@@ -1,0 +1,90 @@
+{
+  "jarred": {
+    "name": "Jarred Sumner",
+    "twitter": "jarredsumner",
+    "github": "Jarred-Sumner",
+    "picture_url": "https://avatars.githubusercontent.com/u/709451?v=4"
+  },
+  "colin": {
+    "name": "Colin McDonnell",
+    "twitter": "colinhacks",
+    "github": "colinhacks",
+    "picture_url": "https://avatars.githubusercontent.com/u/3084745?v=4"
+  },
+  "ashcon": {
+    "name": "Ashcon Partovi",
+    "twitter": "ashconpartovi",
+    "github": "Electroid",
+    "picture_url": "http://blog.cloudflare.com/content/images/2021/04/117158947_4858836477475662_2532132460047140852_o.jpeg"
+  },
+  "dylan": {
+    "name": "Dylan Conway",
+    "github": "dylan-conway",
+    "picture_url": "https://media-exp1.licdn.com/dms/image/C5603AQHo-dmEbhaJ-g/profile-displayphoto-shrink_400_400/0/1663217132712?e=1674691200&v=beta&t=FxGJnhgTv9vFPj6tYqP_4oRqTrjhQQncWuhwH1jc5nc"
+  },
+  "meghan": {
+    "name": "Meghan Denny",
+    "github": "nektro",
+    "picture_url": "https://avatars.githubusercontent.com/u/5464072?v=4"
+  },
+  "ciro": {
+    "name": "Ciro Spaciari",
+    "github": "cirospaciari",
+    "picture_url": "https://avatars.githubusercontent.com/u/6379399?v=4"
+  },
+  "george": {
+    "name": "Georgijs Vilums",
+    "github": "gvilums",
+    "picture_url": "https://avatars.githubusercontent.com/u/48869301?v=4"
+  },
+  "chloe": {
+    "name": "Chloe Caruso",
+    "github": "paperclover",
+    "picture_url": "https://avatars.githubusercontent.com/u/24465214?v=4"
+  },
+  "ben": {
+    "name": "Ben Grant",
+    "github": "190n",
+    "picture_url": "https://cdn.discordapp.com/avatars/164917458182864897/e3e64e282ec5c74d142b46fa9fb68eb0.png"
+  },
+  "unarei": {
+    "name": "Aidan Bloore",
+    "github": "pfgithub",
+    "picture_url": "https://avatars.githubusercontent.com/u/6010774?v=4"
+  },
+  "alistair": {
+    "name": "Alistair Smith",
+    "github": "alii",
+    "picture_url": "https://avatars.githubusercontent.com/u/25351731?v=4"
+  },
+  "lydia": {
+    "name": "Lydia Hallie",
+    "github": "lydiahallie",
+    "picture_url": "https://avatars.githubusercontent.com/u/29451794?v=4"
+  },
+  "taylorfish": {
+    "name": "Taylor",
+    "github": "taylordotfish",
+    "picture_url": "https://avatars.githubusercontent.com/u/25351731?v=4"
+  },
+  "marko": {
+    "name": "Marko Vejnovic",
+    "github": "markovejnovic",
+    "picture_url": "https://avatars.githubusercontent.com/u/15203893?s=96&v=4"
+  },
+  "riskymh": {
+    "name": "Michael H",
+    "github": "riskymh",
+    "picture_url": "https://avatars.githubusercontent.com/u/56214343?v=4"
+  },
+  "zack": {
+    "name": "Zack",
+    "github": "zackradisic",
+    "picture_url": "https://avatars.githubusercontent.com/u/56137411?v=4"
+  },
+  "team": {
+    "name": "Bun Team",
+    "url": "https://github.com/orgs/oven-sh/people",
+    "picture_url": "https://avatars.githubusercontent.com/u/108928776?s=200&v=4"
+  }
+}

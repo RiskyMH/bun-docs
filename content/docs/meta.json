@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "---Main Sections---",
+    "runtime",
+    "pm",
+    "bundler",
+    "test",
+    "---",
+    "../guides",
+    "[Book][Reference](/reference)",
+    "[Newspaper][Blog](/blog)",
+    "feedback",
+    "---Getting Started---",
+    "installation",
+    "index",
+    "quickstart"
+  ]
+}

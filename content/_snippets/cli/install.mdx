@@ -1,0 +1,173 @@
+## CLI Usage
+
+```bash title="terminal"
+$ bun install <name>@<version>
+```
+
+### General Configuration
+
+<ParamField name="--config" type="string">
+	Specify path to config file (bunfig.toml)
+</ParamField>
+
+<ParamField name="--cwd" type="string">
+	Set a specific cwd
+</ParamField>
+
+### Dependency Scope & Management
+
+<ParamField name="--production" type="boolean">
+	Don't install devDependencies
+</ParamField>
+
+<ParamField name="--no-save" type="boolean">
+	Don't update package.json or save a lockfile
+</ParamField>
+
+<ParamField name="--save" type="boolean" default="true">
+	Save to package.json
+</ParamField>
+
+<ParamField name="--omit" type="string">
+	Exclude 'dev', 'optional', or 'peer' dependencies from install
+</ParamField>
+
+<ParamField name="--only-missing" type="boolean">
+	Only add dependencies to package.json if they are not already present
+</ParamField>
+
+### Dependency Type & Versioning
+
+<ParamField name="--dev" type="boolean">
+	Add dependency to "devDependencies"
+</ParamField>
+
+<ParamField name="--optional" type="boolean">
+	Add dependency to "optionalDependencies"
+</ParamField>
+
+<ParamField name="--peer" type="boolean">
+	Add dependency to "peerDependencies"
+</ParamField>
+
+<ParamField name="--exact" type="boolean">
+	Add the exact version instead of the ^range
+</ParamField>
+
+### Lockfile Control
+
+<ParamField name="--yarn" type="boolean">
+	Write a yarn.lock file (yarn v1)
+</ParamField>
+
+<ParamField name="--frozen-lockfile" type="boolean">
+	Disallow changes to lockfile
+</ParamField>
+
+<ParamField name="--save-text-lockfile" type="boolean">
+	Save a text-based lockfile
+</ParamField>
+
+<ParamField name="--lockfile-only" type="boolean">
+	Generate a lockfile without installing dependencies
+</ParamField>
+
+### Network & Registry Settings
+
+<ParamField name="--ca" type="string">
+	Provide a Certificate Authority signing certificate
+</ParamField>
+
+<ParamField name="--cafile" type="string">
+	File path to Certificate Authority signing certificate
+</ParamField>
+
+<ParamField name="--registry" type="string">
+	Use a specific registry by default, overriding .npmrc, bunfig.toml and environment variables
+</ParamField>
+
+### Installation Process Control
+
+<ParamField name="--dry-run" type="boolean">
+	Don't install anything
+</ParamField>
+
+<ParamField name="--force" type="boolean">
+	Always request the latest versions from the registry & reinstall all dependencies
+</ParamField>
+
+<ParamField name="--global" type="boolean">
+	Install globally
+</ParamField>
+
+<ParamField name="--backend" type="string" default="clonefile">
+	Platform-specific optimizations: "clonefile", "hardlink", "symlink", "copyfile"
+</ParamField>
+
+<ParamField name="--filter" type="string">
+	Install packages for the matching workspaces
+</ParamField>
+
+<ParamField name="--analyze" type="boolean">
+	Analyze & install all dependencies of files passed as arguments recursively
+</ParamField>
+
+### Caching Options
+
+<ParamField name="--cache-dir" type="string">
+	Store & load cached data from a specific directory path
+</ParamField>
+
+<ParamField name="--no-cache" type="boolean">
+	Ignore manifest cache entirely
+</ParamField>
+
+### Output & Logging
+
+<ParamField name="--silent" type="boolean">
+	Don't log anything
+</ParamField>
+
+<ParamField name="--verbose" type="boolean">
+	Excessively verbose logging
+</ParamField>
+
+<ParamField name="--no-progress" type="boolean">
+	Disable the progress bar
+</ParamField>
+
+<ParamField name="--no-summary" type="boolean">
+	Don't print a summary
+</ParamField>
+
+### Security & Integrity
+
+<ParamField name="--no-verify" type="boolean">
+	Skip verifying integrity of newly downloaded packages
+</ParamField>
+
+<ParamField name="--trust" type="boolean">
+	Add to trustedDependencies in the project's package.json and install the package(s)
+</ParamField>
+
+### Concurrency & Performance
+
+<ParamField name="--concurrent-scripts" type="number" default="5">
+	Maximum number of concurrent jobs for lifecycle scripts
+</ParamField>
+
+<ParamField name="--network-concurrency" type="number" default="48">
+	Maximum number of concurrent network requests
+</ParamField>
+
+### Lifecycle Script Management
+
+<ParamField name="--ignore-scripts" type="boolean">
+	Skip lifecycle scripts in the project's package.json (dependency scripts are never run)
+</ParamField>
+
+### Help Information
+
+<ParamField name="--help" type="boolean">
+	Print this help menu
+</ParamField>

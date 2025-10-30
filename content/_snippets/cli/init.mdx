@@ -1,0 +1,70 @@
+## CLI Usage
+
+```bash title="terminal"
+$ bun init <folder?>
+```
+
+### Initialization Options
+
+<ParamField name="--yes" type="boolean"> 
+Accept all default prompts without asking questions. Alias: <code>-y</code> 
+</ParamField>
+<ParamField name="--minimal" type="boolean">
+Only initialize type definitions (skip app scaffolding). Alias: <code>-m</code>
+</ParamField>
+
+### Project Templates
+
+<ParamField name="--react" type="string|boolean">
+Scaffold a React project. When used without a value, creates a baseline React app.
+Accepts values for presets:
+- <code>tailwind</code> – React app preconfigured with Tailwind CSS
+- <code>shadcn</code> – React app with <code>@shadcn/ui</code> and Tailwind CSS
+
+Examples:
+
+<code>bun init --react bun init --react=tailwind bun init --react=shadcn</code>
+<br />
+<br />
+
+</ParamField>
+
+### Output & Files
+
+<ParamField name="(result)" type="info">
+Initializes project files and configuration for the chosen options (e.g., creating essential config files and a starter directory structure). Exact files vary by template.
+</ParamField>
+
+### Global Configuration & Context
+
+<ParamField name="--cwd" type="string">
+Run <code>bun init</code> as if started in a different working directory (useful in scripts).
+</ParamField>
+
+### Help
+
+<ParamField name="--help" type="boolean">
+Print this help menu. Alias: <code>-h</code>
+</ParamField>
+
+### Examples
+
+- Accept all defaults
+	```bash
+	$ bun init -y
+```
+
+- React
+	```bash
+	$ bun init --react
+    ```
+
+- React + Tailwind CSS
+	```bash
+	$ bun init --react=tailwind
+    ```
+
+- React + @shadcn/ui
+	```bash
+	$ bun init --react=shadcn
+    ```

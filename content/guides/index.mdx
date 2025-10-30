@@ -1,0 +1,116 @@
+---
+title: Guides
+description: A collection of code samples and walkthroughs for performing common tasks with Bun.
+contextual: false
+mode: center
+---
+
+## Featured
+
+import { Card as FancyCard, Cards as FancyCards } from "@/components/ui/card";
+
+<FancyCards className="grid-cols-3">
+  <FancyCard title="Build a frontend using Vite and Bun" href="/guides/ecosystem/vite" cta="View Guide" />
+  <FancyCard title="Install TypeScript declarations for Bun" href="/guides/runtime/typescript" cta="View Guide" />
+  <FancyCard title="Convert a ReadableStream to a string" href="/guides/streams/to-string" cta="View Guide" />
+  <FancyCard title="Write a simple HTTP server" href="/guides/http/simple" cta="View Guide" />
+  <FancyCard title="Build a simple WebSocket server" href="/guides/websocket/simple" cta="View Guide" />
+  <FancyCard title="Read a file as a string" href="/guides/read-file/string" cta="View Guide" />
+</FancyCards>
+
+## All Guides
+
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+export const GuidesCategory = ({ category }) => {
+  const guidesDir = join(process.cwd(), 'content/guides', category);
+  const files = readdirSync(guidesDir).filter(f => f.endsWith('.mdx'));
+  
+  const pages = files.map(file => {
+    const content = readFileSync(join(guidesDir, file), 'utf-8');
+    
+    const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+    const frontmatter = frontmatterMatch ? frontmatterMatch[1] : '';
+    
+    const titleMatch = frontmatter.match(/^title:\s*['"]?(.+?)['"]?\s*$/m);
+    const fullTitleMatch = frontmatter.match(/^fullTitle:\s*['"]?(.+?)['"]?\s*$/m);
+    
+    const pageTitle = titleMatch ? titleMatch[1] : file.replace('.mdx', '');
+    const pageFullTitle = fullTitleMatch ? fullTitleMatch[1] : pageTitle;
+    
+    return {
+      title: pageFullTitle ||pageTitle,
+      url: `/guides/${category}/${file.replace('.mdx', '')}`
+    };
+  }).sort((a, b) => a.title.localeCompare(b.title));
+
+  return (
+    <Cards className="grid-cols-3">
+      {pages.map((page) => (
+        <Card 
+          key={page.url} 
+          title={page.title} 
+          href={page.url}
+        />
+      ))}
+    </Cards>
+  );
+};
+
+### Deployment
+
+<GuidesCategory category="deployment" />
+
+### Binary Data
+
+<GuidesCategory category="binary" />
+
+### Ecosystem & Frameworks
+
+<GuidesCategory category="ecosystem" />
+
+### File System - Read
+
+<GuidesCategory category="read-file" />
+
+### File System - Write
+
+<GuidesCategory category="write-file" />
+
+### HTML Processing
+
+<GuidesCategory category="html-rewriter" />
+
+### HTTP & Networking
+
+<GuidesCategory category="http" />
+
+### Package Manager
+
+<GuidesCategory category="install" />
+
+### Process & System
+
+<GuidesCategory category="process" />
+
+### Runtime & Debugging
+
+<GuidesCategory category="runtime" />
+
+### Streams
+
+<GuidesCategory category="streams" />
+
+### Test Runner
+
+<GuidesCategory category="test" />
+
+### Utilities
+
+<GuidesCategory category="util" />
+
+### WebSocket
+
+<GuidesCategory category="websocket" />

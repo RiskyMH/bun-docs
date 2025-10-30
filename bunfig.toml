@@ -1,0 +1,6 @@
+[run]
+# bun = true
+
+[install]
+# linker = "isolated"
+linker = "hoisted"

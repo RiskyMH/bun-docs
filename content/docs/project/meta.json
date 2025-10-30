@@ -1,0 +1,14 @@
+{
+  "title": "Contributing",
+  "description": "Contributing to Bun",
+  "root": true,
+  "pages": [
+    "roadmap",
+    "benchmarking",
+    "contributing",
+    "building-windows",
+    "bindgen",
+    "license",
+    "feedback"
+  ]
+}

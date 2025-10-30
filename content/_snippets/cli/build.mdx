@@ -1,0 +1,199 @@
+## CLI Usage
+
+```bash title="terminal"
+$ bun build <entry points>
+```
+
+### General Configuration
+
+<ParamField name="--production" type="boolean">
+	Set <code>NODE_ENV=production</code> and enable minification
+</ParamField>
+
+<ParamField name="--bytecode" type="boolean">
+	Use a bytecode cache when compiling
+</ParamField>
+
+<ParamField name="--target" type="string" default="browser">
+	Intended execution environment for the bundle. One of <code>browser</code>, <code>bun</code>, or{' '}
+	<code>node</code>
+</ParamField>
+
+<ParamField name="--conditions" type="string">
+	Pass custom resolution conditions
+</ParamField>
+
+<ParamField name="--env" type="string" default="disable">
+	Inline environment variables into the bundle as <code>process.env.\$\{name\}</code>. To inline
+	variables matching a prefix, use a glob like <code>FOO_PUBLIC_*</code>
+</ParamField>
+
+### Output & File Handling
+
+<ParamField name="--outdir" type="string" default="dist">
+	Output directory (used when building multiple entry points)
+</ParamField>
+
+<ParamField name="--outfile" type="string">
+	Write output to a specific file
+</ParamField>
+
+<ParamField name="--sourcemap" type="string" default="none">
+	Generate source maps. One of <code>linked</code>, <code>inline</code>, <code>external</code>, or{' '}
+	<code>none</code>
+</ParamField>
+
+<ParamField name="--banner" type="string">
+	Add a banner to the output (e.g. <code>"use client"</code> for React Server Components)
+</ParamField>
+
+<ParamField name="--footer" type="string">
+	Add a footer to the output (e.g. <code>// built with bun!</code>)
+</ParamField>
+
+<ParamField name="--format" type="string" default="esm">
+	Module format of the output bundle. One of <code>esm</code>, <code>cjs</code>, or{' '}
+	<code>iife</code>
+</ParamField>
+
+### File Naming
+
+<ParamField name="--entry-naming" type="string" default="[dir]/[name].[ext]">
+	Customize entry point filenames
+</ParamField>
+
+<ParamField name="--chunk-naming" type="string" default="[name]-[hash].[ext]">
+	Customize chunk filenames
+</ParamField>
+
+<ParamField name="--asset-naming" type="string" default="[name]-[hash].[ext]">
+	Customize asset filenames
+</ParamField>
+
+### Bundling Options
+
+<ParamField name="--root" type="string">
+	Root directory used when bundling multiple entry points
+</ParamField>
+
+<ParamField name="--splitting" type="boolean">
+	Enable code splitting for shared modules
+</ParamField>
+
+<ParamField name="--public-path" type="string">
+	Prefix to be added to import paths in bundled code
+</ParamField>
+
+<ParamField name="--external" type="string">
+	Exclude modules from the bundle (supports wildcards). Alias: <code>-e</code>
+</ParamField>
+
+<ParamField name="--packages" type="string" default="bundle">
+	How to treat dependencies: <code>external</code> or <code>bundle</code>
+</ParamField>
+
+<ParamField name="--no-bundle" type="boolean">
+	Transpile only — do not bundle
+</ParamField>
+
+<ParamField name="--css-chunking" type="boolean">
+	Chunk CSS files together to reduce duplication (only when multiple entry points import CSS)
+</ParamField>
+
+### Minification & Optimization
+
+<ParamField name="--emit-dce-annotations" type="boolean" default="true">
+	Re-emit Dead Code Elimination annotations. Disabled when <code>--minify-whitespace</code> is used
+</ParamField>
+
+<ParamField name="--minify" type="boolean">
+	Enable all minification options
+</ParamField>
+
+<ParamField name="--minify-syntax" type="boolean">
+	Minify syntax and inline constants
+</ParamField>
+
+<ParamField name="--minify-whitespace" type="boolean">
+	Minify whitespace
+</ParamField>
+
+<ParamField name="--minify-identifiers" type="boolean">
+	Minify variable and function identifiers
+</ParamField>
+
+<ParamField name="--keep-names" type="boolean">
+	Preserve original function and class names when minifying
+</ParamField>
+
+### Development Features
+
+<ParamField name="--watch" type="boolean">
+	Rebuild automatically when files change
+</ParamField>
+
+<ParamField name="--no-clear-screen" type="boolean">
+	Don’t clear the terminal when rebuilding with <code>--watch</code>
+</ParamField>
+
+<ParamField name="--react-fast-refresh" type="boolean">
+	Enable React Fast Refresh transform (for development testing)
+</ParamField>
+
+### Standalone Executables
+
+<ParamField name="--compile" type="boolean">
+	Generate a standalone Bun executable containing the bundle. Implies <code>--production</code>
+</ParamField>
+
+<ParamField name="--compile-exec-argv" type="string">
+	Prepend arguments to the standalone executable’s <code>execArgv</code>
+</ParamField>
+
+### Windows Executable Details
+
+<ParamField name="--windows-hide-console" type="boolean">
+	Prevent a console window from opening when running a compiled Windows executable
+</ParamField>
+
+<ParamField name="--windows-icon" type="string">
+	Set an icon for the Windows executable
+</ParamField>
+
+<ParamField name="--windows-title" type="string">
+	Set the Windows executable product name
+</ParamField>
+
+<ParamField name="--windows-publisher" type="string">
+	Set the Windows executable company name
+</ParamField>
+
+<ParamField name="--windows-version" type="string">
+	Set the Windows executable version (e.g. <code>1.2.3.4</code>)
+</ParamField>
+
+<ParamField name="--windows-description" type="string">
+	Set the Windows executable description
+</ParamField>
+
+<ParamField name="--windows-copyright" type="string">
+	Set the Windows executable copyright notice
+</ParamField>
+
+### Experimental & App Building
+
+<ParamField name="--app" type="boolean">
+	<b>(EXPERIMENTAL)</b> Build a web app for production using Bun Bake
+</ParamField>
+
+<ParamField name="--server-components" type="boolean">
+	<b>(EXPERIMENTAL)</b> Enable React Server Components
+</ParamField>
+
+<ParamField name="--debug-dump-server-files" type="boolean">
+	When <code>--app</code> is set, dump all server files to disk even for static builds
+</ParamField>
+
+<ParamField name="--debug-no-minify" type="boolean">
+	When <code>--app</code> is set, disable all minification
+</ParamField>

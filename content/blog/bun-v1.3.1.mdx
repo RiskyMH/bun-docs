@@ -1,0 +1,274 @@
+---
+title: Bun v1.3.1
+description: Fixes 103 issues (addressing 172 👍). 2× faster bun build on macOS for symlink-heavy projects, source maps preserve legal comments, and --format=cjs now inlines import.meta; bun test adds global vi, --pass-with-no-tests, and --only-failures; .npmrc :email auth support, faster installs when no peer deps, selective hoisting for isolated installs (publicHoistPattern/hoistPattern), and fs/promises FileHandle.readLines(); numerous bundler/transpiler fixes (external sourcemaps in Bun.build({ compile:true }), --bytecode with import.meta, Windows react-jsxdev); reliability fixes across install/pm/pack, bunx, Node.js compatibility improvements, and numerous bug fixes.
+date: 2025-10-22T10:11:00.000Z
+authors: jarred
+category: Changelog
+---
+
+<include>../_snippets/blog/install-bun.mdx</include>
+
+## Faster `bun build`
+
+For projects that use `--linker=isolated`, `pnpm`, or otherwise use lots of symlinks, `bun build` gets up to 2x faster.
+
+<ReactTweet id="1977208059241046307" />
+
+### Sourcemaps for legal comments in `bun build`
+
+Source maps now include entries for preserved multi-line comments (including CRLF line endings), ensuring legal comments in bundled output map back to their original sources for accurate debugging and tooling.
+
+### `import.meta` in CommonJS
+
+`bun build --format=cjs` will now inline some usages of `import.meta` similarly to existing behavior with `__dirname` and `__filename`. This prevents syntax errors that could occur when transpiling files using `import.meta` to CommonJS, such as packages like `@sentry/node`.
+
+| ESM-ism               | CommonJS-ism                     |
+| --------------------- | -------------------------------- |
+| `import.meta.url`     | -                                |
+| `import.meta.path`    | `__filename`                     |
+| `import.meta.dirname` | `__dirname`                      |
+| `import.meta.file`    | `path.basename(module.filename)` |
+
+## New in `bun test`
+
+### `vi` global
+
+`bun test` now exposes Vitest's global `vi` (including types). `vi` is defined in test files by default, enabling `vi.fn`, `vi.mock`, `vi.spyOn`, and related APIs without imports.
+
+```ts
+test("hello", () => {
+  const fn = vi.fn();
+  expect(fn).not.toHaveBeenCalled();
+  fn();
+  expect(fn).toHaveBeenCalled();
+});
+```
+
+This makes it a little bit easier to migrate from Vitest to `bun test`.
+
+### `bun test --pass-with-no-tests`
+
+The test runner now supports `--pass-with-no-tests`, which exits with code 0 when no tests are found or when active filters match no tests. This mirrors Jest and Vitest behavior and is useful in monorepos where some packages may not contain tests. Without the flag, `bun test` continues to exit with 1 when no tests are found. Actual test failures still exit non-zero.
+
+```sh
+$ bun test --pass-with-no-tests
+bun test v1.3.1
+No tests found!
+
+Tests need ".test", "_test_", ".spec" or "_spec_" in the filename (ex: "MyApp.test.ts")
+
+Learn more about bun test: https://bun.com/docs/cli/test
+
+$ echo $?
+0
+```
+
+Thanks to @pfg for the contribution!
+
+### `bun test --only-failures`
+
+A new `--only-failures` flag (and `test.onlyFailures` option in `bunfig.toml`) hides passing tests and prints only failures, making large suites and CI logs easier to scan. The final summary (pass/skip/fail, totals) is still printed.
+
+```sh
+$ bun test --only-failures
+bun test v1.3.1
+
+ 10 pass
+  0 fail
+Ran 1 tests across 1 file. [8.00ms]
+```
+
+Thanks to @pfg for the contribution
+
+## New in bun install
+
+### Faster installs when no `peerDependencies` are present
+
+We removed a `sleep()` in Bun’s package manager! It waited for peer dependencies to install, even if there were no peer dependencies to install.
+
+Thanks to @dylan-conway for fixing this!
+
+### `:email` in `.npmrc`
+
+Some private registries (e.g., Sonatype Nexus) require an email alongside username/password or token. bun install now reads and forwards the `:email` field from `.npmrc` for both default and scoped registries, enabling successful authentication in these setups.
+
+```ini title=".npmrc"
+//registry.example.com/:email=user@example.com
+//registry.example.com/:username=myuser
+//registry.example.com/:_password=base64encodedpassword
+# or with a token
+//registry.example.com/:_authToken=xxxxxx
+```
+
+Thanks to @dylan-conway for the contribution!
+
+### `publicHoistPattern` and `hoistPattern`
+
+Bun now supports selective hoisting when using the isolated linker.
+
+- `publicHoistPattern` in `bunfig.toml` (and `public-hoist-pattern` in `.npmrc`) hoists matching transitive dependencies to the root node_modules so tools like ESLint and TypeScript lib augmentations can be discovered across a workspace.
+- `hoistPattern` controls what gets hoisted into node_modules/.bun/node_modules.
+
+This makes it possible to explicitly opt-in packages such as `@types/*`, `eslint` plugins, or `better-typescript-lib` for global visibility in monorepos without reverting to full hoisting.
+
+```toml title="bunfig.toml"
+[install]
+# String form
+publicHoistPattern = "@types*"
+
+# Array form
+publicHoistPattern = [ "@types*", "*eslint*" ]
+
+# Control internal hoisting into node_modules/.bun/node_modules
+hoistPattern = [ "@types*", "*eslint*" ]
+```
+
+```ini title=".npmrc"
+# Equivalent to bunfig.toml, useful when sharing config across tools
+public-hoist-pattern[]=@typescript/*
+public-hoist-pattern[]=*eslint*
+```
+
+### `FileHandle.readLines()` in `node:fs/promises`
+
+Bun now implements Node.js’s `FileHandle.readLines()`, enabling efficient, backpressure-aware async iteration over file lines using for-await-of. This handles empty lines and CRLF correctly and accepts the same options as `createReadStream` (e.g., encoding).
+
+```js
+import { open } from "node:fs/promises";
+
+const file = await open("file.txt");
+try {
+  for await (const line of file.readLines({ encoding: "utf8" })) {
+    console.log(line);
+  }
+} finally {
+  await file.close();
+}
+```
+
+Thanks to @nektro for the contribution!
+
+## Bundler & Transpiler bugfixes
+
+- Improved: Bundler CJS output incorrectly respected `__esModule` when the importer used ESM syntax. `__toESM` now bases `isNodeMode` on the importing module's syntax (ESM import/export sets `isNodeMode=1`), matching
+- Improved: `bun build --no-bundle` now rejects HTML entrypoints with a clear error ("HTML imports are only supported when bundling")
+- Fixed: An assertion failure when transpiling code that evaluates string equality in constant-known expressions involving concatenated strings (rope strings) in rare cases.
+- Fixed: `Bun.build()` with `compile: true` failed to apply sourcemaps (including `sourcemap: "inline" or true`), causing stack traces to reference virtual bundled paths (/$bunfs/root/) instead of original files/lines. The API now mirrors `bun build --compile` by emitting external sourcemaps in compile mode, restoring correct file names and line numbers in error stacks.
+- Fixed: `bun build --bytecode` could fail when code referenced `import.meta.url` or `import.meta.dir`. These now compile without errors.
+- Fixed: An assertion failure in `bun build --production` impacting Windows when `react-jsxdev` is present in tsconfig.json
+- Fixed: Incorrect memory management for error message strings in `bun build --compile` for single-file executables in certain cases.
+- Fixed: Assertion failure when encountering certain invalid async function syntax patterns. Now Bun reports an error.
+- Fixed: "Scope mismatch while visiting" panic when encountering TypeScript enums with function-valued members (e.g. `A = () => {}`)
+- Fixed: A race condition when using `with {type: "macro"}` when executed simultaneously for the first time across multiple threads in `bun build`
+
+## bun test bugfixes
+
+- Fixed: `bun test` could crash when formatting errors for extremely deeply nested objects
+
+## bun install / bun pm
+
+- Fixed: `bun install` with `--linker=isolated` on macOS could fail with `EXDEV` (Cross-device link) when the project lived on a non-system APFS volume or across volumes (common in workspaces/monorepos). Installs now handle cross-volume linking correctly and complete reliably.
+- Fixed: `bun install` with the isolated linker did not create symlinks for self-referencing workspace dependencies in monorepos (e.g., `"workspace:\*"` or `"workspace:."`), preventing packages from resolving their own exports via `node_modules`. These self-deps are now correctly linked.
+- Fixed: A determinism bug when constructing `node_modules/.bun/node_modules` under `--linker=isolated`, which could cause different versions to be hoisted across installs and enable unintended "phantom" dependencies across workspaces despite using `--linker=isolated`.
+- Fixed: Missing error handling when iterating directory entries in certain cases.
+- Fixed: `bun pm pack` now always includes files and directories declared via `"bin"` and `"directories.bin"` even when they are not listed in `"files"`, matching npm pack behavior. This prevents missing CLI binaries in published tarballs and deduplicates paths when they appear in both `"bin"` / `"directories.bin"` and `"files"`
+
+## bunx
+
+- Fixed: A panic in `bunx` on Windows that could occur when npm package names contained multi-byte/non-ASCII characters (which npm's registry does not support).
+
+## Bun.SQL / MySQL
+
+- Fixed: Missing error handling in MySQL parameter binding when passing boxed primitives (`new Number(...)`, `new Boolean(...)`) or other non-indexable values. Bun now throws a descriptive error instructing you to use primitive numbers/booleans instead.
+- Fixed: MySQL TLS connections could spin a CPU core at 100% after a query (sslmode=require/prefer), especially on macOS. Timers are now initialized only after connection status transitions complete, preventing runaway timeouts.
+- Fixed: a regression from v1.2.23 causing idle MySQL connections to keep the event loop alive. Processes now exit cleanly after queries instead of hanging
+
+## Bun.RedisClient
+
+- Fixed: `Bun.RedisClient` now validates connection URLs and throws on invalid parameters (e.g., out-of-range ports) instead of silently defaulting to localhost:6379
+
+## Bun.S3Client
+
+- Fixed: Memory leak in `Bun.S3Client` `listObjects` response parsing (ETag handling) that could cause unbounded memory growth when listing large buckets or repeatedly calling `listObjects`
+
+## bun:ffi
+
+- Fixed: `bun:ffi` now surfaces actionable `dlopen` (linking) errors. When a library cannot be opened, the error includes the library path and the OS error (e.g. "invalid ELF header", "No such file or directory") instead of a generic message.
+- Fixed: `linkSymbols()` and `CFunction()` now throw a clear error when a symbol definition is missing a `ptr` field, and an error propagation issue in `linkSymbols()` was corrected so errors are thrown consistently.
+
+## Bun Shell ($)
+
+- Fixed: a memory leak in Bun Shell command-line arguments.
+- Fixed: a crash that could occur when Bun Shell is garbage collected.
+- Fixed: Blocking I/O on macOS when writing large (>1 MB) outputs to pipes
+- Fixed: Potential assertion failure on Windows when spawning from long paths or when 8.3 short names are disabled.
+- Fixed: Missing error handling when monitoring shell writers on Windows
+
+## WebSocket client & server
+
+- Fixed: WebSocket upgrades ignored cookies set with `req.cookies.set()` prior to `server.upgrade()`; the `Set-Cookie` header is now included in the 101 Switching Protocols response, with or without custom headers
+- Fixed: Incorrect handling of WebSocket client close frames could panic when the close frame payload was fragmented across multiple TCP packets. Bun now buffers fragmented close frames and processes them only when complete
+
+## Node.js Compatibility
+
+- Fixed: a crash that could occur when terminating a Worker that used N-API. This impacted `next build` with Turbopack enabled.
+- Fixed: Missing libuv error codes `UV_ENOEXEC` and `UV_EFTYPE` are now recognized on Windows.
+- Fixed: The `node:buffer` ESM export of `INSPECT_MAX_BYTES` was incorrectly exposed as an accessor. It is now a plain number, matching Node.js semantics; reassigning `buffer.INSPECT_MAX_BYTES` does not affect the ESM named import.
+- Fixed: `Response.json()` now throws a Node.js-compatible `TypeError` ("Value is not JSON serializable") for non-serializable top-level values (`Symbol`, `Function`, `undefined`). `BigInt` now throws "Do not know how to serialize a BigInt".
+
+Thank you to Martin Schwarzl of Cloudflare for reporting these bugs:
+
+- Fixed: out-of-bounds write in `Buffer.prototype.writeBigInt64{LE,BE}` and `Buffer.prototype.writeBigUInt64{LE,BE}`
+- Fixed: assertion failure when setting `process.title` with UTF‑16 characters
+- Fixed: missing exception handling for a `ReadableStream` for use by a `Response.prototype.body` that throws during initialization
+
+## Web APIs
+
+- Fixed: a bug that could cause excessive memory growth in certain rare cases when consuming `fetch()` response bodies chunk-by-chunk.
+
+Thank you to Martin Schwarzl of Cloudflare for also reporting the following bugs:
+
+- Fixed: URL heap size accounting could overflow, causing pathological GC behavior when handling large URLs. Memory usage is now reported accurately.
+- Fixed: assertion failure in `URLSearchParams.prototype.toJSON()` involving numeric string keys
+- Fixed: assertion failure in `Headers.prototype.append()` involving numeric header names
+
+## YAML
+
+- Fixed: `Bun.YAML.parse` no longer treats "..." inside double-quoted strings as a document end marker, eliminating "Unexpected document end" errors for valid quoted text (e.g., internationalized strings with ellipses).
+- Fixed: `Bun.YAML.stringify` now correctly double-quotes strings that begin with YAML indicator characters or leading whitespace (e.g., :, -, ?, [, ], \{, \}, #, &, \*, !, |, >, ', ", %, @, \`, space, tab, newline), ensuring `Bun.YAML.parse(Bun.YAML.stringify(...))` round-trips without`SyntaxError`.
+
+## Console
+
+- Fixed: incorrect error-handling when printing `Set` or `Map` instances where a subclass overrides the `size` property with a non-numeric value. Thanks to Martin Schwarzl & Cloudflare for the report!
+
+## Hot Reload
+
+- Fixed: On macOS, saving the entrypoint with Vim's atomic write could intermittently trigger "Module not found" during `bun --hot` reload; Bun now defers reload until the file is recreated and verified.
+
+## Templates
+
+- Fixed: React templates (react-app, react-shadcn, react-tailwind) had dev and start scripts pointing to src/index.tsx after the entry file was renamed to src/index.ts, causing run failures. Scripts now correctly reference src/index.ts.
+
+## Windows-specific
+
+- Fixed: Hang when running package.json scripts on Windows for non-English locales. Windows environment variables and paths are now converted to "WTF-8" at startup. This fixes hangs when using PowerShell with Bun when usernames or working directories that contained non-ASCII characters. This is a regression from Bun v1.2.23.
+
+### Thanks to 15 contributors!
+
+- [@alinalihassan](https://github.com/alinalihassan)
+- [@cirospaciari](https://github.com/cirospaciari)
+- [@dylan-conway](https://github.com/dylan-conway)
+- [@hoxyy](https://github.com/hoxyy)
+- [@jarred-sumner](https://github.com/jarred-sumner)
+- [@jsparkdev](https://github.com/jsparkdev)
+- [@mariusz4044](https://github.com/mariusz4044)
+- [@markovejnovic](https://github.com/markovejnovic)
+- [@nektro](https://github.com/nektro)
+- [@pfgithub](https://github.com/pfgithub)
+- [@riskymh](https://github.com/riskymh)
+- [@robobun](https://github.com/robobun)
+- [@shlomocode](https://github.com/shlomocode)
+- [@sosukesuzuki](https://github.com/sosukesuzuki)
+- [@taylordotfish](https://github.com/taylordotfish)
+
+Special thanks to Martin Schwarzl of Cloudflare for fuzzing & reporting several bugs!!

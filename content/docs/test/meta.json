@@ -1,0 +1,25 @@
+{
+  "title": "Test Runner",
+  "description": "Bun's built-in test runner",
+  "root": true,
+  "icon": "FlaskConical",
+  "pages": [
+    "---[CirclePlay] Getting Started---",
+    "index",
+    "writing-tests",
+    "configuration",
+    "---[Zap] Test Execution---",
+    "runtime-behavior",
+    "discovery",
+    "---[Sparkles] Test Features---",
+    "lifecycle",
+    "mocks",
+    "snapshots",
+    "dates-times",
+    "---[Microscope] Specialized Testing---",
+    "dom",
+    "---[FileText] Reporting---",
+    "code-coverage",
+    "reporters"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "title": "Bundler",
+  "description": "Bun's fast native bundler",
+  "root": true,
+  "icon": "Combine",
+  "pages": [
+    "---[Package] Core---",
+    "index",
+    "---[Monitor] Development---",
+    "fullstack",
+    "hot-reloading",
+    "---[Image] Asset Processing---",
+    "html-static",
+    "css",
+    "loaders",
+    "---[Binary] Executables---",
+    "executables",
+    "---[Plug] Extensions---",
+    "plugins",
+    "macros",
+    "---[Zap] Optimization---",
+    "bytecode",
+    "minifier",
+    "---[ArrowRight] Migration---",
+    "esbuild"
+  ]
+}

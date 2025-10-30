@@ -1,0 +1,45 @@
+---
+title: GitHub Actions
+fullTitle: Install and run Bun in GitHub Actions
+mode: center
+---
+
+Use the official [`setup-bun`](https://github.com/oven-sh/setup-bun) GitHub Action to install `bun` in your GitHub Actions runner.
+
+```yaml title="workflow.yml"
+name: my-workflow
+jobs:
+  my-job:
+    name: my-job
+    runs-on: ubuntu-latest
+    steps:
+      # ...
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2 // [!code ++]
+
+      # run any `bun` or `bunx` command
+      - run: bun install // [!code ++]
+      - run: bun index.ts // [!code ++]
+      - run: bun run build // [!code ++]
+```
+
+---
+
+To specify a version of Bun to install:
+
+```yaml title="workflow.yml"
+name: my-workflow
+jobs:
+  my-job:
+    name: my-job
+    runs-on: ubuntu-latest
+    steps:
+      # ...
+      - uses: oven-sh/setup-bun@v2
+        with: // [!code ++]
+          bun-version: $BUNL_LATEST_VERSION # or "latest", "canary", <sha> // [!code ++]
+```
+
+---
+
+Refer to the [README.md](https://github.com/oven-sh/setup-bun) for complete documentation of the `setup-bun` GitHub Action.

@@ -1,0 +1,25 @@
+#### To install Bun
+
+```sh tab="curl (Linux/MacOS)"
+$ curl -fsSL https://bun.sh/install | bash
+```
+```powershell tab="powershell (Windows)"
+> powershell -c "irm bun.sh/install.ps1 | iex"
+```
+```sh tab="npm"
+$ npm install -g bun
+```
+```sh tab="brew"
+$ brew tap oven-sh/bun
+$ brew install bun
+```
+```sh tab="docker"
+$ docker pull oven/bun
+$ docker run --rm --init --ulimit memlock=-1:-1 oven/bun
+```
+
+#### To upgrade Bun
+
+```sh
+$ bun upgrade
+```

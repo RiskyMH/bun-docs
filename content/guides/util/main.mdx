@@ -1,0 +1,30 @@
+---
+title: Get entrypoint path
+fullTitle: Get the absolute path to the current entrypoint
+mode: center
+---
+
+The `Bun.main` property contains the absolute path to the current entrypoint.
+
+```ts tab="foo.ts"
+console.log(Bun.main);
+```
+
+```ts tab="index.ts"
+import './foo.ts';
+```
+
+---
+
+The printed path corresponds to the file that is executed with `bun run`.
+
+```sh
+$ bun run index.ts
+/path/to/index.ts
+$ bun run foo.ts
+/path/to/foo.ts
+```
+
+---
+
+See [Docs > API > Utils](https://bun.com/docs/api/utils) for more useful utilities.
