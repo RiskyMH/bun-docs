@@ -159,20 +159,20 @@ function handleCodeGroups(content: string): string {
       const titleMatch = attrs.match(/title="([^"]+)"/);
       if (titleMatch) {
         label = titleMatch[1];
-      } else {
-        // Check for filename (first non-space word after language)
-        const words = attrs.trim().split(/\s+/);
-        if (words.length > 0 && words[0]) {
-          label = words[0];
-        } else {
-          // Check icon attribute
-          const iconMatch = attrs.match(/icon="([^"]+)"/);
-          if (iconMatch) {
-            const icon = iconMatch[1];
-            if (icon === 'terminal') label = 'terminal';
-            else label = icon.replace(/^.*\//, '').replace(/\.svg$/, '');
-          }
+      } else if (attrs.includes('icon=')) {
+        // Check icon attribute
+        const iconMatch = attrs.match(/icon="([^"]+)"/);
+        if (iconMatch) {
+          const icon = iconMatch[1];
+          if (icon === 'terminal') label = 'terminal';
+          else label = icon.replace(/^.*\//, '').replace(/\.svg$/, '');
         }
+        // Also check for text before icon
+        const beforeIcon = attrs.split(/\s+icon=/)[0].trim();
+        if (beforeIcon) label = beforeIcon;
+      } else if (attrs.trim()) {
+        // No title or icon - the entire attrs is the label
+        label = attrs.trim();
       }
       
       // Fallback to filename-like label
@@ -520,6 +520,9 @@ function mergeTerminalWithOutput(content: string): string {
   modified = modified.replace(/```txt\s+title="\.env"/g, '```ini title=".env"');
   modified = modified.replace(/```txt\s+\.env\s/g, '```ini .env ');
   
+  // Fix typo: bun_BE_BUN → BUN_BE_BUN (lowercase to uppercase)
+  modified = modified.replace(/\bbun_BE_BUN=/g, 'BUN_BE_BUN=');
+  
   return modified;
 }
 
@@ -616,7 +619,8 @@ function addTerminalPrompts(content: string): string {
       
       // Check if this looks like an actual command - BE VERY SPECIFIC, no generic patterns
       const looksLikeCommand = 
-        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf|setcap|systemctl|set|vercel)\s/.test(trimmed) || // Common commands
+        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf|setcap|systemctl|set|vercel|codesign)\s/.test(trimmed) || // Common commands
+        /^bun-[a-z0-9-]+(\s|$)/.test(trimmed) || // bun executables like bun-debug, bun-1234566
         /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars  
         (/^[A-Z_]+=/.test(trimmed) && /\s+(bun|npm|node|git)/.test(trimmed)) || // Env var before command like: FOO=bar bun run
         (/^[A-Z_]+=.+/.test(trimmed) && trimmed.length > 20 && /[:\/]/.test(trimmed)) || // Long env var assignments with URLs (like NPM_CONFIG_REGISTRY=https://...)
