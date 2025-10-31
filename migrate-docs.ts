@@ -434,7 +434,10 @@ function addTerminalPrompts(content: string): string {
       if (/^[✓✗×⚠➜→]/.test(trimmed) || // Status symbols
           /^\d+ (pass|fail|skip)/.test(trimmed) || // Test results
           /^-{3,}/.test(trimmed) || // Separator lines (tables)
-          /^\w+\s*\|/.test(trimmed)) { // Table rows with pipes
+          /^\|/.test(trimmed) || // Table rows starting with pipe
+          /^[└├│─]/.test(trimmed) || // Directory tree characters
+          /^(packed|dependencies|Current|Target|Latest|Package)\s/.test(trimmed) || // Common output words
+          /^(you|shouldn)/i.test(trimmed)) { // Words indicating non-command text
         inOutput = true;
         return line;
       }
@@ -444,14 +447,12 @@ function addTerminalPrompts(content: string): string {
         return line;
       }
       
-      // Check if this looks like an actual command
+      // Check if this looks like an actual command - BE VERY SPECIFIC, no generic patterns
       const looksLikeCommand = 
         /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway)\s/.test(trimmed) || // Common commands
-        /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars
+        /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars  
         (/^[A-Z_]+=/.test(trimmed) && /\s+(bun|npm|node|git)/.test(trimmed)) || // Env var before command like: FOO=bar bun run
-        /^\.\//.test(trimmed) || // Relative paths
-        /[\|\&\;\>\<\`]/.test(trimmed) || // Shell operators
-        /^[a-z][a-z0-9-]*\s/.test(trimmed); // Generic command pattern (lowercase word followed by space)
+        /^\.\//.test(trimmed); // Relative paths
       
       if (looksLikeCommand) {
         sawCommand = true;
@@ -677,6 +678,35 @@ function addTabsItems(content: string): string {
     return match;
   });
 
+  return modified;
+}
+
+/**
+ * Unwrap Tabs/Tab structures - convert back to plain code blocks with tab= attributes
+ */
+function unwrapTabs(content: string): string {
+  let modified = content;
+  
+  // Remove <Tabs> and </Tabs> wrappers entirely
+  modified = modified.replace(/<Tabs[^>]*>\s*/g, '');
+  modified = modified.replace(/\s*<\/Tabs>/g, '\n');
+  
+  // Convert <Tab title="..."> blocks to plain code blocks with tab=
+  // Handle both ``` and ```` (markdown allows 4 backticks when code contains 3)
+  modified = modified.replace(
+    /<Tab\s+(?:value|title)="([^"]+)">\s*\n*(````?)(\w+)(?:\s+title="([^"]+)")?(?:\s+icon="[^"]+")?([\s\S]*?)\2\s*\n*<\/Tab>/g,
+    (_match: string, tabLabel: string, backticks: string, lang: string, title: string | undefined, code: string) => {
+      incrementStat("tab-unwrapped");
+      // Use the tab label as the tab attribute, preserve backtick count
+      return `${backticks}${lang} tab="${tabLabel}"${code}${backticks}\n`;
+    }
+  );
+  
+  // Remove any remaining <Tab> and </Tab> tags that weren't converted
+  // (These are tabs with complex content that can't be auto-converted to tab= attributes)
+  modified = modified.replace(/<Tab\s+(?:value|title)="[^"]+"\s*>\s*/g, '');
+  modified = modified.replace(/\s*<\/Tab>/g, '\n');
+  
   return modified;
 }
 
@@ -1062,7 +1092,7 @@ async function processFile(filePath: string, bunVersion: string = ""): Promise<b
     // TODO: fixStepIndentation is adding blank lines everywhere - needs fixing
     // modified = fixStepIndentation(modified);
     modified = fixAccordionWrapping(modified);
-    modified = addTabsItems(modified);
+    modified = unwrapTabs(modified); // Remove Tabs/Tab wrappers, convert to tab= attributes
     modified = fixImageLinks(modified);
     modified = addDocsPrefix(modified, filePath);
     modified = wrapHtmlTagsInCode(modified);
