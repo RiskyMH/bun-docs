@@ -1,6 +1,6 @@
 ---
-title: 'Lifecycle hooks'
-description: 'Learn how to use beforeAll, beforeEach, afterEach, and afterAll lifecycle hooks in Bun tests'
+title: "Lifecycle hooks"
+description: "Learn how to use beforeAll, beforeEach, afterEach, and afterAll lifecycle hooks in Bun tests"
 ---
 
 The test runner supports the following lifecycle hooks. This is useful for loading test fixtures, mocking data, and configuring the test environment.
@@ -17,20 +17,20 @@ The test runner supports the following lifecycle hooks. This is useful for loadi
 Perform per-test setup and teardown logic with `beforeEach` and `afterEach`.
 
 ```ts title="test.ts"
-import {beforeEach, afterEach, test} from 'bun:test';
+import { beforeEach, afterEach, test } from "bun:test";
 
 beforeEach(() => {
-	console.log('running test.');
+  console.log("running test.");
 });
 
 afterEach(() => {
-	console.log('done with test.');
+  console.log("done with test.");
 });
 
 // tests...
-test('example test', () => {
-	// This test will have beforeEach run before it
-	// and afterEach run after it
+test("example test", () => {
+  // This test will have beforeEach run before it
+  // and afterEach run after it
 });
 ```
 
@@ -43,26 +43,26 @@ Perform per-scope setup and teardown logic with `beforeAll` and `afterAll`. The 
 To scope the hooks to a particular describe block:
 
 ```ts title="test.ts"
-import {describe, beforeAll, afterAll, test} from 'bun:test';
+import { describe, beforeAll, afterAll, test } from "bun:test";
 
-describe('test group', () => {
-	beforeAll(() => {
-		// setup for this describe block
-		console.log('Setting up test group');
-	});
+describe("test group", () => {
+  beforeAll(() => {
+    // setup for this describe block
+    console.log("Setting up test group");
+  });
 
-	afterAll(() => {
-		// teardown for this describe block
-		console.log('Tearing down test group');
-	});
+  afterAll(() => {
+    // teardown for this describe block
+    console.log("Tearing down test group");
+  });
 
-	test('test 1', () => {
-		// test implementation
-	});
+  test("test 1", () => {
+    // test implementation
+  });
 
-	test('test 2', () => {
-		// test implementation
-	});
+  test("test 2", () => {
+    // test implementation
+  });
 });
 ```
 
@@ -71,22 +71,22 @@ describe('test group', () => {
 To scope the hooks to an entire test file:
 
 ```ts title="test.ts"
-import {describe, beforeAll, afterAll, test} from 'bun:test';
+import { describe, beforeAll, afterAll, test } from "bun:test";
 
 beforeAll(() => {
-	// setup for entire file
-	console.log('Setting up test file');
+  // setup for entire file
+  console.log("Setting up test file");
 });
 
 afterAll(() => {
-	// teardown for entire file
-	console.log('Tearing down test file');
+  // teardown for entire file
+  console.log("Tearing down test file");
 });
 
-describe('test group', () => {
-	test('test 1', () => {
-		// test implementation
-	});
+describe("test group", () => {
+  test("test 1", () => {
+    // test implementation
+  });
 });
 ```
 
@@ -95,18 +95,18 @@ describe('test group', () => {
 To scope the hooks to an entire multi-file test run, define the hooks in a separate file.
 
 ```ts title="setup.ts"
-import {beforeAll, afterAll} from 'bun:test';
+import { beforeAll, afterAll } from "bun:test";
 
 beforeAll(() => {
-	// global setup
-	console.log('Global test setup');
-	// Initialize database connections, start servers, etc.
+  // global setup
+  console.log("Global test setup");
+  // Initialize database connections, start servers, etc.
 });
 
 afterAll(() => {
-	// global teardown
-	console.log('Global test teardown');
-	// Close database connections, stop servers, etc.
+  // global teardown
+  console.log("Global test teardown");
+  // Close database connections, stop servers, etc.
 });
 ```
 
@@ -128,69 +128,69 @@ preload = ["./setup.ts"]
 ### Database Setup
 
 ```ts title="database-setup.ts"
-import {beforeAll, afterAll, beforeEach, afterEach} from 'bun:test';
-import {createConnection, closeConnection, clearDatabase} from './db';
+import { beforeAll, afterAll, beforeEach, afterEach } from "bun:test";
+import { createConnection, closeConnection, clearDatabase } from "./db";
 
 let connection;
 
 beforeAll(async () => {
-	// Connect to test database
-	connection = await createConnection({
-		host: 'localhost',
-		database: 'test_db',
-	});
+  // Connect to test database
+  connection = await createConnection({
+    host: "localhost",
+    database: "test_db",
+  });
 });
 
 afterAll(async () => {
-	// Close database connection
-	await closeConnection(connection);
+  // Close database connection
+  await closeConnection(connection);
 });
 
 beforeEach(async () => {
-	// Start with clean database for each test
-	await clearDatabase(connection);
+  // Start with clean database for each test
+  await clearDatabase(connection);
 });
 ```
 
 ### API Server Setup
 
 ```ts title="server-setup.ts"
-import {beforeAll, afterAll} from 'bun:test';
-import {startServer, stopServer} from './server';
+import { beforeAll, afterAll } from "bun:test";
+import { startServer, stopServer } from "./server";
 
 let server;
 
 beforeAll(async () => {
-	// Start test server
-	server = await startServer({
-		port: 3001,
-env: 'test',
-	});
+  // Start test server
+  server = await startServer({
+    port: 3001,
+    env: "test",
+  });
 });
 
 afterAll(async () => {
-	// Stop test server
-	await stopServer(server);
+  // Stop test server
+  await stopServer(server);
 });
 ```
 
 ### Mock Setup
 
 ```ts title="mock-setup.ts"
-import {beforeEach, afterEach} from 'bun:test';
-import {mock} from 'bun:test';
+import { beforeEach, afterEach } from "bun:test";
+import { mock } from "bun:test";
 
 beforeEach(() => {
-	// Set up common mocks
-	mock.module('./api-client', () => ({
-		fetchUser: mock(() => Promise.resolve({id: 1, name: 'Test User'})),
-		createUser: mock(() => Promise.resolve({id: 2})),
-	}));
+  // Set up common mocks
+  mock.module("./api-client", () => ({
+    fetchUser: mock(() => Promise.resolve({ id: 1, name: "Test User" })),
+    createUser: mock(() => Promise.resolve({ id: 2 })),
+  }));
 });
 
 afterEach(() => {
-	// Clear all mocks after each test
-	mock.restore();
+  // Clear all mocks after each test
+  mock.restore();
 });
 ```
 
@@ -199,23 +199,23 @@ afterEach(() => {
 All lifecycle hooks support async functions:
 
 ```ts title="test.ts"
-import {beforeAll, afterAll, test} from 'bun:test';
+import { beforeAll, afterAll, test } from "bun:test";
 
 beforeAll(async () => {
-	// Async setup
-	await new Promise(resolve => setTimeout(resolve, 100));
-	console.log('Async setup complete');
+  // Async setup
+  await new Promise(resolve => setTimeout(resolve, 100));
+  console.log("Async setup complete");
 });
 
 afterAll(async () => {
-	// Async teardown
-	await new Promise(resolve => setTimeout(resolve, 100));
-	console.log('Async teardown complete');
+  // Async teardown
+  await new Promise(resolve => setTimeout(resolve, 100));
+  console.log("Async teardown complete");
 });
 
-test('async test', async () => {
-	// Test will wait for beforeAll to complete
-await expect(Promise.resolve('test')).resolves.toBe('test');
+test("async test", async () => {
+  // Test will wait for beforeAll to complete
+  await expect(Promise.resolve("test")).resolves.toBe("test");
 });
 ```
 
@@ -224,27 +224,27 @@ await expect(Promise.resolve('test')).resolves.toBe('test');
 Hooks can be nested and will run in the appropriate order:
 
 ```ts title="test.ts"
-import {describe, beforeAll, beforeEach, afterEach, afterAll, test} from 'bun:test';
+import { describe, beforeAll, beforeEach, afterEach, afterAll, test } from "bun:test";
 
-beforeAll(() => console.log('File beforeAll'));
-afterAll(() => console.log('File afterAll'));
+beforeAll(() => console.log("File beforeAll"));
+afterAll(() => console.log("File afterAll"));
 
-describe('outer describe', () => {
-	beforeAll(() => console.log('Outer beforeAll'));
-	beforeEach(() => console.log('Outer beforeEach'));
-	afterEach(() => console.log('Outer afterEach'));
-	afterAll(() => console.log('Outer afterAll'));
+describe("outer describe", () => {
+  beforeAll(() => console.log("Outer beforeAll"));
+  beforeEach(() => console.log("Outer beforeEach"));
+  afterEach(() => console.log("Outer afterEach"));
+  afterAll(() => console.log("Outer afterAll"));
 
-	describe('inner describe', () => {
-		beforeAll(() => console.log('Inner beforeAll'));
-		beforeEach(() => console.log('Inner beforeEach'));
-		afterEach(() => console.log('Inner afterEach'));
-		afterAll(() => console.log('Inner afterAll'));
+  describe("inner describe", () => {
+    beforeAll(() => console.log("Inner beforeAll"));
+    beforeEach(() => console.log("Inner beforeEach"));
+    afterEach(() => console.log("Inner afterEach"));
+    afterAll(() => console.log("Inner afterAll"));
 
-test('nested test', () => {
-			console.log('Test running');
-		});
-	});
+    test("nested test", () => {
+      console.log("Test running");
+    });
+  });
 });
 
 // Output order:
@@ -266,30 +266,30 @@ test('nested test', () => {
 If a lifecycle hook throws an error, it will affect test execution:
 
 ```ts title="test.ts"
-import {beforeAll, test} from 'bun:test';
+import { beforeAll, test } from "bun:test";
 
 beforeAll(() => {
-	// If this throws, all tests in this scope will be skipped
-	throw new Error('Setup failed');
+  // If this throws, all tests in this scope will be skipped
+  throw new Error("Setup failed");
 });
 
-test('this test will be skipped', () => {
-	// This won't run because beforeAll failed
+test("this test will be skipped", () => {
+  // This won't run because beforeAll failed
 });
 ```
 
 For better error handling:
 
 ```ts title="test.ts"
-import {beforeAll, test, expect} from 'bun:test';
+import { beforeAll, test, expect } from "bun:test";
 
 beforeAll(async () => {
-	try {
-		await setupDatabase();
-	} catch (error) {
-		console.error('Database setup failed:', error);
-		throw error; // Re-throw to fail the test suite
-	}
+  try {
+    await setupDatabase();
+  } catch (error) {
+    console.error("Database setup failed:", error);
+    throw error; // Re-throw to fail the test suite
+  }
 });
 ```
 
@@ -300,16 +300,16 @@ beforeAll(async () => {
 ```ts title="test.ts"
 // Good: Simple, focused setup
 beforeEach(() => {
-	clearLocalStorage();
-	resetMocks();
+  clearLocalStorage();
+  resetMocks();
 });
 
 // Avoid: Complex logic in hooks
 beforeEach(async () => {
-	// Too much complex logic makes tests hard to debug
-	const data = await fetchComplexData();
-	await processData(data);
-	await setupMultipleServices(data);
+  // Too much complex logic makes tests hard to debug
+  const data = await fetchComplexData();
+  await processData(data);
+  await setupMultipleServices(data);
 });
 ```
 
@@ -318,29 +318,29 @@ beforeEach(async () => {
 ```ts title="test.ts"
 // Good: File-level setup for shared resources
 beforeAll(async () => {
-	await startTestServer();
+  await startTestServer();
 });
 
 // Good: Test-level setup for test-specific state
 beforeEach(() => {
-	user = createTestUser();
+  user = createTestUser();
 });
 ```
 
 ### Clean Up Resources
 
 ```ts title="test.ts"
-import {afterAll, afterEach} from 'bun:test';
+import { afterAll, afterEach } from "bun:test";
 
 afterEach(() => {
-	// Clean up after each test
-	document.body.innerHTML = '';
-	localStorage.clear();
+  // Clean up after each test
+  document.body.innerHTML = "";
+  localStorage.clear();
 });
 
 afterAll(async () => {
-	// Clean up expensive resources
-	await closeDatabase();
-	await stopServer();
+  // Clean up expensive resources
+  await closeDatabase();
+  await stopServer();
 });
 ```

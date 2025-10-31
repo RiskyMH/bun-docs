@@ -7,7 +7,9 @@ Production servers often read, upload, and write files to S3-compatible object s
 
 ### Bun's S3 API is fast
 
-![Left: Bun v1.1.44. Right: Node.js v23.6.0](https://bun.com/bun-s3-node.gif)
+<Frame caption="Left: Bun v1.1.44. Right: Node.js v23.6.0">
+  <img src="https://bun.com/images/bun-s3-node.gif" alt="Bun's S3 API is fast" />
+</Frame>
 
 Bun provides fast, native bindings for interacting with S3-compatible object storage services. Bun's S3 API is designed to be simple and feel similar to fetch's `Response` and `Blob` APIs (like Bun's local filesystem APIs).
 
@@ -26,8 +28,8 @@ await write(metadata, JSON.stringify({ name: "John", age: 30 }));
 
 // Presign a URL (synchronous - no network request needed)
 const url = metadata.presign({
-	acl: "public-read",
-	expiresIn: 60 * 60 * 24, // 1 day
+  acl: "public-read",
+  expiresIn: 60 * 60 * 24, // 1 day
 });
 
 // Delete the file
@@ -56,15 +58,17 @@ To explicitly set credentials, pass them to the `Bun.S3Client` constructor.
 ```ts title="s3.ts"
 import { S3Client } from "bun";
 
-const client = new S3Client({ // [!code highlight]
-	accessKeyId: "your-access-key", // [!code highlight]
-	secretAccessKey: "your-secret-key", // [!code highlight]
-	bucket: "my-bucket", // [!code highlight]
-	// sessionToken: "..." // [!code highlight]
-	endpoint: "https://s3.us-east-1.amazonaws.com", // [!code highlight]
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2 // [!code highlight]
-	// endpoint: "http://localhost:9000", // MinIO // [!code highlight]
-}); // [!code highlight]
+const client = new S3Client({
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // sessionToken: "..."
+  // acl: "public-read",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  // endpoint: "https://<region>.digitaloceanspaces.com", // DigitalOcean Spaces
+  // endpoint: "http://localhost:9000", // MinIO
+});
 
 // Bun.s3 is a global singleton that is equivalent to `new Bun.S3Client()`
 ```
@@ -100,7 +104,7 @@ const partial = await s3file.slice(0, 1024).text();
 // Stream the file
 const stream = s3file.stream();
 for await (const chunk of stream) {
-	console.log(chunk);
+  console.log(chunk);
 }
 ```
 
@@ -128,17 +132,17 @@ await s3file.write(new Response("Hello World!"));
 
 // Write with content type
 await s3file.write(JSON.stringify({ name: "John", age: 30 }), {
-	type: "application/json",
+  type: "application/json",
 });
 
 // Write using a writer (streaming)
-const writer = s3file.writer({ type: "application/json"});
+const writer = s3file.writer({ type: "application/json" });
 writer.write("Hello");
 writer.write(" World!");
 await writer.end();
 
 // Write using Bun.write
-await Bun.write(s3file, 'Hello World!');
+await Bun.write(s3file, "Hello World!");
 ```
 
 ### Working with large files (streams)
@@ -149,18 +153,18 @@ Bun automatically handles multipart uploads for large files and provides streami
 // Write a large file
 const bigFile = Buffer.alloc(10 * 1024 * 1024); // 10MB
 const writer = s3file.writer({
-	// Automatically retry on network errors up to 3 times
-	retry: 3,
+  // Automatically retry on network errors up to 3 times
+  retry: 3,
 
-	// Queue up to 10 requests at a time
-	queueSize: 10,
+  // Queue up to 10 requests at a time
+  queueSize: 10,
 
-	// Upload in 5 MB chunks
-	partSize: 5 * 1024 * 1024,
+  // Upload in 5 MB chunks
+  partSize: 5 * 1024 * 1024,
 });
 for (let i = 0; i < 10; i++) {
-	writer.write(bigFile);
-	await writer.flush();
+  writer.write(bigFile);
+  await writer.flush();
 }
 await writer.end();
 ```
@@ -181,17 +185,17 @@ import { s3 } from "bun";
 // Generate a presigned URL that expires in 24 hours (default)
 const download = s3.presign("my-file.txt"); // GET, text/plain, expires in 24 hours
 
-const upload = s3.presign('my-file', {
-	expiresIn: 3600, // 1 hour
-	method: "PUT",
-	type: "application/json", // No extension for inferring, so we can specify the content type to be JSON
+const upload = s3.presign("my-file", {
+  expiresIn: 3600, // 1 hour
+  method: "PUT",
+  type: "application/json", // No extension for inferring, so we can specify the content type to be JSON
 });
 
 // You can call .presign() if on a file reference, but avoid doing so
 // unless you already have a reference (to avoid memory usage).
 const myFile = s3.file("my-file.txt");
 const presignedFile = myFile.presign({
-	expiresIn: 3600, // 1 hour
+  expiresIn: 3600, // 1 hour
 });
 ```
 
@@ -201,8 +205,8 @@ To set an ACL (access control list) on a presigned URL, pass the `acl` option:
 
 ```ts title="s3.ts"
 const url = s3file.presign({
-	acl: "public-read",
-	expiresIn: 3600,
+  acl: "public-read",
+  expiresIn: 3600,
 });
 ```
 
@@ -225,14 +229,14 @@ To set an expiration time for a presigned URL, pass the `expiresIn` option.
 
 ```ts title="s3.ts"
 const url = s3file.presign({
-	// Seconds
-	expiresIn: 3600, // 1 hour
+  // Seconds
+  expiresIn: 3600, // 1 hour
 
-	// access control list
-	acl: "public-read",
+  // access control list
+  acl: "public-read",
 
-	// HTTP method
-	method: "PUT",
+  // HTTP method
+  method: "PUT",
 });
 ```
 
@@ -242,12 +246,12 @@ To set the HTTP method for a presigned URL, pass the `method` option.
 
 ```ts title="s3.ts"
 const url = s3file.presign({
-	method: "PUT",
-	// method: "DELETE",
-	// method: "GET",
-	// method: "HEAD",
-	// method: "POST",
-	// method: "PUT",
+  method: "PUT",
+  // method: "DELETE",
+  // method: "GET",
+  // method: "HEAD",
+  // method: "POST",
+  // method: "PUT",
 });
 ```
 
@@ -255,19 +259,19 @@ const url = s3file.presign({
 
 To quickly redirect users to a presigned URL for an S3 file, pass an `S3File` instance to a `Response` object as the body.
 
+This will automatically redirect the user to the presigned URL for the S3 file, saving you the memory, time, and bandwidth cost of downloading the file to your server and sending it back to the user.
+
 ```ts title="s3.ts"
 const response = new Response(s3file);
 console.log(response);
 ```
 
-This will automatically redirect the user to the presigned URL for the S3 file, saving you the memory, time, and bandwidth cost of downloading the file to your server and sending it back to the user.
-
-```ts title="s3.ts"
+```txt
 Response (0 KB) {
   ok: false,
-  url: ",
+  url: "",
   status: 302,
-  statusText: ",
+  statusText: "",
   headers: Headers {
     "location": "https://<account-id>.r2.cloudflarestorage.com/...",
   },
@@ -291,11 +295,11 @@ import { S3Client } from "bun";
 
 // AWS S3
 const s3 = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
-	// region: "us-east-1",
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // region: "us-east-1",
 });
 ```
 
@@ -308,10 +312,10 @@ import { S3Client } from "bun";
 
 // Google Cloud Storage
 const gcs = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	bucket: "my-bucket",
-	endpoint: "https://storage.googleapis.com", // [!code highlight]
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
+  endpoint: "https://storage.googleapis.com", // [!code highlight]
 });
 ```
 
@@ -324,10 +328,10 @@ import { S3Client } from "bun";
 
 // CloudFlare R2
 const r2 = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	bucket: "my-bucket",
-	endpoint: "https://<account-id>.r2.cloudflarestorage.com", // [!code highlight]
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
+  endpoint: "https://<account-id>.r2.cloudflarestorage.com", // [!code highlight]
 });
 ```
 
@@ -339,11 +343,11 @@ To use Bun's S3 client with [DigitalOcean Spaces](https://www.digitalocean.com/p
 import { S3Client } from "bun";
 
 const spaces = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	bucket: "my-bucket",
-	// region: "nyc3",
-	endpoint: "https://<region>.digitaloceanspaces.com", // [!code highlight]
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
+  // region: "nyc3",
+  endpoint: "https://<region>.digitaloceanspaces.com", // [!code highlight]
 });
 ```
 
@@ -355,13 +359,13 @@ To use Bun's S3 client with [MinIO](https://min.io/), set `endpoint` to the URL 
 import { S3Client } from "bun";
 
 const minio = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	bucket: "my-bucket",
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
 
-	// Make sure to use the correct endpoint URL
-	// It might not be localhost in production!
-	endpoint: "http://localhost:9000", // [!code highlight]
+  // Make sure to use the correct endpoint URL
+  // It might not be localhost in production!
+  endpoint: "http://localhost:9000", // [!code highlight]
 });
 ```
 
@@ -373,22 +377,22 @@ To use Bun's S3 client with [supabase](https://supabase.com/), set `endpoint` to
 import { S3Client } from "bun";
 
 const supabase = new S3Client({ // [!code highlight]
-	accessKeyId: "access-key", // [!code highlight]
-	secretAccessKey: "secret-key", // [!code highlight]
-	bucket: "my-bucket", // [!code highlight]
-	region: "us-west-1", // [!code highlight]
-	endpoint: "https://<account-id>.supabase.co/storage/v1/s3/storage", // [!code highlight]
-}); // [!code highlight]
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
+  region: "us-west-1",
+  endpoint: "https://<account-id>.supabase.co/storage/v1/s3/storage",
+});
 ```
 
 ### Using Bun's S3Client with S3 Virtual Hosted-Style endpoints
 
-When using a S3 Virtual Hosted-Style endpoint, you need to set the `virtualHostedStyle` option to `true`. 
- 
+When using a S3 Virtual Hosted-Style endpoint, you need to set the `virtualHostedStyle` option to `true`.
+
 <Callout type="info">
-- If you don’t specify an endpoint, Bun will automatically determine the AWS S3 endpoint using the provided region and bucket.
-- If no region is specified, Bun defaults to us-east-1.
-- If you explicitly provide an endpoint, you don’t need to specify a bucket name.
+  - If you don’t specify an endpoint, Bun will automatically determine the AWS S3 endpoint using the provided region and
+  bucket. - If no region is specified, Bun defaults to us-east-1. - If you explicitly provide an endpoint, you don’t
+  need to specify a bucket name.
 </Callout>
 
 ```ts title="s3.ts"
@@ -396,28 +400,28 @@ import { S3Client } from "bun";
 
 // AWS S3 endpoint inferred from region and bucket
 const s3 = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	bucket: "my-bucket",
-	virtualHostedStyle: true, // [!code ++]
-	// endpoint: "https://my-bucket.s3.us-east-1.amazonaws.com",
-	// region: "us-east-1",
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  bucket: "my-bucket",
+  virtualHostedStyle: true, // [!code ++]
+  // endpoint: "https://my-bucket.s3.us-east-1.amazonaws.com",
+  // region: "us-east-1",
 });
 
 // AWS S3
 const s3WithEndpoint = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	endpoint: "https://<bucket-name>.s3.<region>.amazonaws.com", // [!code highlight]
-	virtualHostedStyle: true, // [!code ++]
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  endpoint: "https://<bucket-name>.s3.<region>.amazonaws.com", // [!code highlight]
+  virtualHostedStyle: true, // [!code ++]
 });
 
 // Cloudflare R2
 const r2WithEndpoint = new S3Client({
-	accessKeyId: "access-key",
-	secretAccessKey: "secret-key",
-	endpoint: "https://<bucket-name>.<account-id>.r2.cloudflarestorage.com", // [!code highlight]
-	virtualHostedStyle: true, // [!code ++]
+  accessKeyId: "access-key",
+  secretAccessKey: "secret-key",
+  endpoint: "https://<bucket-name>.<account-id>.r2.cloudflarestorage.com", // [!code highlight]
+  virtualHostedStyle: true, // [!code ++]
 });
 ```
 
@@ -459,22 +463,22 @@ When you're not using environment variables or using multiple buckets, you can c
 import { S3Client } from "bun";
 
 const client = new S3Client({ // [!code highlight]
-	accessKeyId: "your-access-key", // [!code highlight]
-	secretAccessKey: "your-secret-key", // [!code highlight]
-	bucket: "my-bucket", // [!code highlight]
-	// sessionToken: "..." // [!code highlight]
-	endpoint: "https://s3.us-east-1.amazonaws.com", // [!code highlight]
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2 // [!code highlight]
-	// endpoint: "http://localhost:9000", // MinIO // [!code highlight]
-}); // [!code highlight]
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // sessionToken: "..."
+  endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  // endpoint: "http://localhost:9000", // MinIO
+});
 
 // Write using a Response
 await file.write(new Response("Hello World!"));
 
 // Presign a URL
 const url = file.presign({
-	expiresIn: 60 * 60 * 24, // 1 day
-	acl: "public-read",
+  expiresIn: 60 * 60 * 24, // 1 day
+  acl: "public-read",
 });
 
 // Delete the file
@@ -487,13 +491,14 @@ To upload or write a file to S3, call `write` on the `S3Client` instance.
 
 ```ts title="s3.ts"
 const client = new Bun.S3Client({
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	endpoint: "https://s3.us-east-1.amazonaws.com",
-	bucket: "my-bucket",
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  endpoint: "https://s3.us-east-1.amazonaws.com",
+  bucket: "my-bucket",
 });
-await client.write('my-file.txt', 'Hello World!'); // [!code highlight]
-await client.write('my-file.txt', new Response("Hello World!")); // [!code highlight]
+
+await client.write("my-file.txt", "Hello World!"); // [!code highlight]
+await client.write("my-file.txt", new Response("Hello World!")); // [!code highlight]
 
 // equivalent to
 // await client.file("my-file.txt").write("Hello World!");
@@ -505,12 +510,12 @@ To delete a file from S3, call `delete` on the `S3Client` instance.
 
 ```ts title="s3.ts"
 const client = new Bun.S3Client({
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
 });
 
-await client.delete('my-file.txt'); // [!code highlight]
+await client.delete("my-file.txt"); // [!code highlight]
 // equivalent to
 // await client.file("my-file.txt").delete();
 ```
@@ -521,12 +526,12 @@ To check if a file exists in S3, call `exists` on the `S3Client` instance.
 
 ```ts title="s3.ts"
 const client = new Bun.S3Client({
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
 });
 
-const exists = await client.exists('my-file.txt'); // [!code highlight]
+const exists = await client.exists("my-file.txt"); // [!code highlight]
 // equivalent to
 // const exists = await client.file("my-file.txt").exists();
 ```
@@ -535,36 +540,36 @@ const exists = await client.exists('my-file.txt'); // [!code highlight]
 
 `S3File` instances are created by calling the `S3Client` instance method or the `s3.file()` function. Like `Bun.file()`, `S3File` instances are lazy. They don't refer to something that necessarily exists at the time of creation. That's why all the methods that don't involve network requests are fully synchronous.
 
-```ts title="s3.ts"
+```ts title="Type Reference"
 interface S3File extends Blob {
-	slice(start: number, end?: number): S3File;
-	exists(): Promise<boolean>;
-	unlink(): Promise<void>;
-	presign(options: S3Options): string;
-	text(): Promise<string>;
-	json(): Promise<any>;
-	bytes(): Promise<Uint8Array>;
-	arrayBuffer(): Promise<ArrayBuffer>;
-	stream(options: S3Options): ReadableStream;
-	write(
-		data: string | Uint8Array | ArrayBuffer | Blob | ReadableStream | Response | Request,
-		options?: BlobPropertyBag,
-	): Promise<number>;
+  slice(start: number, end?: number): S3File;
+  exists(): Promise<boolean>;
+  unlink(): Promise<void>;
+  presign(options: S3Options): string;
+  text(): Promise<string>;
+  json(): Promise<any>;
+  bytes(): Promise<Uint8Array>;
+  arrayBuffer(): Promise<ArrayBuffer>;
+  stream(options: S3Options): ReadableStream;
+  write(
+    data: string | Uint8Array | ArrayBuffer | Blob | ReadableStream | Response | Request,
+    options?: BlobPropertyBag,
+  ): Promise<number>;
 
-	exists(options?: S3Options): Promise<boolean>;
-	unlink(options?: S3Options): Promise<void>;
-	delete(options?: S3Options): Promise<void>;
-	presign(options?: S3Options): string;
+  exists(options?: S3Options): Promise<boolean>;
+  unlink(options?: S3Options): Promise<void>;
+  delete(options?: S3Options): Promise<void>;
+  presign(options?: S3Options): string;
 
-	stat(options?: S3Options): Promise<S3Stat>;
-	/**
-	 * Size is not synchronously available because it requires a network request.
-	 *
-	 * @deprecated Use `stat()` instead.
-	 */
-	size: NaN;
+  stat(options?: S3Options): Promise<S3Stat>;
+  /**
+   * Size is not synchronously available because it requires a network request.
+   *
+   * @deprecated Use `stat()` instead.
+   */
+  size: NaN;
 
-	// ... more omitted for brevity
+  // ... more omitted for brevity
 }
 ```
 
@@ -632,32 +637,32 @@ To write data directly to a path in the bucket, you can use the `S3Client.write`
 import { S3Client } from "bun";
 
 const credentials = {
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
 };
 
 // Write string
-await S3Client.write('my-file.txt', 'Hello World'); // [!code highlight]
+await S3Client.write("my-file.txt", "Hello World"); // [!code highlight]
 
 // Write JSON with type
-await S3Client.write('data.json', JSON.stringify({ hello: "world" }), { // [!code highlight]
-	...credentials, // [!code highlight]
-	type: "application/json", // [!code highlight]
-}); // [!code highlight]
+await S3Client.write("data.json", JSON.stringify({ hello: "world" }), { // [!code highlight]
+  ...credentials,
+  type: "application/json",
+});
 
 // Write from fetch
-const res = await fetch('https://example.com/data');
-await S3Client.write('data.bin', res, credentials); // [!code highlight]
+const res = await fetch("https://example.com/data");
+await S3Client.write("data.bin", res, credentials); // [!code highlight]
 
 // Write with ACL
-await S3Client.write('public.html', html, { // [!code highlight]
-	...credentials, // [!code highlight]
-	acl: "public-read", // [!code highlight]
-	type: "text/html", // [!code highlight]
-}); // [!code highlight]
+await S3Client.write("public.html", html, { // [!code highlight]
+  ...credentials,
+  acl: "public-read",
+  type: "text/html",
+});
 ```
 
 This is equivalent to calling `new S3Client(credentials).write("my-file.txt", "Hello World")`.
@@ -670,16 +675,16 @@ To generate a presigned URL for an S3 file, you can use the `S3Client.presign` s
 import { S3Client } from "bun";
 
 const credentials = {
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
 };
 
-const url = S3Client.presign('my-file.txt', {
-	...credentials,
-	expiresIn: 3600,
+const url = S3Client.presign("my-file.txt", { // [!code highlight]
+  ...credentials,
+  expiresIn: 3600,
 });
 ```
 
@@ -701,10 +706,10 @@ const credentials = {
 };
 
 // List (up to) 1000 objects in the bucket
-const allObjects = await S3Client.list(null, credentials);
+const allObjects = await S3Client.list(null, credentials); // [!code highlight]
 
 // List (up to) 500 objects under `uploads/` prefix, with owner field for each object
-const uploads = await S3Client.list({
+const uploads = await S3Client.list({ // [!code highlight]
   prefix: 'uploads/',
   maxKeys: 500,
   fetchOwner: true,
@@ -713,7 +718,7 @@ const uploads = await S3Client.list({
 // Check if more results are available
 if (uploads.isTruncated) {
   // List next batch of objects under `uploads/` prefix
-  const moreUploads = await S3Client.list({
+  const moreUploads = await S3Client.list({ // [!code highlight]
     prefix: 'uploads/',
     maxKeys: 500,
     startAfter: uploads.contents!.at(-1).key
@@ -732,14 +737,14 @@ To check if an S3 file exists, you can use the `S3Client.exists` static method.
 import { S3Client } from "bun";
 
 const credentials = {
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
 };
 
-const exists = await S3Client.exists('my-file.txt', credentials); // [!code highlight]
+const exists = await S3Client.exists("my-file.txt", credentials); // [!code highlight]
 ```
 
 The same method also works on `S3File` instances.
@@ -747,9 +752,10 @@ The same method also works on `S3File` instances.
 ```ts title="s3.ts"
 import { s3 } from "bun";
 
-const s3file = s3.file('my-file.txt', {
-	...credentials,
+const s3file = s3.file("my-file.txt", {
+  // ...credentials,
 });
+
 const exists = await s3file.exists();
 ```
 
@@ -761,14 +767,14 @@ To quickly check the size of S3 file without downloading it, you can use the `S3
 import { S3Client } from "bun";
 
 const credentials = {
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
 };
 
-const bytes = await S3Client.size('my-file.txt', credentials); // [!code highlight]
+const bytes = await S3Client.size("my-file.txt", credentials); // [!code highlight]
 ```
 
 This is equivalent to calling `new S3Client(credentials).size("my-file.txt")`.
@@ -781,20 +787,23 @@ To get the size, etag, and other metadata of an S3 file, you can use the `S3Clie
 import { S3Client } from "bun";
 
 const credentials = {
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
-	// endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
+  // endpoint: "https://<account-id>.r2.cloudflarestorage.com", // Cloudflare R2
 };
 
-const stat = await S3Client.stat('my-file.txt', credentials);
-// {
-//   etag: "\"7a30b741503c0b461cc14157e2df4ad8\",
-//   lastModified: 2025-01-07T00:19:10.000Z,
-//   size: 1024,
-//   type: "text/plain;charset=utf-8",
-// }
+const stat = await S3Client.stat("my-file.txt", credentials);
+```
+
+```txt
+{
+  etag: "\"7a30b741503c0b461cc14157e2df4ad8\"",
+  lastModified: 2025-01-07T00:19:10.000Z,
+  size: 1024,
+  type: "text/plain;charset=utf-8",
+}
 ```
 
 ### `S3Client.delete` (static)
@@ -805,18 +814,18 @@ To delete an S3 file, you can use the `S3Client.delete` static method.
 import { S3Client } from "bun";
 
 const credentials = {
-	accessKeyId: "your-access-key",
-	secretAccessKey: "your-secret-key",
-	bucket: "my-bucket",
-	// endpoint: "https://s3.us-east-1.amazonaws.com",
+  accessKeyId: "your-access-key",
+  secretAccessKey: "your-secret-key",
+  bucket: "my-bucket",
+  // endpoint: "https://s3.us-east-1.amazonaws.com",
 };
 
-await S3Client.delete('my-file.txt', credentials); // [!code highlight]
+await S3Client.delete("my-file.txt", credentials); // [!code highlight]
 // equivalent to
 // await new S3Client(credentials).delete("my-file.txt");
 
 // S3Client.unlink is alias of S3Client.delete
-await S3Client.unlink('my-file.txt', credentials); // [!code highlight]
+await S3Client.unlink("my-file.txt", credentials); // [!code highlight]
 ```
 
 ## `s3://` protocol
@@ -824,22 +833,22 @@ await S3Client.unlink('my-file.txt', credentials); // [!code highlight]
 To make it easier to use the same code for local files and S3 files, the `s3://` protocol is supported in `fetch` and `Bun.file()`.
 
 ```ts title="s3.ts"
-const response = await fetch('s3://my-bucket/my-file.txt');
+const response = await fetch("s3://my-bucket/my-file.txt");
 const file = Bun.file("s3://my-bucket/my-file.txt");
 ```
 
 You can additionally pass `s3` options to the `fetch` and `Bun.file` functions.
 
 ```ts title="s3.ts"
-const response = await fetch('s3://my-bucket/my-file.txt', {
-	s3: { // [!code highlight]
-		accessKeyId: "your-access-key", // [!code highlight]
-		secretAccessKey: "your-secret-key", // [!code highlight]
-		endpoint: "https://s3.us-east-1.amazonaws.com", // [!code highlight]
-	}, // [!code highlight]
-	headers: {
-		range: 'bytes=0-1023',
-	},
+const response = await fetch("s3://my-bucket/my-file.txt", {
+  s3: { // [!code highlight]
+    accessKeyId: "your-access-key",
+    secretAccessKey: "your-secret-key",
+    endpoint: "https://s3.us-east-1.amazonaws.com",
+  },
+  headers: {
+    range: "bytes=0-1023",
+  },
 });
 ```
 

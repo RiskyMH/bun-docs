@@ -22,8 +22,8 @@ There's often no need for code changes.
 But if you'd rather switch to the `bun:test` imports, you can do that too.
 
 ```ts title="test.ts"
-import {test, expect} from '@jest/globals'; // [!code --]
-import {test, expect} from 'bun:test'; // [!code ++]
+import { test, expect } from "@jest/globals"; // [!code --]
+import { test, expect } from "bun:test"; // [!code ++]
 ```
 
 ---
@@ -45,18 +45,18 @@ Add this directive to _just one file_ in your project, such as:
 Once added, all test files in your project automatically get TypeScript support for Jest globals:
 
 ```ts title="math.test.ts"
-describe('my test suite', () => {
-	test('should work', () => {
-		expect(1 + 1).toBe(2);
-	});
+describe("my test suite", () => {
+  test("should work", () => {
+    expect(1 + 1).toBe(2);
+  });
 
-	beforeAll(() => {
-		// setup code
-	});
+  beforeAll(() => {
+    // setup code
+  });
 
-	afterEach(() => {
-		// cleanup code
-	});
+  afterEach(() => {
+    // cleanup code
+  });
 });
 ```
 
@@ -70,7 +70,7 @@ Some notable missing features:
 
 ---
 
-If you're using `testEnvironment: "jsdom"` to run your tests in a browser-like environment, you should follow the [[DOM testing with Bun and happy-dom](/guides/test/happy-dom) guide to inject browser APIs into the global scope. This guide relies on [`happy-dom`](https://github.com/capricorn86/happy-dom), which is a leaner and faster alternative to [`jsdom`](https://github.com/jsdom/jsdom).
+If you're using `testEnvironment: "jsdom"` to run your tests in a browser-like environment, you should follow the [DOM testing with Bun and happy-dom](/guides/test/happy-dom) guide to inject browser APIs into the global scope. This guide relies on [`happy-dom`](https://github.com/capricorn86/happy-dom), which is a leaner and faster alternative to [`jsdom`](https://github.com/jsdom/jsdom).
 
 At the moment jsdom does not work in Bun due to its internal use of V8 APIs. Track support for it [here](https://github.com/oven-sh/bun/issues/3554).
 

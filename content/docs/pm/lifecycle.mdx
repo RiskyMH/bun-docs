@@ -1,6 +1,6 @@
 ---
-title: 'Lifecycle scripts'
-description: 'How Bun handles package lifecycle scripts securely'
+title: "Lifecycle scripts"
+description: "How Bun handles package lifecycle scripts securely"
 ---
 
 Packages on `npm` can define _lifecycle scripts_ in their `package.json`. Some of the most common are below, but there are [many others](https://docs.npmjs.com/cli/v10/using-npm/scripts).
@@ -20,11 +20,11 @@ The `postinstall` script is particularly important. It's widely used to build or
 
 ```json title="package.json"
 {
-	"name": "my-app",
-	"version": "1.0.0",
-	"dependencies": {
-		"node-sass": "^6.0.1"
-	}
+  "name": "my-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "node-sass": "^6.0.1"
+  }
 }
 ```
 
@@ -36,9 +36,9 @@ Instead of executing arbitrary scripts, Bun uses a "default-secure" approach. Yo
 
 ```json title="package.json"
 {
-	"name": "my-app",
-	"version": "1.0.0",
-	"trustedDependencies": ["node-sass"] // [!code ++]
+  "name": "my-app",
+  "version": "1.0.0",
+  "trustedDependencies": ["node-sass"] // [!code ++]
 }
 ```
 

@@ -24,7 +24,7 @@ Bun's YAML parser currently passes over 90% of the official YAML test suite. Whi
 Parse a YAML string into a JavaScript object.
 
 ```ts
-import {YAML} from 'bun';
+import { YAML } from "bun";
 const text = `
 name: John Doe
 age: 30
@@ -82,7 +82,7 @@ Bun's YAML parser supports the full YAML 1.2 specification, including:
 
 ```ts
 const yaml = `
-Employee record
+# Employee record
 employee: &emp
   name: Jane Smith
   department: Engineering
@@ -115,9 +115,9 @@ const data = Bun.YAML.parse(yaml);
 
 ```ts
 try {
-	Bun.YAML.parse('invalid: yaml: content:');
+  Bun.YAML.parse("invalid: yaml: content:");
 } catch (error) {
-	console.error('Failed to parse YAML:', error.message);
+  console.error("Failed to parse YAML:", error.message);
 }
 ```
 
@@ -129,7 +129,7 @@ try {
 
 You can import YAML files directly as ES modules. The YAML content is parsed and made available as both default and named exports:
 
-```yaml config.yaml
+```yaml title="config.yaml"
 database:
   host: localhost
   port: 5432
@@ -148,7 +148,7 @@ features:
 #### Default Import
 
 ```ts title="app.ts"
-import config from './config.yaml';
+import config from "./config.yaml";
 
 console.log(config.database.host); // "localhost"
 console.log(config.redis.port); // 6379
@@ -159,7 +159,7 @@ console.log(config.redis.port); // 6379
 You can destructure top-level YAML properties as named imports:
 
 ```ts title="app.ts"
-import {database, redis, features} from './config.yaml';
+import { database, redis, features } from "./config.yaml";
 
 console.log(database.host); // "localhost"
 console.log(redis.port); // 6379
@@ -169,14 +169,14 @@ console.log(features.auth); // true
 Or combine both:
 
 ```ts title="app.ts"
-import config, {database, features} from './config.yaml';
+import config, { database, features } from "./config.yaml";
 
 // Use the full config object
 console.log(config);
 
 // Or use specific parts
 if (features.rateLimit) {
-	setupRateLimiting(database);
+  setupRateLimiting(database);
 }
 ```
 
@@ -185,11 +185,11 @@ if (features.rateLimit) {
 YAML files can also be required in CommonJS:
 
 ```ts title="app.ts"
-const config = require('./config.yaml');
+const config = require("./config.yaml");
 console.log(config.database.name); // "myapp"
 
 // Destructuring also works
-const {database, redis} = require('./config.yaml');
+const { database, redis } = require("./config.yaml");
 console.log(database.port); // 5432
 ```
 
@@ -212,24 +212,24 @@ features:
 ```
 
 ```ts title="server.ts"
-import {server, features} from './config.yaml';
+import { server, features } from "./config.yaml";
 
 console.log(`Starting server on ${server.host}:${server.port}`);
 
 if (features.debug) {
-	console.log('Debug mode enabled');
+  console.log("Debug mode enabled");
 }
 
 // Your server code here
 Bun.serve({
-	port: server.port,
-	hostname: server.host,
-	fetch(req) {
-		if (features.verbose) {
-			console.log(`${req.method} ${req.url}`);
-		}
-		return new Response('Hello World');
-	},
+  port: server.port,
+  hostname: server.host,
+  fetch(req) {
+    if (features.verbose) {
+      console.log(`${req.method} ${req.url}`);
+    }
+    return new Response("Hello World");
+  },
 });
 ```
 
@@ -294,22 +294,22 @@ production:
 ```
 
 ```ts title="app.ts"
-import configs from './config.yaml';
+import configs from "./config.yaml";
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || "development";
 const config = configs[env];
 
 // Environment variables in YAML values can be interpolated
 function interpolateEnvVars(obj: any): any {
-	if (typeof obj === 'string') {
-		return obj.replace(/\${(\w+)}/g, (_, key) => process.env[key] || '');
-	}
-	if (typeof obj === 'object') {
-		for (const key in obj) {
-			obj[key] = interpolateEnvVars(obj[key]);
-		}
-	}
-	return obj;
+  if (typeof obj === "string") {
+    return obj.replace(/\${(\w+)}/g, (_, key) => process.env[key] || "");
+  }
+  if (typeof obj === "object") {
+    for (const key in obj) {
+      obj[key] = interpolateEnvVars(obj[key]);
+    }
+  }
+  return obj;
 }
 
 export default interpolateEnvVars(config);
@@ -338,36 +338,36 @@ features:
 ```
 
 ```ts title="feature-flags.ts"
-import {features} from './features.yaml';
+import { features } from "./features.yaml";
 
 export function isFeatureEnabled(featureName: string, userEmail?: string): boolean {
-	const feature = features[featureName];
+  const feature = features[featureName];
 
-	if (!feature?.enabled) {
-		return false;
-	}
+  if (!feature?.enabled) {
+    return false;
+  }
 
-	// Check rollout percentage
-	if (feature.rolloutPercentage < 100) {
-		const hash = hashCode(userEmail || 'anonymous');
-		if (hash % 100 >= feature.rolloutPercentage) {
-			return false;
-		}
-	}
+  // Check rollout percentage
+  if (feature.rolloutPercentage < 100) {
+    const hash = hashCode(userEmail || "anonymous");
+    if (hash % 100 >= feature.rolloutPercentage) {
+      return false;
+    }
+  }
 
-	// Check allowed users
-	if (feature.allowedUsers && userEmail) {
-		return feature.allowedUsers.includes(userEmail);
-	}
+  // Check allowed users
+  if (feature.allowedUsers && userEmail) {
+    return feature.allowedUsers.includes(userEmail);
+  }
 
-	return true;
+  return true;
 }
 
 // Use with hot reloading to toggle features in real-time
-if (isFeatureEnabled('newDashboard', user.email)) {
-	renderNewDashboard();
+if (isFeatureEnabled("newDashboard", user.email)) {
+  renderNewDashboard();
 } else {
-	renderLegacyDashboard();
+  renderLegacyDashboard();
 }
 ```
 
@@ -410,17 +410,17 @@ seeds:
 ```
 
 ```ts title="db.ts"
-import {connections, migrations} from './database.yaml';
-import {createConnection} from './database-driver';
+import { connections, migrations } from "./database.yaml";
+import { createConnection } from "./database-driver";
 
 // Parse environment variables with defaults
 function parseConfig(config: any) {
-	return JSON.parse(
-		JSON.stringify(config).replace(
-			/\${([^:-]+)(?::([^}]+))?}/g,
-			(_, key, defaultValue) => process.env[key] || defaultValue || '',
-		),
-	);
+  return JSON.parse(
+    JSON.stringify(config).replace(
+      /\${([^:-]+)(?::([^}]+))?}/g,
+      (_, key, defaultValue) => process.env[key] || defaultValue || "",
+    ),
+  );
 }
 
 const dbConfig = parseConfig(connections);
@@ -430,8 +430,8 @@ export const cache = await createConnection(dbConfig.cache);
 export const analytics = await createConnection(dbConfig.analytics);
 
 // Auto-run migrations if configured
-if (parseConfig(migrations).autoRun === 'true') {
-	await runMigrations(db, migrations.directory);
+if (parseConfig(migrations).autoRun === "true") {
+  await runMigrations(db, migrations.directory);
 }
 ```
 
@@ -453,17 +453,17 @@ This means:
 
 YAML files can be dynamically imported, useful for loading configuration on demand:
 
-```ts title="Load configuration based on environment"
-const env = process.env.NODE_ENV || 'development';
+```ts Load configuration based on environment
+const env = process.env.NODE_ENV || "development";
 const config = await import(`./configs/${env}.yaml`);
 
 // Load user-specific settings
 async function loadUserSettings(userId: string) {
-	try {
-		const settings = await import(`./users/${userId}/settings.yaml`);
-		return settings.default;
-	} catch {
-		return await import('./users/default-settings.yaml');
-	}
+  try {
+    const settings = await import(`./users/${userId}/settings.yaml`);
+    return settings.default;
+  } catch {
+    return await import("./users/default-settings.yaml");
+  }
 }
 ```

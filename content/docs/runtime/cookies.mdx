@@ -14,18 +14,18 @@ Bun provides native APIs for working with HTTP cookies through `Bun.Cookie` and 
 const cookies = new Bun.CookieMap();
 
 // From a cookie string
-const cookies1 = new Bun.CookieMap('name=value; foo=bar');
+const cookies1 = new Bun.CookieMap("name=value; foo=bar");
 
 // From an object
 const cookies2 = new Bun.CookieMap({
-	session: 'abc123',
-	theme: 'dark',
+  session: "abc123",
+  theme: "dark",
 });
 
 // From an array of name/value pairs
 const cookies3 = new Bun.CookieMap([
-	['session', 'abc123'],
-	['theme', 'dark'],
+  ["session", "abc123"],
+  ["theme", "dark"],
 ]);
 ```
 
@@ -35,31 +35,31 @@ In Bun's HTTP server, the `cookies` property on the request object (in `routes`)
 
 ```ts title="server.ts"
 const server = Bun.serve({
-	routes: {
-		'/': req => {
-			// Access request cookies
-			const cookies = req.cookies;
+  routes: {
+    "/": req => {
+      // Access request cookies
+      const cookies = req.cookies;
 
-			// Get a specific cookie
-			const sessionCookie = cookies.get('session');
-			if (sessionCookie != null) {
-				console.log(sessionCookie);
-			}
+      // Get a specific cookie
+      const sessionCookie = cookies.get("session");
+      if (sessionCookie != null) {
+        console.log(sessionCookie);
+      }
 
-			// Check if a cookie exists
-			if (cookies.has('theme')) {
-				// ...
-			}
+      // Check if a cookie exists
+      if (cookies.has("theme")) {
+        // ...
+      }
 
-			// Set a cookie, it will be automatically applied to the response
-			cookies.set('visited', 'true');
+      // Set a cookie, it will be automatically applied to the response
+      cookies.set("visited", "true");
 
-			return new Response('Hello');
-		},
-	},
+      return new Response("Hello");
+    },
+  },
 });
 
-console.log('Server listening at: ' + server.url);
+console.log("Server listening at: " + server.url);
 ```
 
 ### Methods
@@ -70,10 +70,10 @@ Retrieves a cookie by name. Returns `null` if the cookie doesn't exist.
 
 ```ts title="get-cookie.ts"
 // Get by name
-const cookie = cookies.get('session');
+const cookie = cookies.get("session");
 
 if (cookie != null) {
-	console.log(cookie);
+  console.log(cookie);
 }
 ```
 
@@ -83,8 +83,8 @@ Checks if a cookie with the given name exists.
 
 ```ts title="has-cookie.ts"
 // Check if cookie exists
-if (cookies.has('session')) {
-	// Cookie exists
+if (cookies.has("session")) {
+  // Cookie exists
 }
 ```
 
@@ -98,18 +98,18 @@ Adds or updates a cookie in the map. Cookies default to `{ path: "/", sameSite: 
 
 ```ts title="set-cookie.ts"
 // Set by name and value
-cookies.set('session', 'abc123');
+cookies.set("session", "abc123");
 
 // Set using options object
 cookies.set({
-	name: 'theme',
-	value: 'dark',
-	maxAge: 3600,
-	secure: true,
+  name: "theme",
+  value: "dark",
+  maxAge: 3600,
+  secure: true,
 });
 
 // Set using Cookie instance
-const cookie = new Bun.Cookie('visited', 'true');
+const cookie = new Bun.Cookie("visited", "true");
 cookies.set(cookie);
 ```
 
@@ -121,13 +121,13 @@ Removes a cookie from the map. When applied to a Response, this adds a cookie wi
 
 ```ts title="delete-cookie.ts"
 // Delete by name using default domain and path.
-cookies.delete('session');
+cookies.delete("session");
 
 // Delete with domain/path options.
 cookies.delete({
-	name: 'session',
-	domain: 'example.com',
-	path: '/admin',
+  name: "session",
+  domain: "example.com",
+  path: "/admin",
 });
 ```
 
@@ -145,26 +145,26 @@ Returns an array of values for Set-Cookie headers that can be used to apply all 
 
 When using `Bun.serve()`, you don't need to call this method explicitly. Any changes made to the `req.cookies` map are automatically applied to the response headers. This method is primarily useful when working with other HTTP server implementations.
 
-```js title="node-server.js"
-import {createServer} from 'node:http';
-import {CookieMap} from 'bun';
+```ts title="node-server.js"
+import { createServer } from "node:http";
+import { CookieMap } from "bun";
 
 const server = createServer((req, res) => {
-	const cookieHeader = req.headers.cookie || '';
-	const cookies = new CookieMap(cookieHeader);
+  const cookieHeader = req.headers.cookie || "";
+  const cookies = new CookieMap(cookieHeader);
 
-	cookies.set('view-count', Number(cookies.get('view-count') || '0') + 1);
-	cookies.delete('session');
+  cookies.set("view-count", Number(cookies.get("view-count") || "0") + 1);
+  cookies.delete("session");
 
-	res.writeHead(200, {
-		'Content-Type': 'text/plain',
-		'Set-Cookie': cookies.toSetCookieHeaders(),
-	});
-	res.end(`Found ${cookies.size} cookies`);
+  res.writeHead(200, {
+    "Content-Type": "text/plain",
+    "Set-Cookie": cookies.toSetCookieHeaders(),
+  });
+  res.end(`Found ${cookies.size} cookies`);
 });
 
 server.listen(3000, () => {
-	console.log('Server running at http://localhost:3000/');
+  console.log("Server running at http://localhost:3000/");
 });
 ```
 
@@ -175,27 +175,27 @@ server.listen(3000, () => {
 ```ts title="iterate-cookies.ts"
 // Iterate over [name, cookie] entries
 for (const [name, value] of cookies) {
-	console.log(`${name}: ${value}`);
+  console.log(`${name}: ${value}`);
 }
 
 // Using entries()
 for (const [name, value] of cookies.entries()) {
-	console.log(`${name}: ${value}`);
+  console.log(`${name}: ${value}`);
 }
 
 // Using keys()
 for (const name of cookies.keys()) {
-	console.log(name);
+  console.log(name);
 }
 
 // Using values()
 for (const value of cookies.values()) {
-	console.log(value);
+  console.log(value);
 }
 
 // Using forEach
 cookies.forEach((value, name) => {
-	console.log(`${name}: ${value}`);
+  console.log(`${name}: ${value}`);
 });
 ```
 
@@ -214,30 +214,30 @@ console.log(cookies.size); // Number of cookies
 `Bun.Cookie` represents an HTTP cookie with its name, value, and attributes.
 
 ```ts title="cookie-class.ts"
-import {Cookie} from 'bun';
+import { Cookie } from "bun";
 
 // Create a basic cookie
-const cookie = new Bun.Cookie('name', 'value');
+const cookie = new Bun.Cookie("name", "value");
 
 // Create a cookie with options
-const secureSessionCookie = new Bun.Cookie('session', 'abc123', {
-	domain: 'example.com',
-	path: '/admin',
-	expires: new Date(Date.now() + 86400000), // 1 day
-	httpOnly: true,
-	secure: true,
-	sameSite: 'strict',
+const secureSessionCookie = new Bun.Cookie("session", "abc123", {
+  domain: "example.com",
+  path: "/admin",
+  expires: new Date(Date.now() + 86400000), // 1 day
+  httpOnly: true,
+  secure: true,
+  sameSite: "strict",
 });
 
 // Parse from a cookie string
-const parsedCookie = new Bun.Cookie('name=value; Path=/; HttpOnly');
+const parsedCookie = new Bun.Cookie("name=value; Path=/; HttpOnly");
 
 // Create from an options object
 const objCookie = new Bun.Cookie({
-	name: 'theme',
-	value: 'dark',
-	maxAge: 3600,
-	secure: true,
+  name: "theme",
+  value: "dark",
+  maxAge: 3600,
+  secure: true,
 });
 ```
 
@@ -280,19 +280,19 @@ Checks if the cookie has expired.
 
 ```ts title="is-expired.ts"
 // Expired cookie (Date in the past)
-const expiredCookie = new Bun.Cookie('name', 'value', {
-	expires: new Date(Date.now() - 1000),
+const expiredCookie = new Bun.Cookie("name", "value", {
+  expires: new Date(Date.now() - 1000),
 });
 console.log(expiredCookie.isExpired()); // true
 
 // Valid cookie (Using maxAge instead of expires)
-const validCookie = new Bun.Cookie('name', 'value', {
-	maxAge: 3600, // 1 hour in seconds
+const validCookie = new Bun.Cookie("name", "value", {
+  maxAge: 3600, // 1 hour in seconds
 });
 console.log(validCookie.isExpired()); // false
 
 // Session cookie (no expiration)
-const sessionCookie = new Bun.Cookie('name', 'value');
+const sessionCookie = new Bun.Cookie("name", "value");
 console.log(sessionCookie.isExpired()); // false
 ```
 
@@ -303,13 +303,13 @@ console.log(sessionCookie.isExpired()); // false
 Returns a string representation of the cookie suitable for a `Set-Cookie` header.
 
 ```ts title="serialize-cookie.ts"
-const cookie = new Bun.Cookie('session', 'abc123', {
-	domain: 'example.com',
-	path: '/admin',
-	expires: new Date(Date.now() + 86400000),
-	secure: true,
-	httpOnly: true,
-	sameSite: 'strict',
+const cookie = new Bun.Cookie("session", "abc123", {
+  domain: "example.com",
+  path: "/admin",
+  expires: new Date(Date.now() + 86400000),
+  secure: true,
+  httpOnly: true,
+  sameSite: "strict",
 });
 
 console.log(cookie.serialize());
@@ -323,9 +323,9 @@ console.log(cookie.toString());
 Converts the cookie to a plain object suitable for JSON serialization.
 
 ```ts title="cookie-json.ts"
-const cookie = new Bun.Cookie('session', 'abc123', {
-	secure: true,
-	httpOnly: true,
+const cookie = new Bun.Cookie("session", "abc123", {
+  secure: true,
+  httpOnly: true,
 });
 
 const json = cookie.toJSON();
@@ -350,7 +350,7 @@ const jsonString = JSON.stringify(cookie);
 Parses a cookie string into a `Cookie` instance.
 
 ```ts title="parse-cookie.ts"
-const cookie = Bun.Cookie.parse('name=value; Path=/; Secure; SameSite=Lax');
+const cookie = Bun.Cookie.parse("name=value; Path=/; Secure; SameSite=Lax");
 
 console.log(cookie.name); // "name"
 console.log(cookie.value); // "value"
@@ -364,10 +364,10 @@ console.log(cookie.sameSite); // "lax"
 Factory method to create a cookie.
 
 ```ts title="cookie-from.ts"
-const cookie = Bun.Cookie.from('session', 'abc123', {
-	httpOnly: true,
-	secure: true,
-	maxAge: 3600,
+const cookie = Bun.Cookie.from("session", "abc123", {
+  httpOnly: true,
+  secure: true,
+  maxAge: 3600,
 });
 ```
 
@@ -375,80 +375,80 @@ const cookie = Bun.Cookie.from('session', 'abc123', {
 
 ```ts title="types.ts"
 interface CookieInit {
-	name?: string;
-	value?: string;
-	domain?: string;
-	/** Defaults to '/'. To allow the browser to set the path, use an empty string. */
-	path?: string;
-	expires?: number | Date | string;
-	secure?: boolean;
-	/** Defaults to `lax`. */
-	sameSite?: CookieSameSite;
-	httpOnly?: boolean;
-	partitioned?: boolean;
-	maxAge?: number;
+  name?: string;
+  value?: string;
+  domain?: string;
+  /** Defaults to '/'. To allow the browser to set the path, use an empty string. */
+  path?: string;
+  expires?: number | Date | string;
+  secure?: boolean;
+  /** Defaults to `lax`. */
+  sameSite?: CookieSameSite;
+  httpOnly?: boolean;
+  partitioned?: boolean;
+  maxAge?: number;
 }
 
 interface CookieStoreDeleteOptions {
-	name: string;
-	domain?: string | null;
-	path?: string;
+  name: string;
+  domain?: string | null;
+  path?: string;
 }
 
 interface CookieStoreGetOptions {
-	name?: string;
-	url?: string;
+  name?: string;
+  url?: string;
 }
 
-type CookieSameSite = 'strict' | 'lax' | 'none';
+type CookieSameSite = "strict" | "lax" | "none";
 
 class Cookie {
-	constructor(name: string, value: string, options?: CookieInit);
-	constructor(cookieString: string);
-	constructor(cookieObject?: CookieInit);
+  constructor(name: string, value: string, options?: CookieInit);
+  constructor(cookieString: string);
+  constructor(cookieObject?: CookieInit);
 
-	readonly name: string;
-	value: string;
-	domain?: string;
-	path: string;
-	expires?: Date;
-	secure: boolean;
-	sameSite: CookieSameSite;
-	partitioned: boolean;
-	maxAge?: number;
-	httpOnly: boolean;
+  readonly name: string;
+  value: string;
+  domain?: string;
+  path: string;
+  expires?: Date;
+  secure: boolean;
+  sameSite: CookieSameSite;
+  partitioned: boolean;
+  maxAge?: number;
+  httpOnly: boolean;
 
-	isExpired(): boolean;
+  isExpired(): boolean;
 
-	serialize(): string;
-	toString(): string;
-	toJSON(): CookieInit;
+  serialize(): string;
+  toString(): string;
+  toJSON(): CookieInit;
 
-	static parse(cookieString: string): Cookie;
-	static from(name: string, value: string, options?: CookieInit): Cookie;
+  static parse(cookieString: string): Cookie;
+  static from(name: string, value: string, options?: CookieInit): Cookie;
 }
 
 class CookieMap implements Iterable<[string, string]> {
-	constructor(init?: string[][] | Record<string, string> | string);
+  constructor(init?: string[][] | Record<string, string> | string);
 
-	get(name: string): string | null;
+  get(name: string): string | null;
 
-	toSetCookieHeaders(): string[];
+  toSetCookieHeaders(): string[];
 
-	has(name: string): boolean;
-	set(name: string, value: string, options?: CookieInit): void;
-	set(options: CookieInit): void;
-	delete(name: string): void;
-	delete(options: CookieStoreDeleteOptions): void;
-	delete(name: string, options: Omit<CookieStoreDeleteOptions, 'name'>): void;
-	toJSON(): Record<string, string>;
+  has(name: string): boolean;
+  set(name: string, value: string, options?: CookieInit): void;
+  set(options: CookieInit): void;
+  delete(name: string): void;
+  delete(options: CookieStoreDeleteOptions): void;
+  delete(name: string, options: Omit<CookieStoreDeleteOptions, "name">): void;
+  toJSON(): Record<string, string>;
 
-	readonly size: number;
+  readonly size: number;
 
-	entries(): IterableIterator<[string, string]>;
-	keys(): IterableIterator<string>;
-	values(): IterableIterator<string>;
-	forEach(callback: (value: string, key: string, map: CookieMap) => void): void;
-	[Symbol.iterator](): IterableIterator<[string, string]>;
+  entries(): IterableIterator<[string, string]>;
+  keys(): IterableIterator<string>;
+  values(): IterableIterator<string>;
+  forEach(callback: (value: string, key: string, map: CookieMap) => void): void;
+  [Symbol.iterator](): IterableIterator<[string, string]>;
 }
 ```

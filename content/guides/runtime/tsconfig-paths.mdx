@@ -8,12 +8,12 @@ Bun reads the `paths` field in your `tsconfig.json` to re-write import paths. Th
 
 ```json title="tsconfig.json"
 {
-	"compilerOptions": {
-		"paths": {
-			"my-custom-name": ["zod"],
-			"@components/*": ["./src/components/*"]
-		}
-	}
+  "compilerOptions": {
+    "paths": {
+      "my-custom-name": ["zod"],
+      "@components/*": ["./src/components/*"]
+    }
+  }
 }
 ```
 
@@ -22,8 +22,8 @@ Bun reads the `paths` field in your `tsconfig.json` to re-write import paths. Th
 With the above `tsconfig.json`, the following imports will be re-written:
 
 ```ts title="tsconfig.ts"
-import {z} from 'my-custom-name'; // imports from "zod"
-import {Button} from '@components/Button'; // imports from "./src/components/Button"
+import { z } from "my-custom-name"; // imports from "zod"
+import { Button } from "@components/Button"; // imports from "./src/components/Button"
 ```
 
 ---

@@ -7,7 +7,7 @@ mode: center
 Bun's test runner supports Jest-style snapshot testing via `.toMatchSnapshot()`.
 
 ```ts title="snap.test.ts"
-import {test, expect} from 'bun:test';
+import { test, expect } from "bun:test";
 
 test('snapshot', () => {
 	expect({foo: 'bar'}).toMatchSnapshot();
@@ -47,7 +47,7 @@ test
 
 The `snap.test.ts.snap` file is a JavaScript file that exports a serialized version of the value passed into `expect()`. The `{foo: "bar"}` object has been serialized to JSON.
 
-```js
+```js title="snap.test.ts.snap"
 // Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
 exports[`snapshot 1`] = `

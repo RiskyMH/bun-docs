@@ -5,10 +5,10 @@ mode: center
 ---
 
 <Callout type="info">
-	In [Azure
-	Artifact's](https://learn.microsoft.com/en-us/azure/devops/artifacts/npm/npmrc?view=azure-devops&tabs=windows%2Cclassic)
-	instructions for `.npmrc`, they say to base64 encode the password. Do not do this for `bun
-	install`. Bun will automatically base64 encode the password for you if needed.
+  In [Azure
+  Artifact's](https://learn.microsoft.com/en-us/azure/devops/artifacts/npm/npmrc?view=azure-devops&tabs=windows%2Cclassic)
+  instructions for `.npmrc`, they say to base64 encode the password. Do not do this for `bun install`. Bun will
+  automatically base64 encode the password for you if needed.
 </Callout>
 
 [Azure Artifacts](https://azure.microsoft.com/en-us/products/devops/artifacts) is a package management system for Azure DevOps. It allows you to host your own private npm registry, npm packages, and other types of packages as well.
@@ -64,7 +64,7 @@ In [Azure Artifact's](https://learn.microsoft.com/en-us/azure/devops/artifacts/n
 To decode a base64-encoded password, open your browser console and run:
 
 ```js title="browser"
-atob('<base64-encoded password>');
+atob("<base64-encoded password>");
 ```
 
 ---

@@ -1,13 +1,12 @@
 ---
 title: Configure git to diff Bun's lockfile
-fullTitle: Configure git to diff Bun's lockfile
+fullTitle: Configure git to diff Bun's lockb lockfile
 mode: center
 ---
 
 <Callout type="info">
-	Bun v1.1.39 introduced `bun.lock`, a JSONC formatted lockfile. `bun.lock` is human-readable and
-	git-diffable without configuration, at no cost to performance. [**Learn
-	more.**](https://bun.com/docs/install/lockfile#text-based-lockfile)
+  Bun v1.1.39 introduced `bun.lock`, a JSONC formatted lockfile. `bun.lock` is human-readable and git-diffable without
+  configuration, at no cost to performance. [**Learn more.**](https://bun.com/docs/install/lockfile#text-based-lockfile)
 </Callout>
 
 ---
@@ -23,8 +22,8 @@ To teach `git` how to generate a human-readable diff of Bun's binary lockfile fo
 Then add the following to you local git config with:
 
 ```sh title="terminal"
-git config diff.lockb.textconv bun
-git config diff.lockb.binary true
+$ git config diff.lockb.textconv bun
+$ git config diff.lockb.binary true
 ```
 
 ---
@@ -32,8 +31,8 @@ git config diff.lockb.binary true
 To globally configure git to diff Bun's lockfile, add the following to your global git config with:
 
 ```sh title="terminal"
-git config --global diff.lockb.textconv bun
-git config --global diff.lockb.binary true
+$ git config --global diff.lockb.textconv bun
+$ git config --global diff.lockb.binary true
 ```
 
 ---

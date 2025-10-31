@@ -22,10 +22,7 @@ By default, running unverified scripts are blocked.
 Bun v1.1 or later. We use Bun to run it's own code generators.
 
 ```ps1
-> irm https://get.scoop.sh | iex
-> scoop install nodejs-lts go rust nasm ruby perl ccache
-# scoop seems to be buggy if you install llvm and the rest at the same time
-> scoop install llvm@19.1.7
+> irm bun.com/install.ps1 | iex
 ```
 
 [Visual Studio](https://visualstudio.microsoft.com) with the "Desktop Development with C++" workload. While installing, make sure to install Git as well, if Git for Windows is not already installed.
@@ -47,9 +44,7 @@ After Visual Studio, you need the following:
 - Node.js
 - Ccache
 
-<Callout type="info">
-	The Zig compiler is automatically downloaded, installed, and updated by the building process.
-</Callout>
+<Callout type="info">The Zig compiler is automatically downloaded, installed, and updated by the building process.</Callout>
 
 [Scoop](https://scoop.sh) can be used to install these remaining tools easily.
 
@@ -61,9 +56,9 @@ scoop seems to be buggy if you install llvm and the rest at the same time
 ```
 
 <Callout type="info">
-	Please do not use WinGet/other package manager for these, as you will likely install Strawberry
-	Perl instead of a more minimal installation of Perl. Strawberry Perl includes many other utilities
-	that get installed into `$Env:PATH` that will conflict with MSVC and break the build.
+  Please do not use WinGet/other package manager for these, as you will likely install Strawberry Perl instead of a more
+  minimal installation of Perl. Strawberry Perl includes many other utilities that get installed into `$Env:PATH` that
+  will conflict with MSVC and break the build.
 </Callout>
 
 If you intend on building WebKit locally (optional), you should install these packages:
@@ -85,8 +80,8 @@ To verify, you can check for an MSVC-only command line such as `mt.exe`
 ```
 
 <Callout type="info">
-	It is not recommended to install `ninja` / `cmake` into your global path, because you may run into
-	a situation where you try to build bun without .\scripts\vs-shell.ps1 sourced.
+  It is not recommended to install `ninja` / `cmake` into your global path, because you may run into a situation where
+  you try to build bun without .\scripts\vs-shell.ps1 sourced.
 </Callout>
 
 ## Building

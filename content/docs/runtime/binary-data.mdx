@@ -98,10 +98,9 @@ The following methods are available on `DataView`:
 Typed arrays are a family of classes that provide an `Array`-like interface for interacting with data in an `ArrayBuffer`. Whereas a `DataView` lets you write numbers of varying size at a particular offset, a `TypedArray` interprets the underlying bytes as an array of numbers, each of a fixed size.
 
 <Callout type="info">
-	It's common to refer to this family of classes collectively by their shared superclass
-	`TypedArray`. This class as _internal_ to JavaScript; you can't directly create instances of it,
-	and `TypedArray` is not defined in the global scope. Think of it as an `interface` or an abstract
-	class.
+  It's common to refer to this family of classes collectively by their shared superclass `TypedArray`. This class as
+  _internal_ to JavaScript; you can't directly create instances of it, and `TypedArray` is not defined in the global
+  scope. Think of it as an `interface` or an abstract class.
 </Callout>
 
 ```ts
@@ -238,17 +237,17 @@ In Bun, and someday in other JavaScript engines, it has methods available for co
 
 ```ts
 new Uint8Array([1, 2, 3, 4, 5]).toBase64(); // "AQIDBA=="
-Uint8Array.fromBase64('AQIDBA=='); // Uint8Array(4) [1, 2, 3, 4, 5]
+Uint8Array.fromBase64("AQIDBA=="); // Uint8Array(4) [1, 2, 3, 4, 5]
 
 new Uint8Array([255, 254, 253, 252, 251]).toHex(); // "fffefdfcfb=="
-Uint8Array.fromHex('fffefdfcfb'); // Uint8Array(5) [255, 254, 253, 252, 251]
+Uint8Array.fromHex("fffefdfcfb"); // Uint8Array(5) [255, 254, 253, 252, 251]
 ```
 
 It is the return value of [`TextEncoder#encode`](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder), and the input type of [`TextDecoder#decode`](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder), two utility classes designed to translate strings and various binary encodings, most notably `"utf-8"`.
 
 ```ts
 const encoder = new TextEncoder();
-const bytes = encoder.encode('hello world');
+const bytes = encoder.encode("hello world");
 // => Uint8Array(11) [ 104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100 ]
 
 const decoder = new TextDecoder();
@@ -261,7 +260,7 @@ const text = decoder.decode(bytes);
 Bun implements `Buffer`, a Node.js API for working with binary data that pre-dates the introduction of typed arrays in the JavaScript spec. It has since been re-implemented as a subclass of `Uint8Array`. It provides a wide range of methods, including several Array-like and `DataView`-like methods.
 
 ```ts
-const buf = Buffer.from('hello world');
+const buf = Buffer.from("hello world");
 // => Buffer(11) [ 104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100 ]
 
 buf.length; // => 11
@@ -281,8 +280,8 @@ For complete documentation, refer to the [Node.js documentation](https://nodejs.
 It isn't common to directly create `Blob` instances. More often, you'll receive instances of `Blob` from an external source (like an `<input type="file">` element in the browser) or library. That said, it is possible to create a `Blob` from one or more string or binary "blob parts".
 
 ```ts
-const blob = new Blob(['<html>Hello</html>'], {
-	type: 'text/html',
+const blob = new Blob(["<html>Hello</html>"], {
+  type: "text/html",
 });
 
 blob.type; // => text/html
@@ -293,10 +292,10 @@ These parts can be `string`, `ArrayBuffer`, `TypedArray`, `DataView`, or other `
 
 ```ts
 const blob = new Blob([
-	'<html>',
-	new Blob(['<body>']),
-	new Uint8Array([104, 101, 108, 108, 111]), // "hello" in binary
-	'</body></html>',
+  "<html>",
+  new Blob(["<body>"]),
+  new Uint8Array([104, 101, 108, 108, 111]), // "hello" in binary
+  "</body></html>",
 ]);
 ```
 
@@ -314,7 +313,7 @@ await blob.stream(); // => ReadableStream
 `BunFile` is a subclass of `Blob` used to represent a lazily-loaded file on disk. Like `File`, it adds a `name` and `lastModified` property. Unlike `File`, it does not require the file to be loaded into memory.
 
 ```ts
-const file = Bun.file('index.txt');
+const file = Bun.file("index.txt");
 // => BunFile
 ```
 
@@ -328,13 +327,13 @@ const file = Bun.file('index.txt');
 // on browser!
 // <input type="file" id="file" />
 
-const files = document.getElementById('file').files;
+const files = document.getElementById("file").files;
 // => File[]
 ```
 
 ```ts
-const file = new File(['<html>Hello</html>'], 'index.html', {
-	type: 'text/html',
+const file = new File(["<html>Hello</html>"], "index.html", {
+  type: "text/html",
 });
 ```
 
@@ -349,22 +348,22 @@ Streams are an important abstraction for working with binary data without loadin
 Bun implements the Web APIs [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) and [`WritableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream).
 
 <Callout type="info">
-	Bun also implements the `node:stream` module, including
-	[`Readable`](https://nodejs.org/api/stream.html#stream_readable_streams),
-	[`Writable`](https://nodejs.org/api/stream.html#stream_writable_streams), and
-	[`Duplex`](https://nodejs.org/api/stream.html#stream_duplex_and_transform_streams). For complete
-	documentation, refer to the Node.js docs.
+  Bun also implements the `node:stream` module, including
+  [`Readable`](https://nodejs.org/api/stream.html#stream_readable_streams),
+  [`Writable`](https://nodejs.org/api/stream.html#stream_writable_streams), and
+  [`Duplex`](https://nodejs.org/api/stream.html#stream_duplex_and_transform_streams). For complete documentation, refer
+  to the Node.js docs.
 </Callout>
 
 To create a simple readable stream:
 
 ```ts
 const stream = new ReadableStream({
-	start(controller) {
-		controller.enqueue('hello');
-		controller.enqueue('world');
-		controller.close();
-	},
+  start(controller) {
+    controller.enqueue("hello");
+    controller.enqueue("world");
+    controller.close();
+  },
 });
 ```
 
@@ -372,7 +371,7 @@ The contents of this stream can be read chunk-by-chunk with `for await` syntax.
 
 ```ts
 for await (const chunk of stream) {
-	console.log(chunk);
+  console.log(chunk);
 }
 
 // => "hello"
@@ -430,7 +429,7 @@ Array.from(new Uint8Array(buf));
 #### To `Blob`
 
 ```ts
-new Blob([buf], {type: 'text/plain'});
+new Blob([buf], { type: "text/plain" });
 ```
 
 #### To `ReadableStream`
@@ -439,14 +438,14 @@ The following snippet creates a `ReadableStream` and enqueues the entire `ArrayB
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		controller.enqueue(buf);
-		controller.close();
-	},
+  start(controller) {
+    controller.enqueue(buf);
+    controller.close();
+  },
 });
 ```
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="With chunking">
 To stream the `ArrayBuffer` in chunks, use a `Uint8Array` view and enqueue each chunk.
 
@@ -455,16 +454,17 @@ const view = new Uint8Array(buf);
 const chunkSize = 1024;
 
 new ReadableStream({
-	start(controller) {
-		for (let i = 0; i < view.length; i += chunkSize) {
-			controller.enqueue(view.slice(i, i + chunkSize));
-		}
-		controller.close();
-	},
+  start(controller) {
+    for (let i = 0; i < view.length; i += chunkSize) {
+      controller.enqueue(view.slice(i, i + chunkSize));
+    }
+    controller.close();
+  },
 });
 ```
 
 </Accordion>
+</Accordions>
 
 ### From `TypedArray`
 
@@ -508,36 +508,38 @@ Array.from(arr);
 
 ```ts
 // only if arr is a view of its entire backing TypedArray
-new Blob([arr.buffer], {type: 'text/plain'});
+new Blob([arr.buffer], { type: "text/plain" });
 ```
 
 #### To `ReadableStream`
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		controller.enqueue(arr);
-		controller.close();
-	},
+  start(controller) {
+    controller.enqueue(arr);
+    controller.close();
+  },
 });
 ```
 
+<Accordions type="single">
 <Accordion title="With chunking">
 
 To stream the `ArrayBuffer` in chunks, split the `TypedArray` into chunks and enqueue each one individually.
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		for (let i = 0; i < arr.length; i += chunkSize) {
-			controller.enqueue(arr.slice(i, i + chunkSize));
-		}
-		controller.close();
-	},
+  start(controller) {
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      controller.enqueue(arr.slice(i, i + chunkSize));
+    }
+    controller.close();
+  },
 });
 ```
 
 </Accordion>
+</Accordions>
 
 ### From `DataView`
 
@@ -581,35 +583,37 @@ Array.from(view);
 #### To `Blob`
 
 ```ts
-new Blob([view.buffer], {type: 'text/plain'});
+new Blob([view.buffer], { type: "text/plain" });
 ```
 
 #### To `ReadableStream`
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		controller.enqueue(view.buffer);
-		controller.close();
-	},
+  start(controller) {
+    controller.enqueue(view.buffer);
+    controller.close();
+  },
 });
 ```
 
+<Accordions type="single">
 <Accordion title="With chunking">
 To stream the `ArrayBuffer` in chunks, split the `DataView` into chunks and enqueue each one individually.
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		for (let i = 0; i < view.byteLength; i += chunkSize) {
-			controller.enqueue(view.buffer.slice(i, i + chunkSize));
-		}
-		controller.close();
-	},
+  start(controller) {
+    for (let i = 0; i < view.byteLength; i += chunkSize) {
+      controller.enqueue(view.buffer.slice(i, i + chunkSize));
+    }
+    controller.close();
+  },
 });
 ```
 
 </Accordion>
+</Accordions>
 
 ### From `Buffer`
 
@@ -642,13 +646,13 @@ buf.toString();
 As base64:
 
 ```ts
-buf.toString('base64');
+buf.toString("base64");
 ```
 
 As hex:
 
 ```ts
-buf.toString('hex');
+buf.toString("hex");
 ```
 
 #### To `number[]`
@@ -660,35 +664,37 @@ Array.from(buf);
 #### To `Blob`
 
 ```ts
-new Blob([buf], {type: 'text/plain'});
+new Blob([buf], { type: "text/plain" });
 ```
 
 #### To `ReadableStream`
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		controller.enqueue(buf);
-		controller.close();
-	},
+  start(controller) {
+    controller.enqueue(buf);
+    controller.close();
+  },
 });
 ```
 
+<Accordions type="single">
 <Accordion title="With chunking">
 To stream the `ArrayBuffer` in chunks, split the `Buffer` into chunks and enqueue each one individually.
 
 ```ts
 new ReadableStream({
-	start(controller) {
-		for (let i = 0; i < buf.length; i += chunkSize) {
-			controller.enqueue(buf.slice(i, i + chunkSize));
-		}
-		controller.close();
-	},
+  start(controller) {
+    for (let i = 0; i < buf.length; i += chunkSize) {
+      controller.enqueue(buf.slice(i, i + chunkSize));
+    }
+    controller.close();
+  },
 });
 ```
 
 </Accordion>
+</Accordions>
 
 ### From `Blob`
 
@@ -846,4 +852,3 @@ To split a `ReadableStream` into two streams that can be consumed independently:
 ```ts
 const [a, b] = stream.tee();
 ```
-</Accordions>

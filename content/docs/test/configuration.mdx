@@ -1,6 +1,6 @@
 ---
-title: 'Test configuration'
-description: 'Learn how to configure Bun test behavior using bunfig.toml and command-line options'
+title: "Test configuration"
+description: "Learn how to configure Bun test behavior using bunfig.toml and command-line options"
 ---
 
 Configure `bun test` via `bunfig.toml` file and command-line options. This page documents the available configuration options for `bun test`.
@@ -22,8 +22,7 @@ The `root` option specifies a root directory for test discovery, overriding the 
 
 ```toml title="bunfig.toml"
 [test]
-# Only scan for tests in the src directory
-root = "src"
+root = "src"  # Only scan for tests in the src directory
 ```
 
 This is useful when you want to:
@@ -43,7 +42,7 @@ root = "src"
 root = "tests"
 
 # Run tests in multiple specific directories (not currently supported - use patterns instead)
-root = ["src", "lib"]  # This syntax is not supported
+# root = ["src", "lib"]  # This syntax is not supported
 ```
 
 ### Preload Scripts
@@ -65,30 +64,30 @@ $ bun test --preload ./test-setup.ts --preload ./global-mocks.ts
 
 ```ts title="test-setup.ts"
 // Global test setup
-import {beforeAll, afterAll} from 'bun:test';
+import { beforeAll, afterAll } from "bun:test";
 
 beforeAll(() => {
-	// Set up test database
-	setupTestDatabase();
+  // Set up test database
+  setupTestDatabase();
 });
 
 afterAll(() => {
-	// Clean up
-	cleanupTestDatabase();
+  // Clean up
+  cleanupTestDatabase();
 });
 ```
 
 ```ts title="global-mocks.ts"
 // Global mocks
-import {mock} from 'bun:test';
+import { mock } from "bun:test";
 
 // Mock environment variables
-process.env.NODE_ENV = 'test';
-process.env.API_URL = 'http://localhost:3001';
+process.env.NODE_ENV = "test";
+process.env.API_URL = "http://localhost:3001";
 
 // Mock external dependencies
-mock.module('./external-api', () => ({
-	fetchData: mock(() => Promise.resolve({data: 'test'})),
+mock.module("./external-api", () => ({
+  fetchData: mock(() => Promise.resolve({ data: "test" })),
 }));
 ```
 
@@ -100,21 +99,20 @@ Set the default timeout for all tests:
 
 ```toml title="bunfig.toml"
 [test]
-# 10 seconds (default is 5000ms)
-timeout = 10000
+timeout = 10000  # 10 seconds (default is 5000ms)
 ```
 
 This applies to all tests unless overridden by individual test timeouts:
 
 ```ts title="test.ts"
 // This test will use the default timeout from bunfig.toml
-test('uses default timeout', () => {
-	// test implementation
+test("uses default timeout", () => {
+  // test implementation
 });
 
 // This test overrides the default timeout
-test('custom timeout', () => {
-	// test implementation
+test("custom timeout", () => {
+  // test implementation
 }, 30000); // 30 seconds
 ```
 
@@ -126,8 +124,7 @@ Configure the JUnit reporter output file path directly in the config file:
 
 ```toml title="bunfig.toml"
 [test.reporter]
-# Output path for JUnit XML report
-junit = "path/to/junit.xml"
+junit = "path/to/junit.xml"  # Output path for JUnit XML report
 ```
 
 This complements the `--reporter=junit` and `--reporter-outfile` CLI flags:
@@ -144,6 +141,8 @@ You can use multiple reporters simultaneously:
 ```bash title="terminal"
 # CLI approach
 $ bun test --reporter=junit --reporter-outfile=./junit.xml
+
+# Config file approach
 ```
 
 ```toml title="bunfig.toml"
@@ -164,8 +163,7 @@ Enable the `--smol` memory-saving mode specifically for the test runner:
 
 ```toml title="bunfig.toml"
 [test]
-# Reduce memory usage during test runs
-smol = true
+smol = true  # Reduce memory usage during test runs
 ```
 
 This is equivalent to using the `--smol` flag on the command line:
@@ -208,8 +206,7 @@ Exclude files matching test patterns (e.g., `*.test.ts`) from the coverage repor
 
 ```toml title="bunfig.toml"
 [test]
-# Exclude test files from coverage reports
-coverageSkipTestFiles = true
+coverageSkipTestFiles = true  # Exclude test files from coverage reports
 ```
 
 ### Coverage Thresholds
@@ -305,13 +302,12 @@ Internally, Bun transpiles every file. That means code coverage must also go thr
 
 ```toml title="bunfig.toml"
 [test]
-# Don't use sourcemaps for coverage analysis
-coverageIgnoreSourcemaps = true
+coverageIgnoreSourcemaps = true  # Don't use sourcemaps for coverage analysis
 ```
 
 <Callout type="warning">
-	When using this option, you probably want to stick a `// @bun` comment at the top of the source
-	file to opt out of the transpilation process.
+  When using this option, you probably want to stick a `// @bun` comment at the top of the source file to opt out of the
+  transpilation process.
 </Callout>
 
 ## Install Settings Inheritance
@@ -440,8 +436,7 @@ Bun will warn about invalid configuration options:
 
 ```toml title="bunfig.toml"
 [test]
-# This will generate a warning
-invalidOption = true
+invalidOption = true  # This will generate a warning
 ```
 
 ### Common Configuration Issues

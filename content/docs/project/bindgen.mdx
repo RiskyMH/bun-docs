@@ -3,10 +3,7 @@ title: Bindgen
 description: Bindgen for Bun
 ---
 
-<Callout type="info">
-	This document is for maintainers and contributors to Bun, and describes internal implementation
-	details.
-</Callout>
+<Callout type="info">This document is for maintainers and contributors to Bun, and describes internal implementation details.</Callout>
 
 The new bindings generator, introduced to the codebase in Dec 2024, scans for
 `*.bind.ts` to find function and class definition, and generates glue code to
@@ -43,15 +40,15 @@ const jsc = bun.jsc;
 Then describe the API schema using a `.bind.ts` function. The binding file goes next to the Zig file.
 
 ```ts title="src/bun.js/math.bind.ts"
-import {t, fn} from 'bindgen';
+import { t, fn } from "bindgen";
 
 export const add = fn({
-	args: {
-		global: t.globalObject,
-		a: t.i32,
-		b: t.i32.default(1),
-	},
-	ret: t.i32,
+  args: {
+    global: t.globalObject,
+    a: t.i32,
+    b: t.i32.default(1),
+  },
+  ret: t.i32,
 });
 ```
 
@@ -89,23 +86,23 @@ TLDRs from WebIDL spec:
 A `variants` can specify multiple variants (also known as overloads).
 
 ```ts title="src/bun.js/math.bind.ts"
-import {t, fn} from 'bindgen';
+import { t, fn } from "bindgen";
 
 export const action = fn({
-	variants: [
-		{
-			args: {
-				a: t.i32,
-			},
-			ret: t.i32,
-		},
-		{
-			args: {
-				a: t.DOMString,
-			},
-			ret: t.DOMString,
-		},
-	],
+  variants: [
+    {
+      args: {
+        a: t.i32,
+      },
+      ret: t.i32,
+    },
+    {
+      args: {
+        a: t.DOMString,
+      },
+      ret: t.DOMString,
+    },
+  ],
 });
 ```
 
@@ -135,15 +132,15 @@ To use [WebIDL's enumeration](https://webidl.spec.whatwg.org/#idl-enums) type, u
 An example of `stringEnum` as used in `fmt.zig` / `bun:internal-for-testing`
 
 ```ts
-export const Formatter = t.stringEnum('highlight-javascript', 'escape-powershell');
+export const Formatter = t.stringEnum("highlight-javascript", "escape-powershell");
 
 export const fmtString = fn({
-	args: {
-		global: t.globalObject,
-		code: t.UTF8String,
-		formatter: Formatter,
-	},
-	ret: t.DOMString,
+  args: {
+    global: t.globalObject,
+    code: t.UTF8String,
+    formatter: Formatter,
+  },
+  ret: t.DOMString,
 });
 ```
 
@@ -176,21 +173,21 @@ Depending on the type, there are more attributes available. See the type definit
 Integer types allow customizing the overflow behavior with `clamp` or `enforceRange`
 
 ```ts
-import {t, fn} from 'bindgen';
+import { t, fn } from "bindgen";
 
 export const add = fn({
-	args: {
-		global: t.globalObject,
-		// enforce in i32 range
-		a: t.i32.enforceRange(),
-		// clamp to u16 range
-		b: t.u16,
-		// enforce in arbitrary range, with a default if not provided
-		c: t.i32.enforceRange(0, 1000).default(5),
-		// clamp to arbitrary range, or null
-		d: t.u16.clamp(0, 10).optional,
-	},
-	ret: t.i32,
+  args: {
+    global: t.globalObject,
+    // enforce in i32 range
+    a: t.i32.enforceRange(),
+    // clamp to u16 range
+    b: t.u16,
+    // enforce in arbitrary range, with a default if not provided
+    c: t.i32.enforceRange(0, 1000).default(5),
+    // clamp to arbitrary range, or null
+    d: t.u16.clamp(0, 10).optional,
+  },
+  ret: t.i32,
 });
 ```
 
@@ -199,21 +196,21 @@ Various Node.js validator functions such as `validateInteger`, `validateNumber`,
 Unlike `enforceRange`, which is taken from WebIDL, `validate*` functions are much more strict on the input they accept. For example, Node's numerical validator check `typeof value === 'number'`, while WebIDL uses `ToNumber` for lossy conversion.
 
 ```ts
-import {t, fn} from 'bindgen';
+import { t, fn } from "bindgen";
 
 export const add = fn({
-	args: {
-		global: t.globalObject,
-		// throw if not given a number
-		a: t.f64.validateNumber(),
-		// valid in i32 range
-		a: t.i32.validateInt32(),
-		// f64 within safe integer range
-		b: t.f64.validateInteger(),
-		// f64 in given range
-		c: t.f64.validateNumber(-10000, 10000),
-	},
-	ret: t.i32,
+  args: {
+    global: t.globalObject,
+    // throw if not given a number
+    a: t.f64.validateNumber(),
+    // valid in i32 range
+    a: t.i32.validateInt32(),
+    // f64 within safe integer range
+    b: t.f64.validateInteger(),
+    // f64 in given range
+    c: t.f64.validateNumber(-10000, 10000),
+  },
+  ret: t.i32,
 });
 ```
 

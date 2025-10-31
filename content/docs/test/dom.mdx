@@ -1,6 +1,6 @@
 ---
-title: 'DOM testing'
-description: 'Learn how to test DOM elements and components using Bun with happy-dom and React Testing Library'
+title: "DOM testing"
+description: "Learn how to test DOM elements and components using Bun with happy-dom and React Testing Library"
 ---
 
 Bun's test runner plays well with existing component and DOM testing libraries, including React Testing Library and happy-dom.
@@ -18,7 +18,7 @@ $ bun add -d @happy-dom/global-registrator
 We'll be using Bun's preload functionality to register the happy-dom globals before running our tests. This step will make browser APIs like `document` available in the global scope. Create a file called `happydom.ts` in the root of your project and add the following code:
 
 ```ts title="happydom.ts"
-import {GlobalRegistrator} from '@happy-dom/global-registrator';
+import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
 GlobalRegistrator.register();
 ```
@@ -33,12 +33,12 @@ preload = ["./happydom.ts"]
 This will execute `happydom.ts` when you run `bun test`. Now you can write tests that use browser APIs like `document` and `window`.
 
 ```ts title="dom.test.ts"
-import {test, expect} from 'bun:test';
+import { test, expect } from "bun:test";
 
-test('dom test', () => {
-	document.body.innerHTML = `<button>My button</button>`;
-	const button = document.querySelector('button');
-	expect(button?.innerText).toEqual('My button');
+test("dom test", () => {
+  document.body.innerHTML = `<button>My button</button>`;
+  const button = document.querySelector("button");
+  expect(button?.innerText).toEqual("My button");
 });
 ```
 
@@ -49,12 +49,12 @@ Depending on your `tsconfig.json` setup, you may see a "Cannot find name 'docume
 ```ts title="dom.test.ts"
 /// <reference lib="dom" />
 
-import {test, expect} from 'bun:test';
+import { test, expect } from "bun:test";
 
-test('dom test', () => {
-	document.body.innerHTML = `<button>My button</button>`;
-	const button = document.querySelector('button');
-	expect(button?.innerText).toEqual('My button');
+test("dom test", () => {
+  document.body.innerHTML = `<button>My button</button>`;
+  const button = document.querySelector("button");
+  expect(button?.innerText).toEqual("My button");
 });
 ```
 
@@ -110,23 +110,23 @@ You can test custom elements and web components using the same setup:
 ```ts title="custom-element.test.ts"
 /// <reference lib="dom" />
 
-import {test, expect} from 'bun:test';
+import { test, expect } from "bun:test";
 
-test('custom element', () => {
-	// Define a custom element
-	class MyElement extends HTMLElement {
-		constructor() {
-			super();
-			this.innerHTML = '<p>Custom element content</p>';
-		}
-	}
+test("custom element", () => {
+  // Define a custom element
+  class MyElement extends HTMLElement {
+    constructor() {
+      super();
+      this.innerHTML = "<p>Custom element content</p>";
+    }
+  }
 
-	customElements.define('my-element', MyElement);
+  customElements.define("my-element", MyElement);
 
-	// Use it in tests
-	document.body.innerHTML = '<my-element></my-element>';
-	const element = document.querySelector('my-element');
-	expect(element?.innerHTML).toBe('<p>Custom element content</p>');
+  // Use it in tests
+  document.body.innerHTML = "<my-element></my-element>";
+  const element = document.querySelector("my-element");
+  expect(element?.innerHTML).toBe("<p>Custom element content</p>");
 });
 ```
 
@@ -137,20 +137,20 @@ Test DOM events and user interactions:
 ```ts title="events.test.ts"
 /// <reference lib="dom" />
 
-import {test, expect} from 'bun:test';
+import { test, expect } from "bun:test";
 
-test('button click event', () => {
-	let clicked = false;
+test("button click event", () => {
+  let clicked = false;
 
-	document.body.innerHTML = '<button id="test-btn">Click me</button>';
-	const button = document.getElementById('test-btn');
+  document.body.innerHTML = '<button id="test-btn">Click me</button>';
+  const button = document.getElementById("test-btn");
 
-	button?.addEventListener('click', () => {
-		clicked = true;
-	});
+  button?.addEventListener("click", () => {
+    clicked = true;
+  });
 
-	button?.click();
-	expect(clicked).toBe(true);
+  button?.click();
+  expect(clicked).toBe(true);
 });
 ```
 
@@ -161,32 +161,32 @@ test('button click event', () => {
 For more complex DOM testing setups, you can create a more comprehensive preload file:
 
 ```ts title="test-setup.ts"
-import {GlobalRegistrator} from '@happy-dom/global-registrator';
-import '@testing-library/jest-dom';
+import { GlobalRegistrator } from "@happy-dom/global-registrator";
+import "@testing-library/jest-dom";
 
 // Register happy-dom globals
 GlobalRegistrator.register();
 
 // Add any global test configuration here
 global.ResizeObserver = class ResizeObserver {
-	observe() {}
-	unobserve() {}
-	disconnect() {}
+  observe() {}
+  unobserve() {}
+  disconnect() {}
 };
 
 // Mock other APIs as needed
-Object.defineProperty(window, 'matchMedia', {
-	writable: true,
-	value: jest.fn().mockImplementation(query => ({
-		matches: false,
-		media: query,
-		onchange: null,
-		addListener: jest.fn(),
-		removeListener: jest.fn(),
-		addEventListener: jest.fn(),
-		removeEventListener: jest.fn(),
-		dispatchEvent: jest.fn(),
-	})),
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
 });
 ```
 
@@ -216,11 +216,11 @@ Happy-dom is fast, but for very large test suites, you might want to:
 - Consider using `cleanup` functions from testing libraries
 
 ```ts title="test-setup.ts"
-import {afterEach} from 'bun:test';
-import {cleanup} from '@testing-library/react';
+import { afterEach } from "bun:test";
+import { cleanup } from "@testing-library/react";
 
 afterEach(() => {
-	cleanup();
-	document.body.innerHTML = '';
+  cleanup();
+  document.body.innerHTML = "";
 });
 ```

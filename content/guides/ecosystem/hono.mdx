@@ -6,11 +6,11 @@ mode: center
 
 [Hono](https://github.com/honojs/hono) is a lightweight ultrafast web framework designed for the edge.
 
-```ts tab="server.ts"
-import {Hono} from 'hono';
+```ts title="server.ts"
+import { Hono } from "hono";
 const app = new Hono();
 
-app.get('/', c => c.text('Hono!'));
+app.get("/", c => c.text("Hono!"));
 
 export default app;
 ```
@@ -27,7 +27,7 @@ cloned honojs/starter#main to /path/to/myapp
 ✔ Copied project files
 ```
 
-```sh tab="terminal"
+```sh title="terminal"
 $ cd myapp
 $ bun install
 ```

@@ -32,12 +32,13 @@ Bun has two heaps. One heap is for the JavaScript runtime and the other heap is 
 The `bun:jsc` module exposes a few functions for measuring memory usage:
 
 ```ts
-import {heapStats} from 'bun:jsc';
+import { heapStats } from "bun:jsc";
 console.log(heapStats());
 ```
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="View example statistics">
+
 ```ts
 {
   heapSize: 1657575,
@@ -140,6 +141,7 @@ console.log(heapStats());
   }
 }
 ```
+
 </Accordion>
 </Accordions>
 
@@ -155,10 +157,10 @@ Bun.gc(false); // asynchronous
 Heap snapshots let you inspect what objects are not being freed. You can use the `bun:jsc` module to take a heap snapshot and then view it with Safari or WebKit GTK developer tools. To generate a heap snapshot:
 
 ```ts
-import {generateHeapSnapshot} from 'bun';
+import { generateHeapSnapshot } from "bun";
 
 const snapshot = generateHeapSnapshot();
-await Bun.write('heap.json', JSON.stringify(snapshot, null, 2));
+await Bun.write("heap.json", JSON.stringify(snapshot, null, 2));
 ```
 
 To view the snapshot, open the `heap.json` file in Safari's Developer Tools (or WebKit GTK)
@@ -168,12 +170,22 @@ To view the snapshot, open the `heap.json` file in Safari's Developer Tools (or 
 3. Click "JavaScript Allocations" in the menu on the left. It might not be visible until you click the pencil icon to show all the timelines
 4. Click "Import" and select your heap snapshot JSON
 
-![Importing a heap snapshot](https://user-images.githubusercontent.com/709451/204428943-ba999e8f-8984-4f23-97cb-b4e3e280363e.png)
+<Frame>
+  <img
+    src="https://user-images.githubusercontent.com/709451/204428943-ba999e8f-8984-4f23-97cb-b4e3e280363e.png"
+    alt="Importing a heap snapshot"
+  />
+</Frame>
 
 Once imported, you should see something like this:
 
-![Viewing heap snapshot in Safari](https://user-images.githubusercontent.com/709451/204429337-b0d8935f-3509-4071-b991-217794d1fb27.png)
-
+<Frame>
+  <img
+    alt="Viewing heap snapshot in Safari"
+    src="https://user-images.githubusercontent.com/709451/204429337-b0d8935f-3509-4071-b991-217794d1fb27.png"
+    caption="Viewing heap snapshot in Safari Dev Tools"
+  />
+</Frame>
 
 > The [web debugger](/docs/runtime/debugger#inspect) also offers the timeline feature which allows you to track and examine the memory usage of the running debug session.
 

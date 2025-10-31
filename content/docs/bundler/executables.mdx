@@ -1,10 +1,9 @@
 ---
-title: 'Single-file executable'
-description: 'Generate standalone executables from TypeScript or JavaScript files with Bun'
+title: "Single-file executable"
+description: "Generate standalone executables from TypeScript or JavaScript files with Bun"
 ---
 
 Bun's bundler implements a `--compile` flag for generating a standalone binary from a TypeScript or JavaScript file.
-
 
 
 ```bash tab="terminal"
@@ -12,7 +11,7 @@ $ bun build ./cli.ts --compile --outfile mycli
 ```
 
 ```ts tab="cli.ts"
-console.log('Hello world!');
+console.log("Hello world!");
 ```
 
 
@@ -35,47 +34,47 @@ The `--target` flag lets you compile your standalone executable for a different 
 
 To build for Linux x64 (most servers):
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --target=bun-linux-x64 ./index.ts --outfile myapp
 
-To support CPUs from before 2013, use the baseline version (nehalem)
+# To support CPUs from before 2013, use the baseline version (nehalem)
 $ bun build --compile --target=bun-linux-x64-baseline ./index.ts --outfile myapp
 
-To explicitly only support CPUs from 2013 and later, use the modern version (haswell)
-modern is faster, but baseline is more compatible.
+# To explicitly only support CPUs from 2013 and later, use the modern version (haswell)
+# modern is faster, but baseline is more compatible.
 $ bun build --compile --target=bun-linux-x64-modern ./index.ts --outfile myapp
 ```
 
 To build for Linux ARM64 (e.g. Graviton or Raspberry Pi):
 
-```bash terminal
-Note: the default architecture is x64 if no architecture is specified.
+```bash title="terminal"
+# Note: the default architecture is x64 if no architecture is specified.
 $ bun build --compile --target=bun-linux-arm64 ./index.ts --outfile myapp
 ```
 
 To build for Windows x64:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --target=bun-windows-x64 ./path/to/my/app.ts --outfile myapp
 
-To support CPUs from before 2013, use the baseline version (nehalem)
+# To support CPUs from before 2013, use the baseline version (nehalem)
 $ bun build --compile --target=bun-windows-x64-baseline ./path/to/my/app.ts --outfile myapp
 
-To explicitly only support CPUs from 2013 and later, use the modern version (haswell)
+# To explicitly only support CPUs from 2013 and later, use the modern version (haswell)
 $ bun build --compile --target=bun-windows-x64-modern ./path/to/my/app.ts --outfile myapp
 
-note: if no .exe extension is provided, Bun will automatically add it for Windows executables
+# note: if no .exe extension is provided, Bun will automatically add it for Windows executables
 ```
 
 To build for macOS arm64:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --target=bun-darwin-arm64 ./path/to/my/app.ts --outfile myapp
 ```
 
 To build for macOS x64:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --target=bun-darwin-x64 ./path/to/my/app.ts --outfile myapp
 ```
 
@@ -95,12 +94,11 @@ The order of the `--target` flag does not matter, as long as they're delimited b
 | bun-linux-arm64-musl  | Linux            | arm64        | ✅     | N/A      | musl  |
 
 <Callout type="warning">
-	On x64 platforms, Bun uses SIMD optimizations which require a modern CPU supporting AVX2
-instructions. The `-baseline` build of Bun is for older CPUs that don't support these
-optimizations. Normally, when you install Bun we automatically detect which version to use but
-	this can be harder to do when cross-compiling since you might not know the target CPU. You usually
-	don't need to worry about it on Darwin x64, but it is relevant for Windows x64 and Linux x64. If
-	you or your users see `"Illegal instruction"` errors, you might need to use the baseline version.
+  On x64 platforms, Bun uses SIMD optimizations which require a modern CPU supporting AVX2 instructions. The `-baseline`
+  build of Bun is for older CPUs that don't support these optimizations. Normally, when you install Bun we automatically
+  detect which version to use but this can be harder to do when cross-compiling since you might not know the target CPU.
+  You usually don't need to worry about it on Darwin x64, but it is relevant for Windows x64 and Linux x64. If you or
+  your users see `"Illegal instruction"` errors, you might need to use the baseline version.
 </Callout>
 
 ---
@@ -109,14 +107,15 @@ optimizations. Normally, when you install Bun we automatically detect which vers
 
 Use the `--define` flag to inject build-time constants into your executable, such as version numbers, build timestamps, or configuration values:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --define BUILD_VERSION='"1.2.3"' --define BUILD_TIME='"2024-01-15T10:30:00Z"' src/cli.ts --outfile mycli
 ```
 
 These constants are embedded directly into your compiled binary at build time, providing zero runtime overhead and enabling dead code elimination optimizations.
 
 <Callout type="info">
-For comprehensive examples and advanced patterns, see the [Build-time constants guide](https://bun.com/guides/runtime/build-time-constants).
+  For comprehensive examples and advanced patterns, see the [Build-time constants
+  guide](https://bun.com/guides/runtime/build-time-constants).
 </Callout>
 
 ---
@@ -131,7 +130,7 @@ With compiled executables, you can move that cost from runtime to build-time.
 
 When deploying to production, we recommend the following:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --minify --sourcemap ./path/to/my/app.ts --outfile myapp
 ```
 
@@ -139,20 +138,21 @@ $ bun build --compile --minify --sourcemap ./path/to/my/app.ts --outfile myapp
 
 To improve startup time, enable bytecode compilation:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --minify --sourcemap --bytecode ./path/to/my/app.ts --outfile myapp
 ```
 
 Using bytecode compilation, `tsc` starts 2x faster:
 
-![Bytecode performance comparison](https://github.com/user-attachments/assets/dc8913db-01d2-48f8-a8ef-ac4e984f9763)
+<Frame>
+  ![Bytecode performance comparison](https://github.com/user-attachments/assets/dc8913db-01d2-48f8-a8ef-ac4e984f9763)
+</Frame>
 
 Bytecode compilation moves parsing overhead for large input files from runtime to bundle time. Your app starts faster, in exchange for making the `bun build` command a little slower. It doesn't obscure source code.
 
 <Callout type="warning">
-	**Experimental:** Bytecode compilation is an experimental feature introduced in Bun v1.1.30. Only
-`cjs` format is supported (which means no top-level-await). Let us know if you run into any
-	issues!
+  **Experimental:** Bytecode compilation is an experimental feature introduced in Bun v1.1.30. Only `cjs` format is
+  supported (which means no top-level-await). Let us know if you run into any issues!
 </Callout>
 
 ### What do these flags do?
@@ -169,7 +169,7 @@ The `--bytecode` argument enables bytecode compilation. Every time you run JavaS
 
 **`--compile-exec-argv="args"`** - Embed runtime arguments that are available via `process.execArgv`:
 
-```bash terminal
+```bash title="terminal"
 $ bun build --compile --compile-exec-argv="--smol --user-agent=MyBot" ./app.ts --outfile myapp
 ```
 
@@ -228,14 +228,14 @@ Bun's `--compile` flag can create standalone executables that contain both serve
 
 
 ```ts title="server.ts"
-import {serve} from 'bun';
-import index from './index.html';
+import { serve } from "bun";
+import index from "./index.html";
 
 const server = serve({
-	routes: {
-		'/': index,
-		'/api/hello': {GET: () => Response.json({message: 'Hello from API'})},
-	},
+  routes: {
+    "/": index,
+    "/api/hello": { GET: () => Response.json({ message: "Hello from API" }) },
+  },
 });
 
 console.log(`Server running at http://localhost:${server.port}`);
@@ -244,24 +244,24 @@ console.log(`Server running at http://localhost:${server.port}`);
 ```html title="index.html"
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>My App</title>
-		<link rel="stylesheet" href="./styles.css" />
-	</head>
-	<body>
-		<h1>Hello World</h1>
-		<script src="./app.js"></script>
-	</body>
+  <head>
+    <title>My App</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <script src="./app.js"></script>
+  </body>
 </html>
 ```
 
 ```js title="app.js"
-console.log('Hello from the client!');
+console.log("Hello from the client!");
 ```
 
 ```css title="styles.css"
 body {
-	background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 ```
 
@@ -283,7 +283,7 @@ This creates a self-contained binary that includes:
 The result is a single file that can be deployed anywhere without needing Node.js, Bun, or any dependencies installed. Just run:
 
 ```bash title="terminal"
-./myapp
+$ ./myapp
 ```
 
 Bun automatically handles serving the frontend assets with proper MIME types and cache headers. The HTML import is replaced with a manifest object that `Bun.serve` uses to efficiently serve pre-bundled assets.
@@ -303,12 +303,12 @@ $ bun build --compile ./index.ts ./my-worker.ts --outfile myapp
 Then, reference the worker in your code:
 
 ```ts title="index.ts"
-console.log('Hello from Bun!');
+console.log("Hello from Bun!");
 
 // Any of these will work:
-new Worker('./my-worker.ts');
-new Worker(new URL('./my-worker.ts', import.meta.url));
-new Worker(new URL('./my-worker.ts', import.meta.url).href);
+new Worker("./my-worker.ts");
+new Worker(new URL("./my-worker.ts", import.meta.url));
+new Worker(new URL("./my-worker.ts", import.meta.url).href);
 ```
 
 As of Bun v1.1.25, when you add multiple entrypoints to a standalone executable, they will be bundled separately into the executable.
@@ -326,16 +326,16 @@ You can use `bun:sqlite` imports with `bun build --compile`.
 By default, the database is resolved relative to the current working directory of the process.
 
 ```ts title="index.ts"
-import db from './my.db' with {type: 'sqlite'};
+import db from "./my.db" with { type: "sqlite" };
 
-console.log(db.query('select * from users LIMIT 1').get());
+console.log(db.query("select * from users LIMIT 1").get());
 ```
 
 That means if the executable is located at `/usr/bin/hello`, the user's terminal is located at `/home/me/Desktop`, it will look for `/home/me/Desktop/my.db`.
 
 ```bash title="terminal"
 $ cd /home/me/Desktop
-./hello
+$ ./hello
 ```
 
 ---

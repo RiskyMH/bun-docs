@@ -285,8 +285,8 @@ await Bun.build({
 ```
 
 <Callout type="warning">
-	Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the
-	frontend dev server - not yet supported in `bun build`'s CLI.
+  Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
+  - not yet supported in `bun build`'s CLI.
 </Callout>
 
 ### Watch Mode
@@ -301,37 +301,37 @@ Need more control? Configure the bundler through the JavaScript API and use Bun'
 
 ```ts title="build.ts"
 await Bun.build({
-	entrypoints: ['./index.html'],
-	outdir: './dist',
-	minify: true,
+  entrypoints: ["./index.html"],
+  outdir: "./dist",
+  minify: true,
 
-	plugins: [
-		{
-			// A plugin that makes every HTML tag lowercase
-			name: 'lowercase-html-plugin',
-			setup({onLoad}) {
-				const rewriter = new HTMLRewriter().on('*', {
-					element(element) {
-						element.tagName = element.tagName.toLowerCase();
-					},
-					text(element) {
-						element.replace(element.text.toLowerCase());
-					},
-				});
+  plugins: [
+    {
+      // A plugin that makes every HTML tag lowercase
+      name: "lowercase-html-plugin",
+      setup({ onLoad }) {
+        const rewriter = new HTMLRewriter().on("*", {
+          element(element) {
+            element.tagName = element.tagName.toLowerCase();
+          },
+          text(element) {
+            element.replace(element.text.toLowerCase());
+          },
+        });
 
-				onLoad({filter: /\.html$/}, async args => {
-					const html = await Bun.file(args.path).text();
+        onLoad({ filter: /\.html$/ }, async args => {
+          const html = await Bun.file(args.path).text();
 
-					return {
-						// Bun's bundler will scan the HTML for <script> tags, <link rel="stylesheet"> tags, and other assets
-						// and bundle them automatically
-						contents: rewriter.transform(html),
-						loader: 'html',
-					};
-				});
-			},
-		},
-	],
+          return {
+            // Bun's bundler will scan the HTML for <script> tags, <link rel="stylesheet"> tags, and other assets
+            // and bundle them automatically
+            contents: rewriter.transform(html),
+            loader: "html",
+          };
+        });
+      },
+    },
+  ],
 });
 ```
 

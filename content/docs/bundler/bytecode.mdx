@@ -52,10 +52,10 @@ $ bun build --compile --bytecode --minify --sourcemap ./cli.ts --outfile=mycli
 
 The performance improvement scales with your codebase size:
 
-| Application size           | Typical startup improvement |
-| -------------------------- | --------------------------- |
-| Small CLI (< 100 KB)       | 1.5-2x faster               |
-| Medium-large app (> 5 MB)         | 2.5x-4x faster                 |
+| Application size          | Typical startup improvement |
+| ------------------------- | --------------------------- |
+| Small CLI (< 100 KB)      | 1.5-2x faster               |
+| Medium-large app (> 5 MB) | 2.5x-4x faster              |
 
 Larger applications benefit more because they have more code to parse.
 
@@ -100,7 +100,7 @@ Bytecode caching currently works with CommonJS output format. Bun's bundler auto
 
 ```js
 // This prevents bytecode caching
-const data = await fetch('https://api.example.com');
+const data = await fetch("https://api.example.com");
 export default data;
 ```
 
@@ -110,8 +110,8 @@ export default data;
 
 ```js
 async function init() {
-	const data = await fetch('https://api.example.com');
-	return data;
+  const data = await fetch("https://api.example.com");
+  return data;
 }
 export default init;
 ```
@@ -213,6 +213,7 @@ On success, it will log something like:
 ```
 
 If you see a cache miss, it will log something like:
+
 ```txt
 [Disk cache] cache miss for sourceCode
 ```
@@ -252,13 +253,13 @@ Modern JavaScript engines use a clever optimization called **lazy parsing**. The
 ```js
 // Without bytecode caching:
 function rarely_used() {
-	// This 500-line function is only parsed
-	// when it's actually called
+  // This 500-line function is only parsed
+  // when it's actually called
 }
 
 function main() {
-	console.log('Starting app');
-	// rarely_used() is never called, so it's never parsed
+  console.log("Starting app");
+  // rarely_used() is never called, so it's never parsed
 }
 ```
 

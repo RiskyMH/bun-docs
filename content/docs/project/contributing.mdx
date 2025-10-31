@@ -29,7 +29,7 @@ $ sudo pacman -S base-devel ccache cmake git go libiconv libtool make ninja pkg-
 $ sudo dnf install cargo ccache cmake git golang libtool ninja-build pkg-config rustc ruby libatomic-static libstdc++-static sed unzip which libicu-devel 'perl(Math::BigInt)'
 ```
 
-```bash openSUSE Tumbleweed
+```bash tab="openSUSE Tumbleweed"
 $ sudo zypper install go cmake ninja automake git icu rustup && rustup toolchain install stable
 ```
 
@@ -40,12 +40,11 @@ $ sudo zypper install go cmake ninja automake git icu rustup && rustup toolchain
 Before starting, you will need to already have a release build of Bun installed, as we use our bundler to transpile and minify our code, as well as for code generation scripts.
 
 
-
-```bash title="Native"
+```bash tab="Native"
 $ curl -fsSL https://bun.com/install | bash
 ```
 
-```bash npm
+```bash tab="npm"
 $ npm install -g bun
 ```
 
@@ -61,8 +60,7 @@ $ brew install bun
 Bun requires LLVM 19 (`clang` is part of LLVM). This version requirement is to match WebKit (precompiled), as mismatching versions will cause memory allocation failures at runtime. In most cases, you can install LLVM through your system package manager:
 
 
-
-```bash macOS (Homebrew)
+```bash tab="macOS (Homebrew)"
 $ brew install llvm@19
 ```
 
@@ -79,7 +77,7 @@ $ sudo pacman -S llvm clang lld
 $ sudo dnf install llvm clang lld-devel
 ```
 
-```bash openSUSE Tumbleweed
+```bash tab="openSUSE Tumbleweed"
 $ sudo zypper install clang19 lld19 llvm19
 ```
 
@@ -96,8 +94,7 @@ $ which clang-19
 If not, run this to manually add it:
 
 
-
-```bash macOS (Homebrew)
+```bash tab="macOS (Homebrew)"
 # use fish_add_path if you're using fish
 # use path+="$(brew --prefix llvm@19)/bin" if you are using zsh
 $ export PATH="$(brew --prefix llvm@19)/bin:$PATH"
@@ -258,8 +255,8 @@ Note that if you change make changes to our [WebKit fork](https://github.com/ove
 ### 'span' file not found on Ubuntu
 
 <Callout type="warning">
-	⚠️ Please note that the instructions below are specific to issues occurring on Ubuntu. It is
-	unlikely that the same issues will occur on other Linux distributions.
+  ⚠️ Please note that the instructions below are specific to issues occurring on Ubuntu. It is unlikely that the same
+  issues will occur on other Linux distributions.
 </Callout>
 
 The Clang compiler typically uses the `libstdc++` C++ standard library by default. `libstdc++` is the default C++ Standard Library implementation provided by the GNU Compiler Collection (GCC). While Clang may link against the `libc++` library, this requires explicitly providing the `-stdlib` flag when running Clang.

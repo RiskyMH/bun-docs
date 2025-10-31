@@ -1,5 +1,5 @@
 ---
-title: 'SvelteKit with Bun'
+title: "SvelteKit with Bun"
 fullTitle: Build an app with SvelteKit and Bun
 mode: center
 ---
@@ -83,22 +83,22 @@ To build for production, you'll need to add the right SvelteKit adapter. Current
 Now, make the following changes to your `svelte.config.js`.
 
 ```js title="svelte.config.js"
-import adapter from '@sveltejs/adapter-auto'; // [!code --]
-import adapter from 'svelte-adapter-bun'; // [!code ++]
-import {vitePreprocess} from '@sveltejs/vite-plugin-svelte';
+import adapter from "@sveltejs/adapter-auto"; // [!code --]
+import adapter from "svelte-adapter-bun"; // [!code ++]
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://svelte.dev/docs/kit/integrations#preprocessors
-	// for more information about preprocessors
-	preprocess: vitePreprocess(),
+  // Consult https://svelte.dev/docs/kit/integrations#preprocessors
+  // for more information about preprocessors
+  preprocess: vitePreprocess(),
 
-	kit: {
-		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
-		adapter: adapter(),
-	},
+  kit: {
+    // adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
+    // If your environment is not supported, or you settled on a specific environment, switch out the adapter.
+    // See https://svelte.dev/docs/kit/adapters for more information about adapters.
+    adapter: adapter(),
+  },
 };
 
 export default config;

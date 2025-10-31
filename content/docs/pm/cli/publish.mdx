@@ -1,5 +1,5 @@
 ---
-title: 'bun publish'
+title: "bun publish"
 description: Use `bun publish` to publish a package to the npm registry
 ---
 
@@ -38,9 +38,8 @@ $ bun publish ./package.tgz
 ```
 
 <Callout type="info">
-	`bun publish` will not run lifecycle scripts
-	(`prepublishOnly/prepack/prepare/postpack/publish/postpublish`) if a tarball path is provided.
-	Scripts will only be run if the package is packed by `bun publish`.
+  `bun publish` will not run lifecycle scripts (`prepublishOnly/prepack/prepare/postpack/publish/postpublish`) if a
+  tarball path is provided. Scripts will only be run if the package is packed by `bun publish`.
 </Callout>
 
 ### `--access`
@@ -55,9 +54,9 @@ $ bun publish --access public
 
 ```json title="package.json"
 {
-	"publishConfig": {
-		"access": "restricted"
-	}
+  "publishConfig": {
+    "access": "restricted"
+  }
 }
 ```
 
@@ -73,9 +72,9 @@ $ bun publish --tag alpha
 
 ```json title="package.json"
 {
-	"publishConfig": {
-		"tag": "next"
-	}
+  "publishConfig": {
+    "tag": "next"
+  }
 }
 ```
 
@@ -112,11 +111,10 @@ $ bun publish --otp 123456
 ```
 
 <Callout type="info">
-	`bun publish` respects the `NPM_CONFIG_TOKEN` environment variable which can be used when
-	publishing in github actions or automated workflows.
+  `bun publish` respects the `NPM_CONFIG_TOKEN` environment variable which can be used when publishing in github actions
+  or automated workflows.
 </Callout>
 
 ---
 
 <include>../../../_snippets/cli/publish.mdx</include>
-
