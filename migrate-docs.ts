@@ -354,16 +354,29 @@ function transformHighlights(content: string): string {
 function mergeTerminalWithOutput(content: string): string {
   let modified = content;
   
-  // Merge bash/sh terminal blocks followed by txt blocks (command + output pattern)
-  // Pattern: bash/sh block with "terminal" in attrs, followed by txt block
+  // First, protect PowerShell + txt blocks from being merged by converting txt to text
   modified = modified.replace(
-    /```(bash|sh|shell|zsh)([^\n]*terminal[^\n]*)\n([\s\S]*?)```\s*\n+\s*```txt\n([\s\S]*?)```/g,
-    (_match: string, lang: string, attrs: string, commandContent: string, outputContent: string) => {
-      incrementStat("terminal-output-merged");
-      // Merge the command and output into one block, keeping the terminal attrs
-      return `\`\`\`${lang}${attrs}\n${commandContent}\n${outputContent}\`\`\``;
+    /```powershell([^\n]*)\n([\s\S]*?)```\s*\n+\s*```txt\n/g,
+    (_match: string, attrs: string, commandContent: string) => {
+      // Convert txt to text to prevent merging
+      return `\`\`\`powershell${attrs}\n${commandContent}\`\`\`\n\n\`\`\`text\n`;
     }
   );
+  
+  // Merge bash/sh terminal blocks followed by txt blocks (command + output pattern)
+  // Pattern: bash/sh block with "terminal" in attrs, followed by txt block
+  // Match space/newline after language to avoid matching "powershell"
+  modified = modified.replace(
+    /```(bash|sh|shell|zsh)([ \t])([^\n]*terminal[^\n]*)\n([\s\S]*?)```\s*\n+\s*```txt\n([\s\S]*?)```/g,
+    (_match: string, lang: string, space: string, attrs: string, commandContent: string, outputContent: string) => {
+      incrementStat("terminal-output-merged");
+      // Merge the command and output into one block, keeping the terminal attrs
+      return `\`\`\`${lang}${space}${attrs}\n${commandContent}\n${outputContent}\`\`\``;
+    }
+  );
+  
+  // Convert text blocks back to txt
+  modified = modified.replace(/```text\n/g, '```txt\n');
   
   return modified;
 }
@@ -382,7 +395,13 @@ function addTerminalPrompts(content: string): string {
     const processedLines = lines.map((line: string) => {
       const trimmed = line.trim();
       
+      // Skip comments, existing prompts, and marked output lines
       if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith(">") || trimmed.startsWith("//")) {
+        // If this is a marked output line, strip the marker
+        if (trimmed.startsWith("# OUTPUT: ")) {
+          const leadingSpace = line.match(/^(\s*)/)?.[1] || "";
+          return `${leadingSpace}${trimmed.slice(10)}`; // Remove "# OUTPUT: " prefix
+        }
         return line;
       }
       
@@ -438,7 +457,7 @@ function addTerminalPrompts(content: string): string {
           /^[└├│─]/.test(trimmed) || // Directory tree characters
           /^(packed|dependencies|Current|Target|Latest|Package)\s/.test(trimmed) || // Common output words
           /^(you|shouldn)/i.test(trimmed) || // Words indicating non-command text
-          /^(bun|npm|node)\s+(test|run|install|build)\s+v[\d.$]/.test(trimmed) || // Version banners like "bun test v1.3.1"
+          /^(bun|npm|node)\s+(\w+\s+)*v[\d.$]/.test(trimmed) || // Version banners like "bun test v1.3.1", "bun pm version v1.0.0"
           /^\.\/[^:]+:\s+(valid|satisfies|error|warning)/.test(trimmed)) { // Path verification output like "./myapp: valid on disk"
         inOutput = true;
         return line;
@@ -454,7 +473,7 @@ function addTerminalPrompts(content: string): string {
         /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway)\s/.test(trimmed) || // Common commands
         /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars  
         (/^[A-Z_]+=/.test(trimmed) && /\s+(bun|npm|node|git)/.test(trimmed)) || // Env var before command like: FOO=bar bun run
-        /^\.\//.test(trimmed); // Relative paths
+        (/^\.\//.test(trimmed) && !/\s+@\d/.test(trimmed)); // Relative paths (but not output like "./path @1.2.3")
       
       if (looksLikeCommand) {
         sawCommand = true;
@@ -988,12 +1007,12 @@ function wrapHtmlTagsInCode(content: string): string {
     // Match <tagname> or </tagname> but not React/MDX components
     return part.text.replace(
       /<\/?([a-z][a-z0-9-]*?)>/gi,
-      (match, tagName) => {
+      (match, tagName, offset, fullText) => {
         const lowerTagName = tagName.toLowerCase();
         
         // Skip MDX/React components (include, Callout, Tab, etc.)
         const mdxComponents = ['include', 'callout', 'tab', 'tabs', 'accordion', 'accordions', 
-                               'card', 'cards', 'step', 'steps', 'paramfield', 'codegroup'];
+                               'card', 'cards', 'step', 'steps', 'paramfield', 'codegroup', 'section'];
         if (mdxComponents.includes(lowerTagName)) {
           return match;
         }
@@ -1001,6 +1020,19 @@ function wrapHtmlTagsInCode(content: string): string {
         // Skip if it's a component (starts with capital letter)
         if (/^[A-Z]/.test(tagName)) {
           return match;
+        }
+        
+        // Skip tags inside attributes (e.g., name="--dry-run=<val>")
+        // Check if there's a quote before the tag without a closing quote between them
+        const textBefore = fullText.slice(0, offset);
+        const lastQuote = Math.max(textBefore.lastIndexOf('"'), textBefore.lastIndexOf("'"));
+        if (lastQuote !== -1) {
+          // Check if there's a closing quote after the last quote but before our tag
+          const textBetween = fullText.slice(lastQuote + 1, offset);
+          if (!/["']/.test(textBetween)) {
+            // We're inside an attribute value, don't wrap
+            return match;
+          }
         }
         
         incrementStat("html-tag-wrapped");
