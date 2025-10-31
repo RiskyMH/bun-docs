@@ -140,6 +140,11 @@ const config = {
         destination: "/docs-md/:path*",
         permanent: false,
       },
+      {
+        source: '/docs/images/:path*',
+        destination: '/images/:path*',
+        permanent: false,
+      },
       ...Object.entries(permanentRedirects).map(([source, destination]) => ({
         source,
         destination,
