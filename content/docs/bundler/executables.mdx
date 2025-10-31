@@ -223,9 +223,7 @@ This is useful for building CLI tools on top of Bun that may need to install pac
 
 Bun's `--compile` flag can create standalone executables that contain both server and client code, making it ideal for full-stack applications. When you import an HTML file in your server code, Bun automatically bundles all frontend assets (JavaScript, CSS, etc.) and embeds them into the executable. When Bun sees the HTML import on the server, it kicks off a frontend build process to bundle JavaScript, CSS, and other assets.
 
-
-
-```ts title="server.ts"
+```ts tab="server.ts"
 import { serve } from "bun";
 import index from "./index.html";
 
@@ -239,7 +237,7 @@ const server = serve({
 console.log(`Server running at http://localhost:${server.port}`);
 ```
 
-```html title="index.html"
+```html tab="index.html"
 <!DOCTYPE html>
 <html>
   <head>
@@ -253,17 +251,15 @@ console.log(`Server running at http://localhost:${server.port}`);
 </html>
 ```
 
-```js title="app.js"
+```ts tab="app.js"
 console.log("Hello from the client!");
 ```
 
-```css title="styles.css"
+```css tab="styles.css"
 body {
   background-color: #f0f0f0;
 }
 ```
-
-
 
 To build this into a single executable:
 
@@ -346,14 +342,14 @@ To embed files into an executable with `bun build --compile`, import the file in
 
 ```ts title="index.ts"
 // this becomes an internal file path
-import icon from './icon.png' with {type: 'file'};
-import {file} from 'bun';
+import icon from "./icon.png" with { type: "file" };
+import { file } from "bun";
 
 export default {
-	fetch(req) {
-		// Embedded files can be streamed from Response objects
-		return new Response(file(icon));
-	},
+  fetch(req) {
+    // Embedded files can be streamed from Response objects
+    return new Response(file(icon));
+  },
 };
 ```
 
@@ -362,8 +358,8 @@ Embedded files can be read using `Bun.file`'s functions or the Node.js `fs.readF
 For example, to read the contents of the embedded file:
 
 ```ts title="index.ts"
-import icon from './icon.png' with {type: 'file'};
-import {file} from 'bun';
+import icon from "./icon.png" with { type: "file" };
+import { file } from "bun";
 
 const bytes = await file(icon).arrayBuffer();
 // await fs.promises.readFile(icon)
@@ -375,9 +371,9 @@ const bytes = await file(icon).arrayBuffer();
 If your application wants to embed a SQLite database, set `type: "sqlite"` in the import attribute and the `embed` attribute to `"true"`.
 
 ```ts title="index.ts"
-import myEmbeddedDb from './my.db' with {type: 'sqlite', embed: 'true'};
+import myEmbeddedDb from "./my.db" with { type: "sqlite", embed: "true" };
 
-console.log(myEmbeddedDb.query('select * from users LIMIT 1').get());
+console.log(myEmbeddedDb.query("select * from users LIMIT 1").get());
 ```
 
 This database is read-write, but all changes are lost when the executable exits (since it's stored in memory).
@@ -387,7 +383,7 @@ This database is read-write, but all changes are lost when the executable exits 
 As of Bun v1.0.23, you can embed `.node` files into executables.
 
 ```ts title="index.ts"
-const addon = require('./addon.node');
+const addon = require("./addon.node");
 
 console.log(addon.hello());
 ```
@@ -405,14 +401,14 @@ $ bun build --compile ./index.ts ./public/**/*.png
 Then, you can reference the files in your code:
 
 ```ts title="index.ts"
-import icon from './public/assets/icon.png' with {type: 'file'};
-import {file} from 'bun';
+import icon from "./public/assets/icon.png" with { type: "file" };
+import { file } from "bun";
 
 export default {
-	fetch(req) {
-		// Embedded files can be streamed from Response objects
-		return new Response(file(icon));
-	},
+  fetch(req) {
+    // Embedded files can be streamed from Response objects
+    return new Response(file(icon));
+  },
 };
 ```
 
@@ -423,8 +419,8 @@ This is honestly a workaround, and we expect to improve this in the future with 
 To get a list of all embedded files, use `Bun.embeddedFiles`:
 
 ```ts title="index.ts"
-import './icon.png' with {type: 'file'};
-import {embeddedFiles} from 'bun';
+import "./icon.png" with { type: "file" };
+import { embeddedFiles } from "bun";
 
 console.log(embeddedFiles[0].name); // `icon-${hash}.png`
 ```
@@ -462,9 +458,7 @@ When compiling a standalone executable on Windows, there are two platform-specif
 - `--windows-icon=path/to/icon.ico` to customize the executable file icon.
 - `--windows-hide-console` to disable the background terminal, which can be used for applications that do not need a TTY.
 
-<Callout type="warning">
-	These flags currently cannot be used when cross-compiling because they depend on Windows APIs.
-</Callout>
+<Callout type="warning">These flags currently cannot be used when cross-compiling because they depend on Windows APIs.</Callout>
 
 ---
 
@@ -473,7 +467,7 @@ When compiling a standalone executable on Windows, there are two platform-specif
 To codesign a standalone executable on macOS (which fixes Gatekeeper warnings), use the `codesign` command.
 
 ```bash title="terminal"
-codesign --deep --force -vvvv --sign "XXXXXXXXXX" ./myapp
+$ codesign --deep --force -vvvv --sign "XXXXXXXXXX" ./myapp
 ```
 
 We recommend including an `entitlements.plist` file with JIT permissions.
@@ -500,13 +494,13 @@ We recommend including an `entitlements.plist` file with JIT permissions.
 To codesign with JIT support, pass the `--entitlements` flag to `codesign`.
 
 ```bash title="terminal"
-codesign --deep --force -vvvv --sign "XXXXXXXXXX" --entitlements entitlements.plist ./myapp
+$ codesign --deep --force -vvvv --sign "XXXXXXXXXX" --entitlements entitlements.plist ./myapp
 ```
 
 After codesigning, verify the executable:
 
 ```bash title="terminal"
-codesign -vvv --verify ./myapp
+$ codesign -vvv --verify ./myapp
 ./myapp: valid on disk
 ./myapp: satisfies its Designated Requirement
 ```
