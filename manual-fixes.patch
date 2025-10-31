@@ -1,15 +1,4655 @@
-# Manual Fixes Patch
-#
-# This patch contains manual fixes that should be applied after migration.
-# Add any customizations or corrections here that the migration script can't handle.
-#
-# To update this patch:
-# 1. Run: bun run sync-docs (will fail on git apply, that's ok)
-# 2. Manually fix the files that need correction
-# 3. Run: git diff content/ > manual-fixes.patch
-# 4. Commit the updated patch
-#
-# Examples of what to put here:
-# - Custom content you've added
-# - Bug fixes for migration script issues
-# - Manual corrections for complex transformations
+diff --git a/content/docs/bundler/esbuild.mdx b/content/docs/bundler/esbuild.mdx
+index 95320fe7..3f9b720f 100644
+--- a/content/docs/bundler/esbuild.mdx
++++ b/content/docs/bundler/esbuild.mdx
+@@ -30,7 +30,7 @@ Bun and esbuild both provide a command-line interface.
+ 
+ ```bash title="terminal"
+ # esbuild
+-$ esbuild <entrypoint> --outdir=out --bundle
++esbuild <entrypoint> --outdir=out --bundle
+ 
+ # bun
+ $ bun build <entrypoint> --outdir=out
+@@ -231,55 +231,23 @@ const myPlugin: BunPlugin = {
+ ### onResolve
+ 
+ <Tabs items={['options', 'arguments', 'results']}>
+-	<Tab value="options">
+-		- 🟢 `filter`
+-		- 🟢 `namespace`
+-	</Tab>
+-	<Tab value="arguments">
+-		- 🟢 `path`
+-		- 🟢 `importer`
+-		- 🔴 `namespace`
+-		- 🔴 `resolveDir`
+-		- 🔴 `kind`
+-		- 🔴 `pluginData`
+-	</Tab>
+-	<Tab value="results">
+-		- 🟢 `namespace`
+-		- 🟢 `path`
+-		- 🔴 `errors`
+-		- 🔴 `external`
+-		- 🔴 `pluginData`
+-		- 🔴 `pluginName`
+-		- 🔴 `sideEffects`
+-		- 🔴 `suffix`
+-		- 🔴 `warnings`
+-		- 🔴 `watchDirs`
+-		- 🔴 `watchFiles`
+-	</Tab>
++  <Tab value="options">- 🟢 `filter` - 🟢 `namespace`</Tab>
++  <Tab value="arguments">
++    - 🟢 `path` - 🟢 `importer` - 🔴 `namespace` - 🔴 `resolveDir` - 🔴 `kind` - 🔴 `pluginData`
++  </Tab>
++  <Tab value="results">
++    - 🟢 `namespace` - 🟢 `path` - 🔴 `errors` - 🔴 `external` - 🔴 `pluginData` - 🔴 `pluginName` - 🔴 `sideEffects` -
++    🔴 `suffix` - 🔴 `warnings` - 🔴 `watchDirs` - 🔴 `watchFiles`
++  </Tab>
+ </Tabs>
+ 
+ ### onLoad
+ 
+ <Tabs items={['options', 'arguments', 'results']}>
+-	<Tab value="options">
+-		- 🟢 `filter`
+-		- 🟢 `namespace`
+-	</Tab>
+-	<Tab value="arguments">
+-		- 🟢 `path`
+-		- 🔴 `namespace`
+-		- 🔴 `suffix`
+-		- 🔴 `pluginData`
+-	</Tab>
+-	<Tab value="results">
+-		- 🟢 `contents`
+-		- 🟢 `loader`
+-		- 🔴 `errors`
+-		- 🔴 `pluginData`
+-		- 🔴 `pluginName`
+-		- 🔴 `resolveDir`
+-		- 🔴 `warnings`
+-		- 🔴 `watchDirs`
+-		- 🔴 `watchFiles`
+-	</Tab>
++  <Tab value="options">- 🟢 `filter` - 🟢 `namespace`</Tab>
++  <Tab value="arguments">- 🟢 `path` - 🔴 `namespace` - 🔴 `suffix` - 🔴 `pluginData`</Tab>
++  <Tab value="results">
++    - 🟢 `contents` - 🟢 `loader` - 🔴 `errors` - 🔴 `pluginData` - 🔴 `pluginName` - 🔴 `resolveDir` - 🔴 `warnings` -
++    🔴 `watchDirs` - 🔴 `watchFiles`
++  </Tab>
+ </Tabs>
+diff --git a/content/docs/bundler/executables.mdx b/content/docs/bundler/executables.mdx
+index 262f78ce..c58f5908 100644
+--- a/content/docs/bundler/executables.mdx
++++ b/content/docs/bundler/executables.mdx
+@@ -5,13 +5,18 @@ description: "Generate standalone executables from TypeScript or JavaScript file
+ 
+ Bun's bundler implements a `--compile` flag for generating a standalone binary from a TypeScript or JavaScript file.
+ 
+-```bash tab="terminal"
+-$ bun build ./cli.ts --compile --outfile mycli
+-```
+-
+-```ts tab="cli.ts"
+-console.log("Hello world!");
+-```
++<Tabs items={['JavaScript', 'CLI']} groupId="js/cli">
++  <Tab value="CLI">
++    ```bash title="terminal"
++    $ bun build ./cli.ts --compile --outfile mycli
++   ```
++  </Tab>
++  <Tab value="JavaScript">
++    ```ts title="cli.ts"
++    console.log("Hello world!");
++   ```
++  </Tab>
++</Tabs>
+ 
+ This bundles `cli.ts` into an executable that can be executed directly:
+ 
+@@ -204,11 +209,11 @@ you shouldn't see this
+ 
+ However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
+ 
+-```bash terminal
+-With the env var, the executable acts like the `bun` CLI
++```bash title="terminal"
++# With the env var, the executable acts like the `bun` CLI
+ $ BUN_BE_BUN=1 ./such-bun install
+ 
+-bun install v$BUN_LATEST_VERSION (1d1db811)
++bun install v1.2.16-canary.1 (1d1db811)
+ Checked 63 installs across 64 packages (no changes) [5.00ms]
+ ```
+ 
+@@ -254,7 +259,7 @@ console.log(`Server running at http://localhost:${server.port}`);
+ console.log("Hello from the client!");
+ ```
+ 
+-```css tab="styles.css"
++```scss tab="styles.css"
+ body {
+   background-color: #f0f0f0;
+ }
+diff --git a/content/docs/bundler/fullstack.mdx b/content/docs/bundler/fullstack.mdx
+index 17d40065..9d2c9237 100644
+--- a/content/docs/bundler/fullstack.mdx
++++ b/content/docs/bundler/fullstack.mdx
+@@ -123,7 +123,9 @@ Becomes something like this:
+ 
+ To use React in your client-side code, import `react-dom/client` and render your app.
+ 
+-```ts tab="src/backend.ts"
++<Tabs items={['src/backend.ts', 'src/frontend.tsx', 'public/dashboard.html', 'src/app.tsx']}>
++<Tab value="src/backend.ts">
++```ts title="src/backend.ts"
+ import dashboard from "../public/dashboard.html";
+ import { serve } from "bun";
+ 
+@@ -138,18 +140,24 @@ routes: {
+     },
+ 
+ });
+-```
+ 
+-```tsx tab="src/frontend.tsx"
++````
++</Tab>
++
++<Tab value="src/frontend.tsx">
++```tsx title="src/frontend.tsx"
+ import { createRoot } from 'react-dom/client';
+ import App from './app';
+ 
+ const container = document.getElementById('root');
+ const root = createRoot(container!);
+ root.render(<App />);
+-```
++````
+ 
+-```html tab="public/dashboard.html"
++</Tab>
++
++<Tab value="public/dashboard.html">
++```html title="public/dashboard.html"
+ <!DOCTYPE html>
+ <html>
+   <head>
+@@ -162,8 +170,10 @@ root.render(<App />);
+   </body>
+ </html>
+ ```
++</Tab>
+ 
+-```tsx tab="src/app.tsx"
++<Tab value="src/app.tsx">
++```tsx title="src/app.tsx"
+ import { useState } from 'react';
+ 
+ export default function App() {
+@@ -179,7 +189,10 @@ export default function App() {
+     );
+ 
+ }
+-```
++
++````
++</Tab>
++</Tabs>
+ 
+ ## Development Mode
+ 
+@@ -201,7 +214,7 @@ Bun.serve({
+     // ... api requests
+   },
+ });
+-```
++````
+ 
+ ### Development Mode Features
+ 
+@@ -441,7 +454,7 @@ This will allow you to use TailwindCSS utility classes in your HTML and CSS file
+ 
+ Or in your CSS:
+ 
+-```css title="style.css"
++```scss title="style.css"
+ @import "tailwindcss";
+ 
+ .custom-class {
+@@ -495,7 +508,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
+ <Steps>
+ <Step>
+ 
+-  ### 1. `<script>` Processing
++  ### 1. <script> Processing
+ - Transpiles TypeScript, JSX, and TSX in `<script>` tags
+ - Bundles imported dependencies
+ - Generates sourcemaps for debugging
+@@ -761,7 +774,7 @@ export function App() {
+ }
+ ```
+ 
+-```css title="src/styles.css"
++```scss title="src/styles.css"
+ * {
+   margin: 0;
+   padding: 0;
+@@ -1003,11 +1016,11 @@ CMD ["bun", "index.js"]
+ 
+ ### Environment Variables
+ 
+-```ini title=".env.production"
++```bash title=".env.production"
+ NODE_ENV=production
+ PORT=3000
+-DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
+-CORS_ORIGIN=https://myapp.com
++$ DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
++$ CORS_ORIGIN=https://myapp.com
+ ```
+ 
+ ## Migration from Other Frameworks
+diff --git a/content/docs/bundler/html-static.mdx b/content/docs/bundler/html-static.mdx
+index 300cc0be..c9d8ebcb 100644
+--- a/content/docs/bundler/html-static.mdx
++++ b/content/docs/bundler/html-static.mdx
+@@ -22,8 +22,10 @@ To get started, pass HTML files to `bun`.
+ 
+ ```bash title="terminal"
+ $ bun ./index.html
++```
+ 
+-Bun v$BUN_LATEST_VERSION
++```
++Bun v1.2.20
+ ready in 6.62ms
+ → http://localhost:3000/
+ Press h + Enter to show shortcuts
+@@ -46,8 +48,10 @@ When you pass a single `.html` file to Bun, Bun will use it as a fallback route
+ 
+ ```bash title="terminal"
+ $ bun index.html
++```
+ 
+-Bun v$BUN_LATEST_VERSION
++```
++Bun v1.2.20
+ ready in 6.62ms
+ → http://localhost:3000/
+ Press h + Enter to show shortcuts
+@@ -75,7 +79,7 @@ Some projects have several separate routes or HTML files as entry points. To sup
+ ```bash title="terminal"
+ $ bun ./index.html ./about.html
+ 
+-Bun v$BUN_LATEST_VERSION
++Bun v1.2.20
+ ready in 6.62ms
+ → http://localhost:3000/
+ Routes:
+@@ -95,8 +99,10 @@ To specify multiple files, you can use glob patterns that end in `.html`:
+ 
+ ```bash title="terminal"
+ $ bun ./**/*.html
++```
+ 
+-Bun v$BUN_LATEST_VERSION
++```
++Bun v1.2.20
+ ready in 6.62ms
+ → http://localhost:3000/
+ Routes:
+@@ -111,8 +117,10 @@ The base path is chosen from the longest common prefix among all the files.
+ 
+ ```bash title="terminal"
+ $ bun ./index.html ./about/index.html ./about/foo/index.html
++```
+ 
+-Bun v$BUN_LATEST_VERSION
++```
++Bun v1.2.20
+ ready in 6.62ms
+ → http://localhost:3000/
+ Routes:
+@@ -144,7 +152,7 @@ It's also a CSS bundler. You can use `@import` in your CSS files to import other
+ 
+ For example:
+ 
+-```css tab="styles.css"
++```scss tab="styles.css"
+ @import "./abc.css";
+ 
+ .container {
+@@ -152,7 +160,7 @@ For example:
+ }
+ ```
+ 
+-```css tab="abc.css"
++```scss tab="abc.css"
+ body {
+   background-color: red;
+ }
+@@ -160,7 +168,7 @@ body {
+ 
+ This outputs:
+ 
+-```css
++```scss
+ body {
+   background-color: red;
+ }
+@@ -174,7 +182,7 @@ body {
+ 
+ You can reference local assets in your CSS files.
+ 
+-```css title="styles.css"
++```scss title="styles.css"
+ body {
+   background-image: url("./logo.png");
+ }
+@@ -182,7 +190,7 @@ body {
+ 
+ This will copy `./logo.png` to the output directory and rewrite the path in the CSS file to include a content hash.
+ 
+-```css title="styles.css"
++```scss title="styles.css"
+ body {
+   background-image: url("./logo-[ABC123].png");
+ }
+@@ -221,16 +229,16 @@ plugins = ["bun-plugin-tailwind"]
+ 
+ Then, reference TailwindCSS in your HTML via `<link>` tag, `@import` in CSS, or import in JavaScript.
+ 
+-```html tab="index.html"
+-<!-- Reference TailwindCSS in your HTML -->
+-<link rel="stylesheet" href="tailwindcss" />
+-```
+-```css tab="styles.css"
+-@import "tailwindcss";
+-```
+-```ts tab="app.ts"
+-import "tailwindcss";
+-```
++<Tabs items={['index.html', 'styles.css', 'app.ts']}>
++  <Tab value="index.html">
++    ```html title="index.html"
++    {/* Reference TailwindCSS in your HTML */}
++    <link rel="stylesheet" href="tailwindcss" />
++   ```
++  </Tab>
++  <Tab value="styles.css">```scss title="styles.css" @import "tailwindcss"; ```</Tab>
++  <Tab value="app.ts">```ts title="app.ts" import "tailwindcss"; ```</Tab>
++</Tabs>
+ 
+ <Callout type="info">Only one of those are necessary, not all three.</Callout>
+ 
+@@ -242,8 +250,10 @@ To enable, pass the `--console` CLI flag.
+ 
+ ```bash title="terminal"
+ $ bun ./index.html --console
++```
+ 
+-Bun v$BUN_LATEST_VERSION
++```
++Bun v1.2.20
+ ready in 6.62ms
+ → http://localhost:3000/
+ Press h + Enter to show shortcuts
+@@ -269,16 +279,22 @@ While the server is running:
+ 
+ When you're ready to deploy, use `bun build` to create optimized production bundles:
+ 
+-```bash title="terminal" tab="CLI"
+-$ bun build ./index.html --minify --outdir=dist
+-```
+-```ts title="build.ts" tab="API"
+-await Bun.build({
+-	entrypoints: ["./index.html"],
+-	outdir: "./dist",
+-	minify: true,
+-});
+-```
++<Tabs items={['CLI', 'API']}>
++  <Tab value="CLI">
++    ```bash title="terminal"
++    $ bun build ./index.html --minify --outdir=dist
++   ```
++  </Tab>
++  <Tab value="API">
++    ```ts title="build.ts"
++    await Bun.build({
++      entrypoints: ["./index.html"],
++      outdir: "./dist",
++      minify: true,
++    });
++   ```
++  </Tab>
++</Tabs>
+ 
+ <Callout type="warning">
+   Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
+diff --git a/content/docs/bundler/index.mdx b/content/docs/bundler/index.mdx
+index cba8910a..6fcfeef9 100644
+--- a/content/docs/bundler/index.mdx
++++ b/content/docs/bundler/index.mdx
+@@ -55,7 +55,7 @@ Let's jump into the bundler API.
+ 
+ Let's build our first bundle. You have the following two files, which implement a simple client-side rendered React app.
+ 
+-```tsx title="index.tsx"
++```tsx tab="index.tsx"
+ import * as ReactDOM from "react-dom/client";
+ import { Component } from "./Component";
+ 
+@@ -63,7 +63,7 @@ const root = ReactDOM.createRoot(document.getElementById("root")!);
+ root.render(<Component message="Sup!" />);
+ ```
+ 
+-```tsx title="Component.tsx"
++```tsx tab="Component.tsx"
+ export function Component(props: { message: string }) {
+   return <h1>{props.message}</h1>;
+ }
+@@ -77,8 +77,8 @@ To create our bundle:
+   <Tab value="JavaScript">
+     ```ts title="build.ts"
+     await Bun.build({
+-    	entrypoints: ['./index.tsx'],
+-    	outdir: './out',
++      entrypoints: ["./index.tsx"],
++      outdir: "./out",
+     });
+    ```
+   </Tab>
+@@ -101,7 +101,7 @@ For each file specified in `entrypoints`, Bun will generate a new bundle. This b
+ 
+ The contents of `out/index.js` will look something like this:
+ 
+-```js title="out/index.js"
++```ts title="out/index.js"
+ // out/index.js
+ // ...
+ // ~20k lines of code
+@@ -154,32 +154,11 @@ Like the Bun runtime, the bundler supports an array of file types out of the box
+ | Extensions                                            | Details                                                                                                                                                                                                                                                                                                                                                      |
+ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+ | `.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` | Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. The bundler executes a set of default transforms including dead code elimination and tree shaking. At the moment Bun does not attempt to down-convert syntax; if you use recently ECMAScript syntax, that will be reflected in the bundled code. |
+-| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:json</include>                                                                                                                                                                                                                                    |
+-| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:toml</include>                                                                                                                                                                                                                                    |
+-| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<include>index.mdx#content-types:txt</include>                                                                                                                                                                                                                                |
++| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import pkg from "./package.json";<br/>pkg.name; // => "my-package"<br/>`                                                                                                                                                                                          |
++| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./bunfig.toml";<br/>config.logLevel; // => "debug"<br/>`                                                                                                                                                                                      |
++| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<br/><br/>`js<br/>import contents from "./file.txt";<br/>console.log(contents); // => "Hello, world!"<br/>`                                                                                                                                                                   |
+ | `.node` `.wasm`                                       | These files are supported by the Bun runtime, but during bundling they are treated as assets.                                                                                                                                                                                                                                                                |
+ 
+-{/* start llm ignored codeblock */}
+-<section id="content-types:json" style={{display:"none"}}>
+-```js
+-import pkg from "./package.json";
+-pkg.name; // => "my-package"
+-```
+-</section>
+-<section id="content-types:toml" style={{display:"none"}}>
+-```js
+-import config from "./bunfig.toml";
+-config.logLevel; // => "debug"
+-```
+-</section>
+-<section id="content-types:txt" style={{display:"none"}}>
+-```js
+-import contents from "./file.txt";
+-console.log(contents); // => "Hello, world!"
+-```
+-</section>
+-{/* end llm ignored codeblock */}
+-
+ ### Assets
+ 
+ If the bundler encounters an import with an unrecognized extension, it treats the imported file as an external file. The referenced file is copied as-is into `outdir`, and the import is resolved as a path to the file.
+@@ -293,30 +272,28 @@ The intended execution environment for the bundle.
+ 
+ Depending on the target, Bun will apply different module resolution rules and optimizations.
+ 
+-<Cards className="grid-cols-1">
+-  <Card title="Browser (default)">
+-    For generating bundles that are intended for execution by a browser. Prioritizes the
+-    `"browser"` export condition when resolving imports. Importing any built-in modules, like
+-    `node:events` or `node:path` will work, but calling some functions, like `fs.readFile` will not
+-    work.
+-  </Card>
++<Card title="browser" icon="globe">
++  **Default.** For generating bundles that are intended for execution by a browser. Prioritizes the `"browser"` export
++  condition when resolving imports. Importing any built-in modules, like `node:events` or `node:path` will work, but
++  calling some functions, like `fs.readFile` will not work.
++</Card>
++
++<Card title="bun" icon="server">
++For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
+ 
+-  <Card title="Bun">
+-    For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
++All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
+ 
+-    All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
++If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
+ 
+-    If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
++When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
+ 
+-    When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
+-  </Card>
++</Card>
+ 
+-  <Card title="Node">
+-    For generating bundles that are intended to be run by Node.js. Prioritizes the `"node"` export
+-    condition when resolving imports, and outputs `.mjs`. In the future, this will automatically
+-    polyfill the Bun global and other built-in `bun:*` modules, though this is not yet implemented.
+-  </Card>
+-</Cards>
++<Card title="node" icon="node">
++  For generating bundles that are intended to be run by Node.js. Prioritizes the `"node"` export condition when
++  resolving imports, and outputs `.mjs`. In the future, this will automatically polyfill the Bun global and other
++  built-in `bun:*` modules, though this is not yet implemented.
++</Card>
+ 
+ ### format
+ 
+@@ -382,21 +359,21 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+   <Tab value="JavaScript">
+     ```ts title="index.ts"
+     await Bun.build({
+-      entrypoints: ['./app.tsx'],
+-      outdir: './out',
++      entrypoints: ["./app.tsx"],
++      outdir: "./out",
+       jsx: {
+-        factory: 'h',
+-        fragment: 'Fragment',
+-        runtime: 'classic',
++        factory: "h",
++        fragment: "Fragment",
++        runtime: "classic",
+       },
+     });
+-       ```
++   ```
+   </Tab>
+   <Tab value="CLI">
+     ```bash title="terminal"
+     # JSX configuration is handled via bunfig.toml or tsconfig.json
+     $ bun build ./app.tsx --outdir ./out
+-       ```
++   ```
+   </Tab>
+ </Tabs>
+ 
+@@ -406,20 +383,20 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+   <Tab value="JavaScript">
+     ```ts title="index.ts"
+     await Bun.build({
+-    	entrypoints: ['./app.tsx'],
+-    	outdir: './out',
+-    	jsx: {
+-    		importSource: 'preact',
+-    		runtime: 'automatic',
+-    	},
++      entrypoints: ["./app.tsx"],
++      outdir: "./out",
++      jsx: {
++        importSource: "preact",
++        runtime: "automatic",
++      },
+     });
+-      ```
++   ```
+   </Tab>
+   <Tab value="CLI">
+     ```bash title="terminal"
+     # JSX configuration is handled via bunfig.toml or tsconfig.json
+     $ bun build ./app.tsx --outdir ./out
+-       ```
++   ```
+   </Tab>
+ </Tabs>
+ 
+@@ -473,7 +450,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
+   <Tab value="CLI">
+     ```bash title="terminal"
+     $ bun build ./entry-a.ts ./entry-b.ts --outdir ./out --splitting
+-    ```
++   ```
+   </Tab>
+ </Tabs>
+ 
+@@ -529,21 +506,21 @@ Injects environment variables into the bundled output by converting `process.env
+   <Tab value="CLI">
+     ```bash title="terminal"
+     $ bun build ./index.tsx --outdir ./out --env inline
+-    ```
++   ```
+   </Tab>
+ </Tabs>
+ 
+ For the input below:
+ 
+-```ts title="input.tsx"
+-// input.tsx
++```ts title="input.js"
++// input.js
+ console.log(process.env.FOO);
+ console.log(process.env.BAZ);
+ ```
+ 
+ The generated bundle will contain the following code:
+ 
+-```js title="output.js"
++```ts title="output.js"
+ // output.js
+ console.log("bar");
+ console.log("123");
+@@ -559,7 +536,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+     await Bun.build({
+       entrypoints: ['./index.tsx'],
+       outdir: './out',
+-
++      
+       // Inline all env vars that start with "ACME_PUBLIC_"
+       env: "ACME_PUBLIC_*",
+     })
+@@ -575,7 +552,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+ For example, given the following environment variables:
+ 
+ ```bash title="terminal"
+-FOO=bar BAZ=123 ACME_PUBLIC_URL=https://acme.com
++$ FOO=bar BAZ=123 ACME_PUBLIC_URL=https://acme.com
+ ```
+ 
+ And source code:
+@@ -588,7 +565,7 @@ console.log(process.env.BAZ);
+ 
+ The generated bundle will contain the following code:
+ 
+-```js title="output.js"
++```ts title="output.js"
+ console.log(process.env.FOO);
+ console.log("https://acme.com");
+ console.log(process.env.BAZ);
+@@ -730,7 +707,7 @@ Normally, bundling `index.tsx` would generate a bundle containing the entire sou
+ 
+ The generated bundle will look something like this:
+ 
+-```js title="out/index.js"
++```ts title="out/index.js"
+ import { z } from "zod";
+ 
+ // ...
+@@ -1000,12 +977,12 @@ In many cases, generated bundles will contain no import statements. After all, t
+ In any of these cases, the final bundles may contain paths to other files. By default these imports are relative. Here is an example of a simple asset import:
+ 
+ ```ts tab="Input"
+-import logo from './logo.svg';
++import logo from "./logo.svg";
+ console.log(logo);
+ ```
+ 
+ ```ts tab="Output"
+-var logo = './logo-a7305bdef.svg';
++var logo = "./logo-a7305bdef.svg";
+ console.log(logo);
+ ```
+ 
+@@ -1030,8 +1007,8 @@ Setting `publicPath` will prefix all file paths with the specified value.
+ 
+ The output file would now look something like this.
+ 
+-```js title="out/index.js"
+-var logo = 'https://cdn.example.com/logo-a7305bdef.svg';
++```ts title="out/index.js"
++var logo = "https://cdn.example.com/logo-a7305bdef.svg";
+ ```
+ 
+ ### define
+@@ -1204,39 +1181,44 @@ return new Response(artifact);
+ 
+ The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
+ 
+-```ts title="build.ts"
+-// build.ts
+-const build = await Bun.build({
+-  /* */
+-});
+-
+-const artifact = build.outputs[0];
+-console.log(artifact);
+-```
++<Tabs items={['JavaScript', 'CLI']} groupId="js/cli">
++  <Tab value="JavaScript">
++    ```ts title="build.ts"
++    // build.ts
++    const build = await Bun.build({
++      /* */
++    });
+ 
+-```bash title="Shell output"
+-$ bun run build.ts
+-
+-BuildArtifact (entry-point) {
+-  path: "./index.js",
+-  loader: "tsx",
+-  kind: "entry-point",
+-  hash: "824a039620219640",
+-  Blob (74756 bytes) {
+-    type: "text/javascript;charset=utf-8"
+-  },
+-  sourcemap: BuildArtifact (sourcemap) {
+-    path: "./index.js.map",
+-    loader: "file",
+-    kind: "sourcemap",
+-    hash: "e7178cda3e72e301",
+-    Blob (24765 bytes) {
+-      type: "application/json;charset=utf-8"
+-    },
+-    sourcemap: null
+-  }
+-}
+-```
++    const artifact = build.outputs[0];
++    console.log(artifact);
++   ```
++  </Tab>
++  <Tab value="CLI">
++    ```bash title="terminal" Shell output
++    $ bun run build.ts
++
++    BuildArtifact (entry-point) {
++      path: "./index.js",
++      loader: "tsx",
++      kind: "entry-point",
++      hash: "824a039620219640",
++      Blob (74756 bytes) {
++        type: "text/javascript;charset=utf-8"
++      },
++      sourcemap: BuildArtifact (sourcemap) {
++        path: "./index.js.map",
++        loader: "file",
++        kind: "sourcemap",
++        hash: "e7178cda3e72e301",
++        Blob (24765 bytes) {
++          type: "application/json;charset=utf-8"
++        },
++        sourcemap: null
++      }
++    }
++   ```
++  </Tab>
++</Tabs>
+ 
+ ## Bytecode
+ 
+diff --git a/content/docs/bundler/minifier.mdx b/content/docs/bundler/minifier.mdx
+index a5126c92..24e53b81 100644
+--- a/content/docs/bundler/minifier.mdx
++++ b/content/docs/bundler/minifier.mdx
+@@ -102,14 +102,14 @@ Renames local variables and function names to shorter identifiers using frequenc
+ 
+ Converts boolean literals to shorter expressions.
+ 
+-```ts title="Input"
+-true
+-false
++```ts Input
++true;
++false;
+ ```
+ 
+-```js title="Output"
+-!0
+-!1
++```ts Output
++!0;
++!1;
+ ```
+ 
+ ### Boolean algebra optimizations
+@@ -118,22 +118,22 @@ false
+ 
+ Simplifies boolean expressions using logical rules.
+ 
+-```ts title="Input"
+-!!x
+-x === true
+-x && true
+-x || false
+-!true
+-!false
++```ts Input
++!!x;
++x === true;
++x && true;
++x || false;
++!true;
++!false;
+ ```
+ 
+-```js title="Output"
+-x
+-x
+-x
+-x
+-!1
+-!0
++```ts Output
++x;
++x;
++x;
++x;
++!1;
++!0;
+ ```
+ 
+ ### Undefined shortening
+@@ -142,29 +142,30 @@ x
+ 
+ Replaces `undefined` with shorter equivalent.
+ 
+-```ts title="Input"
+-undefined
++```ts Input
++undefined;
+ let x = undefined;
+ ```
+ 
+-```js title="Output"
+-void 0
+-let x=void 0;
++```ts Output
++void 0;
++let x = void 0;
+ ```
+ 
+ ### Undefined equality optimization
++
+ **Mode:** `--minify-syntax`
+ 
+ Optimizes loose equality checks with undefined.
+ 
+-```ts title="Input"
+-x == undefined
+-x != undefined
++```ts Input
++x == undefined;
++x != undefined;
+ ```
+ 
+-```js title="Output"
+-x == null
+-x != null
++```ts Output
++x == null;
++x != null;
+ ```
+ 
+ ### Infinity shortening
+@@ -173,14 +174,12 @@ x != null
+ 
+ Converts Infinity to mathematical expressions.
+ 
+-```ts title="Input"
+-Infinity
+--Infinity
++```ts Input
++Infinity - Infinity;
+ ```
+ 
+-```js title="Output"
+-1/0
+--1/0
++```ts Output
++1 / 0 - 1 / 0;
+ ```
+ 
+ ### Typeof optimizations
+@@ -189,26 +188,26 @@ Infinity
+ 
+ Optimizes typeof comparisons and evaluates constant typeof expressions.
+ 
+-```ts title="Input"
+-typeof x === 'undefined'
+-typeof x !== 'undefined'
+-typeof require
+-typeof null
+-typeof true
+-typeof 123
+-typeof "str"
+-typeof 123n
++```ts Input
++typeof x === "undefined";
++typeof x !== "undefined";
++typeof require;
++typeof null;
++typeof true;
++typeof 123;
++typeof "str";
++typeof 123n;
+ ```
+ 
+-```js title="Output"
+-typeof x>'u'
+-typeof x<'u'
+-"function"
+-"object"
+-"boolean"
+-"number"
+-"string"
+-"bigint"
++```ts Output
++typeof x > "u";
++typeof x < "u";
++("function");
++("object");
++("boolean");
++("number");
++("string");
++("bigint");
+ ```
+ 
+ ### Number formatting
+@@ -217,20 +216,18 @@ typeof x<'u'
+ 
+ Formats numbers in the most compact representation.
+ 
+-```ts title="Input"
+-10000
+-100000
+-1000000
+-1.0
+--42.0
++```ts Input
++10000;
++100000;
++1000000;
++1.0 - 42.0;
+ ```
+ 
+-```js title="Output"
+-1e4
+-1e5
+-1e6
+-1
+--42
++```ts Output
++1e4;
++1e5;
++1e6;
++1 - 42;
+ ```
+ 
+ ### Arithmetic constant folding
+@@ -239,22 +236,22 @@ Formats numbers in the most compact representation.
+ 
+ Evaluates arithmetic operations at compile time.
+ 
+-```ts title="Input"
+-1 + 2
+-10 - 5
+-3 * 4
+-10 / 2
+-10 % 3
+-2 ** 3
++```ts Input
++1 + 2;
++10 - 5;
++3 * 4;
++10 / 2;
++10 % 3;
++2 ** 3;
+ ```
+ 
+-```js title="Output"
+-3
+-5
+-12
+-5
+-1
+-8
++```ts Output
++3;
++5;
++12;
++5;
++1;
++8;
+ ```
+ 
+ ### Bitwise constant folding
+@@ -263,22 +260,21 @@ Evaluates arithmetic operations at compile time.
+ 
+ Evaluates bitwise operations at compile time.
+ 
+-```ts title="Input"
+-5 & 3
+-5 | 3
+-5 ^ 3
+-8 << 2
+-32 >> 2
+-~5
++```ts Input
++5 & 3;
++5 | 3;
++5 ^ 3;
++8 << 2;
++32 >> 2;
++~5;
+ ```
+ 
+-```js title="Output"
+-1
+-7
+-6
+-32
+-8
+--6
++```ts Output
++1;
++7;
++6;
++32;
++8 - 6;
+ ```
+ 
+ ### String concatenation
+@@ -287,16 +283,16 @@ Evaluates bitwise operations at compile time.
+ 
+ Combines string literals at compile time.
+ 
+-```ts title="Input"
+-"a" + "b"
+-"x" + 123
+-"foo" + "bar" + "baz"
++```ts Input
++"a" + "b";
++"x" + 123;
++"foo" + "bar" + "baz";
+ ```
+ 
+-```js title="Output"
+-"ab"
+-"x123"
+-"foobarbaz"
++```ts Output
++"ab";
++"x123";
++"foobarbaz";
+ ```
+ 
+ ### String indexing
+@@ -305,14 +301,14 @@ Combines string literals at compile time.
+ 
+ Evaluates string character access at compile time.
+ 
+-```ts title="Input"
+-"foo"[2]
+-"hello"[0]
++```ts Input
++"foo"[2];
++"hello"[0];
+ ```
+ 
+-```js title="Output"
+-"o"
+-"h"
++```ts Output
++"o";
++"h";
+ ```
+ 
+ ### Template literal folding
+@@ -321,14 +317,13 @@ Evaluates string character access at compile time.
+ 
+ Evaluates template literals with constant expressions.
+ 
+-```ts title="Input"
+-`a${123}b`
+-`result: ${5 + 10}`
++```ts Input
++`a${123}b``result: ${5 + 10}`;
+ ```
+ 
+-```js title="Output"
+-"a123b"
+-"result: 15"
++```ts Output
++"a123b";
++"result: 15";
+ ```
+ 
+ ### Template literal to string conversion
+@@ -337,15 +332,14 @@ Evaluates template literals with constant expressions.
+ 
+ Converts simple template literals to regular strings.
+ 
+-```ts title="Input"
+-`Hello World`
+-`Line 1
+-Line 2`
++```ts Input
++`Hello World``Line 1
++Line 2`;
+ ```
+ 
+-```js title="Output"
+-"Hello World"
+-"Line 1\nLine 2"
++```ts Output
++"Hello World";
++"Line 1\nLine 2";
+ ```
+ 
+ ### String quote optimization
+@@ -354,16 +348,15 @@ Line 2`
+ 
+ Chooses the optimal quote character to minimize escapes.
+ 
+-```ts title="Input"
+-"It's a string"
+-'He said "hello"'
+-`Simple string`
++```ts Input
++"It's a string";
++'He said "hello"'`Simple string`;
+ ```
+ 
+-```js title="Output"
+-"It's a string"
+-'He said "hello"'
+-"Simple string"
++```ts Output
++"It's a string";
++'He said "hello"';
++"Simple string";
+ ```
+ 
+ ### Array spread inlining
+@@ -372,14 +365,13 @@ Chooses the optimal quote character to minimize escapes.
+ 
+ Inlines array spread operations with constant arrays.
+ 
+-```ts title="Input"
++```ts Input
+ [1, ...[2, 3], 4]
+ [...[a, b]]
+ ```
+ 
+-```js title="Output"
+-[1,2,3,4]
+-[a,b]
++```ts Output
++[1, 2, 3, 4][(a, b)];
+ ```
+ 
+ ### Array indexing
+@@ -388,16 +380,16 @@ Inlines array spread operations with constant arrays.
+ 
+ Evaluates constant array access at compile time.
+ 
+-```ts title="Input"
++```ts Input
+ [x][0]
+ ['a', 'b', 'c'][1]
+ ['a', , 'c'][1]
+ ```
+ 
+-```js title="Output"
+-x
+-'b'
+-void 0
++```ts Output
++x;
++("b");
++void 0;
+ ```
+ 
+ ### Property access optimization
+@@ -406,18 +398,18 @@ void 0
+ 
+ Converts bracket notation to dot notation when possible.
+ 
+-```ts title="Input"
+-obj["property"]
+-obj["validName"]
+-obj["123"]
+-obj["invalid-name"]
++```ts Input
++obj["property"];
++obj["validName"];
++obj["123"];
++obj["invalid-name"];
+ ```
+ 
+-```js title="Output"
+-obj.property
+-obj.validName
+-obj["123"]
+-obj["invalid-name"]
++```ts Output
++obj.property;
++obj.validName;
++obj["123"];
++obj["invalid-name"];
+ ```
+ 
+ ### Comparison folding
+@@ -426,20 +418,20 @@ obj["invalid-name"]
+ 
+ Evaluates constant comparisons at compile time.
+ 
+-```ts title="Input"
+-3 < 5
+-5 > 3
+-3 <= 3
+-5 >= 6
+-"a" < "b"
++```ts Input
++3 < 5;
++5 > 3;
++3 <= 3;
++5 >= 6;
++"a" < "b";
+ ```
+ 
+-```js title="Output"
+-!0
+-!0
+-!0
+-!1
+-!0
++```ts Output
++!0;
++!0;
++!0;
++!1;
++!0;
+ ```
+ 
+ ### Logical operation folding
+@@ -448,18 +440,18 @@ Evaluates constant comparisons at compile time.
+ 
+ Simplifies logical operations with constant values.
+ 
+-```ts title="Input"
+-true && x
+-false && x
+-true || x
+-false || x
++```ts Input
++true && x;
++false && x;
++true || x;
++false || x;
+ ```
+ 
+-```js title="Output"
+-x
+-!1
+-!0
+-x
++```ts Output
++x;
++!1;
++!0;
++x;
+ ```
+ 
+ ### Nullish coalescing folding
+@@ -468,16 +460,16 @@ x
+ 
+ Evaluates nullish coalescing with known values.
+ 
+-```ts title="Input"
+-null ?? x
+-undefined ?? x
+-42 ?? x
++```ts Input
++null ?? x;
++undefined ?? x;
++42 ?? x;
+ ```
+ 
+-```js title="Output"
+-x
+-x
+-42
++```ts Output
++x;
++x;
++42;
+ ```
+ 
+ ### Comma expression simplification
+@@ -486,14 +478,13 @@ x
+ 
+ Removes side-effect-free expressions from comma sequences.
+ 
+-```ts title="Input"
+-(0, x)
+-(123, "str", x)
++```ts Input
++(0, x)(123, "str", x);
+ ```
+ 
+-```js title="Output"
+-x
+-x
++```ts Output
++x;
++x;
+ ```
+ 
+ ### Ternary conditional folding
+@@ -502,18 +493,18 @@ x
+ 
+ Evaluates conditional expressions with constant conditions.
+ 
+-```ts title="Input"
+-true ? a : b
+-false ? a : b
+-x ? true : false
+-x ? false : true
++```ts Input
++true ? a : b;
++false ? a : b;
++x ? true : false;
++x ? false : true;
+ ```
+ 
+-```js title="Output"
+-a
+-b
+-x
+-!x
++```ts Output
++a;
++b;
++x;
++!x;
+ ```
+ 
+ ### Unary expression folding
+@@ -522,20 +513,18 @@ x
+ 
+ Simplifies unary operations.
+ 
+-```ts title="Input"
+-+123
+-+"123"
+--(-x)
+-~(~x)
+-!(!x)
++```ts Input
+++123 + "123" - -x;
++~~x;
++!!x;
+ ```
+ 
+-```js title="Output"
+-123
+-123
+-x
+-x
+-x
++```ts Output
++123;
++123;
++x;
++x;
++x;
+ ```
+ 
+ ### Double negation removal
+@@ -544,14 +533,14 @@ x
+ 
+ Removes unnecessary double negations.
+ 
+-```ts title="Input"
+-!!x
+-!!!x
++```ts Input
++!!x;
++!!!x;
+ ```
+ 
+-```js title="Output"
+-x
+-!x
++```ts Output
++x;
++!x;
+ ```
+ 
+ ### If statement optimization
+@@ -560,18 +549,21 @@ x
+ 
+ Optimizes if statements with constant conditions.
+ 
+-```ts title="Input"
++```ts Input
+ if (true) x;
+ if (false) x;
+-if (x) { a; }
+-if (x) {} else y;
++if (x) {
++  a;
++}
++if (x) {
++} else y;
+ ```
+ 
+-```js title="Output"
++```ts Output
+ x;
+ // removed
+-if(x)a;
+-if(!x)y;
++if (x) a;
++if (!x) y;
+ ```
+ 
+ ### Dead code elimination
+@@ -580,7 +572,7 @@ if(!x)y;
+ 
+ Removes unreachable code and code without side effects.
+ 
+-```ts title="Input"
++```ts Input
+ if (false) {
+   unreachable();
+ }
+@@ -590,8 +582,10 @@ function foo() {
+ }
+ ```
+ 
+-```js title="Output"
+-function foo(){return x}
++```ts Output
++function foo() {
++  return x;
++}
+ ```
+ 
+ ### Unreachable branch removal
+@@ -600,13 +594,13 @@ function foo(){return x}
+ 
+ Removes branches that can never execute.
+ 
+-```ts title="Input"
++```ts Input
+ while (false) {
+   neverRuns();
+ }
+ ```
+ 
+-```js title="Output"
++```ts Output
+ // removed entirely
+ ```
+ 
+@@ -616,12 +610,14 @@ while (false) {
+ 
+ Removes empty blocks and unnecessary braces.
+ 
+-```ts title="Input"
+-{ }
+-if (x) { }
++```ts Input
++{
++}
++if (x) {
++}
+ ```
+ 
+-```js title="Output"
++```ts Output
+ // removed
+ ```
+ 
+@@ -631,28 +627,33 @@ if (x) { }
+ 
+ Removes unnecessary braces around single statements.
+ 
+-```ts title="Input"
++```ts Input
+ if (condition) {
+   doSomething();
+ }
+ ```
+ 
+-```js title="Output"
+-if(condition)doSomething();
++```ts Output
++if (condition) doSomething();
+ ```
+ 
+ ### TypeScript enum inlining
++
+ **Mode:** `--minify-syntax`
+ 
+ Inlines TypeScript enum values at compile time.
+ 
+-```ts title="Input"
+-enum Color { Red, Green, Blue }
++```ts Input
++enum Color {
++  Red,
++  Green,
++  Blue,
++}
+ const x = Color.Red;
+ ```
+ 
+-```js title="Output"
+-const x=0;
++```ts Output
++const x = 0;
+ ```
+ 
+ ### Pure annotation support
+@@ -661,12 +662,12 @@ const x=0;
+ 
+ Respects `/*@__PURE__*/` annotations for tree shaking.
+ 
+-```ts title="Input"
++```ts Input
+ const x = /*@__PURE__*/ expensive();
+ // If x is unused...
+ ```
+ 
+-```js title="Output"
++```ts Output
+ // removed entirely
+ ```
+ 
+@@ -676,15 +677,18 @@ const x = /*@__PURE__*/ expensive();
+ 
+ Renames local variables to shorter names based on usage frequency.
+ 
+-```ts title="Input"
++```ts Input
+ function calculateSum(firstNumber, secondNumber) {
+   const result = firstNumber + secondNumber;
+   return result;
+ }
+ ```
+ 
+-```js title="Output"
+-function a(b,c){const d=b+c;return d}
++```ts Output
++function a(b, c) {
++  const d = b + c;
++  return d;
++}
+ ```
+ 
+ **Naming strategy:**
+@@ -707,15 +711,18 @@ function a(b,c){const d=b+c;return d}
+ 
+ Removes all unnecessary whitespace.
+ 
+-```ts title="Input"
++```ts Input
+ function add(a, b) {
+   return a + b;
+ }
+ let x = 10;
+ ```
+ 
+-```js title="Output"
+-function add(a,b){return a+b;}let x=10;
++```ts Output
++function add(a, b) {
++  return a + b;
++}
++let x = 10;
+ ```
+ 
+ ### Semicolon optimization
+@@ -724,14 +731,16 @@ function add(a,b){return a+b;}let x=10;
+ 
+ Inserts semicolons only when necessary.
+ 
+-```ts title="Input"
++```ts Input
+ let a = 1;
+ let b = 2;
+ return a + b;
+ ```
+ 
+-```js title="Output"
+-let a=1;let b=2;return a+b
++```ts Output
++let a = 1;
++let b = 2;
++return a + b;
+ ```
+ 
+ ### Operator spacing removal
+@@ -740,16 +749,16 @@ let a=1;let b=2;return a+b
+ 
+ Removes spaces around operators.
+ 
+-```ts title="Input"
++```ts Input
+ a + b;
+ x = y * z;
+ (foo && bar) || baz;
+ ```
+ 
+-```js title="Output"
+-a+b
+-x=y*z
+-foo&&bar||baz
++```ts Output
++a + b;
++x = y * z;
++(foo && bar) || baz;
+ ```
+ 
+ ### Comment removal
+@@ -758,24 +767,27 @@ foo&&bar||baz
+ 
+ Removes comments except important license comments.
+ 
+-```ts title="Input"
++```ts Input
+ // This comment is removed
+ /* So is this */
+ /*! But this license comment is kept */
+-function test() { /* inline comment */ }
++function test() {
++  /* inline comment */
++}
+ ```
+ 
+-```js title="Output"
++```ts Output
+ /*! But this license comment is kept */
+-function test(){}
++function test() {}
+ ```
+ 
+ ### Object and array formatting
++
+ **Mode:** `--minify-whitespace`
+ 
+ Removes whitespace in object and array literals.
+ 
+-```ts title="Input"
++```ts Input
+ const obj = {
+   name: "John",
+   age: 30,
+@@ -783,8 +795,9 @@ const obj = {
+ const arr = [1, 2, 3];
+ ```
+ 
+-```js title="Output"
+-const obj={name:"John",age:30};const arr=[1,2,3];
++```ts Output
++const obj = { name: "John", age: 30 };
++const arr = [1, 2, 3];
+ ```
+ 
+ ### Control flow formatting
+@@ -793,7 +806,7 @@ const obj={name:"John",age:30};const arr=[1,2,3];
+ 
+ Removes whitespace in control structures.
+ 
+-```ts title="Input"
++```ts Input
+ if (condition) {
+   doSomething();
+ }
+@@ -802,8 +815,9 @@ for (let i = 0; i < 10; i++) {
+ }
+ ```
+ 
+-```js title="Output"
+-if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
++```ts Output
++if (condition) doSomething();
++for (let i = 0; i < 10; i++) console.log(i);
+ ```
+ 
+ ### Function formatting
+@@ -812,15 +826,18 @@ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
+ 
+ Removes whitespace in function declarations.
+ 
+-```ts title="Input"
++```ts Input
+ function myFunction(param1, param2) {
+   return param1 + param2;
+ }
+ const arrow = (a, b) => a + b;
+ ```
+ 
+-```js title="Output"
+-function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
++```ts Output
++function myFunction(a, b) {
++  return a + b;
++}
++const arrow = (a, b) => a + b;
+ ```
+ 
+ ### Parentheses minimization
+@@ -829,16 +846,15 @@ function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
+ 
+ Only adds parentheses when necessary for operator precedence.
+ 
+-```ts title="Input"
+-(a + b) * c
+-a + (b * c)
+-((x))
++```ts Input
++(a + b) * c;
++a + (b * c)(x);
+ ```
+ 
+-```js title="Output"
+-(a+b)*c
+-a+b*c
+-x
++```ts Output
++(a + b) * c;
++a + b * c;
++x;
+ ```
+ 
+ ### Property mangling
+@@ -847,12 +863,13 @@ x
+ 
+ Renames object properties to shorter names when configured.
+ 
+-```ts title="input.ts (with property mangling enabled)"
++```ts title="input.ts"
++// (with property mangling enabled)
+ obj.longPropertyName
+ ```
+ 
+-```js title="Output"
+-obj.a
++```ts Output
++obj.a;
+ ```
+ 
+ ### Template literal value folding
+@@ -861,20 +878,16 @@ obj.a
+ 
+ Converts non-string interpolated values to strings and folds them into the template.
+ 
+-```ts title="Input"
+-`hello ${123}`
+-`value: ${true}`
+-`result: ${null}`
+-`status: ${undefined}`
+-`big: ${10n}`
++```ts Input
++`hello ${123}``value: ${true}``result: ${null}``status: ${undefined}``big: ${10n}`;
+ ```
+ 
+-```js title="Output"
+-"hello 123"
+-"value: true"
+-"result: null"
+-"status: undefined"
+-"big: 10"
++```ts Output
++"hello 123";
++"value: true";
++"result: null";
++"status: undefined";
++"big: 10";
+ ```
+ 
+ ### String length constant folding
+@@ -883,14 +896,14 @@ Converts non-string interpolated values to strings and folds them into the templ
+ 
+ Evaluates `.length` property on string literals at compile time.
+ 
+-```ts title="Input"
+-"hello world".length
+-"test".length
++```ts Input
++"hello world".length;
++"test".length;
+ ```
+ 
+-```js title="Output"
+-11
+-4
++```ts Output
++11;
++4;
+ ```
+ 
+ ### Constructor call simplification
+@@ -899,20 +912,23 @@ Evaluates `.length` property on string literals at compile time.
+ 
+ Simplifies constructor calls for built-in types.
+ 
+-```ts title="Input"
+-new Object()
+-new Object(null)
+-new Object({a: 1})
+-new Array()
+-new Array(x, y)
++```ts Input
++new Object();
++new Object(null);
++new Object({ a: 1 });
++new Array();
++new Array(x, y);
+ ```
+ 
+-```js title="Output"
+-{}
+-{}
+-{a:1}
+-[]
+-[x,y]
++```ts Output
++{
++}
++{
++}
++{
++  a: 1;
++}
++[][(x, y)];
+ ```
+ 
+ ### Single property object inlining
+@@ -921,12 +937,12 @@ new Array(x, y)
+ 
+ Inlines property access for objects with a single property.
+ 
+-```ts title="Input"
+-({fn: () => console.log('hi')}).fn()
++```ts Input
++({ fn: () => console.log("hi") }).fn();
+ ```
+ 
+-```js title="Output"
+-(() => console.log('hi'))()
++```ts Output
++(() => console.log("hi"))();
+ ```
+ 
+ ### String charCodeAt constant folding
+@@ -935,14 +951,14 @@ Inlines property access for objects with a single property.
+ 
+ Evaluates `charCodeAt()` on string literals for ASCII characters.
+ 
+-```ts title="Input"
+-"hello".charCodeAt(1)
+-"A".charCodeAt(0)
++```ts Input
++"hello".charCodeAt(1);
++"A".charCodeAt(0);
+ ```
+ 
+-```js title="Output"
+-101
+-65
++```ts Output
++101;
++65;
+ ```
+ 
+ ### Void 0 equality to null equality
+@@ -951,14 +967,14 @@ Evaluates `charCodeAt()` on string literals for ASCII characters.
+ 
+ Converts loose equality checks with `void 0` to `null` since they're equivalent.
+ 
+-```ts title="Input"
+-x == void 0
+-x != void 0
++```ts Input
++x == void 0;
++x != void 0;
+ ```
+ 
+-```js title="Output"
+-x == null
+-x != null
++```ts Output
++x == null;
++x != null;
+ ```
+ 
+ ### Negation operator optimization
+@@ -967,14 +983,13 @@ x != null
+ 
+ Moves negation operator through comma expressions.
+ 
+-```ts title="Input"
+--(a, b)
+--(x, y, z)
++```ts Input
++-(a, b) - (x, y, z);
+ ```
+ 
+-```js title="Output"
+-a,-b
+-x,y,-z
++```ts Output
++(a, -b);
++(x, y, -z);
+ ```
+ 
+ ### Import.meta property inlining
+@@ -983,14 +998,14 @@ x,y,-z
+ 
+ Inlines `import.meta` properties at build time when values are known.
+ 
+-```ts title="Input"
++```ts Input
+ import.meta.dir;
+ import.meta.file;
+ import.meta.path;
+ import.meta.url;
+ ```
+ 
+-```js title="Output"
++```ts Output
+ "/path/to/directory";
+ "filename.js";
+ "/full/path/to/file.js";
+@@ -1003,16 +1018,18 @@ import.meta.url;
+ 
+ Merges adjacent variable declarations of the same type.
+ 
+-```ts title="Input"
++```ts Input
+ let a = 1;
+ let b = 2;
+ const c = 3;
+ const d = 4;
+ ```
+ 
+-```js title="Output"
+-let a=1,b=2;
+-const c=3,d=4;
++```ts Output
++let a = 1,
++  b = 2;
++const c = 3,
++  d = 4;
+ ```
+ 
+ ### Expression statement merging
+@@ -1021,14 +1038,14 @@ const c=3,d=4;
+ 
+ Merges adjacent expression statements using comma operator.
+ 
+-```ts title="Input"
++```ts Input
+ console.log(1);
+ console.log(2);
+ console.log(3);
+ ```
+ 
+-```js title="Output"
+-console.log(1),console.log(2),console.log(3);
++```ts Output
++(console.log(1), console.log(2), console.log(3));
+ ```
+ 
+ ### Return statement merging
+@@ -1037,13 +1054,13 @@ console.log(1),console.log(2),console.log(3);
+ 
+ Merges expressions before return with comma operator.
+ 
+-```ts title="Input"
++```ts Input
+ console.log(x);
+ return y;
+ ```
+ 
+-```js title="Output"
+-return console.log(x),y;
++```ts Output
++return (console.log(x), y);
+ ```
+ 
+ ### Throw statement merging
+@@ -1052,13 +1069,13 @@ return console.log(x),y;
+ 
+ Merges expressions before throw with comma operator.
+ 
+-```ts title="Input"
++```ts Input
+ console.log(x);
+ throw new Error();
+ ```
+ 
+-```js title="Output"
+-throw(console.log(x),new Error());
++```ts Output
++throw (console.log(x), new Error());
+ ```
+ 
+ ### TypeScript enum cross-module inlining
+@@ -1067,7 +1084,8 @@ throw(console.log(x),new Error());
+ 
+ Inlines enum values across module boundaries.
+ 
+-```ts title="input.ts (lib.ts)"
++```ts title="input.ts"
++// (lib.ts)
+ export enum Color { Red, Green, Blue }
+ 
+ // Input (main.ts)
+@@ -1075,22 +1093,25 @@ import { Color } from './lib';
+ const x = Color.Red;
+ ```
+ 
+-```js title="Output"
+-const x=0;
++```ts Output
++const x = 0;
+ ```
+ 
+ ### Computed property enum inlining
++
+ **Mode:** `--minify-syntax`
+ 
+ Inlines enum values used as computed object properties.
+ 
+-```ts title="Input"
+-enum Keys { FOO = 'foo' }
+-const obj = { [Keys.FOO]: value }
++```ts Input
++enum Keys {
++  FOO = "foo",
++}
++const obj = { [Keys.FOO]: value };
+ ```
+ 
+-```js title="Output"
+-const obj={foo:value}
++```ts Output
++const obj = { foo: value };
+ ```
+ 
+ ### String number to numeric index
+@@ -1099,14 +1120,14 @@ const obj={foo:value}
+ 
+ Converts string numeric property access to numeric index.
+ 
+-```ts title="Input"
+-obj["0"]
+-arr["5"]
++```ts Input
++obj["0"];
++arr["5"];
+ ```
+ 
+-```js title="Output"
+-obj[0]
+-arr[5]
++```ts Output
++obj[0];
++arr[5];
+ ```
+ 
+ ### Arrow function body shortening
+@@ -1115,14 +1136,18 @@ arr[5]
+ 
+ Uses expression body syntax when an arrow function only returns a value.
+ 
+-```ts title="Input"
+-() => { return x; }
+-(a) => { return a + 1; }
++```ts Input
++() => {
++  return x;
++};
++a => {
++  return a + 1;
++};
+ ```
+ 
+-```js title="Output"
+-() => x
+-a => a + 1
++```ts Output
++() => x;
++a => a + 1;
+ ```
+ 
+ ### Object property shorthand
+@@ -1131,14 +1156,18 @@ a => a + 1
+ 
+ Uses shorthand syntax when property name and value identifier match.
+ 
+-```ts title="Input"
++```ts Input
+ { x: x, y: y }
+ { name: name, age: age }
+ ```
+ 
+-```js title="Output"
+-{ x, y }
+-{ name, age }
++```ts Output
++{
++  (x, y);
++}
++{
++  (name, age);
++}
+ ```
+ 
+ ### Method shorthand
+@@ -1147,14 +1176,14 @@ Uses shorthand syntax when property name and value identifier match.
+ 
+ Uses method shorthand syntax in object literals.
+ 
+-```ts title="Input"
++```ts Input
+ {
+   foo: function() {},
+   bar: async function() {}
+ }
+ ```
+ 
+-```js title="Output"
++```ts Output
+ {
+   foo() {},
+   async bar() {}
+@@ -1167,15 +1196,17 @@ Uses method shorthand syntax in object literals.
+ 
+ Removes `debugger` statements from code.
+ 
+-```ts title="Input"
++```ts Input
+ function test() {
+   debugger;
+   return x;
+ }
+ ```
+ 
+-```js title="Output"
+-function test(){return x}
++```ts Output
++function test() {
++  return x;
++}
+ ```
+ 
+ ### Drop console calls
+@@ -1184,16 +1215,16 @@ function test(){return x}
+ 
+ Removes all `console.*` method calls from code.
+ 
+-```ts title="Input"
++```ts Input
+ console.log("debug");
+ console.warn("warning");
+ x = console.error("error");
+ ```
+ 
+-```js title="Output"
++```ts Output
+ void 0;
+ void 0;
+-x=void 0;
++x = void 0;
+ ```
+ 
+ ### Drop custom function calls
+@@ -1202,12 +1233,13 @@ x=void 0;
+ 
+ Removes calls to specified global functions or methods.
+ 
+-```ts title="input.ts with --drop=assert"
++```ts title="input.ts"
++// with --drop=assert
+ assert(condition);
+ obj.assert(test);
+ ```
+ 
+-```js title="Output"
++```ts Output
+ void 0;
+ void 0;
+ ```
+@@ -1253,7 +1285,7 @@ const output = myFunction();
+ ```
+ 
+ ```ts title="output.ts"
+-// Output with --minify (49 bytes, 69% reduction)
++// // Output with --minify (49 bytes, 69% reduction)
+ const a=42,b=()=>{const c=!0,d=void 0;return c?a:d},e=b();
+ ```
+ 
+diff --git a/content/docs/bundler/plugins.mdx b/content/docs/bundler/plugins.mdx
+index eaa42850..e09f6e1e 100644
+--- a/content/docs/bundler/plugins.mdx
++++ b/content/docs/bundler/plugins.mdx
+@@ -325,7 +325,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+ 
+ ```bash title="terminal"
+ $ bun add -g @napi-rs/cli
+-$ napi new
++napi new
+ ```
+ 
+ Then install this crate:
+diff --git a/content/docs/feedback.mdx b/content/docs/feedback.mdx
+index e4259f86..3b566865 100644
+--- a/content/docs/feedback.mdx
++++ b/content/docs/feedback.mdx
+@@ -2,13 +2,12 @@
+ title: Feedback
+ description: Share feedback, bug reports, and feature requests
+ mode: center
+-icon: Lightbulb
+ ---
+ 
+ Whether you've found a bug, have a performance issue, or just want to suggest an improvement, here's how you can open a helpful issue:
+ 
+-<Callout>
+-	For general questions, please join our [Discord](https://discord.com/invite/CXdq2DP29u).
++<Callout icon="discord">
++  For general questions, please join our [Discord](https://discord.com/invite/CXdq2DP29u).
+ </Callout>
+ 
+ ## Reporting Issues
+@@ -59,14 +58,11 @@ Whether you've found a bug, have a performance issue, or just want to suggest an
+     	- A detailed description of the issue (what happened, what you expected to happen, and what actually happened)
+     	- The operating system and version you are using
+     		<Callout type="info">
+-    			- For MacOS and Linux: copy the output of this command in the terminal:
+-					```bash
+-					$ uname -mprs
+-					```
+-    		    - For Windows: copy the output of this command in the powershell console:
+-					```powershell
+-					> "$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"
+-					```
++    			- For MacOS and Linux: copy the output of `uname -mprs`
++    		  - For Windows: copy the output of this command in the powershell console:
++    				```powershell
++    					"$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"
++    				```
+     		</Callout>
+     </Step>
+ 
+diff --git a/content/docs/index.mdx b/content/docs/index.mdx
+index 1057c8eb..717b1c4e 100644
+--- a/content/docs/index.mdx
++++ b/content/docs/index.mdx
+@@ -4,68 +4,73 @@ description: Bun is an all-in-one toolkit for developing modern JavaScript/TypeS
+ mode: center
+ ---
+ 
+-{/* start llm ignored codeblock */}
+-import { CogIcon, BoxIcon, FlaskConicalIcon, CombineIcon, ChevronRightIcon } from "lucide-react";
+-import { Card as FancyCard, Cards as FancyCards } from "@/components/ui/card";
+-
+-<FancyCards>
+-	<FancyCard	
+-		icon={<CogIcon />}
+-		title="Bun Runtime"
+-		href="/docs/runtime"
+-        cta={<span>Get started with <code>bun run</code></span>}
+-	>
+-		A fast JavaScript runtime designed as a drop-in replacement for Node.js
+-    </FancyCard>
+-    <FancyCard
+-    	icon={<BoxIcon />}
+-    	title="Bun Package Manager"
+-    	href="/docs/pm/cli/install"
+-    	cta={<span>Get started with <code>bun install</code></span>}
+-    >
+-    	Install packages up to 30x faster than npm with a global cache and workspaces
+-    </FancyCard>
+-    <FancyCard
+-    	icon={<FlaskConicalIcon />}
+-    	title="Bun Test Runner"
+-    	href="/docs/test"
+-    	cta={<span>Get started with <code>bun test</code></span>}
+-    >
+-    	Jest-compatible, TypeScript-first tests with snapshots, DOM, and watch mode
+-    </FancyCard>
+-    <FancyCard
+-    	icon={<CombineIcon />}
+-    	title="Bun Bundler"
+-    	href="/docs/bundler"
+-    	cta={<span>Get started with <code>bun build</code></span>}
+-    >
+-    	Bundle TypeScript, JSX, React & CSS for both browsers and servers
+-    </FancyCard>
+-</FancyCards>
++<Cards>
++  <Card
++    icon="cog"
++    title="Bun Runtime"
++    href="/runtime"
++    cta={
++      <span>
++        Get started with <code>bun run</code>
++      </span>
++    }
++  >
++    A fast JavaScript runtime designed as a drop-in replacement for Node.js
++  </Card>
++  <Card
++    icon="box"
++    title="Bun Package Manager"
++    href="/pm/cli/install"
++    cta={
++      <span>
++        Get started with <code>bun install</code>
++      </span>
++    }
++  >
++    Install packages up to 30x faster than npm with a global cache and workspaces
++  </Card>
++  <Card
++    icon="flask-conical"
++    title="Bun Test Runner"
++    href="/test"
++    cta={
++      <span>
++        Get started with <code>bun test</code>
++      </span>
++    }
++  >
++    Jest-compatible, TypeScript-first tests with snapshots, DOM, and watch mode
++  </Card>
++  <Card
++    icon="combine"
++    title="Bun Bundler"
++    href="/bundler"
++    cta={
++      <span>
++        Get started with <code>bun build</code>
++      </span>
++    }
++  >
++    Bundle TypeScript, JSX, React & CSS for both browsers and servers
++  </Card>
++</Cards>
+ 
+ ---
+-{/* end llm ignored codeblock */}
+ 
+ ## Get Started
+ 
+ Bun ships as a single, dependency-free binary and includes a runtime, package manager, test runner, and bundler. New to Bun?
+ 
+-{/* start llm ignored codeblock */}
+-import { DownloadIcon, ZapIcon, LightbulbIcon } from 'lucide-react';
+-
+-<Cards className="grid-cols-3">
+-  <Card icon={<DownloadIcon />} title="Install Bun" href="/docs/installation">
++<Cards>
++  <Card icon="download" title="Install Bun" href="/installation">
+     Supported platforms and all install methods.
+   </Card>
+-  <Card icon={<ZapIcon />} title="Quickstart" href="/docs/quickstart">
++  <Card icon="zap" title="Quickstart" href="/quickstart">
+     Hello world in minutes with Bun.serve.
+   </Card>
+-    <Card icon={<LightbulbIcon />} title="Feedback" href="/feedback">
+-    Share feedback, bug reports, and feature requests.
+-  </Card>
+-</Cards> 
++</Cards>
++
+ ---
+-{/* end llm ignored codeblock */}
+ 
+ ## What's Inside
+ 
+diff --git a/content/docs/installation.mdx b/content/docs/installation.mdx
+index 0ea66e0a..6e970ec6 100644
+--- a/content/docs/installation.mdx
++++ b/content/docs/installation.mdx
+@@ -1,6 +1,6 @@
+ ---
+ title: Installation
+-description: Install Bun with npm, Homebrew, Docker, or the official script.
++description: Install Bun
+ ---
+ 
+ ## Overview
+@@ -13,9 +13,13 @@ Bun ships as a single, dependency-free executable. You can install it via script
+ 
+ <Tabs items={['macOS & Linux', 'Windows', 'Package Managers', 'Docker']}>
+   <Tab value="macOS & Linux">
+-      ```bash title="curl"
+-      $ curl -fsSL https://bun.com/install | bash
+-      ```
++
++    
++
++```bash curl
++$ curl -fsSL https://bun.com/install | bash
++```
++
+     <Callout type="info">
+       **Linux users**  The `unzip` package is required to install Bun. Use `sudo apt install unzip` to install the unzip package. Kernel version 5.6 or higher is strongly recommended, but the minimum is 5.1. Use `uname -r` to check Kernel version.
+       </Callout>
+@@ -23,9 +27,12 @@ Bun ships as a single, dependency-free executable. You can install it via script
+   </Tab>
+ 
+   <Tab value="Windows">
+-      ```powershell title="PowerShell"
+-      > powershell -c "irm bun.sh/install.ps1|iex"
+-      ```
++    
++
++```powershell PowerShell
++> powershell -c "irm bun.sh/install.ps1|iex"
++```
++
+     <Callout type="warning">
+       Bun requires Windows 10 version 1809 or later.
+     </Callout>
+@@ -33,16 +40,22 @@ Bun ships as a single, dependency-free executable. You can install it via script
+     For support and discussion, please join the **#windows** channel on our [Discord](https://discord.gg/bun).
+ 
+   </Tab>
++
+     <Tab value="Package Managers">
+-    	```bash title="npm"
+-      $ npm install -g bun # the last `npm` command you'll ever need
+-      ```
+-      ```bash title="Homebrew"
+-      $ brew install oven-sh/bun/bun
+-      ```
+-    	```bash title="Scoop"
+-    	$ scoop install bun
+-      ```
++    	
++
++```bash tab="npm"
++$ npm install -g bun # the last `npm` command you'll ever need
++```
++
++```bash tab="Homebrew"
++$ brew install oven-sh/bun/bun
++```
++
++```bash tab="Scoop"
++$ scoop install bun
++```
++
+     </Tab>
+ 
+   <Tab value="Docker">
+@@ -51,7 +64,7 @@ Bun ships as a single, dependency-free executable. You can install it via script
+     ```bash title="Docker"
+     $ docker pull oven/bun
+     $ docker run --rm --init --ulimit memlock=-1:-1 oven/bun
+-    ```
++   ```
+ 
+     ### Image Variants
+ 
+@@ -62,7 +75,8 @@ Bun ships as a single, dependency-free executable. You can install it via script
+     $ docker pull oven/bun:slim
+     $ docker pull oven/bun:distroless
+     $ docker pull oven/bun:alpine
+-    ```
++   ```
++
+   </Tab>
+ </Tabs>
+ 
+@@ -70,93 +84,96 @@ To check that Bun was installed successfully, open a new terminal window and run
+ 
+ ```bash title="terminal"
+ $ bun --version
+-1.x.y
++Output: 1.x.y
+ 
+ # See the precise commit of `oven-sh/bun` that you're using
+ $ bun --revision
+-1.x.y+b7982ac13189
++Output: 1.x.y+b7982ac13189
+ ```
+ 
+ <Callout type="warning">
+-	If you've installed Bun but are seeing a `command not found` error, you may have to manually add
+-	the installation directory (`~/.bun/bin`) to your `PATH`.
++  If you've installed Bun but are seeing a `command not found` error, you may have to manually add the installation
++  directory (`~/.bun/bin`) to your `PATH`.
+ </Callout>
+ 
+-<Accordions>
++<Accordions type="single">
+ <Accordion title="Add Bun to your PATH">
+   <Tabs items={['macOS & Linux', 'Windows']}>
+     <Tab value="macOS & Linux">
+       <Steps>
+         <Step>
+-          ### Determine which shell you're using
+ 
+-          ```bash title="terminal"
+-          $ echo $SHELL
+-          # /bin/zsh  or /bin/bash or /bin/fish
+-          ```
++          ### Determine which shell you're using
++        ```bash title="terminal"
++        $ echo $SHELL
++        # /bin/zsh  or /bin/bash or /bin/fish
++   ```
+         </Step>
+         <Step>
+-          ### Open your shell configuration file
+ 
++          ### Open your shell configuration file
+           - For bash: `~/.bashrc`
+           - For zsh: `~/.zshrc`
+           - For fish: `~/.config/fish/config.fish`
+         </Step>
+         
+         <Step>
+-          ### Add the Bun directory to PATH
+ 
++        
++          ### Add the Bun directory to PATH
+           Add this line to your configuration file:
+           ```bash title="terminal"
+           $ export BUN_INSTALL="$HOME/.bun"
+           $ export PATH="$BUN_INSTALL/bin:$PATH"
+-          ```
++   ```
+         </Step>
+         
+         <Step>
+-          ### Reload your shell configuration
+ 
++        
++          ### Reload your shell configuration
+           ```bash title="terminal"
+-          $ source ~/.bashrc # or ~/.zshrc
+-          ```
++          $ source ~/.bashrc  # or ~/.zshrc
++   ```
+         </Step>
+       </Steps>
+     </Tab>
+     <Tab value="Windows">
+       <Steps>
+         <Step>
++
+           ### Determine if the bun binary is properly installed
++        ```bash title="terminal"
++        & "$env:USERPROFILE\.bun\bin\bun" --version
++   ```
+ 
+-          ```bash title="terminal"
+-          $ & "$env:USERPROFILE\.bun\bin\bun" --version
+-          ```
++        If the command runs successfully but `bun --version` is not recognized, it means that bun is not in your system's PATH. To fix this, open a Powershell terminal and run the following command:
+ 
+-          If the command runs successfully but `bun --version` is not recognized, it means that bun is not in your system's PATH. To fix this, open a Powershell terminal and run the following command:
++        ```bash title="terminal"
++        [System.Environment]::SetEnvironmentVariable(
++          "Path",
++          [System.Environment]::GetEnvironmentVariable("Path", "User") + ";$env:USERPROFILE\.bun\bin",
++          [System.EnvironmentVariableTarget]::User
++        )
++   ```
+ 
+-          ```bash title="terminal"
+-          [System.Environment]::SetEnvironmentVariable(
+-            "Path",
+-            [System.Environment]::GetEnvironmentVariable("Path", "User") + ";$env:USERPROFILE\.bun\bin",
+-            [System.EnvironmentVariableTarget]::User
+-          )
+-          ```
+         </Step>
+         <Step>
+-          ### Restart your terminal
+ 
+-          After running the command, restart your terminal and test with `bun --version`
++          ### Restart your terminal
++           After running the command, restart your terminal and test with `bun --version`
+ 
+           ```bash title="terminal"
+           $ bun --version
+-          ```
++   ```
+         </Step>
+       </Steps>
+     </Tab>
+ 
+   </Tabs>
+ </Accordion>
+-
+ </Accordions>
++
+ ---
+ 
+ ## Upgrading
+@@ -206,14 +223,16 @@ Since Bun is a single binary, you can install older versions by re-running the i
+ 
+     ```bash title="terminal"
+     $ curl -fsSL https://bun.com/install | bash -s "bun-v$BUN_LATEST_VERSION"
+-    ```
++   ```
++
+   </Tab>
+   <Tab value="Windows">
+     On Windows, pass the version number to the PowerShell install script:
+ 
+     ```powershell title="PowerShell"
+     > iex "& {$(irm https://bun.com/install.ps1)} -Version $BUN_LATEST_VERSION"
+-    ```
++   ```
++
+   </Tab>
+ </Tabs>
+ 
+@@ -226,55 +245,55 @@ To download Bun binaries directly, visit the [releases page on GitHub](https://g
+ ### Latest Version Downloads
+ 
+ <Cards cols={2}>
+-	<Card
+-	
+-		title="Linux x64"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
+-	>
+-		Standard Linux x64 binary
+-	</Card>
+-	<Card
+-	
+-		title="Linux x64 Baseline"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64-baseline.zip"
+-	>
+-		For older CPUs without AVX2
+-	</Card>
+-	<Card
+-	
+-		title="Windows x64"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-windows-x64.zip"
+-	>
+-		Standard Windows binary
+-	</Card>
+-	<Card
+-	
+-		title="Windows x64 Baseline"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-windows-x64-baseline.zip"
+-	>
+-		For older CPUs without AVX2
+-	</Card>
+-	<Card
+-	
+-		title="macOS ARM64"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-darwin-aarch64.zip"
+-	>
+-		Apple Silicon (M1/M2/M3)
+-	</Card>
+-	<Card
+-	
+-		title="macOS x64"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-darwin-x64.zip"
+-	>
+-		Intel Macs
+-	</Card>
+-	<Card
+-	
+-		title="Linux ARM64"
+-		href="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-aarch64.zip"
+-	>
+-		ARM64 Linux systems
+-	</Card>
++  <Card
++    icon="/icons/linux.svg"
++    title="Linux x64"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
++  >
++    Standard Linux x64 binary
++  </Card>
++  <Card
++    icon="/icons/linux.svg"
++    title="Linux x64 Baseline"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64-baseline.zip"
++  >
++    For older CPUs without AVX2
++  </Card>
++  <Card
++    icon="/icons/windows.svg"
++    title="Windows x64"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-windows-x64.zip"
++  >
++    Standard Windows binary
++  </Card>
++  <Card
++    icon="/icons/windows.svg"
++    title="Windows x64 Baseline"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-windows-x64-baseline.zip"
++  >
++    For older CPUs without AVX2
++  </Card>
++  <Card
++    icon="/icons/apple.svg"
++    title="macOS ARM64"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-darwin-aarch64.zip"
++  >
++    Apple Silicon (M1/M2/M3)
++  </Card>
++  <Card
++    icon="/icons/apple.svg"
++    title="macOS x64"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-darwin-x64.zip"
++  >
++    Intel Macs
++  </Card>
++  <Card
++    icon="/icons/linux.svg"
++    title="Linux ARM64"
++    href="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-aarch64.zip"
++  >
++    ARM64 Linux systems
++  </Card>
+ </Cards>
+ 
+ ### Musl Binaries
+@@ -286,9 +305,8 @@ For distributions without `glibc` (Alpine Linux, Void Linux):
+ - [Linux ARM64 musl](https://github.com/oven-sh/bun/releases/latest/download/bun-linux-aarch64-musl.zip)
+ 
+ <Callout type="info">
+-	If you encounter an error like `bun: /lib/x86_64-linux-gnu/libm.so.6: version GLIBC_2.29 not
+-	found`, try using the musl binary. Bun's install script automatically chooses the correct binary
+-	for your system.
++  If you encounter an error like `bun: /lib/x86_64-linux-gnu/libm.so.6: version GLIBC_2.29 not found`, try using the
++  musl binary. Bun's install script automatically chooses the correct binary for your system.
+ </Callout>
+ 
+ ---
+@@ -305,22 +323,23 @@ Bun has specific CPU requirements based on the binary you're using:
+     | x64 | Haswell (4th gen Core) or newer | Excavator or newer |
+ 	</Tab>
+ 
+-	<Tab value="Baseline Builds">
+-		**x64-baseline binaries** target the Nehalem architecture for older CPUs
++    <Tab value="Baseline Builds">
++    	**x64-baseline binaries** target the Nehalem architecture for older CPUs
+     | Platform | Intel Requirement | AMD Requirement |
+-    |----------|-------------------|-----------------| 
++    |----------|-------------------|-----------------|
+     | x64-baseline | Nehalem (1st gen Core) or newer | Bulldozer or newer |
+ 
+-		<Callout type="warning">
+-			Baseline builds are slower than regular builds. Use them only if you encounter an "Illegal
+-			Instruction" error.
+-		</Callout>
+-	</Tab>
++    	<Callout type="warning">
++    		Baseline builds are slower than regular builds. Use them only if you encounter an "Illegal
++    		Instruction" error.
++    	</Callout>
++    </Tab>
++
+ </Tabs>
+ 
+ <Callout type="info">
+-	Bun does not support CPUs older than the baseline target, which mandates the SSE4.2 extension.
+-	macOS requires version 13.0 or later.
++  Bun does not support CPUs older than the baseline target, which mandates the SSE4.2 extension. macOS requires version
++  13.0 or later.
+ </Callout>
+ 
+ ---
+@@ -331,26 +350,32 @@ To remove Bun from your system:
+ 
+ <Tabs items={['macOS & Linux', 'Windows', 'Package Managers']}>
+ 	<Tab value="macOS & Linux">
+-    ```bash title="terminal"
+-    $ rm -rf ~/.bun
+-    ```
++  ```bash title="terminal"
++  $ rm -rf ~/.bun
++  ```
+   </Tab>
+ 
+-	<Tab value="Windows">
+-		```powershell title="PowerShell"
++    <Tab value="Windows">
++    	```powershell title="PowerShell"
+     > powershell -c ~\.bun\uninstall.ps1
+-    ```
+-	</Tab>
++   ```
++    </Tab>
++
++    <Tab value="Package Managers">
++    	
++
++```bash tab="npm"
++$ npm uninstall -g bun
++```
++
++```bash tab="Homebrew"
++$ brew uninstall bun
++```
++
++```bash tab="Scoop"
++$ scoop uninstall bun
++```
++
++    </Tab>
+ 
+-	<Tab value="Package Managers">
+-			```bash title="npm"
+-      $ npm uninstall -g bun
+-      ```
+-      ```bash title="Homebrew"
+-      $ brew uninstall bun
+-      ```
+-      ```bash title="Scoop"
+-      $ scoop uninstall bun
+-      ```
+-	</Tab>
+ </Tabs>
+diff --git a/content/docs/pm/bunx.mdx b/content/docs/pm/bunx.mdx
+index 6614c847..24f8ce7a 100644
+--- a/content/docs/pm/bunx.mdx
++++ b/content/docs/pm/bunx.mdx
+@@ -30,7 +30,7 @@ Packages can declare executables in the `"bin"` field of their `package.json`. T
+ 
+ These executables are commonly plain JavaScript files marked with a [shebang line](<https://en.wikipedia.org/wiki/Shebang_(Unix)>) to indicate which program should be used to execute them. The following file indicates that it should be executed with `node`.
+ 
+-```js title="dist/index.js"
++```ts title="dist/index.js"
+ #!/usr/bin/env node
+ 
+ console.log("Hello world!");
+@@ -78,6 +78,6 @@ $ bunx --package @angular/cli ng
+ 
+ To force bun to always be used with a script, use a shebang.
+ 
+-```js title="dist/index.js"
++```ts title="dist/index.js"
+ #!/usr/bin/env bun
+ ```
+diff --git a/content/docs/pm/cli/link.mdx b/content/docs/pm/cli/link.mdx
+index 88b1821e..ee4532d2 100644
+--- a/content/docs/pm/cli/link.mdx
++++ b/content/docs/pm/cli/link.mdx
+@@ -7,10 +7,10 @@ Use `bun link` in a local directory to register the current package as a "linkab
+ 
+ ```bash title="terminal"
+ $ cd /path/to/cool-pkg
+-$ cat package.json
++cat package.json
+ $ bun link
+ 
+-bun link v$BUN_LATEST_VERSION (7416672e)
++bun link v1.x (7416672e)
+ Success! Registered "cool-pkg"
+ 
+ To use cool-pkg in a project, run:
+diff --git a/content/docs/pm/cli/outdated.mdx b/content/docs/pm/cli/outdated.mdx
+index 5c7de79d..d9c73e1a 100644
+--- a/content/docs/pm/cli/outdated.mdx
++++ b/content/docs/pm/cli/outdated.mdx
+@@ -11,7 +11,7 @@ $ bun outdated
+ | Package                        | Current | Update    | Latest     |
+ | ------------------------------ | ------- | --------- | ---------- |
+ | @sinclair/typebox              | 0.34.15 | 0.34.16   | 0.34.16    |
+-| @types/bun (dev)               | 1.2.0   | 1.3.1     | 1.3.1      |
++| @types/bun (dev)               | 1.2.0   | 1.2.23    | 1.2.23     |
+ | eslint (dev)                   | 8.57.1  | 8.57.1    | 9.20.0     |
+ | eslint-plugin-security (dev)   | 2.1.1   | 2.1.1     | 3.0.1      |
+ | eslint-plugin-sonarjs (dev)    | 0.23.0  | 0.23.0    | 3.0.1      |
+@@ -19,6 +19,7 @@ $ bun outdated
+ | prettier (dev)                 | 3.4.2   | 3.5.0     | 3.5.0      |
+ | tsup (dev)                     | 8.3.5   | 8.3.6     | 8.3.6      |
+ | typescript (dev)               | 5.7.2   | 5.7.3     | 5.7.3      |
++
+ ```
+ 
+ ## Version Information
+@@ -42,6 +43,7 @@ $ bun outdated eslint-plugin-security eslint-plugin-sonarjs
+ | ------------------------------ | ------- | ------ | --------- |
+ | eslint-plugin-security (dev)   | 2.1.1   | 2.1.1  | 3.0.1     |
+ | eslint-plugin-sonarjs (dev)    | 0.23.0  | 0.23.0 | 3.0.1     |
++
+ ```
+ 
+ You can also pass glob patterns to check for outdated packages:
+@@ -63,7 +65,7 @@ $ bun outdated '@types/*'
+ 
+ | Package            | Current | Update | Latest |
+ | ------------------ | ------- | ------ | ------ |
+-| @types/bun (dev)   | 1.2.0   | 1.3.1  | 1.3.1  |
++| @types/bun (dev)   | 1.2.0   | 1.2.23 | 1.2.23 |
+ ```
+ 
+ Or to exclude all `@types/*` packages:
+diff --git a/content/docs/pm/cli/pm.mdx b/content/docs/pm/cli/pm.mdx
+index 23e9735d..e965e479 100644
+--- a/content/docs/pm/cli/pm.mdx
++++ b/content/docs/pm/cli/pm.mdx
+@@ -87,6 +87,7 @@ To print the path to the `bin` directory for the local project:
+ 
+ ```bash title="terminal"
+ $ bun pm bin
++
+ /path/to/current/project/node_modules/.bin
+ ```
+ 
+@@ -94,6 +95,7 @@ To print the path to the global `bin` directory:
+ 
+ ```bash title="terminal"
+ $ bun pm bin -g
++
+ <$HOME>/.bun/bin
+ ```
+ 
+@@ -268,16 +270,16 @@ Manage `package.json` data with get, set, delete, and fix operations.
+ All commands support dot and bracket notation:
+ 
+ ```bash title="terminal"
+-$ scripts.build              # dot notation
++scripts.build              # dot notation
+ contributors[0]            # array access
+ workspaces.0               # dot with numeric index
+-$ scripts[test:watch]        # bracket for special chars
++scripts[test:watch]        # bracket for special chars
+ ```
+ 
+ Examples:
+ 
+ ```bash title="terminal"
+-# get
++# set
+ $ bun pm pkg get name                               # single property
+ $ bun pm pkg get name version                       # multiple properties
+ $ bun pm pkg get                                    # entire package.json
+diff --git a/content/docs/pm/cli/publish.mdx b/content/docs/pm/cli/publish.mdx
+index 9114c89b..700e814b 100644
+--- a/content/docs/pm/cli/publish.mdx
++++ b/content/docs/pm/cli/publish.mdx
+@@ -9,7 +9,6 @@ description: Use `bun publish` to publish a package to the npm registry
+ ## Publishing the package from the current working directory
+ $ bun publish
+ 
+-## Output
+ bun publish v$BUN_LATEST_VERSION (ca7428e9)
+ 
+ packed 203B package.json
+diff --git a/content/docs/pm/cli/update.mdx b/content/docs/pm/cli/update.mdx
+index 98faa4c8..72ed40a4 100644
+--- a/content/docs/pm/cli/update.mdx
++++ b/content/docs/pm/cli/update.mdx
+@@ -33,8 +33,6 @@ This launches an interactive terminal interface that shows all outdated packages
+ The interface displays packages grouped by dependency type:
+ 
+ ```sh title="terminal"
+-$ bun update -i
+-
+ ? Select packages to update - Space to toggle, Enter to confirm, a to select all, n to select none, i to invert, l to toggle latest
+ 
+   dependencies                Current  Target   Latest
+diff --git a/content/docs/pm/npmrc.mdx b/content/docs/pm/npmrc.mdx
+index 812215f9..f87cd037 100644
+--- a/content/docs/pm/npmrc.mdx
++++ b/content/docs/pm/npmrc.mdx
+@@ -1,6 +1,6 @@
+ ---
+ title: .npmrc support
+-description: "Package Manager npmrc configuration"
++description:
+ ---
+ 
+ Bun supports loading configuration options from [`.npmrc`](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc) files, allowing you to reuse existing registry/scope configurations.
+diff --git a/content/docs/pm/security-scanner-api.mdx b/content/docs/pm/security-scanner-api.mdx
+index 5e448032..4509e5b9 100644
+--- a/content/docs/pm/security-scanner-api.mdx
++++ b/content/docs/pm/security-scanner-api.mdx
+@@ -1,5 +1,6 @@
+ ---
+ title: Security Scanner API
++description:
+ ---
+ 
+ Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
+diff --git a/content/docs/pm/workspaces.mdx b/content/docs/pm/workspaces.mdx
+index cd43a9af..f653d958 100644
+--- a/content/docs/pm/workspaces.mdx
++++ b/content/docs/pm/workspaces.mdx
+@@ -7,25 +7,26 @@ Bun supports [`workspaces`](https://docs.npmjs.com/cli/v9/using-npm/workspaces?v
+ 
+ It's common for a monorepo to have the following structure:
+ 
+-```txt title="tree"
++```
++tree
+ <root>
+ ├── README.md
+ ├── bun.lock
+ ├── package.json
+ ├── tsconfig.json
+ └── packages
+-    ├── pkg-a
+-    │   ├── index.ts
+-    │   ├── package.json
+-    │   └── tsconfig.json
+-    ├── pkg-b
+-    │   ├── index.ts
+-    │   ├── package.json
+-    │   └── tsconfig.json
+-    └── pkg-c
+-        ├── index.ts
+-        ├── package.json
+-        └── tsconfig.json
++    ├── pkg-a
++    │   ├── index.ts
++    │   ├── package.json
++    │   └── tsconfig.json
++    ├── pkg-b
++    │   ├── index.ts
++    │   ├── package.json
++    │   └── tsconfig.json
++    └── pkg-c
++        ├── index.ts
++        ├── package.json
++        └── tsconfig.json
+ ```
+ 
+ In the root `package.json`, the `"workspaces"` key is used to indicate which subdirectories should be considered packages/workspaces within the monorepo. It's conventional to place all the workspace in a directory called `packages`.
+diff --git a/content/docs/project/contributing.mdx b/content/docs/project/contributing.mdx
+index e34a8540..ab0d4c98 100644
+--- a/content/docs/project/contributing.mdx
++++ b/content/docs/project/contributing.mdx
+@@ -57,7 +57,7 @@ $ brew install llvm@19
+ ```
+ 
+ ```bash tab="Ubuntu/Debian"
+-# LLVM has an automatic installation script that is compatible with all versions of Ubuntu
++$ # LLVM has an automatic installation script that is compatible with all versions of Ubuntu
+ $ wget https://apt.llvm.org/llvm.sh -O - | sudo bash -s -- 19 all
+ ```
+ 
+diff --git a/content/docs/quickstart.mdx b/content/docs/quickstart.mdx
+index f059b21c..42ca0882 100644
+--- a/content/docs/quickstart.mdx
++++ b/content/docs/quickstart.mdx
+@@ -49,7 +49,7 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+       	$ cd my-app
+       	$ bun run index.ts
+       	
+-        Hello via Bun!
++      Hello via Bun!
+       	```
+ 
+       	You should see a console output saying `"Hello via Bun!"`.
+@@ -238,7 +238,7 @@ Then run it with `bun run start`.
+ ```bash title="terminal"
+ $ bun run start
+ 
+-Listening on http://localhost:3000
++ Listening on http://localhost:3000
+ ```
+ 
+ <Callout type="info">⚡️ **Performance** — `bun run` is roughly 28x faster than `npm run` (6ms vs 170ms of overhead).</Callout>
+diff --git a/content/docs/runtime/auto-install.mdx b/content/docs/runtime/auto-install.mdx
+index 3cd099ed..285474ad 100644
+--- a/content/docs/runtime/auto-install.mdx
++++ b/content/docs/runtime/auto-install.mdx
+@@ -75,20 +75,23 @@ This auto-installation approach is useful for a few reasons:
+ 
+ ## FAQ
+ 
+-<Accordions>
+-    <Accordion>
+-    ### How is this different from what pnpm does?
++<Accordions type="single">
++
++    <Accordion title="How is this different from what pnpm does?">
++
+     With pnpm, you have to run `pnpm install`, which creates a `node_modules` folder of symlinks for the runtime to resolve. By contrast, Bun resolves dependencies on the fly when you run a file; there's no need to run any `install` command ahead of time. Bun also doesn't create a `node_modules` folder.
++
+     </Accordion>
+ 
+-    <Accordion>
+-    ### How is this different from Yarn Plug'N'Play does?
++    <Accordion title="How is this different from Yarn Plug'N'Play does?">
+     With Yarn, you must run `yarn install` before you run a script. By contrast, Bun resolves dependencies on the fly when you run a file; there's no need to run any `install` command ahead of time.
++
+     Yarn Plug'N'Play also uses zip files to store dependencies. This makes dependency loading [slower at runtime](https://twitter.com/jarredsumner/status/1458207919636287490), as random access reads on zip files tend to be slower than the equivalent disk lookup.
+     </Accordion>
+ 
+-    <Accordion>
+-    ### How is this different from what Deno does?
++    <Accordion title="How is this different from what Deno does?">
++
+     Deno requires an `npm:` specifier before each npm `import`, lacks support for import maps via `compilerOptions.paths` in `tsconfig.json`, and has incomplete support for `package.json` settings. Unlike Deno, Bun does not currently support URL imports.
+     </Accordion>
++
+ </Accordions>
+diff --git a/content/docs/runtime/bunfig.mdx b/content/docs/runtime/bunfig.mdx
+index 688680a6..e330e5ac 100644
+--- a/content/docs/runtime/bunfig.mdx
++++ b/content/docs/runtime/bunfig.mdx
+@@ -179,6 +179,7 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
+ 
+ ```toml title="bunfig.toml"
+ [test]
++
+ # to require 90% line-level and function-level coverage
+ coverageThreshold = 0.9
+ ```
+@@ -223,8 +224,7 @@ By default, coverage reports will be printed to the console. For persistent code
+ 
+ ```toml title="bunfig.toml"
+ [test]
+-# default ["text"]
+-coverageReporter = ["text", "lcov"]
++coverageReporter  = ["text", "lcov"]  # default ["text"]
+ ```
+ 
+ ### `test.coverageDir`
+@@ -233,8 +233,7 @@ Set path where coverage reports will be saved. Please notice, that it works only
+ 
+ ```toml title="bunfig.toml"
+ [test]
+-# default "coverage"
+-coverageDir = "path/to/somewhere"
++coverageDir = "path/to/somewhere"  # default "coverage"
+ ```
+ 
+ ### `test.randomize`
+@@ -401,7 +400,6 @@ To configure the directory where Bun installs globally installed binaries and CL
+ Environment variable: `BUN_INSTALL_BIN`
+ 
+ ```toml title="bunfig.toml"
+-[install]
+ # where globally-installed package bins are linked
+ globalBinDir = "~/.bun/bin"
+ ```
+@@ -467,6 +465,7 @@ To configure the cache behavior:
+ 
+ ```toml title="bunfig.toml"
+ [install.cache]
++
+ # the directory to use for the cache
+ dir = "~/.bun/install/cache"
+ 
+@@ -626,7 +625,9 @@ With this option, the command being run will not be printed to the console:
+ 
+ ```sh
+ $ bun run dev
++```
+ 
++```txt
+ Running "dev"...
+ ```
+ 
+diff --git a/content/docs/runtime/c-compiler.mdx b/content/docs/runtime/c-compiler.mdx
+index 3f2ab577..ef588210 100644
+--- a/content/docs/runtime/c-compiler.mdx
++++ b/content/docs/runtime/c-compiler.mdx
+@@ -13,7 +13,7 @@ See the [introduction blog post](https://bun.com/blog/compile-and-run-c-in-js) f
+ 
+ JavaScript:
+ 
+-```ts title="hello.ts"
++```ts title="hello.js"
+ import { cc } from "bun:ffi";
+ import source from "./hello.c" with { type: "file" };
+ 
+@@ -87,9 +87,9 @@ You can also pass a `napi_env` to receive the N-API environment used to call the
+ 
+ For example, if you have a string in C, you can return it to JavaScript like this:
+ 
+-```ts title="hello.ts"
+-import {cc} from 'bun:ffi';
+-import source from './hello.c' with {type: 'file'};
++```ts title="hello.js"
++import { cc } from "bun:ffi";
++import source from "./hello.c" with { type: "file" };
+ 
+ const {
+   symbols: { hello },
+diff --git a/content/docs/runtime/child-process.mdx b/content/docs/runtime/child-process.mdx
+index 661c0425..14bd6ce8 100644
+--- a/content/docs/runtime/child-process.mdx
++++ b/content/docs/runtime/child-process.mdx
+@@ -289,7 +289,7 @@ childProc.disconnect();
+ 
+ To use IPC between a `bun` process and a Node.js process, set `serialization: "json"` in `Bun.spawn`. This is because Node.js and Bun use different JavaScript engines with different object serialization formats.
+ 
+-```js title="bun-node-ipc.js"
++```ts title="bun-node-ipc.js"
+ if (typeof Bun !== "undefined") {
+   const prefix = `[bun ${process.versions.bun} 🐇]`;
+   const node = Bun.spawn({
+diff --git a/content/docs/runtime/cookies.mdx b/content/docs/runtime/cookies.mdx
+index ce38e410..9f00c1e7 100644
+--- a/content/docs/runtime/cookies.mdx
++++ b/content/docs/runtime/cookies.mdx
+@@ -145,7 +145,7 @@ Returns an array of values for Set-Cookie headers that can be used to apply all
+ 
+ When using `Bun.serve()`, you don't need to call this method explicitly. Any changes made to the `req.cookies` map are automatically applied to the response headers. This method is primarily useful when working with other HTTP server implementations.
+ 
+-```js title="node-server.js"
++```ts title="node-server.js"
+ import { createServer } from "node:http";
+ import { CookieMap } from "bun";
+ 
+diff --git a/content/docs/runtime/debugger.mdx b/content/docs/runtime/debugger.mdx
+index c1fec8e1..3873e1d4 100644
+--- a/content/docs/runtime/debugger.mdx
++++ b/content/docs/runtime/debugger.mdx
+@@ -22,7 +22,9 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This a
+ 
+ ```sh title="terminal"
+ $ bun --inspect server.ts
++```
+ 
++```txt id="terminal"
+ ------------------ Bun Inspector ------------------
+ Listening at:
+   ws://localhost:6499/0tqxs9exrgrm
+@@ -146,11 +148,11 @@ await fetch("https://example.com", {
+ This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
+ 
+ ```sh
+-[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/$BUN_LATEST_VERSION" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
++[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/1.3.1" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
+ [fetch] > HTTP/1.1 POST https://example.com/
+ [fetch] > content-type: application/json
+ [fetch] > Connection: keep-alive
+-[fetch] > User-Agent: Bun/$BUN_LATEST_VERSION
++[fetch] > User-Agent: Bun/1.3.1
+ [fetch] > Accept: */*
+ [fetch] > Host: example.com
+ [fetch] > Accept-Encoding: gzip, deflate, br
+@@ -192,7 +194,7 @@ This prints the following to the console:
+ [fetch] > HTTP/1.1 POST https://example.com/
+ [fetch] > content-type: application/json
+ [fetch] > Connection: keep-alive
+-[fetch] > User-Agent: Bun/$BUN_LATEST_VERSION
++[fetch] > User-Agent: Bun/1.3.1
+ [fetch] > Accept: */*
+ [fetch] > Host: example.com
+ [fetch] > Accept-Encoding: gzip, deflate, br
+diff --git a/content/docs/runtime/environment-variables.mdx b/content/docs/runtime/environment-variables.mdx
+index ea05ca2e..63032a20 100644
+--- a/content/docs/runtime/environment-variables.mdx
++++ b/content/docs/runtime/environment-variables.mdx
+@@ -29,7 +29,7 @@ $ FOO=helloworld bun run dev
+ $ set FOO=helloworld && bun run dev
+ 
+ # Using PowerShell
+-$ $env:FOO="helloworld"; bun run dev
++$env:FOO="helloworld"; bun run dev
+ ```
+ 
+ <Accordions type="single">
+@@ -199,7 +199,7 @@ It is recommended to disable this cache when using ephemeral filesystems like Do
+ To disable the runtime transpiler cache, set `BUN_RUNTIME_TRANSPILER_CACHE_PATH` to an empty string or the string `"0"`.
+ 
+ ```sh
+-$ bun_RUNTIME_TRANSPILER_CACHE_PATH=0 bun run dev
++$ BUN_RUNTIME_TRANSPILER_CACHE_PATH=0 bun run dev
+ ```
+ 
+ ### What does it cache?
+diff --git a/content/docs/runtime/ffi.mdx b/content/docs/runtime/ffi.mdx
+index d2d6e13a..0431cc18 100644
+--- a/content/docs/runtime/ffi.mdx
++++ b/content/docs/runtime/ffi.mdx
+@@ -66,7 +66,7 @@ pub export fn add(a: i32, b: i32) i32 {
+ To compile:
+ 
+ ```bash title="terminal"
+-$ zig build-lib add.zig -dynamic -OReleaseFast
++zig build-lib add.zig -dynamic -OReleaseFast
+ ```
+ 
+ Pass a path to the shared library and a map of symbols to import into `dlopen`:
+@@ -100,7 +100,7 @@ pub extern "C" fn add(a: i32, b: i32) -> i32 {
+ To compile:
+ 
+ ```bash
+-$ rustc --crate-type cdylib add.rs
++rustc --crate-type cdylib add.rs
+ ```
+ 
+ ### C++
+@@ -116,7 +116,7 @@ extern "C" int32_t add(int32_t a, int32_t b) {
+ To compile:
+ 
+ ```bash
+-$ zig build-lib add.cpp -dynamic -lc -lc++
++zig build-lib add.cpp -dynamic -lc -lc++
+ ```
+ 
+ ---
+diff --git a/content/docs/runtime/file-types.mdx b/content/docs/runtime/file-types.mdx
+index 6133461b..a3c1ba4c 100644
+--- a/content/docs/runtime/file-types.mdx
++++ b/content/docs/runtime/file-types.mdx
+@@ -202,7 +202,7 @@ The html loader processes HTML files and bundles any referenced assets. It will:
+ 
+ For example, given this HTML file:
+ 
+-```html tab="src/index.html"
++```html title="src/index.html"
+ <!DOCTYPE html>
+ <html>
+   <body>
+@@ -215,7 +215,7 @@ For example, given this HTML file:
+ 
+ It will output a new HTML file with the bundled assets:
+ 
+-```html tab="dist/output.html"
++```html title="dist/output.html"
+ <!DOCTYPE html>
+ <html>
+   <body>
+diff --git a/content/docs/runtime/http/server.mdx b/content/docs/runtime/http/server.mdx
+index b4f56d5a..97ff34b2 100644
+--- a/content/docs/runtime/http/server.mdx
++++ b/content/docs/runtime/http/server.mdx
+@@ -408,7 +408,7 @@ The `Bun.serve` server can handle roughly 2.5x more requests per second than Nod
+ 
+ Here's a basic database-backed REST API using Bun's router with zero dependencies:
+ 
+-```ts title="tab="server.ts""
++```ts tab="server.ts"
+ import type { Post } from "./types.ts";
+ import { Database } from "bun:sqlite";
+ 
+@@ -477,7 +477,7 @@ export interface Post {
+ 
+ ## Reference
+ 
+-```ts
++```ts See TypeScript Definitions
+ interface Server extends Disposable {
+   /**
+    * Stop the server from accepting new connections.
+diff --git a/content/docs/runtime/http/websockets.mdx b/content/docs/runtime/http/websockets.mdx
+index 2fdfb648..24a45a63 100644
+--- a/content/docs/runtime/http/websockets.mdx
++++ b/content/docs/runtime/http/websockets.mdx
+@@ -170,7 +170,7 @@ Bun.serve({
+ 
+ To connect to this server from the browser, create a new `WebSocket`.
+ 
+-```js title="browser.js"
++```ts title="browser.js"
+ const socket = new WebSocket("ws://localhost:3000/chat");
+ 
+ socket.addEventListener("message", event => {
+diff --git a/content/docs/runtime/index.mdx b/content/docs/runtime/index.mdx
+index 8bdb4a8a..629b9863 100644
+--- a/content/docs/runtime/index.mdx
++++ b/content/docs/runtime/index.mdx
+@@ -64,7 +64,7 @@ Flags that occur at the end of the command will be ignored and passed through to
+ Compare to `npm run <script>` or `yarn <script>`
+ </Callout>
+ 
+-```sh title="terminal"
++```sh
+ $ bun [bun flags] run <script> [script flags]
+ ```
+ 
+diff --git a/content/docs/runtime/module-resolution.mdx b/content/docs/runtime/module-resolution.mdx
+index fc14e346..7696b6f2 100644
+--- a/content/docs/runtime/module-resolution.mdx
++++ b/content/docs/runtime/module-resolution.mdx
+@@ -66,13 +66,13 @@ import { hello } from "./hello.js"; // this also works
+ 
+ Bun supports both ES modules (`import`/`export` syntax) and CommonJS modules (`require()`/`module.exports`). The following CommonJS version would also work in Bun.
+ 
+-```js tab="index.js"
++```ts tab="index.js"
+ const { hello } = require("./hello");
+ 
+ hello();
+ ```
+ 
+-```js tab="hello.js"
++```ts tab="hello.js"
+ function hello() {
+   console.log("Hello world!");
+ }
+diff --git a/content/docs/runtime/networking/fetch.mdx b/content/docs/runtime/networking/fetch.mdx
+index 55cfb787..c6e38375 100644
+--- a/content/docs/runtime/networking/fetch.mdx
++++ b/content/docs/runtime/networking/fetch.mdx
+@@ -342,7 +342,7 @@ This will print the request and response headers to your terminal:
+ ```sh
+ [fetch] > HTTP/1.1 GET http://example.com/
+ [fetch] > Connection: keep-alive
+-[fetch] > User-Agent: Bun/$BUN_LATEST_VERSION
++[fetch] > User-Agent: Bun/1.3.1
+ [fetch] > Accept: */*
+ [fetch] > Host: example.com
+ [fetch] > Accept-Encoding: gzip, deflate, br, zstd
+@@ -430,7 +430,7 @@ When the limit is exceeded, the requests are queued and sent as soon as the next
+ You can increase the maximum number of simultaneous connections via the `BUN_CONFIG_MAX_HTTP_REQUESTS` environment variable:
+ 
+ ```sh
+-$ BUN_CONFIG_MAX_HTTP_REQUESTS=512 bun ./my-script.ts
++bun_CONFIG_MAX_HTTP_REQUESTS=512 bun ./my-script.ts
+ ```
+ 
+ The max value for this limit is currently set to 65,336. The maximum port number is 65,535, so it's quite difficult for any one computer to exceed this limit.
+diff --git a/content/docs/runtime/plugins.mdx b/content/docs/runtime/plugins.mdx
+index 5875c9b5..e3fcc9eb 100644
+--- a/content/docs/runtime/plugins.mdx
++++ b/content/docs/runtime/plugins.mdx
+@@ -316,7 +316,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+ 
+ ```bash title="terminal"
+ $ bun add -g @napi-rs/cli
+-$ napi new
++napi new
+ ```
+ 
+ Then install this crate:
+diff --git a/content/docs/runtime/s3.mdx b/content/docs/runtime/s3.mdx
+index 086f77a4..c80755ec 100644
+--- a/content/docs/runtime/s3.mdx
++++ b/content/docs/runtime/s3.mdx
+@@ -697,7 +697,7 @@ To list some or all (up to 1,000) objects in a bucket, you can use the `S3Client
+ ```ts title="s3.ts"
+ import { S3Client } from "bun";
+ 
+-const credentials = {
++const credentials = { ... }
+   accessKeyId: "your-access-key",
+   secretAccessKey: "your-secret-key",
+   bucket: "my-bucket",
+diff --git a/content/docs/runtime/sql.mdx b/content/docs/runtime/sql.mdx
+index 97abac44..df07be2d 100644
+--- a/content/docs/runtime/sql.mdx
++++ b/content/docs/runtime/sql.mdx
+@@ -524,11 +524,11 @@ MySQL connections can be configured via environment variables:
+ 
+ ```bash
+ # Primary connection URL (checked first)
+-MYSQL_URL="mysql://user:pass@localhost:3306/mydb"
++$ MYSQL_URL="mysql://user:pass@localhost:3306/mydb"
+ 
+ # Alternative: DATABASE_URL with MySQL protocol
+-DATABASE_URL="mysql://user:pass@localhost:3306/mydb"
+-DATABASE_URL="mysql2://user:pass@localhost:3306/mydb"
++$ DATABASE_URL="mysql://user:pass@localhost:3306/mydb"
++$ DATABASE_URL="mysql2://user:pass@localhost:3306/mydb"
+ ```
+ 
+ If no connection URL is provided, MySQL checks these individual parameters:
+@@ -572,9 +572,9 @@ SQLite connections can be configured via `DATABASE_URL` when it contains a SQLit
+ 
+ ```bash
+ # These are all recognized as SQLite
+-DATABASE_URL=":memory:"
+-DATABASE_URL="sqlite://./app.db"
+-DATABASE_URL="file:///absolute/path/to/db.sqlite"
++$ DATABASE_URL=":memory:"
++$ DATABASE_URL="sqlite://./app.db"
++$ DATABASE_URL="file:///absolute/path/to/db.sqlite"
+ ```
+ 
+ **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
+diff --git a/content/docs/runtime/sqlite.mdx b/content/docs/runtime/sqlite.mdx
+index 7dd2220f..b71c4b5f 100644
+--- a/content/docs/runtime/sqlite.mdx
++++ b/content/docs/runtime/sqlite.mdx
+@@ -10,7 +10,11 @@ import { Database } from "bun:sqlite";
+ 
+ const db = new Database(":memory:");
+ const query = db.query("select 'Hello world' as message;");
+-query.get(); // => { message: "Hello world" }
++query.get();
++```
++
++```txt
++{ message: "Hello world" }
+ ```
+ 
+ The API is simple, synchronous, and fast. Credit to [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3) and its contributors for inspiring the API of `bun:sqlite`.
+@@ -139,10 +143,14 @@ import { Database } from "bun:sqlite";
+ {
+   using db = new Database("mydb.sqlite"); // [!code highlight]
+   using query = db.query("select 'Hello world' as message;"); // [!code highlight]
+-  console.log(query.get()); // => { message: "Hello world" }
++  console.log(query.get());
+ }
+ ```
+ 
++```txt
++{ message: "Hello world" }
++```
++
+ ### `.serialize()`
+ 
+ `bun:sqlite` supports SQLite's built-in mechanism for [serializing](https://www.sqlite.org/c3ref/serialize.html) and [deserializing](https://www.sqlite.org/c3ref/deserialize.html) databases to and from memory.
+@@ -190,6 +198,7 @@ db.exec("PRAGMA journal_mode = WAL;");
+ In WAL mode, writes to the database are written directly to a separate file called the "WAL file" (write-ahead log). This file will be later integrated into the main database file. Think of it as a buffer for pending writes. Refer to the [SQLite docs](https://www.sqlite.org/wal.html) for a more detailed overview.
+ 
+ On macOS, WAL files may be persistent by default. This is not a bug, it is how macOS configured the system version of SQLite.
++
+ </Accordion>
+ </Accordions>
+ 
+@@ -258,7 +267,10 @@ Use `.all()` to run a query and get back the results as an array of objects.
+ ```ts title="db.ts"
+ const query = db.query(`select $message;`);
+ query.all({ $message: "Hello world" }); // [!code highlight]
+-// => [{ message: "Hello world" }]
++```
++
++```txt
++[{ message: "Hello world" }]
+ ```
+ 
+ Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
+@@ -270,7 +282,10 @@ Use `.get()` to run a query and get back the first result as an object.
+ ```ts title="db.ts"
+ const query = db.query(`select $message;`);
+ query.get({ $message: "Hello world" }); // [!code highlight]
+-// => { $message: "Hello world" }
++```
++
++```txt
++{ $message: "Hello world" }
+ ```
+ 
+ Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `undefined` is returned.
+@@ -282,10 +297,13 @@ Use `.run()` to run a query and get back `undefined`. This is useful for schema-
+ ```ts title="db.ts"
+ const query = db.query(`create table foo;`);
+ query.run(); // [!code highlight]
+-// {
+-//   lastInsertRowid: 0,
+-//   changes: 0,
+-// }
++```
++
++```txt
++{
++  lastInsertRowid: 0,
++  changes: 0,
++}
+ ```
+ 
+ Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) once. Stepping through all the rows is not necessary when you don't care about the results.
+@@ -310,8 +328,13 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
+ const movies = query.all();
+ const first = query.get();
+ 
+-console.log(movies[0].isMarvel); // => true
+-console.log(first.isMarvel); // => true
++console.log(movies[0].isMarvel);
++console.log(first.isMarvel);
++```
++
++```txt
++true
++true
+ ```
+ 
+ As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like using `Object.create` than `new`. The class's prototype is assigned to the object, methods are attached, and getters/setters are set up, but the constructor is not called.
+@@ -349,11 +372,14 @@ const query = db.query(`select $message;`);
+ 
+ query.values({ $message: "Hello world" }); // [!code highlight]
+ query.values(2); // [!code highlight]
+-// [
+-//   [ "Iron Man", 2008 ],
+-//   [ "The Avengers", 2012 ],
+-//   [ "Ant-Man: Quantumania", 2023 ],
+-// ]
++```
++
++```txt
++[
++  [ "Iron Man", 2008 ],
++  [ "The Avengers", 2012 ],
++  [ "Ant-Man: Quantumania", 2023 ],
++]
+ ```
+ 
+ Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
+@@ -411,8 +437,13 @@ const query = db.query("SELECT ?1, ?2");
+ const results = query.all("hello", "goodbye");
+ ```
+ 
+-```json
+-[{"?1": "hello", "?2": "goodbye"}]
++```txt
++[
++	{
++		"?1": "hello",
++		"?2": "goodbye",
++	},
++];
+ ```
+ 
+ ---
+@@ -435,7 +466,12 @@ import { Database } from "bun:sqlite";
+ const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
+ const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
+ const result = query.get();
+-console.log(result.max_int); // => 9007199254741093n
++
++console.log(result.max_int);
++```
++
++```txt
++9007199254741093n
+ ```
+ 
+ When `safeIntegers` is `true`, `bun:sqlite` will throw an error if a `bigint` value in a bound parameter exceeds 64 bits:
+@@ -451,10 +487,14 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+ try {
+   query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
+ } catch (e) {
+-  console.log(e.message); // => BigInt value '81129638414606663681390495662081' is out of range
++  console.log(e.message);
+ }
+ ```
+ 
++```txt
++BigInt value '81129638414606663681390495662081' is out of range
++```
++
+ ### `safeIntegers: false` (default)
+ 
+ When `safeIntegers` is `false`, `bun:sqlite` will return integers as `number` types and truncate any bits beyond 53:
+@@ -465,7 +505,11 @@ import { Database } from "bun:sqlite";
+ const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
+ const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
+ const result = query.get();
+-console.log(result.max_int); // => 9007199254741092
++console.log(result.max_int);
++```
++
++```txt
++9007199254741092
+ ```
+ 
+ ---
+@@ -558,7 +602,7 @@ db.loadExtension("myext"); // [!code highlight]
+ 
+ ```bash title="terminal"
+ $ brew install sqlite
+-$ which sqlite # get path to binary
++which sqlite # get path to binary
+ ```
+ 
+ To point `bun:sqlite` to the new build, call `Database.setCustomSQLite(path)` before creating any `Database` instances. (On other operating systems, this is a no-op.) Pass a path to the SQLite `.dylib` file, _not_ the executable. With recent versions of Homebrew this is something like `/opt/homebrew/Cellar/sqlite/<version>/libsqlite3.dylib`.
+diff --git a/content/docs/runtime/streams.mdx b/content/docs/runtime/streams.mdx
+index 4bc91b3b..062e325f 100644
+--- a/content/docs/runtime/streams.mdx
++++ b/content/docs/runtime/streams.mdx
+@@ -195,7 +195,7 @@ sink.start({
+ 
+ ## Reference
+ 
+-```ts title="See Typescript Definitions"
++```ts See Typescript Definitions
+ /**
+  * Fast incremental writer that becomes an `ArrayBuffer` on end().
+  */
+diff --git a/content/docs/runtime/templating/create.mdx b/content/docs/runtime/templating/create.mdx
+index 8b409b9d..b578cc0a 100644
+--- a/content/docs/runtime/templating/create.mdx
++++ b/content/docs/runtime/templating/create.mdx
+@@ -81,7 +81,7 @@ plugins = ["bun-plugin-tailwind"]
+ 
+ And a `${component}.css` file with `@import "tailwindcss";` at the top:
+ 
+-```css title="MyComponent.css"
++```scss title="MyComponent.css"
+ @import "tailwindcss";
+ ```
+ 
+diff --git a/content/docs/runtime/transpiler.mdx b/content/docs/runtime/transpiler.mdx
+index cf84322d..f66ec8c6 100644
+--- a/content/docs/runtime/transpiler.mdx
++++ b/content/docs/runtime/transpiler.mdx
+@@ -17,7 +17,7 @@ const transpiler = new Bun.Transpiler({
+ 
+ Transpile code synchronously with the `.transformSync()` method. Modules are not resolved and the code is not executed. The result is a string of vanilla JavaScript code.
+ 
+-```ts tab="transpile.ts" 
++```ts tab="transpile.ts"
+ const transpiler = new Bun.Transpiler({
+   loader: 'tsx',
+ });
+@@ -56,9 +56,11 @@ transpiler.transformSync("<div>hi!</div>", "tsx");
+ 
+ <Accordions type="single">
+ <Accordion title="Nitty gritty">
++
+ When `.transformSync` is called, the transpiler is run in the same thread as the currently executed code.
+ 
+ If a macro is used, it will be run in the same thread as the transpiler, but in a separate event loop from the rest of your application. Currently, globals between macros and regular code are shared, which means it is possible (but not recommended) to share states between macros and regular code. Attempting to use AST nodes outside of a macro is undefined behavior.
++
+ </Accordion>
+ </Accordions>
+ 
+@@ -184,12 +186,12 @@ const result = transpiler.scanImports(code);
+ 
+ ## Reference
+ 
+-```ts
++```ts See Typescript Definitions
+ type Loader = "jsx" | "js" | "ts" | "tsx";
+ 
+ interface TranspilerOptions {
+   // Replace key with value. Value must be a JSON string.
+-  // { "process.env.NODE_ENV": "\"production\" }
++  // { "process.env.NODE_ENV": "\"production\"" }
+   define?: Record<string, string>,
+ 
+   // Default loader for this transpiler
+@@ -268,7 +270,7 @@ type Import = {
+   // url() in CSS
+   | "url-token"
+   // The import was injected by Bun
+-  | "internal"
++  | "internal" 
+   // Entry point (not common)
+   | "entry-point-build"
+   | "entry-point-run"
+diff --git a/content/docs/runtime/utils.mdx b/content/docs/runtime/utils.mdx
+index 943e27f6..4c82ccde 100644
+--- a/content/docs/runtime/utils.mdx
++++ b/content/docs/runtime/utils.mdx
+@@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
+ 
+ ```ts title="terminal"
+ Bun.version;
+-// => "$BUN_LATEST_VERSION"
++// => "0.6.4"
+ ```
+ 
+ ## `Bun.revision`
+@@ -363,7 +363,7 @@ As a reminder, 1 nanosecond (ns) is 1 billionth of a second. Here's a quick refe
+ | ms   | 1             |
+ 
+ ```bash title="terminal"
+-$ bun string-width.mjs
++❯ bun string-width.mjs
+ cpu: 13th Gen Intel(R) Core(TM) i9-13900
+ runtime: bun 1.0.29 (x64-linux)
+ 
+@@ -840,7 +840,7 @@ console.log(Bun.stripANSI(formatted)); // => "Bold and underlined"
+ cpu: Apple M3 Max
+ runtime: bun 1.2.21 (arm64-darwin)
+ 
+-$ benchmark                               avg (min … max) p75 / p99
++benchmark                               avg (min … max) p75 / p99
+ ------------------------------------------------------- ----------
+ Bun.stripANSI      11 chars no-ansi        8.13 ns/iter   8.27 ns
+                                    (7.45 ns … 33.59 ns)  10.29 ns
+@@ -860,7 +860,7 @@ Bun.stripANSI 212,992 chars long-ansi    227.65 µs/iter 234.50 µs
+ cpu: Apple M3 Max
+ runtime: node 24.6.0 (arm64-darwin)
+ 
+-$ benchmark                                avg (min … max) p75 / p99
++benchmark                                avg (min … max) p75 / p99
+ -------------------------------------------------------- ---------
+ npm/strip-ansi      11 chars no-ansi      466.79 ns/iter 468.67 ns
+                                  (454.08 ns … 570.67 ns) 543.67 ns
+diff --git a/content/docs/runtime/watch-mode.mdx b/content/docs/runtime/watch-mode.mdx
+index cb83108d..c5da0cde 100644
+--- a/content/docs/runtime/watch-mode.mdx
++++ b/content/docs/runtime/watch-mode.mdx
+@@ -117,6 +117,8 @@ If you run this file with `bun --hot server.ts`, you'll see the reload count inc
+ ```bash title="terminal"
+ $ bun --hot index.ts
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ Reloaded 1 times
+ Reloaded 2 times
+ Reloaded 3 times
+diff --git a/content/docs/test/index.mdx b/content/docs/test/index.mdx
+index bed9f16f..a0c97688 100644
+--- a/content/docs/test/index.mdx
++++ b/content/docs/test/index.mdx
+@@ -220,6 +220,8 @@ When using `--randomize`, the seed used for randomization will be displayed in t
+ ```sh title="terminal"
+ $ bun test --randomize
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ # ... test output ...
+  --seed=12345
+  2 pass
+diff --git a/content/docs/test/lifecycle.mdx b/content/docs/test/lifecycle.mdx
+index d8cbf4b9..47f524c9 100644
+--- a/content/docs/test/lifecycle.mdx
++++ b/content/docs/test/lifecycle.mdx
+@@ -247,6 +247,8 @@ describe("outer describe", () => {
+   });
+ });
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ // Output order:
+ // File beforeAll
+ // Outer beforeAll
+diff --git a/content/docs/test/reporters.mdx b/content/docs/test/reporters.mdx
+index 8f2e1eca..d14832f8 100644
+--- a/content/docs/test/reporters.mdx
++++ b/content/docs/test/reporters.mdx
+@@ -1,5 +1,6 @@
+ ---
+ title: Test Reporters
++description:
+ ---
+ 
+ bun test supports different output formats through reporters. This document covers both built-in reporters and how to implement your own custom reporters.
+diff --git a/content/docs/test/runtime-behavior.mdx b/content/docs/test/runtime-behavior.mdx
+index a0dc0080..709c7de2 100644
+--- a/content/docs/test/runtime-behavior.mdx
++++ b/content/docs/test/runtime-behavior.mdx
+@@ -275,10 +275,10 @@ The test runner properly handles common signals:
+ 
+ ```bash title="terminal"
+ # Gracefully stops test execution
+-$ kill -SIGTERM <test-process-pid>
++kill -SIGTERM <test-process-pid>
+ 
+ # Immediately stops test execution
+-$ kill -SIGKILL <test-process-pid>
++kill -SIGKILL <test-process-pid>
+ ```
+ 
+ ### Environment Detection
+diff --git a/content/docs/typescript.mdx b/content/docs/typescript.mdx
+index 5f36440b..2c6a54e5 100644
+--- a/content/docs/typescript.mdx
++++ b/content/docs/typescript.mdx
+@@ -5,8 +5,8 @@ description: Using TypeScript with Bun, including type definitions and compiler
+ 
+ To install the TypeScript definitions for Bun's built-in APIs, install `@types/bun`.
+ 
+-```sh title="terminal"
+-$ bun add -d @types/bun  # dev dependency
++```zsh title="terminal"
++$ bun add -d @types/bun # dev dependency
+ ```
+ 
+ At this point, you should be able to reference the `Bun` global in your TypeScript files without seeing errors in your editor.
+@@ -15,7 +15,7 @@ At this point, you should be able to reference the `Bun` global in your TypeScri
+ 
+ Bun supports things like top-level await, JSX, and extensioned `.ts` imports, which TypeScript doesn't allow by default. Below is a set of recommended `compilerOptions` for a Bun project, so you can use these features without seeing compiler warnings from TypeScript.
+ 
+-```jsonc title="tsconfig.json"
++```json title="tsconfig.json"
+ {
+   "compilerOptions": {
+     // Environment setup & latest features
+diff --git a/content/guides/deployment/vercel.mdx b/content/guides/deployment/vercel.mdx
+index 578bc9bd..1493be1a 100644
+--- a/content/guides/deployment/vercel.mdx
++++ b/content/guides/deployment/vercel.mdx
+@@ -4,6 +4,8 @@ fullTitle: Deploy a Bun application on Vercel
+ mode: center
+ ---
+ 
++import { ProductCard } from "/snippets/product-card.mdx";
++
+ [Vercel](https://vercel.com/) is a cloud platform that lets you build, deploy, and scale your apps.
+ 
+ <Callout type="warning">
+diff --git a/content/guides/ecosystem/discordjs.mdx b/content/guides/ecosystem/discordjs.mdx
+index 2f93a995..eb21b004 100644
+--- a/content/guides/ecosystem/discordjs.mdx
++++ b/content/guides/ecosystem/discordjs.mdx
+@@ -22,7 +22,7 @@ $ bun add discord.js
+ 
+ ---
+ 
+-Before we go further, we need to go to the [Discord developer portal](https://discord.com/developers/applications), login/signup, create a new _Application_, then create a new _Bot_ within that application. Follow the [official guide](https://discordjs.guide/legacy/preparations/app-setup#creating-your-bot) for step-by-step instructions.
++Before we go further, we need to go to the [Discord developer portal](https://discord.com/developers/applications), login/signup, create a new _Application_, then create a new _Bot_ within that application. Follow the [official guide](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot) for step-by-step instructions.
+ 
+ ---
+ 
+@@ -30,7 +30,7 @@ Once complete, you'll be presented with your bot's _private key_. Let's add this
+ 
+ <Callout type="info">This is an example token that has already been invalidated.</Callout>
+ 
+-```ini title=".env.local"
++```txt title=".env.local"
+ DISCORD_TOKEN=NzkyNzE1NDU0MTk2MDg4ODQy.X-hvzA.Ovy4MCQywSkoMRRclStW4xAYK7I
+ ```
+ 
+diff --git a/content/guides/ecosystem/edgedb.mdx b/content/guides/ecosystem/edgedb.mdx
+index a688af8d..d7fad2e3 100644
+--- a/content/guides/ecosystem/edgedb.mdx
++++ b/content/guides/ecosystem/edgedb.mdx
+@@ -15,7 +15,7 @@ $ curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh
+ ```
+ 
+ ```sh tab="Windows terminal"
+-$ iwr https://ps1.edgedb.com -useb | iex
++iwr https://ps1.edgedb.com -useb | iex
+ ```
+ 
+ ---
+@@ -33,9 +33,9 @@ $ bun init -y
+ We'll use the EdgeDB CLI to initialize an EdgeDB instance for our project. This creates an `edgedb.toml` file in our project root.
+ 
+ ```sh title="terminal"
+-$ edgedb project init
++edgedb project init
+ 
+-$ No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
++No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
+ Do you want to initialize a new project? [Y/n]
+ > Y
+ Specify the name of EdgeDB instance to use with this project [default: my_edgedb_app]:
+@@ -64,7 +64,7 @@ To connect to my_edgedb_app, run `edgedb`
+ To see if the database is running, let's open a REPL and run a simple query.
+ 
+ ```sh title="terminal"
+-$ edgedb
++edgedb
+ edgedb> select 1 + 1;
+ 
+ 2
+@@ -104,13 +104,13 @@ module default {
+ Then generate and apply an initial migration.
+ 
+ ```sh title="terminal"
+-$ edgedb migration create
++edgedb migration create
+ 
+ Created /Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app/dbschema/migrations/00001.edgeql, id: m1uwekrn4ni4qs7ul7hfar4xemm5kkxlpswolcoyqj3xdhweomwjrq
+ ```
+ 
+ ```sh title="terminal"
+-$ edgedb migrate
++edgedb migrate
+ 
+ Applied m1uwekrn4ni4qs7ul7hfar4xemm5kkxlpswolcoyqj3xdhweomwjrq (00001.edgeql)
+ ```
+diff --git a/content/guides/ecosystem/mongoose.mdx b/content/guides/ecosystem/mongoose.mdx
+index d6b0a42d..97337372 100644
+--- a/content/guides/ecosystem/mongoose.mdx
++++ b/content/guides/ecosystem/mongoose.mdx
+@@ -87,4 +87,4 @@ Moo!
+ 
+ ---
+ 
+-This is a simple introduction to using Mongoose with TypeScript and Bun. As you build your application, refer to the official [MongoDB](https://www.mongodb.com/docs) and [Mongoose](https://mongoosejs.com/docs/) sites for complete documentation.
++This is a simple introduction to using Mongoose with TypeScript and Bun. As you build your application, refer to the official [MongoDB](https://docs.mongodb.com/) and [Mongoose](https://mongoosejs.com/docs/) sites for complete documentation.
+diff --git a/content/guides/ecosystem/neon-drizzle.mdx b/content/guides/ecosystem/neon-drizzle.mdx
+index ca8edaf2..9c2dc0cc 100644
+--- a/content/guides/ecosystem/neon-drizzle.mdx
++++ b/content/guides/ecosystem/neon-drizzle.mdx
+@@ -20,7 +20,7 @@ $ bun add -D drizzle-kit
+ 
+ Create a `.env.local` file and add your [Neon Postgres connection string](https://neon.tech/docs/connect/connect-from-any-app) to it.
+ 
+-```ini title=".env.local"
++```txt title=".env.local"
+ DATABASE_URL=postgresql://usertitle:password@ep-adj-noun-guid.us-east-1.aws.neon.tech/neondb?sslmode=require
+ ```
+ 
+diff --git a/content/guides/ecosystem/neon-serverless-postgres.mdx b/content/guides/ecosystem/neon-serverless-postgres.mdx
+index d9818e01..62607103 100644
+--- a/content/guides/ecosystem/neon-serverless-postgres.mdx
++++ b/content/guides/ecosystem/neon-serverless-postgres.mdx
+@@ -21,8 +21,8 @@ $ bun add @neondatabase/serverless
+ 
+ Create a `.env.local` file and add your [Neon Postgres connection string](https://neon.tech/docs/connect/connect-from-any-app) to it.
+ 
+-```ini title=".env.local"
+-DATABASE_URL=postgresql://usertitle:password@ep-adj-noun-guid.us-east-1.aws.neon.tech/neondb?sslmode=require
++```sh title=".env.local"
++$ DATABASE_URL=postgresql://usertitle:password@ep-adj-noun-guid.us-east-1.aws.neon.tech/neondb?sslmode=require
+ ```
+ 
+ ---
+diff --git a/content/guides/ecosystem/nextjs.mdx b/content/guides/ecosystem/nextjs.mdx
+index 6ebe4071..a4f6af0d 100644
+--- a/content/guides/ecosystem/nextjs.mdx
++++ b/content/guides/ecosystem/nextjs.mdx
+@@ -25,7 +25,9 @@ You can specify a starter template using the `--example` flag.
+ 
+ ```sh
+ $ bun create next-app --example with-supabase
++```
+ 
++```txt
+ ✔ What is your project named? … my-app
+ ...
+ ```
+diff --git a/content/guides/ecosystem/nuxt.mdx b/content/guides/ecosystem/nuxt.mdx
+index 30bc89df..b8e3ad95 100644
+--- a/content/guides/ecosystem/nuxt.mdx
++++ b/content/guides/ecosystem/nuxt.mdx
+@@ -35,7 +35,7 @@ To start the dev server, run `bun --bun run dev` from the project root. This wil
+ $ cd my-nuxt-app
+ $ bun --bun run dev
+ 
+- $ nuxt dev
++nuxt dev
+ Nuxi 3.6.5
+ Nuxt 3.6.5 with Nitro 2.5.2
+   > Local:    http://localhost:3000/
+diff --git a/content/guides/ecosystem/pm2.mdx b/content/guides/ecosystem/pm2.mdx
+index bd94fd3d..b12fd035 100644
+--- a/content/guides/ecosystem/pm2.mdx
++++ b/content/guides/ecosystem/pm2.mdx
+@@ -22,7 +22,7 @@ You can use PM2 with Bun in two ways: as a CLI option or in a configuration file
+ To start your application with PM2 and Bun as the interpreter, open your terminal and run the following command:
+ 
+ ```bash title="terminal"
+-$ pm2 start --interpreter ~/.bun/bin/bun index.ts
++pm2 start --interpreter ~/.bun/bin/bun index.ts
+ ```
+ 
+ ---
+@@ -47,7 +47,7 @@ module.exports = {
+ After saving the file, you can start your application with PM2
+ 
+ ```bash title="terminal"
+-$ pm2 start pm2.config.js
++pm2 start pm2.config.js
+ ```
+ 
+ ---
+diff --git a/content/guides/ecosystem/prisma.mdx b/content/guides/ecosystem/prisma.mdx
+index a22b35e6..2f03f4fc 100644
+--- a/content/guides/ecosystem/prisma.mdx
++++ b/content/guides/ecosystem/prisma.mdx
+@@ -1,6 +1,7 @@
+ ---
+ title: Prisma ORM with Bun
+ fullTitle: Use Prisma with Bun
++mode: center
+ ---
+ 
+ <Callout type="info">
+@@ -149,7 +150,7 @@ fullTitle: Use Prisma with Bun
+     	```bash title="terminal"
+     	$ bun run index.ts
+     	```
+-    	```txg
++    	```txt
+     	Created john-0.12802932895402364@example.com
+     	There are 1 users in the database.
+     	```
+diff --git a/content/guides/ecosystem/qwik.mdx b/content/guides/ecosystem/qwik.mdx
+index 4de876b1..95d54cc0 100644
+--- a/content/guides/ecosystem/qwik.mdx
++++ b/content/guides/ecosystem/qwik.mdx
+@@ -79,6 +79,7 @@ $ bun create qwik
+ ├──────────────────────────────────────────────────────╯
+ │
+ └  Happy coding! 🎉
++
+ ```
+ 
+ ---
+diff --git a/content/guides/ecosystem/solidstart.mdx b/content/guides/ecosystem/solidstart.mdx
+index e4618672..3868ba95 100644
+--- a/content/guides/ecosystem/solidstart.mdx
++++ b/content/guides/ecosystem/solidstart.mdx
+@@ -47,7 +47,7 @@ Then run the development server.
+ 
+ ```sh title="terminal"
+ $ bun run dev
+-or, equivalently
++# or, equivalently
+ $ bunx solid-start dev
+ ```
+ 
+diff --git a/content/guides/ecosystem/sveltekit.mdx b/content/guides/ecosystem/sveltekit.mdx
+index 985ade01..9095a830 100644
+--- a/content/guides/ecosystem/sveltekit.mdx
++++ b/content/guides/ecosystem/sveltekit.mdx
+@@ -84,7 +84,7 @@ To build for production, you'll need to add the right SvelteKit adapter. Current
+ 
+ Now, make the following changes to your `svelte.config.js`.
+ 
+-```js title="svelte.config.js"
++```ts title="svelte.config.js"
+ import adapter from "@sveltejs/adapter-auto"; // [!code --]
+ import adapter from "svelte-adapter-bun"; // [!code ++]
+ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+diff --git a/content/guides/index.mdx b/content/guides/index.mdx
+index 4e453352..107c894c 100644
+--- a/content/guides/index.mdx
++++ b/content/guides/index.mdx
+@@ -5,112 +5,6 @@ contextual: false
+ mode: center
+ ---
+ 
+-## Featured
++import { GuidesList } from "/snippets/guides.jsx";
+ 
+-import { Card as FancyCard, Cards as FancyCards } from "@/components/ui/card";
+-
+-<FancyCards className="grid-cols-3">
+-  <FancyCard title="Build a frontend using Vite and Bun" href="/guides/ecosystem/vite" cta="View Guide" />
+-  <FancyCard title="Install TypeScript declarations for Bun" href="/guides/runtime/typescript" cta="View Guide" />
+-  <FancyCard title="Convert a ReadableStream to a string" href="/guides/streams/to-string" cta="View Guide" />
+-  <FancyCard title="Write a simple HTTP server" href="/guides/http/simple" cta="View Guide" />
+-  <FancyCard title="Build a simple WebSocket server" href="/guides/websocket/simple" cta="View Guide" />
+-  <FancyCard title="Read a file as a string" href="/guides/read-file/string" cta="View Guide" />
+-</FancyCards>
+-
+-## All Guides
+-
+-import { readdirSync, readFileSync } from 'node:fs';
+-import { join } from 'node:path';
+-import { Card, Cards } from 'fumadocs-ui/components/card';
+-
+-export const GuidesCategory = ({ category }) => {
+-  const guidesDir = join(process.cwd(), 'content/guides', category);
+-  const files = readdirSync(guidesDir).filter(f => f.endsWith('.mdx'));
+-  
+-  const pages = files.map(file => {
+-    const content = readFileSync(join(guidesDir, file), 'utf-8');
+-    
+-    const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+-    const frontmatter = frontmatterMatch ? frontmatterMatch[1] : '';
+-    
+-    const titleMatch = frontmatter.match(/^title:\s*['"]?(.+?)['"]?\s*$/m);
+-    const fullTitleMatch = frontmatter.match(/^fullTitle:\s*['"]?(.+?)['"]?\s*$/m);
+-    
+-    const pageTitle = titleMatch ? titleMatch[1] : file.replace('.mdx', '');
+-    const pageFullTitle = fullTitleMatch ? fullTitleMatch[1] : pageTitle;
+-    
+-    return {
+-      title: pageFullTitle ||pageTitle,
+-      url: `/guides/${category}/${file.replace('.mdx', '')}`
+-    };
+-  }).sort((a, b) => a.title.localeCompare(b.title));
+-
+-  return (
+-    <Cards className="grid-cols-3">
+-      {pages.map((page) => (
+-        <Card 
+-          key={page.url} 
+-          title={page.title} 
+-          href={page.url}
+-        />
+-      ))}
+-    </Cards>
+-  );
+-};
+-
+-### Deployment
+-
+-<GuidesCategory category="deployment" />
+-
+-### Binary Data
+-
+-<GuidesCategory category="binary" />
+-
+-### Ecosystem & Frameworks
+-
+-<GuidesCategory category="ecosystem" />
+-
+-### File System - Read
+-
+-<GuidesCategory category="read-file" />
+-
+-### File System - Write
+-
+-<GuidesCategory category="write-file" />
+-
+-### HTML Processing
+-
+-<GuidesCategory category="html-rewriter" />
+-
+-### HTTP & Networking
+-
+-<GuidesCategory category="http" />
+-
+-### Package Manager
+-
+-<GuidesCategory category="install" />
+-
+-### Process & System
+-
+-<GuidesCategory category="process" />
+-
+-### Runtime & Debugging
+-
+-<GuidesCategory category="runtime" />
+-
+-### Streams
+-
+-<GuidesCategory category="streams" />
+-
+-### Test Runner
+-
+-<GuidesCategory category="test" />
+-
+-### Utilities
+-
+-<GuidesCategory category="util" />
+-
+-### WebSocket
+-
+-<GuidesCategory category="websocket" />
++<GuidesList />
+diff --git a/content/guides/install/from-npm-install-to-bun-install.mdx b/content/guides/install/from-npm-install-to-bun-install.mdx
+index c41d0f5b..d16182c8 100644
+--- a/content/guides/install/from-npm-install-to-bun-install.mdx
++++ b/content/guides/install/from-npm-install-to-bun-install.mdx
+@@ -48,8 +48,7 @@ $ bun my-script
+ $ bun run my-script
+ 
+ # Run an executable in node_modules/.bin:
+-$ bun my-executable
+-# such as tsc, esbuild, etc.
++$ bun my-executable # such as tsc, esbuild, etc.
+ $ bun run my-executable
+ 
+ # Run a JavaScript/TypeScript file:
+@@ -151,6 +150,7 @@ To list installed packages, you can use `bun pm ls`. This will list all the pack
+ ```sh title="terminal"
+ # List top-level installed packages:
+ $ bun pm ls
++
+ my-pkg node_modules (781)
+ ├── @types/node@20.16.5
+ ├── @types/react@18.3.8
+@@ -163,6 +163,7 @@ my-pkg node_modules (781)
+ ```sh title="terminal"
+ # List all installed packages:
+ $ bun pm ls -a
++
+ my-pkg node_modules
+ ├── @alloc/quick-lru@5.2.0
+ ├── @isaacs/cliui@8.0.2
+@@ -182,6 +183,7 @@ To create a package tarball, you can use `bun pm pack`. This will create a tarba
+ ```sh title="terminal"
+ # Create a tarball
+ $ bun pm pack
++
+ Total files: 46
+ Shasum: 2ee19b6f0c6b001358449ca0eadead703f326216
+ Integrity: sha512-ZV0lzWTEkGAMz[...]Gl4f8lA9sl97g==
+@@ -216,5 +218,5 @@ You can install packages globally using `bun i -g <package>`. This will install
+ $ bun i -g eslint
+ 
+ # Run a globally-installed package without the `bun run` prefix
+-$ eslint --init
++eslint --init
+ ```
+diff --git a/content/guides/install/registry-scope.mdx b/content/guides/install/registry-scope.mdx
+index e9dfb2cc..0da49c23 100644
+--- a/content/guides/install/registry-scope.mdx
++++ b/content/guides/install/registry-scope.mdx
+@@ -23,6 +23,7 @@ To configure a registry for a particular npm scope:
+ 
+ # as an object with token
+ "@myorg3" = { token = "$npm_token", url = "https://registry.myorg.com/" }
++
+ ```
+ 
+ ---
+diff --git a/content/guides/read-file/arraybuffer.mdx b/content/guides/read-file/arraybuffer.mdx
+index 4779b8fa..744a6a46 100644
+--- a/content/guides/read-file/arraybuffer.mdx
++++ b/content/guides/read-file/arraybuffer.mdx
+@@ -15,7 +15,7 @@ const buffer = await file.arrayBuffer();
+ 
+ ---
+ 
+-The binary content in the `ArrayBuffer` can then be read as a typed array, such as `Int8Array`. For `Uint8Array`, use [`.bytes()`](/guides/read-file/uint8array).
++The binary content in the `ArrayBuffer` can then be read as a typed array, such as `Int8Array`. For `Uint8Array`, use [`.bytes()`](./uint8array).
+ 
+ ```ts title="index.ts"
+ const buffer = await file.arrayBuffer();
+diff --git a/content/guides/runtime/build-time-constants.mdx b/content/guides/runtime/build-time-constants.mdx
+index ea15ae8f..29e47553 100644
+--- a/content/guides/runtime/build-time-constants.mdx
++++ b/content/guides/runtime/build-time-constants.mdx
+@@ -63,28 +63,33 @@ await Bun.build({
+ 
+ Embed version and build metadata directly into your executable:
+ 
+-```ts tab="src/version.ts"
+-// These constants are replaced at build time
+-declare const BUILD_VERSION: string;
+-declare const BUILD_TIME: string;
+-declare const GIT_COMMIT: string;
+-
+-export function getVersion() {
+-  return {
+-    version: BUILD_VERSION,
+-    buildTime: BUILD_TIME,
+-    commit: GIT_COMMIT,
+-  };
+-}
+-```
+-
+-```sh tab="Build command"
+-$ bun build --compile \
+-  --define BUILD_VERSION='"1.2.3"' \
+-  --define BUILD_TIME='"2024-01-15T10:30:00Z"' \
+-  --define GIT_COMMIT='"abc123"' \
+-  src/cli.ts --outfile mycli
+-```
++<Tabs items={['JavaScript', 'CLI']} groupId="js/cli">
++  <Tab value="JavaScript">
++    ```ts title="src/version.ts"
++    // These constants are replaced at build time
++    declare const BUILD_VERSION: string;
++    declare const BUILD_TIME: string;
++    declare const GIT_COMMIT: string;
++
++    export function getVersion() {
++      return {
++        version: BUILD_VERSION,
++        buildTime: BUILD_TIME,
++        commit: GIT_COMMIT,
++      };
++    }
++   ```
++  </Tab>
++  <Tab value="CLI">
++    ```sh title="terminal" Build command
++    $ bun build --compile \
++      --define BUILD_VERSION='"1.2.3"' \
++      --define BUILD_TIME='"2024-01-15T10:30:00Z"' \
++      --define GIT_COMMIT='"abc123"' \
++      src/cli.ts --outfile mycli
++   ```
++  </Tab>
++</Tabs>
+ 
+ ### Feature flags
+ 
+diff --git a/content/guides/runtime/cicd.mdx b/content/guides/runtime/cicd.mdx
+index feb5780e..d743fd26 100644
+--- a/content/guides/runtime/cicd.mdx
++++ b/content/guides/runtime/cicd.mdx
+@@ -37,7 +37,7 @@ jobs:
+       # ...
+       - uses: oven-sh/setup-bun@v2
+         with: // [!code ++]
+-          bun-version: $BUN_LATEST_VERSION # or "latest", "canary", <sha> // [!code ++]
++          bun-version: 1.2.0 # or "latest", "canary", <sha> // [!code ++]
+ ```
+ 
+ ---
+diff --git a/content/guides/runtime/codesign-macos-executable.mdx b/content/guides/runtime/codesign-macos-executable.mdx
+index 58a41b64..cbe257d5 100644
+--- a/content/guides/runtime/codesign-macos-executable.mdx
++++ b/content/guides/runtime/codesign-macos-executable.mdx
+@@ -16,7 +16,8 @@ $ bun build --compile ./path/to/entry.ts --outfile myapp
+ List your available signing identities. One of these will be your signing identity that you pass to the `codesign` command. This command requires macOS.
+ 
+ ```sh title="terminal"
+-$ security find-identity -v -p codesigning
++security find-identity -v -p codesigning
++
+ 1. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "Developer ID Application: Your Name (ZZZZZZZZZZ)"
+    1 valid identities found
+ ```
+diff --git a/content/guides/runtime/set-env.mdx b/content/guides/runtime/set-env.mdx
+index 13c32a38..5d9510ae 100644
+--- a/content/guides/runtime/set-env.mdx
++++ b/content/guides/runtime/set-env.mdx
+@@ -39,7 +39,7 @@ $ FOO=helloworld bun run dev
+ $ set FOO=helloworld && bun run dev
+ 
+ # Using PowerShell
+-$ $env:FOO="helloworld"; bun run dev
++$env:FOO="helloworld"; bun run dev
+ ```
+ 
+ ---
+diff --git a/content/guides/runtime/web-debugger.mdx b/content/guides/runtime/web-debugger.mdx
+index 90156671..b791abd7 100644
+--- a/content/guides/runtime/web-debugger.mdx
++++ b/content/guides/runtime/web-debugger.mdx
+@@ -4,7 +4,7 @@ fullTitle: Debugging Bun with the web debugger
+ mode: center
+ ---
+ 
+-Bun speaks the [WebKit Inspector Protocol](https://github.com/oven-sh/bun/blob/main/packages/bun-inspector-protocol/src/protocol/jsc/index.d.ts). To enable debugging when running code with Bun, use the `--inspect` flag. For demonstration purposes, consider the following simple web server.
++Bun speaks the [WebKit Inspector Protocol](https://github.com/oven-sh/bun/blob/main/packages/bun-vscode/types/jsc.d.ts). To enable debugging when running code with Bun, use the `--inspect` flag. For demonstration purposes, consider the following simple web server.
+ 
+ ```ts title="server.ts"
+ Bun.serve({
+diff --git a/content/guides/test/coverage-threshold.mdx b/content/guides/test/coverage-threshold.mdx
+index 3b0e97b3..1ebaf8de 100644
+--- a/content/guides/test/coverage-threshold.mdx
++++ b/content/guides/test/coverage-threshold.mdx
+@@ -9,6 +9,8 @@ Bun's test runner supports built-in code coverage reporting via the `--coverage`
+ ```sh title="terminal"
+ $ bun test --coverage
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ test.test.ts:
+ ✓ math > add [0.71ms]
+ ✓ math > multiply [0.03ms]
+@@ -43,6 +45,8 @@ If your test suite does not meet this threshold, `bun test` will exit with a non
+ ```sh title="terminal"
+ $ bun test --coverage
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ <test output>
+ $ echo $?
+ 1 # this is the exit code of the previous command
+diff --git a/content/guides/test/coverage.mdx b/content/guides/test/coverage.mdx
+index 028c41dc..067f1fb4 100644
+--- a/content/guides/test/coverage.mdx
++++ b/content/guides/test/coverage.mdx
+@@ -15,6 +15,8 @@ The coverage report lists the source files that were executed during the test ru
+ ```sh title="terminal"
+ $ bun test --coverage
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ test.test.ts:
+ ✓ math > add [0.71ms]
+ ✓ math > multiply [0.03ms]
+diff --git a/content/guides/test/happy-dom.mdx b/content/guides/test/happy-dom.mdx
+index f7638b27..499b194c 100644
+--- a/content/guides/test/happy-dom.mdx
++++ b/content/guides/test/happy-dom.mdx
+@@ -56,6 +56,8 @@ With Happy DOM properly configured, this test runs as expected.
+ ```sh title="terminal"
+ $ bun test
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ dom.test.ts:
+ ✓ set button text [0.82ms]
+ 
+diff --git a/content/guides/test/run-tests.mdx b/content/guides/test/run-tests.mdx
+index b1ab1867..deb2cc6f 100644
+--- a/content/guides/test/run-tests.mdx
++++ b/content/guides/test/run-tests.mdx
+@@ -23,6 +23,7 @@ Here's what the output of a typical test run looks like. In this case, there are
+ 
+ ```sh title="terminal"
+ $ bun test
++
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
+ test.test.js:
+@@ -49,6 +50,7 @@ To only run certain test files, pass a positional argument to `bun test`. The ru
+ 
+ ```sh title="terminal"
+ $ bun test test3
++
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
+ test3.test.js:
+@@ -87,6 +89,7 @@ Adding `-t add` will only run tests with "add" in the name. This works with test
+ 
+ ```sh title="terminal"
+ $ bun test -t add
++
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
+ test.test.js:
+diff --git a/content/guides/test/skip-tests.mdx b/content/guides/test/skip-tests.mdx
+index 33c16fdd..5679852e 100644
+--- a/content/guides/test/skip-tests.mdx
++++ b/content/guides/test/skip-tests.mdx
+@@ -21,6 +21,8 @@ Running `bun test` will not execute this test. It will be marked as skipped in t
+ ```sh title="terminal"
+ $ bun test
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ test.test.ts:
+ ✓ add [0.03ms]
+ ✓ multiply [0.02ms]
+diff --git a/content/guides/test/snapshot.mdx b/content/guides/test/snapshot.mdx
+index 8263c38f..a140daba 100644
+--- a/content/guides/test/snapshot.mdx
++++ b/content/guides/test/snapshot.mdx
+@@ -20,6 +20,7 @@ The first time this test is executed, Bun will evaluate the value passed into `e
+ 
+ ```sh title="terminal"
+ $ bun test test/snap
++
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
+ test/snap.test.ts:
+@@ -65,6 +66,8 @@ Later, when this test file is executed again, Bun will read the snapshot file an
+ $ bun test
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ test/snap.test.ts:
+ ✓ snapshot [1.05ms]
+ 
+@@ -82,6 +85,8 @@ To update snapshots, use the `--update-snapshots` flag.
+ $ bun test --update-snapshots
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ test/snap.test.ts:
+ ✓ snapshot [0.86ms]
+ 
+diff --git a/content/guides/test/spy-on.mdx b/content/guides/test/spy-on.mdx
+index 731fa14e..29dde3cb 100644
+--- a/content/guides/test/spy-on.mdx
++++ b/content/guides/test/spy-on.mdx
+@@ -35,7 +35,8 @@ const leo = {
+ 
+ const spy = spyOn(leo, "sayHi");
+ 
+-test("turtles", () => { // [!code ++]
++test("turtles", () => {
++  // [!code ++]
+   expect(spy).toHaveBeenCalledTimes(0); // [!code ++]
+   leo.sayHi("pizza"); // [!code ++]
+   expect(spy).toHaveBeenCalledTimes(1); // [!code ++]
+diff --git a/content/guides/test/svelte-test.mdx b/content/guides/test/svelte-test.mdx
+index 4e663175..b38e1b85 100644
+--- a/content/guides/test/svelte-test.mdx
++++ b/content/guides/test/svelte-test.mdx
+@@ -14,7 +14,7 @@ $ bun add @testing-library/svelte svelte@4 @happy-dom/global-registrator
+ 
+ Then, save this plugin in your project.
+ 
+-```js title="svelte-loader.js"
++```ts title="svelte-loader.js"
+ import { plugin } from "bun";
+ import { compile } from "svelte/compiler";
+ import { readFileSync } from "fs";
+diff --git a/content/guides/test/todo-tests.mdx b/content/guides/test/todo-tests.mdx
+index 14e03425..95ffd8ae 100644
+--- a/content/guides/test/todo-tests.mdx
++++ b/content/guides/test/todo-tests.mdx
+@@ -20,6 +20,8 @@ The output of `bun test` indicates how many `todo` tests were encountered.
+ ```sh title="terminal"
+ $ bun test
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ test.test.ts:
+ ✓ add [0.03ms]
+ ✓ multiply [0.02ms]
+@@ -51,6 +53,8 @@ If an implementation is provided, it will not be run unless the `--todo` flag is
+ ```sh title="terminal"
+ $ bun test --todo
+ 
++bun test v$BUN_LATEST_VERSION (9c68abdb)
++
+ my.test.ts:
+ ✗ unimplemented feature
+   ^ this test is marked as todo but passes. Remove `.todo` or check that test is correct.
+diff --git a/content/guides/test/update-snapshots.mdx b/content/guides/test/update-snapshots.mdx
+index e4d49d59..96ddd412 100644
+--- a/content/guides/test/update-snapshots.mdx
++++ b/content/guides/test/update-snapshots.mdx
+@@ -31,6 +31,7 @@ To regenerate snapshots, use the `--update-snapshots` flag.
+ 
+ ```sh title="terminal"
+ $ bun test --update-snapshots
++
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
+ test/snap.test.ts:
+diff --git a/content/guides/util/main.mdx b/content/guides/util/main.mdx
+index a4d9b52f..e39b4957 100644
+--- a/content/guides/util/main.mdx
++++ b/content/guides/util/main.mdx
+@@ -18,10 +18,15 @@ import "./foo.ts";
+ 
+ The printed path corresponds to the file that is executed with `bun run`.
+ 
+-```sh
++```sh title="terminal"
+ $ bun run index.ts
++
+ /path/to/index.ts
++```
++
++```sh title="terminal"
+ $ bun run foo.ts
++
+ /path/to/foo.ts
+ ```
+ 
+diff --git a/content/guides/util/version.mdx b/content/guides/util/version.mdx
+index 668029f3..ae5699d9 100644
+--- a/content/guides/util/version.mdx
++++ b/content/guides/util/version.mdx
+@@ -7,7 +7,7 @@ mode: center
+ Get the current version of Bun in a semver format.
+ 
+ ```ts title="index.ts"
+-Bun.version; // => "$BUN_LATEST_VERSION"
++Bun.version; // => "1.3.1"
+ ```
+ 
+ ---
