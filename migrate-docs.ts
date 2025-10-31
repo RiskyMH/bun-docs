@@ -378,6 +378,11 @@ function mergeTerminalWithOutput(content: string): string {
   // Convert text blocks back to txt
   modified = modified.replace(/```text\n/g, '```txt\n');
   
+  // Fix Bun source language typos that break Shiki syntax highlighting
+  modified = modified.replace(/```env(\s)/g, '```ini$1'); // env → ini (env not supported)
+  modified = modified.replace(/```txts(\s)/g, '```txt$1'); // txts → txt (typo)
+  modified = modified.replace(/```txg(\s)/g, '```txt$1'); // txg → txt (typo)
+  
   return modified;
 }
 
