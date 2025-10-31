@@ -2233,7 +2233,8 @@ index a5126c92..24e53b81 100644
 @@ -1253,7 +1285,7 @@ const output = myFunction();
  ```
  
- ```ts title="output.ts"
+- ```ts title="output.ts"
++ ```js title="output.js"
 -// Output with --minify (49 bytes, 69% reduction)
 +// // Output with --minify (49 bytes, 69% reduction)
  const a=42,b=()=>{const c=!0,d=void 0;return c?a:d},e=b();
