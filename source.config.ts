@@ -59,6 +59,11 @@ export const blog = defineCollections({
 export default defineConfig({
   mdxOptions: {
     // MDX options
+    remarkImageOptions: {
+      // todo: enable again (it hangs on some images - prob ratelimited)
+      external: false,
+      onError: "ignore",
+    },
     remarkHeadingOptions: {
       slug(root, heading, text) {
         return text
