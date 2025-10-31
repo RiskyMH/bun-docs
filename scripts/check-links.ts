@@ -64,6 +64,10 @@ async function checkLinks() {
       // they prob block bun/automated requests
       "https://developer.mozilla.org/*",
       "https://twitter.com/*",
+      "https://twitter.com/jarredsumner/status/1458207919636287490",
+      "https://twitter.com/jarredsumner/status/1606163655527059458",
+      "https://twitter.com/jarredsumner/status/1499225725492076544",
+      "https://twitter.com/jarredsumner/status/1499225725492076544",
     ],
   });
   console.timeEnd("checked links");

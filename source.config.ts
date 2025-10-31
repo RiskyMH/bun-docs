@@ -5,9 +5,7 @@ import {
   metaSchema,
   defineCollections,
 } from "fumadocs-mdx/config";
-import {
-  rehypeCodeDefaultOptions,
-} from "fumadocs-core/mdx-plugins";
+import { rehypeCodeDefaultOptions } from "fumadocs-core/mdx-plugins";
 import { z } from "zod";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
@@ -61,6 +59,15 @@ export const blog = defineCollections({
 export default defineConfig({
   mdxOptions: {
     // MDX options
+    remarkHeadingOptions: {
+      slug(root, heading, text) {
+        return text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .replace(/-+/g, "-");
+      },
+    },
     remarkPlugins: [
       () => (tree) => {
         function replace(tree: any) {
