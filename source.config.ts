@@ -57,6 +57,7 @@ export const blog = defineCollections({
 });
 
 export default defineConfig({
+  experimentalBuildCache: ".next/cache/fumadocs",
   mdxOptions: {
     // MDX options
     remarkImageOptions: {
