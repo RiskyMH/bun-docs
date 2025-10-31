@@ -89,6 +89,7 @@ export default defineConfig({
       },
       langAlias: {
         env: "ini",
+        zsh: "shellscript",
       },
       icon: {
         // https://github.com/fuma-nama/fumadocs/blob/main/packages/core/src/mdx-plugins/transformer-icon.ts
@@ -108,6 +109,7 @@ export default defineConfig({
           toml: "config",
           yaml: "config",
           yml: "config",
+          zsh: "shellscript",
         },
       },
       transformers: [

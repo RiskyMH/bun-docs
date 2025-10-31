@@ -10,17 +10,13 @@ EdgeDB is a graph-relational database powered by Postgres under the hood. It pro
 
 First, [install EdgeDB](https://www.edgedb.com/install) if you haven't already.
 
-
-
 ```sh tab="Linux/macOS terminal"
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh
 ```
 
 ```sh tab="Windows terminal"
-iwr https://ps1.edgedb.com -useb | iex
+$ iwr https://ps1.edgedb.com -useb | iex
 ```
-
-
 
 ---
 
@@ -39,7 +35,7 @@ We'll use the EdgeDB CLI to initialize an EdgeDB instance for our project. This 
 ```sh title="terminal"
 $ edgedb project init
 
-No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
+$ No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
 Do you want to initialize a new project? [Y/n]
 > Y
 Specify the name of EdgeDB instance to use with this project [default: my_edgedb_app]:
@@ -136,7 +132,7 @@ Paste the following code into `seed.ts`.
 The client auto-connects to the database. We insert a couple movies using the `.execute()` method. We will use EdgeQL's `for` expression to turn this bulk insert into a single optimized query.
 
 ```ts title="seed.ts"
-import {createClient} from 'edgedb';
+import { createClient } from "edgedb";
 
 const client = createClient();
 
@@ -151,12 +147,12 @@ const INSERT_MOVIE = `
 `;
 
 const movies = [
-	{title: 'The Matrix', year: 1999},
-	{title: 'The Matrix Reloaded', year: 2003},
-	{title: 'The Matrix Revolutions', year: 2003},
+  { title: "The Matrix", year: 1999 },
+  { title: "The Matrix Reloaded", year: 2003 },
+  { title: "The Matrix Revolutions", year: 2003 },
 ];
 
-await client.execute(INSERT_MOVIE, {movies});
+await client.execute(INSERT_MOVIE, { movies });
 
 console.log(`Seeding complete.`);
 process.exit();
@@ -201,14 +197,14 @@ the query builder directory? The following line will be added:
 In `index.ts`, we can import the generated query builder from `./dbschema/edgeql-js` and write a simple select query.
 
 ```ts title="index.ts"
-import {createClient} from 'edgedb';
-import e from './dbschema/edgeql-js';
+import { createClient } from "edgedb";
+import e from "./dbschema/edgeql-js";
 
 const client = createClient();
 
 const query = e.select(e.Movie, () => ({
-	title: true,
-	releaseYear: true,
+  title: true,
+  releaseYear: true,
 }));
 
 const results = await query.run(client);

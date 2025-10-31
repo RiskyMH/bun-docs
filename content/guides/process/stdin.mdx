@@ -7,11 +7,11 @@ mode: center
 For CLI tools, it's often useful to read from `stdin`. In Bun, the `console` object is an `AsyncIterable` that yields lines from `stdin`.
 
 ```ts title="index.ts"
-const prompt = 'Type something: ';
+const prompt = "Type something: ";
 process.stdout.write(prompt);
 for await (const line of console) {
-	console.log(`You typed: ${line}`);
-	process.stdout.write(prompt);
+  console.log(`You typed: ${line}`);
+  process.stdout.write(prompt);
 }
 ```
 
@@ -20,10 +20,8 @@ for await (const line of console) {
 Running this file results in a never-ending interactive prompt that echoes whatever the user types.
 
 ```sh title="terminal"
-bun run index.ts
-```
+$ bun run index.ts
 
-```txt
 Type something: hello
 You typed: hello
 Type something: hello again
@@ -38,10 +36,10 @@ There is no guarantee that the chunks will be split line-by-line.
 
 ```ts title="stdin.ts"
 for await (const chunk of Bun.stdin.stream()) {
-	// chunk is Uint8Array
-	// this converts it to text (assumes ASCII encoding)
-	const chunkText = Buffer.from(chunk).toString();
-	console.log(`Chunk: ${chunkText}`);
+  // chunk is Uint8Array
+  // this converts it to text (assumes ASCII encoding)
+  const chunkText = Buffer.from(chunk).toString();
+  console.log(`Chunk: ${chunkText}`);
 }
 ```
 
@@ -50,10 +48,8 @@ for await (const chunk of Bun.stdin.stream()) {
 This will print the input that is piped into the `bun` process.
 
 ```sh title="terminal"
-echo "hello" | bun run stdin.ts
-```
+$ echo "hello" | bun run stdin.ts
 
-```txt
 Chunk: hello
 ```
 

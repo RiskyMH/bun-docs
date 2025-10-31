@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev --turbo",
     "start": "next start",
-    "postinstall": "fumadocs-mdx && bun pull-docs",
+    "postinstall": "fumadocs-mdx",
     "pull-docs": "bun scripts/pull-docs.ts",
     "check-links": "bun scripts/check-links.ts"
   },

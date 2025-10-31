@@ -14,8 +14,6 @@ $ bun build ./cli.ts --compile --outfile mycli
 console.log("Hello world!");
 ```
 
-
-
 This bundles `cli.ts` into an executable that can be executed directly:
 
 ```bash title="terminal"
@@ -188,7 +186,7 @@ You can run a standalone executable as if it were the `bun` CLI itself by settin
 
 For example, consider an executable compiled from a simple script:
 
-```bash terminal
+```bash title="terminal"
 $ echo "console.log(\"you shouldn't see this\");" > such-bun.js
 $ bun build --compile ./such-bun.js
 
@@ -198,8 +196,8 @@ $ bun build --compile ./such-bun.js
 
 Normally, running `./such-bun` with arguments would execute the script.
 
-```bash terminal
-Executable runs its own entrypoint by default
+```bash title="terminal"
+# Executable runs its own entrypoint by default
 $ ./such-bun install
 
 you shouldn't see this

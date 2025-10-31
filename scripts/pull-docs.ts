@@ -3,7 +3,7 @@
 import { join } from "node:path";
 const REPO_URL = "https://github.com/oven-sh/bun.git";
 const REPO_PATH = join(import.meta.dirname, "../.repos/bun");
-const REPO_BRANCH = "main";
+const REPO_BRANCH = "lydia/merge-docs";
 
 const fetchRepo = async () => {
   if (await Bun.file(join(REPO_PATH, ".git/HEAD")).exists()) {
@@ -41,3 +41,20 @@ await Promise.all([
 // BUT right now it is made for previous docs structure, so that can't happen right now.
 //     (also dont forget to make a .gitignore in those copied folders)
 //     (also work out best way to store _snippets - either in bun/docs or dynamically make it here)
+
+const cwd = join(import.meta.dirname, "../");
+
+await Bun.$`cp -r ${join(REPO_PATH, "docs")} content`.cwd(cwd);
+// await Bun.$`cp -r ${BLOG_PATH }/pages/blog content`.cwd('../'+import.meta.dirname);
+await Bun.$`cp -r content/docs/guides content`.cwd(cwd);
+await Bun.$`cp -r content/docs/images public`.cwd(cwd);
+
+await Bun.$`rm -rf content/docs/guides`.cwd(cwd);
+await Bun.$`rm -rf content/docs/icons`.cwd(cwd);
+await Bun.$`rm -rf content/docs/images`.cwd(cwd);
+await Bun.$`rm -rf content/docs/snippets`.cwd(cwd);
+await Bun.$`rm -rf content/docs/**/*.{css,png,svg,js}`.cwd(cwd);
+await Bun.$`rm -rf content/docs/README.md content/docs/docs.json _content/docs/.prettierrc.json`.cwd(cwd);
+
+await Bun.write(join(cwd, "content/docs/.gitignore"), ".*")
+await Bun.write(join(cwd, "content/guides/.gitignore"), ".*")

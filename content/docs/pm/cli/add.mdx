@@ -1,5 +1,5 @@
 ---
-title: 'bun add'
+title: "bun add"
 description: "Add packages to your project with Bun's fast package manager"
 ---
 
@@ -59,13 +59,13 @@ This will add the following to your `package.json`:
 
 ```json title="package.json"
 {
-	"dependencies": {
-		// without --exact
-		"react": "^18.2.0", // this matches >= 18.2.0 < 19.0.0
+  "dependencies": {
+    // without --exact
+    "react": "^18.2.0", // this matches >= 18.2.0 < 19.0.0
 
-		// with --exact
-		"react": "18.2.0" // this matches only 18.2.0 exactly
-	}
+    // with --exact
+    "react": "18.2.0" // this matches only 18.2.0 exactly
+  }
 }
 ```
 
@@ -78,15 +78,15 @@ $ bun add --help
 ## `--global`
 
 <Callout type="info">
-**Note** — This would not modify package.json of your current project folder. **Alias** - `bun add
---global`, `bun add -g`, `bun install --global` and `bun install -g`
+  **Note** — This would not modify package.json of your current project folder. **Alias** - `bun add --global`, `bun add
+  -g`, `bun install --global` and `bun install -g`
 </Callout>
 
 To install a package globally, use the `-g`/`--global` flag. This will not modify the `package.json` of your current project. Typically this is used for installing command-line tools.
 
 ```bash title="terminal"
 $ bun add --global cowsay # or `bun add -g cowsay`
-cowsay "Bun!"
+$ cowsay "Bun!"
 
  ______
 < Bun! >
@@ -98,7 +98,7 @@ cowsay "Bun!"
                 ||     ||
 ```
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Configuring global installation behavior">
 
 ```toml title="bunfig.toml"
@@ -121,9 +121,9 @@ To tell Bun to allow lifecycle scripts for a particular package, add the package
 
 ```json title="package.json"
 {
-	"name": "my-app",
-	"version": "1.0.0",
-	"trustedDependencies": ["my-trusted-package"] // [!code ++]
+  "name": "my-app",
+  "version": "1.0.0",
+  "trustedDependencies": ["my-trusted-package"] // [!code ++]
 }
 ```
 
@@ -138,20 +138,19 @@ $ bun add git@github.com:moment/moment.git
 ```
 
 <Callout type="info">
-	To install private repositories, your system needs the appropriate SSH credentials to access the
-	repository.
+  To install private repositories, your system needs the appropriate SSH credentials to access the repository.
 </Callout>
 
 Bun supports a variety of protocols, including [`github`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#github-urls), [`git`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#git-urls-as-dependencies), `git+ssh`, `git+https`, and many more.
 
 ```json title="package.json"
 {
-	"dependencies": {
-		"dayjs": "git+https://github.com/iamkun/dayjs.git",
-		"lodash": "git+ssh://github.com/lodash/lodash.git#4.17.21",
-		"moment": "git@github.com:moment/moment.git",
-		"zod": "github:colinhacks/zod"
-	}
+  "dependencies": {
+    "dayjs": "git+https://github.com/iamkun/dayjs.git",
+    "lodash": "git+ssh://github.com/lodash/lodash.git#4.17.21",
+    "moment": "git@github.com:moment/moment.git",
+    "zod": "github:colinhacks/zod"
+  }
 }
 ```
 
@@ -167,9 +166,9 @@ This will add the following line to your `package.json`:
 
 ```json title="package.json"
 {
-	"dependencies": {
-		"zod": "https://registry.npmjs.org/zod/-/zod-3.21.4.tgz"
-	}
+  "dependencies": {
+    "zod": "https://registry.npmjs.org/zod/-/zod-3.21.4.tgz"
+  }
 }
 ```
 

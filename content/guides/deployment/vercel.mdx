@@ -7,99 +7,90 @@ mode: center
 [Vercel](https://vercel.com/) is a cloud platform that lets you build, deploy, and scale your apps.
 
 <Callout type="warning">
-	The Bun runtime is in Beta; certain features (e.g., automatic source maps, byte-code caching,
-	metrics on `node:http/https`) are not yet supported.
+  The Bun runtime is in Beta; certain features (e.g., automatic source maps, byte-code caching, metrics on
+  `node:http/https`) are not yet supported.
 </Callout>
 
 <Callout type="info">
-	`Bun.serve` is currently not supported on Vercel Functions. 
-	
-	Use Bun with frameworks supported by Vercel, like 
-	Next.js, Express, Hono, or Nitro.
+  `Bun.serve` is currently not supported on Vercel Functions. Use Bun with frameworks supported by Vercel, like Next.js,
+  Express, Hono, or Nitro.
 </Callout>
 
 ---
 
 <Steps>
-<Step>
+	<Step>
 
-### Configure Bun in vercel.json
+	  ### Configure Bun in vercel.json
+		To enable the Bun runtime for your Functions, add a `bunVersion` field in your `vercel.json` file:
 
-To enable the Bun runtime for your Functions, add a `bunVersion` field in your `vercel.json` file:
+    	```json title="vercel.json"
+    	{
+    		"bunVersion": "1.x" // [!code ++]
+    	}
+    	```
 
-```json title="vercel.json"
-{
-	"bunVersion": "1.x" // [!code ++]
-}
-```
+    	Vercel automatically detects this configuration and runs your application on Bun. The value has to be `"1.x"`, Vercel handles the minor version internally.
 
-Vercel automatically detects this configuration and runs your application on Bun. The value has to be `"1.x"`, Vercel handles the minor version internally.
+    	For best results, match your local Bun version with the version used by Vercel. **Currently, Bun version `1.2.23` is supported**.
+    </Step>
 
-For best results, match your local Bun version with the version used by Vercel. **Currently, Bun version `1.2.23` is supported**.
+    <Step>
 
-</Step>
+      ### Next.js configuration
+    	If you’re deploying a **Next.js** project (including ISR), update your `package.json` scripts to use the Bun runtime:
 
-<Step>
+    	```json title="package.json"
+    	{
+    		"scripts": {
+    			"dev": "bun --bun next dev", // [!code ++]
+    			"build": "bun --bun next build" // [!code ++]
+    		}
+    	}
+    	```
 
-### Next.js configuration
+    	<Callout type="info">
+    		The `--bun` flag runs the Next.js CLI under Bun. Bundling (via Turbopack or Webpack) remains unchanged, but all commands execute within the Bun runtime.
+    	</Callout>
 
-If you're deploying a **Next.js** project (including ISR), update your `package.json` scripts to use the Bun runtime:
+    	This ensures both local development and builds use Bun.
+    </Step>
 
-```json title="package.json"
-{
-	"scripts": {
-		"dev": "bun --bun next dev", // [!code ++]
-		"build": "bun --bun next build" // [!code ++]
-	}
-}
-```
+    <Step>
 
-<Callout type="info">
-	The `--bun` flag runs the Next.js CLI under Bun. Bundling (via Turbopack or Webpack) remains unchanged, but all commands execute within the Bun runtime.
-</Callout>
+      ### Deploy your app
+    	Connect your repository to Vercel, or deploy from the CLI:
 
-This ensures both local development and builds use Bun.
+    	```bash title="terminal"
+    	# Using bunx (no global install)
+    	$ bunx vercel login
+    	$ bunx vercel deploy
+    	```
 
-</Step>
+    	Or install the Vercel CLI globally:
 
-<Step>
+    	```bash title="terminal"
+    	$ bun i -g vercel
+    	$ vercel login
+    	$ vercel deploy
+    	```
 
-### Deploy your app
+    	[Learn more in the Vercel Deploy CLI documentation →](https://vercel.com/docs/cli/deploy)
+    </Step>
 
-Connect your repository to Vercel, or deploy from the CLI:
+    <Step>
 
-```bash title="terminal"
-# Using bunx (no global install)
-$ bunx vercel login
-$ bunx vercel deploy
-```
+      ### Verify the runtime
+    	To confirm your deployment uses Bun, log the Bun version:
 
-Or install the Vercel CLI globally:
+    	```ts title="index.ts"
+    	console.log("runtime", process.versions.bun);
+    	
+    	runtime 1.2.23
+    	```
 
-```bash title="terminal"
-$ bun i -g vercel
-$ vercel login
-$ vercel deploy
-```
-
-[Learn more in the Vercel Deploy CLI documentation →](https://vercel.com/docs/cli/deploy)
-
-</Step>
-
-<Step>
-
-### Verify the runtime
-
-To confirm your deployment uses Bun, log the Bun version:
-
-```ts title="index.ts"
-console.log("runtime", process.versions.bun);
-// => runtime 1.2.23
-```
-
-[See the Vercel Bun Runtime documentation for feature support →](https://vercel.com/docs/functions/runtimes/bun#feature-support)
-
-</Step>
+    	[See the Vercel Bun Runtime documentation for feature support →](https://vercel.com/docs/functions/runtimes/bun#feature-support)
+    </Step>
 
 </Steps>
 

@@ -22,27 +22,27 @@ A rough overview of the types (please refer to Bun's `bun.d.ts` for the full typ
 
 ```ts title="bun.d.ts"
 type PluginBuilder = {
-	onStart(callback: () => void): void;
-	onResolve: (
-		args: {filter: RegExp; namespace?: string},
-		callback: (args: {path: string; importer: string}) => {
-			path: string;
-			namespace?: string;
-		} | void,
-	) => void;
-	onLoad: (
-		args: {filter: RegExp; namespace?: string},
-		defer: () => Promise<void>,
-		callback: (args: {path: string}) => {
-			loader?: Loader;
-			contents?: string;
-			exports?: Record<string, any>;
-		},
-	) => void;
-	config: BuildConfig;
+  onStart(callback: () => void): void;
+  onResolve: (
+    args: { filter: RegExp; namespace?: string },
+    callback: (args: { path: string; importer: string }) => {
+      path: string;
+      namespace?: string;
+    } | void,
+  ) => void;
+  onLoad: (
+    args: { filter: RegExp; namespace?: string },
+    defer: () => Promise<void>,
+    callback: (args: { path: string }) => {
+      loader?: Loader;
+      contents?: string;
+      exports?: Record<string, any>;
+    },
+  ) => void;
+  config: BuildConfig;
 };
 
-type Loader = 'js' | 'jsx' | 'ts' | 'tsx' | 'css' | 'json' | 'toml';
+type Loader = "js" | "jsx" | "ts" | "tsx" | "css" | "json" | "toml";
 ```
 
 ## Usage
@@ -50,13 +50,13 @@ type Loader = 'js' | 'jsx' | 'ts' | 'tsx' | 'css' | 'json' | 'toml';
 A plugin is defined as simple JavaScript object containing a `name` property and a `setup` function.
 
 ```ts title="myPlugin.ts"
-import type {BunPlugin} from 'bun';
+import type { BunPlugin } from "bun";
 
 const myPlugin: BunPlugin = {
-	name: 'Custom loader',
-	setup(build) {
-		// implementation
-	},
+  name: "Custom loader",
+  setup(build) {
+    // implementation
+  },
 };
 ```
 
@@ -64,9 +64,9 @@ This plugin can be passed into the `plugins` array when calling `Bun.build`.
 
 ```ts title="index.ts"
 await Bun.build({
-	entrypoints: ['./app.ts'],
-	outdir: './out',
-	plugins: [myPlugin],
+  entrypoints: ["./app.ts"],
+  outdir: "./out",
+  plugins: [myPlugin],
 });
 ```
 
@@ -94,16 +94,16 @@ onStart(callback: () => void): Promise<void> | void;
 Registers a callback to be run when the bundler starts a new bundle.
 
 ```ts title="index.ts"
-import {plugin} from 'bun';
+import { plugin } from "bun";
 
 plugin({
-	name: 'onStart example',
+  name: "onStart example",
 
-	setup(build) {
-		build.onStart(() => {
-			console.log('Bundle started!');
-		});
-	},
+  setup(build) {
+    build.onStart(() => {
+      console.log("Bundle started!");
+    });
+  },
 });
 ```
 
@@ -113,37 +113,36 @@ For example:
 
 ```ts title="index.ts"
 const result = await Bun.build({
-	entrypoints: ['./app.ts'],
-	outdir: './dist',
-	sourcemap: 'external',
-	plugins: [
-		{
-			name: 'Sleep for 10 seconds',
-			setup(build) {
-				build.onStart(async () => {
-					await Bun.sleep(10_000);
-				});
-			},
-		},
-		{
-			name: 'Log bundle time to a file',
-			setup(build) {
-				build.onStart(async () => {
-					const now = Date.now();
-					await Bun.$`echo ${now} > bundle-time.txt`;
-				});
-			},
-		},
-	],
+  entrypoints: ["./app.ts"],
+  outdir: "./dist",
+  sourcemap: "external",
+  plugins: [
+    {
+      name: "Sleep for 10 seconds",
+      setup(build) {
+        build.onStart(async () => {
+          await Bun.sleep(10_000);
+        });
+      },
+    },
+    {
+      name: "Log bundle time to a file",
+      setup(build) {
+        build.onStart(async () => {
+          const now = Date.now();
+          await Bun.$`echo ${now} > bundle-time.txt`;
+        });
+      },
+    },
+  ],
 });
 ```
 
 In the above example, Bun will wait until the first `onStart()` (sleeping for 10 seconds) has completed, as well as the second `onStart()` (writing the bundle time to a file).
 
 <Callout type="info">
-	`onStart()` callbacks (like every other lifecycle callback) do not have the ability to modify the
-	`build.config` object. If you want to mutate `build.config`, you must do so directly in the
-	`setup()` function.
+  `onStart()` callbacks (like every other lifecycle callback) do not have the ability to modify the `build.config`
+  object. If you want to mutate `build.config`, you must do so directly in the `setup()` function.
 </Callout>
 
 ### onResolve
@@ -171,19 +170,19 @@ The callback receives as input the path to the matching module. The callback can
 For example, redirecting all imports to `images/` to `./public/images/`:
 
 ```ts title="index.ts"
-import {plugin} from 'bun';
+import { plugin } from "bun";
 
 plugin({
-	name: 'onResolve example',
-	setup(build) {
-		build.onResolve({filter: /.*/, namespace: 'file'}, args => {
-			if (args.path.startsWith('images/')) {
-				return {
-					path: args.path.replace('images/', './public/images/'),
-				};
-			}
-		});
-	},
+  name: "onResolve example",
+  setup(build) {
+    build.onResolve({ filter: /.*/, namespace: "file" }, args => {
+      if (args.path.startsWith("images/")) {
+        return {
+          path: args.path.replace("images/", "./public/images/"),
+        };
+      }
+    });
+  },
 });
 ```
 
@@ -250,46 +249,46 @@ This allows you to delay execution of the `onLoad` callback until all other modu
 
 This is useful for returning contents of a module that depends on other modules.
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Example: tracking and reporting unused exports">
 
 ```ts title="index.ts"
-import {plugin} from 'bun';
+import { plugin } from "bun";
 
 plugin({
-	name: 'track imports',
-	setup(build) {
-		const transpiler = new Bun.Transpiler();
+  name: "track imports",
+  setup(build) {
+    const transpiler = new Bun.Transpiler();
 
-		let trackedImports: Record<string, number> = {};
+    let trackedImports: Record<string, number> = {};
 
-		// Each module that goes through this onLoad callback
-		// will record its imports in `trackedImports`
-		build.onLoad({filter: /\.ts/}, async ({path}) => {
-			const contents = await Bun.file(path).arrayBuffer();
+    // Each module that goes through this onLoad callback
+    // will record its imports in `trackedImports`
+    build.onLoad({ filter: /\.ts/ }, async ({ path }) => {
+      const contents = await Bun.file(path).arrayBuffer();
 
-			const imports = transpiler.scanImports(contents);
+      const imports = transpiler.scanImports(contents);
 
-			for (const i of imports) {
-				trackedImports[i.path] = (trackedImports[i.path] || 0) + 1;
-			}
+      for (const i of imports) {
+        trackedImports[i.path] = (trackedImports[i.path] || 0) + 1;
+      }
 
-			return undefined;
-		});
+      return undefined;
+    });
 
-		build.onLoad({filter: /stats\.json/}, async ({defer}) => {
-			// Wait for all files to be loaded, ensuring
-			// that every file goes through the above `onLoad()` function
-			// and their imports tracked
-			await defer();
+    build.onLoad({ filter: /stats\.json/ }, async ({ defer }) => {
+      // Wait for all files to be loaded, ensuring
+      // that every file goes through the above `onLoad()` function
+      // and their imports tracked
+      await defer();
 
-			// Emit JSON containing the stats of each import
-			return {
-				contents: `export default ${JSON.stringify(trackedImports)}`,
-				loader: 'json',
-			};
-		});
-	},
+      // Emit JSON containing the stats of each import
+      return {
+        contents: `export default ${JSON.stringify(trackedImports)}`,
+        loader: "json",
+      };
+    });
+  },
 });
 ```
 
@@ -297,8 +296,7 @@ plugin({
 </Accordions>
 
 <Callout type="warning">
-	The `.defer()` function currently has the limitation that it can only be called once per `onLoad`
-	callback.
+  The `.defer()` function currently has the limitation that it can only be called once per `onLoad` callback.
 </Callout>
 
 ## Native plugins
@@ -373,29 +371,29 @@ pub fn replace_foo_with_bar(handle: &mut OnBeforeParse) -> Result<()> {
 And to use it in `Bun.build()`:
 
 ```ts title="index.ts"
-import myNativeAddon from './my-native-addon';
+import myNativeAddon from "./my-native-addon";
 
 Bun.build({
-	entrypoints: ['./app.tsx'],
-	plugins: [
-		{
-			name: 'my-plugin',
+  entrypoints: ["./app.tsx"],
+  plugins: [
+    {
+      name: "my-plugin",
 
-			setup(build) {
-				build.onBeforeParse(
-					{
-						namespace: 'file',
-						filter: '**/*.tsx',
-					},
-					{
-						napiModule: myNativeAddon,
-						symbol: 'replace_foo_with_bar',
-						// external: myNativeAddon.getSharedState()
-					},
-				);
-			},
-		},
-	],
+      setup(build) {
+        build.onBeforeParse(
+          {
+            namespace: "file",
+            filter: "**/*.tsx",
+          },
+          {
+            napiModule: myNativeAddon,
+            symbol: "replace_foo_with_bar",
+            // external: myNativeAddon.getSharedState()
+          },
+        );
+      },
+    },
+  ],
 });
 ```
 
@@ -412,7 +410,4 @@ This lifecycle callback is run immediately before a file is parsed by Bun's bund
 
 As input, it receives the file's contents and can optionally return new source code.
 
-<Callout type="info">
-	This callback can be called from any thread and so the napi module implementation must be
-	thread-safe.
-</Callout>
+<Callout type="info">This callback can be called from any thread and so the napi module implementation must be thread-safe.</Callout>

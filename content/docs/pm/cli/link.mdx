@@ -1,6 +1,6 @@
 ---
-title: 'bun link'
-description: 'Link local packages for development'
+title: "bun link"
+description: "Link local packages for development"
 ---
 
 Use `bun link` in a local directory to register the current package as a "linkable" package.
@@ -31,11 +31,11 @@ In addition, the `--save` flag can be used to add `cool-pkg` to the `dependencie
 
 ```json title="package.json"
 {
-	"name": "my-app",
-	"version": "1.0.0",
-	"dependencies": {
-		"cool-pkg": "link:cool-pkg" // [!code ++]
-	}
+  "name": "my-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "cool-pkg": "link:cool-pkg" // [!code ++]
+  }
 }
 ```
 

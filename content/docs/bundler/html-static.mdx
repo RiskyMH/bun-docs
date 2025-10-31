@@ -8,13 +8,13 @@ Bun's bundler has first-class support for HTML. Build static sites, landing page
 ```html title="index.html"
 <!doctype html>
 <html>
-	<head>
-		<link rel="stylesheet" href="./styles.css" />
-		<script src="./app.ts" type="module"></script>
-	</head>
-	<body>
-		<img src="./logo.png" />
-	</body>
+  <head>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.ts" type="module"></script>
+  </head>
+  <body>
+    <img src="./logo.png" />
+  </body>
 </html>
 ```
 
@@ -58,13 +58,13 @@ Your React or other SPA will work out of the box — no configuration needed. Al
 ```html title="index.html"
 <!doctype html>
 <html>
-	<head>
-		<title>My SPA</title>
-		<script src="./app.tsx" type="module"></script>
-	</head>
-	<body>
-		<div id="root"></div>
-	</body>
+  <head>
+    <title>My SPA</title>
+    <script src="./app.tsx" type="module"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
 ```
 
@@ -144,33 +144,29 @@ It's also a CSS bundler. You can use `@import` in your CSS files to import other
 
 For example:
 
-
-
-```css title="styles.css"
-@import './abc.css';
+```css tab="styles.css"
+@import "./abc.css";
 
 .container {
-	background-color: blue;
+  background-color: blue;
 }
 ```
 
-```css abc.css
+```css tab="abc.css"
 body {
-	background-color: red;
+  background-color: red;
 }
 ```
-
-
 
 This outputs:
 
 ```css
 body {
-	background-color: red;
+  background-color: red;
 }
 
 .container {
-	background-color: blue;
+  background-color: blue;
 }
 ```
 
@@ -180,7 +176,7 @@ You can reference local assets in your CSS files.
 
 ```css title="styles.css"
 body {
-	background-image: url('./logo.png');
+  background-image: url("./logo.png");
 }
 ```
 
@@ -188,7 +184,7 @@ This will copy `./logo.png` to the output directory and rewrite the path in the 
 
 ```css title="styles.css"
 body {
-	background-image: url('./logo-[ABC123].png');
+  background-image: url("./logo-[ABC123].png");
 }
 ```
 
@@ -197,8 +193,8 @@ body {
 To associate a CSS file with a JavaScript file, you can import it in your JavaScript file.
 
 ```ts title="app.ts"
-import './styles.css';
-import './more-styles.css';
+import "./styles.css";
+import "./more-styles.css";
 ```
 
 This generates `./app.css` and `./app.js` in the output directory. All CSS files imported from JavaScript will be bundled into a single CSS file per entry point. If you import the same CSS file from multiple JavaScript files, it will only be included once in the output CSS file.

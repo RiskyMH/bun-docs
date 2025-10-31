@@ -21,6 +21,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       </CodeBlock>
     ),
     ReactTweet: Tweet,
+    Frame: (props) => <div {...props}>{props.children}</div>,
+    Badge: (props: { children: React.ReactNode }) => <span className="bg-fd-accent text-fd-accent-foreground rounded-md px-2 py-1 text-xs">{props.children}</span>,
     ...components,
   };
 }

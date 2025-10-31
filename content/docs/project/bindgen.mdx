@@ -20,7 +20,7 @@ this one:
 
 Given a file implementing a simple function, such as `add`
 
-```zig src/bun.js/math.zig
+```zig title="src/bun.js/math.zig"
 pub fn add(global: *jsc.JSGlobalObject, a: i32, b: i32) !i32 {
     return std.math.add(i32, a, b) catch {
         // Binding functions can return `error.OutOfMemory` and `error.JSError`.

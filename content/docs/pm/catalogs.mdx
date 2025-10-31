@@ -1,6 +1,6 @@
 ---
-title: 'Catalogs'
-description: 'Share common dependency versions across multiple packages in a monorepo'
+title: "Catalogs"
+description: "Share common dependency versions across multiple packages in a monorepo"
 ---
 
 Catalogs in Bun provide a straightforward way to share common dependency versions across multiple packages in a monorepo. Rather than specifying the same versions repeatedly in each workspace package, you define them once in the root package.json and reference them consistently throughout your project.
@@ -40,20 +40,20 @@ In your root-level `package.json`, add a `catalog` or `catalogs` field within th
 
 ```json title="package.json"
 {
-	"name": "my-monorepo",
-	"workspaces": {
-		"packages": ["packages/*"],
-		"catalog": {
-			"react": "^19.0.0",
-			"react-dom": "^19.0.0"
-		},
-		"catalogs": {
-			"testing": {
-				"jest": "30.0.0",
-				"testing-library": "14.0.0"
-			}
-		}
-	}
+  "name": "my-monorepo",
+  "workspaces": {
+    "packages": ["packages/*"],
+    "catalog": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
+    },
+    "catalogs": {
+      "testing": {
+        "jest": "30.0.0",
+        "testing-library": "14.0.0"
+      }
+    }
+  }
 }
 ```
 
@@ -65,26 +65,26 @@ In your workspace packages, use the `catalog:` protocol to reference versions:
 
 ```json title="packages/app/package.json"
 {
-	"name": "app",
-	"dependencies": {
-		"react": "catalog:",
-		"react-dom": "catalog:",
-		"jest": "catalog:testing"
-	}
+  "name": "app",
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "jest": "catalog:testing"
+  }
 }
 ```
 
 ```json title="packages/ui/package.json"
 {
-	"name": "ui",
-	"dependencies": {
-		"react": "catalog:",
-		"react-dom": "catalog:"
-	},
-	"devDependencies": {
-		"jest": "catalog:testing",
-		"testing-library": "catalog:testing"
-	}
+  "name": "ui",
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "jest": "catalog:testing",
+    "testing-library": "catalog:testing"
+  }
 }
 ```
 
@@ -123,8 +123,8 @@ Bun supports two ways to define catalogs:
      "ui": {
        "tailwind": "4.0.0"
      }
-    }
-	```
+   }
+   ```
 
    Reference with `catalog:<name>`:
 
@@ -150,73 +150,73 @@ Here's a more comprehensive example for a React application:
 
 ```json title="package.json"
 {
-	"name": "react-monorepo",
-	"workspaces": {
-		"packages": ["packages/*"],
-		"catalog": {
-			"react": "^19.0.0",
-			"react-dom": "^19.0.0",
-			"react-router-dom": "^6.15.0"
-		},
-		"catalogs": {
-			"build": {
-				"webpack": "5.88.2",
-				"babel": "7.22.10"
-			},
-			"testing": {
-				"jest": "29.6.2",
-				"react-testing-library": "14.0.0"
-			}
-		}
-	},
-	"devDependencies": {
-		"typescript": "5.1.6"
-	}
+  "name": "react-monorepo",
+  "workspaces": {
+    "packages": ["packages/*"],
+    "catalog": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0",
+      "react-router-dom": "^6.15.0"
+    },
+    "catalogs": {
+      "build": {
+        "webpack": "5.88.2",
+        "babel": "7.22.10"
+      },
+      "testing": {
+        "jest": "29.6.2",
+        "react-testing-library": "14.0.0"
+      }
+    }
+  },
+  "devDependencies": {
+    "typescript": "5.1.6"
+  }
 }
 ```
 
 ```json title="packages/app/package.json"
 {
-	"name": "app",
-	"dependencies": {
-		"react": "catalog:",
-		"react-dom": "catalog:",
-		"react-router-dom": "catalog:",
-		"@monorepo/ui": "workspace:*",
-		"@monorepo/utils": "workspace:*"
-	},
-	"devDependencies": {
-		"webpack": "catalog:build",
-		"babel": "catalog:build",
-		"jest": "catalog:testing",
-		"react-testing-library": "catalog:testing"
-	}
+  "name": "app",
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-router-dom": "catalog:",
+    "@monorepo/ui": "workspace:*",
+    "@monorepo/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "webpack": "catalog:build",
+    "babel": "catalog:build",
+    "jest": "catalog:testing",
+    "react-testing-library": "catalog:testing"
+  }
 }
 ```
 
-```json tab="packages/ui/package.json"
+```json title="packages/ui/package.json"
 {
-	"name": "@monorepo/ui",
-	"dependencies": {
-		"react": "catalog:",
-		"react-dom": "catalog:"
-	},
-	"devDependencies": {
-		"jest": "catalog:testing",
-		"react-testing-library": "catalog:testing"
-	}
+  "name": "@monorepo/ui",
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "jest": "catalog:testing",
+    "react-testing-library": "catalog:testing"
+  }
 }
 ```
 
-```json tab="packages/utils/package.json"
+```json title="packages/utils/package.json"
 {
-	"name": "@monorepo/utils",
-	"dependencies": {
-		"react": "catalog:"
-	},
-	"devDependencies": {
-		"jest": "catalog:testing"
-	}
+  "name": "@monorepo/utils",
+  "dependencies": {
+    "react": "catalog:"
+  },
+  "devDependencies": {
+    "jest": "catalog:testing"
+  }
 }
 ```
 
@@ -244,7 +244,7 @@ Bun's lockfile tracks catalog versions, making it easy to ensure consistent inst
 {
   "lockfileVersion": 1,
   "workspaces": {
-    ": {
+    "": {
       "name": "react-monorepo",
     },
     "packages/app": {

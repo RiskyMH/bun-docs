@@ -11,9 +11,7 @@ If you are using Windows, please refer to [this guide](/docs/project/building-wi
 
 Using your system's package manager, install Bun's dependencies:
 
-
-
-```bash macOS (Homebrew)
+```bash tab="macOS (Homebrew)"
 $ brew install automake ccache cmake coreutils gnu-sed go icu4c libiconv libtool ninja pkg-config rust ruby
 ```
 
@@ -33,12 +31,9 @@ $ sudo dnf install cargo ccache cmake git golang libtool ninja-build pkg-config 
 $ sudo zypper install go cmake ninja automake git icu rustup && rustup toolchain install stable
 ```
 
-
-
 > **Note**: The Zig compiler is automatically installed and updated by the build scripts. Manual installation is not required.
 
 Before starting, you will need to already have a release build of Bun installed, as we use our bundler to transpile and minify our code, as well as for code generation scripts.
-
 
 ```bash tab="Native"
 $ curl -fsSL https://bun.com/install | bash
@@ -53,12 +48,9 @@ $ brew tap oven-sh/bun
 $ brew install bun
 ```
 
-
-
 ## Install LLVM
 
 Bun requires LLVM 19 (`clang` is part of LLVM). This version requirement is to match WebKit (precompiled), as mismatching versions will cause memory allocation failures at runtime. In most cases, you can install LLVM through your system package manager:
-
 
 ```bash tab="macOS (Homebrew)"
 $ brew install llvm@19
@@ -81,8 +73,6 @@ $ sudo dnf install llvm clang lld-devel
 $ sudo zypper install clang19 lld19 llvm19
 ```
 
-
-
 If none of the above solutions apply, you will have to install it [manually](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.7).
 
 Make sure Clang/LLVM 19 is in your path:
@@ -92,7 +82,6 @@ $ which clang-19
 ```
 
 If not, run this to manually add it:
-
 
 ```bash tab="macOS (Homebrew)"
 # use fish_add_path if you're using fish
@@ -104,8 +93,6 @@ $ export PATH="$(brew --prefix llvm@19)/bin:$PATH"
 # use fish_add_path if you're using fish
 $ export PATH="$PATH:/usr/lib/llvm19/bin"
 ```
-
-
 
 <Callout type="warning">
 ⚠️ Ubuntu distributions (\<= 20.04) may require installation of the C++ standard library independently. See the [troubleshooting section](#span-file-not-found-on-ubuntu) for more information.

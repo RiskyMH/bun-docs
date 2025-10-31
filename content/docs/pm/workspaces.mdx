@@ -1,6 +1,6 @@
 ---
-title: 'Workspaces'
-description: 'Develop complex monorepos with multiple independent packages'
+title: "Workspaces"
+description: "Develop complex monorepos with multiple independent packages"
 ---
 
 Bun supports [`workspaces`](https://docs.npmjs.com/cli/v9/using-npm/workspaces?v=true#description) in `package.json`. Workspaces make it easy to develop complex software as a _monorepo_ consisting of several independent packages.
@@ -32,30 +32,30 @@ In the root `package.json`, the `"workspaces"` key is used to indicate which sub
 
 ```json
 {
-	"name": "my-project",
-	"version": "1.0.0",
-	"workspaces": ["packages/*"],
-	"devDependencies": {
-		"example-package-in-monorepo": "workspace:*"
-	}
+  "name": "my-project",
+  "version": "1.0.0",
+  "workspaces": ["packages/*"],
+  "devDependencies": {
+    "example-package-in-monorepo": "workspace:*"
+  }
 }
 ```
 
 <Callout type="info">
-	**Glob support** — Bun supports full glob syntax in `"workspaces"` (see
-	[here](/docs/runtime/glob#supported-glob-patterns) for a comprehensive list of supported syntax),
-	_except_ for exclusions (e.g. `!**/excluded/**`), which are not implemented yet.
+  **Glob support** — Bun supports full glob syntax in `"workspaces"` (see [here](/docs/runtime/glob#supported-glob-patterns)
+  for a comprehensive list of supported syntax), _except_ for exclusions (e.g. `!**/excluded/**`), which are not
+  implemented yet.
 </Callout>
 
 Each workspace has it's own `package.json`. When referencing other packages in the monorepo, semver or workspace protocols (e.g. `workspace:*`) can be used as the version field in your `package.json`.
 
 ```json
 {
-	"name": "pkg-a",
-	"version": "1.0.0",
-	"dependencies": {
-		"pkg-b": "workspace:*"
-	}
+  "name": "pkg-a",
+  "version": "1.0.0",
+  "dependencies": {
+    "pkg-b": "workspace:*"
+  }
 }
 ```
 
@@ -71,7 +71,7 @@ $ bun install --filter "./packages/pkg-*" --filter "!pkg-c" # or --filter "!./pa
 
 When publishing, `workspace:` versions are replaced by the package's `package.json` version,
 
-```txt
+```
 "workspace:*" -> "1.0.1"
 "workspace:^" -> "^1.0.1"
 "workspace:~" -> "~1.0.1"
@@ -79,7 +79,7 @@ When publishing, `workspace:` versions are replaced by the package's `package.js
 
 Setting a specific version takes precedence over the package's `package.json` version,
 
-```txt
+```
 "workspace:1.0.2" -> "1.0.2" // Even if current version is 1.0.1
 ```
 
@@ -104,5 +104,5 @@ updates every package that references it. See
 - 12x faster than `yarn install` (v1)
 - 8x faster than `pnpm install`
 
-
+<Image src="https://user-images.githubusercontent.com/709451/212829600-77df9544-7c9f-4d8d-a984-b2cd0fd2aa52.png" />
 </Callout>

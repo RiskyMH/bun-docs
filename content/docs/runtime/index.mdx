@@ -3,7 +3,6 @@ title: Bun Runtime
 description: Execute JavaScript/TypeScript files, package.json scripts, and executable packages with Bun's fast runtime.
 ---
 
-
 The Bun Runtime is designed to start fast and run fast.
 
 Under the hood, Bun uses the [JavaScriptCore engine](https://developer.apple.com/documentation/javascriptcore), which is developed by Apple for Safari. In most cases, the startup and running performance is faster than V8, the engine used by Node.js and Chromium-based browsers. Its transpiler and runtime are written in Zig, a modern, high-performance language. On Linux, this translates into startup times [4x faster](https://twitter.com/jarredsumner/status/1499225725492076544) than Node.js.
@@ -62,7 +61,7 @@ Flags that occur at the end of the command will be ignored and passed through to
 ## Run a `package.json` script
 
 <Callout type="info">
-Comparable to `npm run <script>` or `yarn <script>`
+Compare to `npm run <script>` or `yarn <script>`
 </Callout>
 
 ```sh title="terminal"
@@ -73,11 +72,11 @@ Your `package.json` can define a number of named `"scripts"` that correspond to 
 
 ```json title="package.json"
 {
-	// ... other fields
-	"scripts": {
-		"clean": "rm -rf dist && echo 'Done.'",
-		"dev": "bun server.ts"
-	}
+  // ... other fields
+  "scripts": {
+    "clean": "rm -rf dist && echo 'Done.'",
+    "dev": "bun server.ts"
+  }
 }
 ```
 
@@ -139,7 +138,7 @@ $ bun run --bun vite
 
 In monorepos containing multiple packages, you can use the `--filter` argument to execute scripts in many packages at once.
 
-Use `bun run --filter <name_pattern> <script\>` to execute `<script>` in all packages whose name matches `<name_pattern>`.
+Use `bun run --filter <name_pattern> <script>` to execute `<script>` in all packages whose name matches `<name_pattern>`.
 For example, if you have subdirectories containing packages named `foo`, `bar` and `baz`, running
 
 ```bash title="terminal"
@@ -182,7 +181,7 @@ $ bun --console-depth 5 run index.tsx
 This sets how deeply nested objects are displayed in `console.log()` output. The default depth is `2`. Higher values show more nested properties but may produce verbose output for complex objects.
 
 ```ts title="console.ts"
-const nested = {a: {b: {c: {d: 'deep'}}}};
+const nested = { a: { b: { c: { d: "deep" } } } };
 console.log(nested);
 // With --console-depth 2 (default): { a: { b: [Object] } }
 // With --console-depth 4: { a: { b: { c: { d: 'deep' } } } }
@@ -212,4 +211,3 @@ When there is a package.json script and a file with the same name, `bun run` pri
 ---
 
 <include>../../_snippets/cli/run.mdx</include>
-

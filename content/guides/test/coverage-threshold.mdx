@@ -8,6 +8,7 @@ Bun's test runner supports built-in code coverage reporting via the `--coverage`
 
 ```sh title="terminal"
 $ bun test --coverage
+
 test.test.ts:
 ✓ math > add [0.71ms]
 ✓ math > multiply [0.03ms]
@@ -41,6 +42,7 @@ If your test suite does not meet this threshold, `bun test` will exit with a non
 
 ```sh title="terminal"
 $ bun test --coverage
+
 <test output>
 $ echo $?
 1 # this is the exit code of the previous command

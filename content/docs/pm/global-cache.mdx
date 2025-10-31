@@ -1,11 +1,11 @@
 ---
-title: 'Global cache'
-description: 'How Bun stores and manages packages in its global cache'
+title: "Global cache"
+description: "How Bun stores and manages packages in its global cache"
 ---
 
 All packages downloaded from the registry are stored in a global cache at `~/.bun/install/cache`, or the path defined by the environment variable `BUN_INSTALL_CACHE_DIR`. They are stored in subdirectories named like `${name}@${version}`, so multiple versions of a package can be cached.
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Configuring cache behavior">
 
 ```toml title="bunfig.toml"
@@ -30,7 +30,7 @@ disableManifest = false
 
 Bun strives to avoid re-downloading packages multiple times. When installing a package, if the cache already contains a version in the range specified by `package.json`, Bun will use the cached package instead of downloading it again.
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Installation details">
 If the semver version has pre-release suffix (`1.0.0-beta.0`) or a build suffix (`1.0.0+20220101`), it is replaced with a hash of that value instead, to reduce the chances of errors associated with long file paths.
 
@@ -55,7 +55,7 @@ Since Bun uses hardlinks to "copy" a module into a project's `node_modules` dire
 
 This benefit also applies to macOS, but there are exceptions. It uses `clonefile` which is copy-on-write, meaning it will not occupy disk space, but it will count towards drive's limit. This behavior is useful if something attempts to patch `node_modules/*`, so it's impossible to affect other installations.
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Installation strategies">
 This behavior is configurable with the `--backend` flag, which is respected by all of Bun's package management commands.
 

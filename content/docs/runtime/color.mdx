@@ -247,7 +247,7 @@ Bun.color([255, 0, 0], "HEX"); // "#FF0000"
 
 Like many of Bun's APIs, you can use macros to invoke `Bun.color` at bundle-time for use in client-side JavaScript builds:
 
-```ts client-side.ts
+```ts title="client-side.ts"
 import { color } from "bun" with { type: "macro" };
 
 console.log(color("#f00", "css"));

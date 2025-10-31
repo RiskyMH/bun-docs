@@ -1,5 +1,5 @@
 ---
-title: 'Discord.js with Bun'
+title: "Discord.js with Bun"
 fullTitle: Create a Discord bot
 mode: center
 ---
@@ -49,14 +49,14 @@ Now let's actually write our bot in a new file called `bot.ts`.
 
 ```ts title="bot.ts"
 // import discord.js
-import {Client, Events, GatewayIntentBits} from 'discord.js';
+import { Client, Events, GatewayIntentBits } from "discord.js";
 
 // create a new Client instance
-const client = new Client({intents: [GatewayIntentBits.Guilds]});
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // listen for the client to be ready
 client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`);
+  console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
 // login with the token from .env.local

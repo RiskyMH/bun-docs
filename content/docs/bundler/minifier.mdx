@@ -16,6 +16,7 @@ $ bun build ./index.ts --minify --outfile=out.js
 ```
 
 The `--minify` flag automatically enables:
+
 - Whitespace minification
 - Syntax minification
 - Identifier minification
@@ -29,6 +30,7 @@ $ bun build ./index.ts --production --outfile=out.js
 ```
 
 The `--production` flag also:
+
 - Sets `process.env.NODE_ENV` to `production`
 - Enables the production-mode JSX import & transform
 
@@ -56,8 +58,8 @@ When using Bun's bundler programmatically, configure minification through the `m
 
 ```ts
 await Bun.build({
-  entrypoints: ['./index.ts'],
-  outdir: './out',
+  entrypoints: ["./index.ts"],
+  outdir: "./out",
   minify: true, // Enable all minification modes
 });
 ```
@@ -66,8 +68,8 @@ For granular control, pass an object:
 
 ```ts
 await Bun.build({
-  entrypoints: ['./index.ts'],
-  outdir: './out',
+  entrypoints: ["./index.ts"],
+  outdir: "./out",
   minify: {
     whitespace: true,
     syntax: true,
@@ -95,6 +97,7 @@ Renames local variables and function names to shorter identifiers using frequenc
 ## All Transformations
 
 ### Boolean literal shortening
+
 **Mode:** `--minify-syntax`
 
 Converts boolean literals to shorter expressions.
@@ -110,6 +113,7 @@ false
 ```
 
 ### Boolean algebra optimizations
+
 **Mode:** `--minify-syntax`
 
 Simplifies boolean expressions using logical rules.
@@ -133,6 +137,7 @@ x
 ```
 
 ### Undefined shortening
+
 **Mode:** `--minify-syntax`
 
 Replaces `undefined` with shorter equivalent.
@@ -163,6 +168,7 @@ x != null
 ```
 
 ### Infinity shortening
+
 **Mode:** `--minify-syntax`
 
 Converts Infinity to mathematical expressions.
@@ -178,6 +184,7 @@ Infinity
 ```
 
 ### Typeof optimizations
+
 **Mode:** `--minify-syntax`
 
 Optimizes typeof comparisons and evaluates constant typeof expressions.
@@ -205,6 +212,7 @@ typeof x<'u'
 ```
 
 ### Number formatting
+
 **Mode:** `--minify-syntax`
 
 Formats numbers in the most compact representation.
@@ -226,6 +234,7 @@ Formats numbers in the most compact representation.
 ```
 
 ### Arithmetic constant folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates arithmetic operations at compile time.
@@ -249,6 +258,7 @@ Evaluates arithmetic operations at compile time.
 ```
 
 ### Bitwise constant folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates bitwise operations at compile time.
@@ -272,6 +282,7 @@ Evaluates bitwise operations at compile time.
 ```
 
 ### String concatenation
+
 **Mode:** `--minify-syntax`
 
 Combines string literals at compile time.
@@ -289,6 +300,7 @@ Combines string literals at compile time.
 ```
 
 ### String indexing
+
 **Mode:** `--minify-syntax`
 
 Evaluates string character access at compile time.
@@ -304,6 +316,7 @@ Evaluates string character access at compile time.
 ```
 
 ### Template literal folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates template literals with constant expressions.
@@ -319,6 +332,7 @@ Evaluates template literals with constant expressions.
 ```
 
 ### Template literal to string conversion
+
 **Mode:** `--minify-syntax`
 
 Converts simple template literals to regular strings.
@@ -335,6 +349,7 @@ Line 2`
 ```
 
 ### String quote optimization
+
 **Mode:** `--minify-syntax`
 
 Chooses the optimal quote character to minimize escapes.
@@ -352,6 +367,7 @@ Chooses the optimal quote character to minimize escapes.
 ```
 
 ### Array spread inlining
+
 **Mode:** `--minify-syntax`
 
 Inlines array spread operations with constant arrays.
@@ -367,6 +383,7 @@ Inlines array spread operations with constant arrays.
 ```
 
 ### Array indexing
+
 **Mode:** `--minify-syntax`
 
 Evaluates constant array access at compile time.
@@ -384,6 +401,7 @@ void 0
 ```
 
 ### Property access optimization
+
 **Mode:** `--minify-syntax`
 
 Converts bracket notation to dot notation when possible.
@@ -403,6 +421,7 @@ obj["invalid-name"]
 ```
 
 ### Comparison folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates constant comparisons at compile time.
@@ -424,6 +443,7 @@ Evaluates constant comparisons at compile time.
 ```
 
 ### Logical operation folding
+
 **Mode:** `--minify-syntax`
 
 Simplifies logical operations with constant values.
@@ -443,6 +463,7 @@ x
 ```
 
 ### Nullish coalescing folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates nullish coalescing with known values.
@@ -460,6 +481,7 @@ x
 ```
 
 ### Comma expression simplification
+
 **Mode:** `--minify-syntax`
 
 Removes side-effect-free expressions from comma sequences.
@@ -475,6 +497,7 @@ x
 ```
 
 ### Ternary conditional folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates conditional expressions with constant conditions.
@@ -494,6 +517,7 @@ x
 ```
 
 ### Unary expression folding
+
 **Mode:** `--minify-syntax`
 
 Simplifies unary operations.
@@ -515,6 +539,7 @@ x
 ```
 
 ### Double negation removal
+
 **Mode:** `--minify-syntax`
 
 Removes unnecessary double negations.
@@ -530,6 +555,7 @@ x
 ```
 
 ### If statement optimization
+
 **Mode:** `--minify-syntax`
 
 Optimizes if statements with constant conditions.
@@ -549,6 +575,7 @@ if(!x)y;
 ```
 
 ### Dead code elimination
+
 **Mode:** `--minify-syntax`
 
 Removes unreachable code and code without side effects.
@@ -568,6 +595,7 @@ function foo(){return x}
 ```
 
 ### Unreachable branch removal
+
 **Mode:** `--minify-syntax`
 
 Removes branches that can never execute.
@@ -583,6 +611,7 @@ while (false) {
 ```
 
 ### Empty block removal
+
 **Mode:** `--minify-syntax`
 
 Removes empty blocks and unnecessary braces.
@@ -593,11 +622,11 @@ if (x) { }
 ```
 
 ```js title="Output"
-;
 // removed
 ```
 
 ### Single statement block unwrapping
+
 **Mode:** `--minify-syntax`
 
 Removes unnecessary braces around single statements.
@@ -627,6 +656,7 @@ const x=0;
 ```
 
 ### Pure annotation support
+
 **Mode:** Always active
 
 Respects `/*@__PURE__*/` annotations for tree shaking.
@@ -641,6 +671,7 @@ const x = /*@__PURE__*/ expensive();
 ```
 
 ### Identifier renaming
+
 **Mode:** `--minify-identifiers`
 
 Renames local variables to shorter names based on usage frequency.
@@ -657,25 +688,28 @@ function a(b,c){const d=b+c;return d}
 ```
 
 **Naming strategy:**
+
 - Most frequently used identifiers get the shortest names (a, b, c...)
 - Single letters: a-z (26 names)
 - Double letters: aa-zz (676 names)
 - Triple letters and beyond as needed
 
 **Preserved identifiers:**
+
 - JavaScript keywords and reserved words
 - Global identifiers
 - Named exports (to maintain API)
 - CommonJS names: `exports`, `module`
 
 ### Whitespace removal
+
 **Mode:** `--minify-whitespace`
 
 Removes all unnecessary whitespace.
 
 ```ts title="Input"
 function add(a, b) {
-    return a + b;
+  return a + b;
 }
 let x = 10;
 ```
@@ -685,6 +719,7 @@ function add(a,b){return a+b;}let x=10;
 ```
 
 ### Semicolon optimization
+
 **Mode:** `--minify-whitespace`
 
 Inserts semicolons only when necessary.
@@ -700,14 +735,15 @@ let a=1;let b=2;return a+b
 ```
 
 ### Operator spacing removal
+
 **Mode:** `--minify-whitespace`
 
 Removes spaces around operators.
 
 ```ts title="Input"
-a + b
-x = y * z
-foo && bar || baz
+a + b;
+x = y * z;
+(foo && bar) || baz;
 ```
 
 ```js title="Output"
@@ -717,6 +753,7 @@ foo&&bar||baz
 ```
 
 ### Comment removal
+
 **Mode:** `--minify-whitespace`
 
 Removes comments except important license comments.
@@ -740,8 +777,8 @@ Removes whitespace in object and array literals.
 
 ```ts title="Input"
 const obj = {
-    name: "John",
-    age: 30
+  name: "John",
+  age: 30,
 };
 const arr = [1, 2, 3];
 ```
@@ -751,16 +788,17 @@ const obj={name:"John",age:30};const arr=[1,2,3];
 ```
 
 ### Control flow formatting
+
 **Mode:** `--minify-whitespace`
 
 Removes whitespace in control structures.
 
 ```ts title="Input"
 if (condition) {
-    doSomething();
+  doSomething();
 }
 for (let i = 0; i < 10; i++) {
-    console.log(i);
+  console.log(i);
 }
 ```
 
@@ -769,13 +807,14 @@ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
 ```
 
 ### Function formatting
+
 **Mode:** `--minify-whitespace`
 
 Removes whitespace in function declarations.
 
 ```ts title="Input"
 function myFunction(param1, param2) {
-    return param1 + param2;
+  return param1 + param2;
 }
 const arrow = (a, b) => a + b;
 ```
@@ -785,6 +824,7 @@ function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
 ```
 
 ### Parentheses minimization
+
 **Mode:** Always active
 
 Only adds parentheses when necessary for operator precedence.
@@ -802,6 +842,7 @@ x
 ```
 
 ### Property mangling
+
 **Mode:** `--minify-identifiers` (with configuration)
 
 Renames object properties to shorter names when configured.
@@ -815,6 +856,7 @@ obj.a
 ```
 
 ### Template literal value folding
+
 **Mode:** `--minify-syntax`
 
 Converts non-string interpolated values to strings and folds them into the template.
@@ -836,6 +878,7 @@ Converts non-string interpolated values to strings and folds them into the templ
 ```
 
 ### String length constant folding
+
 **Mode:** `--minify-syntax`
 
 Evaluates `.length` property on string literals at compile time.
@@ -851,6 +894,7 @@ Evaluates `.length` property on string literals at compile time.
 ```
 
 ### Constructor call simplification
+
 **Mode:** `--minify-syntax`
 
 Simplifies constructor calls for built-in types.
@@ -872,6 +916,7 @@ new Array(x, y)
 ```
 
 ### Single property object inlining
+
 **Mode:** `--minify-syntax`
 
 Inlines property access for objects with a single property.
@@ -885,6 +930,7 @@ Inlines property access for objects with a single property.
 ```
 
 ### String charCodeAt constant folding
+
 **Mode:** Always active
 
 Evaluates `charCodeAt()` on string literals for ASCII characters.
@@ -900,6 +946,7 @@ Evaluates `charCodeAt()` on string literals for ASCII characters.
 ```
 
 ### Void 0 equality to null equality
+
 **Mode:** `--minify-syntax`
 
 Converts loose equality checks with `void 0` to `null` since they're equivalent.
@@ -915,6 +962,7 @@ x != null
 ```
 
 ### Negation operator optimization
+
 **Mode:** `--minify-syntax`
 
 Moves negation operator through comma expressions.
@@ -930,25 +978,27 @@ x,y,-z
 ```
 
 ### Import.meta property inlining
+
 **Mode:** Bundle mode
 
 Inlines `import.meta` properties at build time when values are known.
 
 ```ts title="Input"
-import.meta.dir
-import.meta.file
-import.meta.path
-import.meta.url
+import.meta.dir;
+import.meta.file;
+import.meta.path;
+import.meta.url;
 ```
 
 ```js title="Output"
-"/path/to/directory"
-"filename.js"
-"/full/path/to/file.js"
-"file:///full/path/to/file.js"
+"/path/to/directory";
+"filename.js";
+"/full/path/to/file.js";
+"file:///full/path/to/file.js";
 ```
 
 ### Variable declaration merging
+
 **Mode:** `--minify-syntax`
 
 Merges adjacent variable declarations of the same type.
@@ -966,6 +1016,7 @@ const c=3,d=4;
 ```
 
 ### Expression statement merging
+
 **Mode:** `--minify-syntax`
 
 Merges adjacent expression statements using comma operator.
@@ -981,6 +1032,7 @@ console.log(1),console.log(2),console.log(3);
 ```
 
 ### Return statement merging
+
 **Mode:** `--minify-syntax`
 
 Merges expressions before return with comma operator.
@@ -995,6 +1047,7 @@ return console.log(x),y;
 ```
 
 ### Throw statement merging
+
 **Mode:** `--minify-syntax`
 
 Merges expressions before throw with comma operator.
@@ -1009,6 +1062,7 @@ throw(console.log(x),new Error());
 ```
 
 ### TypeScript enum cross-module inlining
+
 **Mode:** `--minify-syntax` (bundle mode)
 
 Inlines enum values across module boundaries.
@@ -1040,6 +1094,7 @@ const obj={foo:value}
 ```
 
 ### String number to numeric index
+
 **Mode:** `--minify-syntax`
 
 Converts string numeric property access to numeric index.
@@ -1055,6 +1110,7 @@ arr[5]
 ```
 
 ### Arrow function body shortening
+
 **Mode:** Always active
 
 Uses expression body syntax when an arrow function only returns a value.
@@ -1070,6 +1126,7 @@ a => a + 1
 ```
 
 ### Object property shorthand
+
 **Mode:** Always active
 
 Uses shorthand syntax when property name and value identifier match.
@@ -1085,6 +1142,7 @@ Uses shorthand syntax when property name and value identifier match.
 ```
 
 ### Method shorthand
+
 **Mode:** Always active
 
 Uses method shorthand syntax in object literals.
@@ -1104,6 +1162,7 @@ Uses method shorthand syntax in object literals.
 ```
 
 ### Drop debugger statements
+
 **Mode:** `--drop=debugger`
 
 Removes `debugger` statements from code.
@@ -1120,14 +1179,15 @@ function test(){return x}
 ```
 
 ### Drop console calls
+
 **Mode:** `--drop=console`
 
 Removes all `console.*` method calls from code.
 
 ```ts title="Input"
-console.log('debug');
-console.warn('warning');
-x = console.error('error');
+console.log("debug");
+console.warn("warning");
+x = console.error("error");
 ```
 
 ```js title="Output"
@@ -1137,6 +1197,7 @@ x=void 0;
 ```
 
 ### Drop custom function calls
+
 **Mode:** `--drop=<name>`
 
 Removes calls to specified global functions or methods.
@@ -1163,8 +1224,8 @@ Or in the JavaScript API:
 
 ```ts
 await Bun.build({
-  entrypoints: ['./index.ts'],
-  outdir: './out',
+  entrypoints: ["./index.ts"],
+  outdir: "./out",
   minify: {
     identifiers: true,
     keepNames: true,
@@ -1178,7 +1239,8 @@ This preserves the `.name` property on functions and classes while still minifyi
 
 Using all three minification modes together:
 
-```ts title="input.ts (158 bytes)"
+```ts title="input.ts"
+// (158 bytes)
 const myVariable = 42;
 
 const myFunction = () => {
@@ -1198,16 +1260,19 @@ const a=42,b=()=>{const c=!0,d=void 0;return c?a:d},e=b();
 ## When to Use Minification
 
 **Use `--minify` for:**
+
 - Production bundles
 - Reducing CDN bandwidth costs
 - Improving page load times
 
 **Use individual modes for:**
+
 - **`--minify-whitespace`:** Quick size reduction without semantic changes
 - **`--minify-syntax`:** Smaller output while keeping readable identifiers for debugging
 - **`--minify-identifiers`:** Maximum size reduction (combine with `--keep-names` for better stack traces)
 
 **Avoid minification for:**
+
 - Development builds (harder to debug)
 - When you need readable error messages
 - Libraries where consumers may read the source

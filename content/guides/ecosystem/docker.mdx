@@ -126,7 +126,7 @@ The container is now running in the background. Visit [localhost:3000](http://lo
 To stop the container, we'll use `docker stop <container-id>`.
 
 ```sh title="terminal"
-docker stop 7f03e212a15ede8644379bce11a13589f563d3909a9640446c5bbefce993678d
+$ docker stop 7f03e212a15ede8644379bce11a13589f563d3909a9640446c5bbefce993678d
 ```
 
 ---
@@ -134,7 +134,7 @@ docker stop 7f03e212a15ede8644379bce11a13589f563d3909a9640446c5bbefce993678d
 If you can't find the container ID, you can use `docker ps` to list all running containers.
 
 ```sh title="terminal"
-docker ps
+$ docker ps
 
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
 7f03e212a15e        bun-hello-world     "bun run index.ts"       2 minutes ago       Up 2 minutes        0.0.0.0:3000->3000/tcp   flamboyant_cerf

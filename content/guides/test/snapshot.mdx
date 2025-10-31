@@ -9,8 +9,8 @@ Bun's test runner supports Jest-style snapshot testing via `.toMatchSnapshot()`.
 ```ts title="snap.test.ts"
 import { test, expect } from "bun:test";
 
-test('snapshot', () => {
-	expect({foo: 'bar'}).toMatchSnapshot();
+test("snapshot", () => {
+  expect({ foo: "bar" }).toMatchSnapshot();
 });
 ```
 

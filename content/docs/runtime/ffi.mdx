@@ -100,7 +100,7 @@ pub extern "C" fn add(a: i32, b: i32) -> i32 {
 To compile:
 
 ```bash
-rustc --crate-type cdylib add.rs
+$ rustc --crate-type cdylib add.rs
 ```
 
 ### C++
@@ -116,7 +116,7 @@ extern "C" int32_t add(int32_t a, int32_t b) {
 To compile:
 
 ```bash
-zig build-lib add.cpp -dynamic -lc -lc++
+$ zig build-lib add.cpp -dynamic -lc -lc++
 ```
 
 ---

@@ -3,7 +3,6 @@ title: Bundler
 description: Bun's fast native bundler for JavaScript, TypeScript, JSX, and more
 ---
 
-
 Bun's fast native bundler can be used via the `bun build` CLI command or the `Bun.build()` JavaScript API.
 
 ### At a Glance
@@ -32,7 +31,12 @@ Bun's fast native bundler can be used via the `bun build` CLI command or the `Bu
 
 It's fast. The numbers below represent performance on esbuild's [three.js benchmark](https://github.com/oven-sh/bun/tree/main/bench/bundle).
 
-![Bundling 10 copies of three.js from scratch, with sourcemaps and minification](https://bun.com/images/bundler-speed.png)
+<Frame>
+  <img
+    src="https://bun.com/images/bundler-speed.png"
+    caption="Bundling 10 copies of three.js from scratch, with sourcemaps and minification"
+  />
+</Frame>
 
 ## Why bundle?
 
@@ -45,31 +49,25 @@ The bundler is a key piece of infrastructure in the JavaScript ecosystem. As a b
 
 Let's jump into the bundler API.
 
-<Callout type="info">
-	The Bun bundler is not intended to replace `tsc` for typechecking or generating type declarations.
-</Callout>
+<Callout type="info">The Bun bundler is not intended to replace `tsc` for typechecking or generating type declarations.</Callout>
 
 ## Basic example
 
 Let's build our first bundle. You have the following two files, which implement a simple client-side rendered React app.
 
-
-
 ```tsx title="index.tsx"
-import * as ReactDOM from 'react-dom/client';
-import {Component} from './Component';
+import * as ReactDOM from "react-dom/client";
+import { Component } from "./Component";
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(<Component message="Sup!" />);
 ```
 
 ```tsx title="Component.tsx"
-export function Component(props: {message: string}) {
-	return <h1>{props.message}</h1>;
+export function Component(props: { message: string }) {
+  return <h1>{props.message}</h1>;
 }
 ```
-
-
 
 Here, `index.tsx` is the "entrypoint" to our application. Commonly, this will be a script that performs some side effect, like starting a server or—in this case—initializing a React root. Because we're using TypeScript & JSX, we need to bundle our code before it can be sent to the browser.
 
@@ -114,32 +112,32 @@ The contents of `out/index.js` will look something like this:
 
 // Component.tsx
 function Component(props) {
-	return $jsxDEV(
-		'p',
-		{
-			children: props.message,
-		},
-		undefined,
-		false,
-		undefined,
-		this,
-	);
+  return $jsxDEV(
+    "p",
+    {
+      children: props.message,
+    },
+    undefined,
+    false,
+    undefined,
+    this,
+  );
 }
 
 // index.tsx
-var rootNode = document.getElementById('root');
+var rootNode = document.getElementById("root");
 var root = $createRoot(rootNode);
 root.render(
-	$jsxDEV(
-		Component,
-		{
-			message: 'Sup!',
-		},
-		undefined,
-		false,
-		undefined,
-		this,
-	),
+  $jsxDEV(
+    Component,
+    {
+      message: "Sup!",
+    },
+    undefined,
+    false,
+    undefined,
+    this,
+  ),
 );
 ```
 
@@ -185,86 +183,25 @@ console.log(contents); // => "Hello, world!"
 </section>
 {/* end llm ignored codeblock */}
 
-{/* 
-<table>
-<thead>
-<tr><th>Extensions</th> <th>Details</th></tr>
-</thead>
-<tbody>
-
-<tr>
-<td>`.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx`</td>
-<td>
-Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. 
-The bundler executes a set of default transforms including dead code elimination and tree shaking. 
-At the moment Bun does not attempt to down-convert syntax; if you use recently ECMAScript syntax, that will be reflected in the bundled code.
-</td>
-</tr>
-
-<tr>
-<td>`.json`</td>
-<td>
-JSON files are parsed and inlined into the bundle as a JavaScript object.
-```js
-import pkg from "./package.json";
-pkg.name; // => "my-package"
-```
-</td>
-</tr>
-
-<tr>
-<td>`.toml`</td>
-<td>
-TOML files are parsed and inlined into the bundle as a JavaScript object.
-```js
-import config from "./bunfig.toml";
-config.logLevel; // => "debug"
-```
-</td>
-</tr>
-
-<tr>
-<td>`.txt`</td>
-<td>
-The contents of the text file are read and inlined into the bundle as a string.
-```js
-import contents from "./file.txt";
-console.log(contents); // => "Hello, world!"
-```
-</td>
-</tr>
-
-<tr>
-<td>`.node` `.wasm`</td>
-<td>These files are supported by the Bun runtime, but during bundling they are treated as assets.</td>
-</tr>
-
-</tbody>
-</table>
- */}
-
 ### Assets
 
 If the bundler encounters an import with an unrecognized extension, it treats the imported file as an external file. The referenced file is copied as-is into `outdir`, and the import is resolved as a path to the file.
 
 ```ts tab="Input"
 // bundle entrypoint
-import logo from './logo.svg';
+import logo from "./logo.svg";
 console.log(logo);
 ```
 
 ```ts tab="Output"
 // bundled output
-var logo = './logo-a7305bdef.svg';
+var logo = "./logo-a7305bdef.svg";
 console.log(logo);
 ```
 
 The exact behavior of the file loader is also impacted by [`naming`](#naming) and [`publicPath`](#publicpath).
 
-<Callout type="info">
-	Refer to the [Bundler > Loaders](/docs/bundler/loaders) page for more complete documentation on
-	the file loader.
-</Callout>
+<Callout type="info">Refer to the [Bundler > Loaders](/docs/bundler/loaders) page for more complete documentation on the file loader.</Callout>
 
 ### Plugins
 
@@ -274,7 +211,7 @@ The behavior described in this table can be overridden or extended with plugins.
 
 ### entrypoints
 
-Required
+<Badge>Required</Badge>
 
 An array of paths corresponding to the entrypoints of our application. One bundle will be generated for each entrypoint.
 
@@ -319,18 +256,18 @@ If `outdir` is not passed to the JavaScript API, bundled code will not be writte
 
 ```ts title="build.ts"
 const result = await Bun.build({
-	entrypoints: ['./index.ts'],
+  entrypoints: ["./index.ts"],
 });
 
 for (const res of result.outputs) {
-	// Can be consumed as blobs
-	await res.text();
+  // Can be consumed as blobs
+  await res.text();
 
-	// Bun will set Content-Type and Etag headers
-	new Response(res);
+  // Bun will set Content-Type and Etag headers
+  new Response(res);
 
-	// Can be written manually, but you should use `outdir` in this case.
-	Bun.write(path.join('out', res.path), res);
+  // Can be written manually, but you should use `outdir` in this case.
+  Bun.write(path.join("out", res.path), res);
 }
 ```
 
@@ -515,18 +452,17 @@ Whether to enable code splitting.
 
 When `true`, the bundler will enable code splitting. When multiple entrypoints both import the same file, module, or set of files/modules, it's often useful to split the shared code into a separate bundle. This shared bundle is known as a chunk. Consider the following files:
 
-
 ```ts tab="entry-a.ts"
-import {shared} from './shared.ts';
+import { shared } from "./shared.ts";
 ```
+
 ```ts tab="entry-b.ts"
-import {shared} from './shared.ts';
+import { shared } from "./shared.ts";
 ```
+
 ```ts tab="shared.ts"
-export const shared = 'shared';
+export const shared = "shared";
 ```
-
-
 
 To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
 
@@ -568,11 +504,11 @@ A list of plugins to use during bundling.
 
 ```ts title="build.ts"
 await Bun.build({
-	entrypoints: ['./index.tsx'],
-	outdir: './out',
-	plugins: [
-		/* ... */
-	],
+  entrypoints: ["./index.tsx"],
+  outdir: "./out",
+  plugins: [
+    /* ... */
+  ],
 });
 ```
 
@@ -615,8 +551,8 @@ The generated bundle will contain the following code:
 
 ```js title="output.js"
 // output.js
-console.log('bar');
-console.log('123');
+console.log("bar");
+console.log("123");
 ```
 
 #### env: "PUBLIC\_\*" (prefix)
@@ -660,7 +596,7 @@ The generated bundle will contain the following code:
 
 ```js title="output.js"
 console.log(process.env.FOO);
-console.log('https://acme.com');
+console.log("https://acme.com");
 console.log(process.env.BAZ);
 ```
 
@@ -772,10 +708,10 @@ An external import is one that will not be included in the final bundle. Instead
 For instance, consider the following entrypoint file:
 
 ```tsx title="index.tsx"
-import _ from 'lodash';
-import {z} from 'zod';
+import _ from "lodash";
+import { z } from "zod";
 
-const value = z.string().parse('Hello world!');
+const value = z.string().parse("Hello world!");
 console.log(_.upperCase(value));
 ```
 
@@ -801,13 +737,13 @@ Normally, bundling `index.tsx` would generate a bundle containing the entire sou
 The generated bundle will look something like this:
 
 ```js title="out/index.js"
-import {z} from 'zod';
+import { z } from "zod";
 
 // ...
 // the contents of the "lodash" package
 // including the `_.upperCase` function
 
-var value = z.string().parse('Hello world!');
+var value = z.string().parse("Hello world!");
 console.log(_.upperCase(value));
 ```
 
@@ -1225,17 +1161,17 @@ The `Bun.build` function returns a `Promise<BuildOutput>`, defined as:
 
 ```ts title="build.ts"
 interface BuildOutput {
-	outputs: BuildArtifact[];
-	success: boolean;
-	logs: Array<object>; // see docs for details
+  outputs: BuildArtifact[];
+  success: boolean;
+  logs: Array<object>; // see docs for details
 }
 
 interface BuildArtifact extends Blob {
-	kind: 'entry-point' | 'chunk' | 'asset' | 'sourcemap';
-	path: string;
-	loader: Loader;
-	hash: string | null;
-	sourcemap: BuildArtifact | null;
+  kind: "entry-point" | "chunk" | "asset" | "sourcemap";
+  path: string;
+  loader: Loader;
+  hash: string | null;
+  sourcemap: BuildArtifact | null;
 }
 ```
 
@@ -1243,31 +1179,31 @@ The `outputs` array contains all the files that were generated by the build. Eac
 
 ```ts title="build.ts"
 const build = await Bun.build({
-	/* */
+  /* */
 });
 
 for (const output of build.outputs) {
-	await output.arrayBuffer(); // => ArrayBuffer
-	await output.bytes(); // => Uint8Array
-	await output.text(); // string
+  await output.arrayBuffer(); // => ArrayBuffer
+  await output.bytes(); // => Uint8Array
+  await output.text(); // string
 }
 ```
 
 Each artifact also contains the following properties:
 
-| Property    | Description                                                                                                                                                       |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`      | What kind of build output this file is. A build generates bundled entrypoints, code-split "chunks", sourcemaps, bytecode, and copied assets (like images).        |
-| `path`      | Absolute path to the file on disk                                                                                                                                 |
+| Property    | Description                                                                                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `kind`      | What kind of build output this file is. A build generates bundled entrypoints, code-split "chunks", sourcemaps, bytecode, and copied assets (like images).   |
+| `path`      | Absolute path to the file on disk                                                                                                                            |
 | `loader`    | The loader was used to interpret the file. See [Bundler > Loaders](/docs/bundler/loaders) to see how Bun maps file extensions to the appropriate built-in loader. |
-| `hash`      | The hash of the file contents. Always defined for assets.                                                                                                         |
-| `sourcemap` | The sourcemap file corresponding to this file, if generated. Only defined for entrypoints and chunks.                                                             |
+| `hash`      | The hash of the file contents. Always defined for assets.                                                                                                    |
+| `sourcemap` | The sourcemap file corresponding to this file, if generated. Only defined for entrypoints and chunks.                                                        |
 
 Similar to `BunFile`, `BuildArtifact` objects can be passed directly into `new Response()`.
 
 ```ts title="build.ts"
 const build = await Bun.build({
-	/* */
+  /* */
 });
 
 const artifact = build.outputs[0];
@@ -1278,12 +1214,10 @@ return new Response(artifact);
 
 The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
 
-
-
 ```ts title="build.ts"
 // build.ts
 const build = await Bun.build({
-	/* */
+  /* */
 });
 
 const artifact = build.outputs[0];
@@ -1314,8 +1248,6 @@ BuildArtifact (entry-point) {
 }
 ```
 
-
-
 ## Bytecode
 
 The `bytecode: boolean` option can be used to generate bytecode for any JavaScript/TypeScript entrypoints. This can greatly improve startup times for large applications. Only supported for `"cjs"` format, only supports `"target": "bun"` and dependent on a matching version of Bun. This adds a corresponding `.jsc` file for each entrypoint.
@@ -1343,7 +1275,7 @@ Bun supports "compiling" a JavaScript/TypeScript entrypoint into a standalone ex
 
 ```bash title="terminal"
 $ bun build ./cli.tsx --outfile mycli --compile
-./mycli
+$ ./mycli
 ```
 
 Refer to [Bundler > Executables](/docs/bundler/executables) for complete documentation.
@@ -1354,20 +1286,20 @@ On failure, `Bun.build` returns a rejected promise with an `AggregateError`. Thi
 
 ```ts title="build.ts"
 try {
-	const result = await Bun.build({
-		entrypoints: ['./index.tsx'],
-		outdir: './out',
-	});
+  const result = await Bun.build({
+    entrypoints: ["./index.tsx"],
+    outdir: "./out",
+  });
 } catch (e) {
-	// TypeScript does not allow annotations on the catch clause
-	const error = e as AggregateError;
-	console.error('Build Failed');
+  // TypeScript does not allow annotations on the catch clause
+  const error = e as AggregateError;
+  console.error("Build Failed");
 
-	// Example: Using the built-in formatter
-	console.error(error);
+  // Example: Using the built-in formatter
+  console.error(error);
 
-	// Example: Serializing the failure as a JSON string.
-	console.error(JSON.stringify(error, null, 2));
+  // Example: Serializing the failure as a JSON string.
+  console.error(JSON.stringify(error, null, 2));
 }
 ```
 
@@ -1377,17 +1309,17 @@ Each item in `error.errors` is an instance of `BuildMessage` or `ResolveMessage`
 
 ```ts title="build.ts"
 class BuildMessage {
-	name: string;
-	position?: Position;
-	message: string;
-	level: 'error' | 'warning' | 'info' | 'debug' | 'verbose';
+  name: string;
+  position?: Position;
+  message: string;
+  level: "error" | "warning" | "info" | "debug" | "verbose";
 }
 
 class ResolveMessage extends BuildMessage {
-	code: string;
-	referrer: string;
-	specifier: string;
-	importKind: ImportKind;
+  code: string;
+  referrer: string;
+  specifier: string;
+  importKind: ImportKind;
 }
 ```
 
@@ -1395,16 +1327,16 @@ On build success, the returned object contains a `logs` property, which contains
 
 ```ts title="build.ts"
 const result = await Bun.build({
-	entrypoints: ['./index.tsx'],
-	outdir: './out',
+  entrypoints: ["./index.tsx"],
+  outdir: "./out",
 });
 
 if (result.logs.length > 0) {
-	console.warn('Build succeeded with warnings:');
-	for (const message of result.logs) {
-		// Bun will pretty print the message object
-		console.warn(message);
-	}
+  console.warn("Build succeeded with warnings:");
+  for (const message of result.logs) {
+    // Bun will pretty print the message object
+    console.warn(message);
+  }
 }
 ```
 
@@ -1412,167 +1344,167 @@ if (result.logs.length > 0) {
 
 ```ts title="Typescript Definitions"
 interface Bun {
-	build(options: BuildOptions): Promise<BuildOutput>;
+  build(options: BuildOptions): Promise<BuildOutput>;
 }
 
 interface BuildConfig {
-	entrypoints: string[]; // list of file path
-	outdir?: string; // output directory
-	target?: Target; // default: "browser"
-	/**
-	 * Output module format. Top-level await is only supported for `"esm"`.
-	 *
-	 * Can be:
-	 * - `"esm"`
-	 * - `"cjs"` (**experimental**)
-	 * - `"iife"` (**experimental**)
-	 *
-	 * @default "esm"
-	 */
-	format?: 'esm' | 'cjs' | 'iife';
-	/**
-	 * JSX configuration object for controlling JSX transform behavior
-	 */
-	jsx?: {
-		factory?: string;
-		fragment?: string;
-		importSource?: string;
-		runtime?: 'automatic' | 'classic';
-	};
-	naming?:
-		| string
-		| {
-				chunk?: string;
-				entry?: string;
-				asset?: string;
-		  };
-	root?: string; // project root
-	splitting?: boolean; // default true, enable code splitting
-	plugins?: BunPlugin[];
-	external?: string[];
-	packages?: 'bundle' | 'external';
-	publicPath?: string;
-	define?: Record<string, string>;
-	loader?: {[k in string]: Loader};
-	sourcemap?: 'none' | 'linked' | 'inline' | 'external' | 'linked' | boolean; // default: "none", true -> "inline"
-	/**
-	 * package.json `exports` conditions used when resolving imports
-	 *
-	 * Equivalent to `--conditions` in `bun build` or `bun run`.
-	 *
-	 * https://nodejs.org/api/packages.html#exports
-	 */
-	conditions?: Array<string> | string;
+  entrypoints: string[]; // list of file path
+  outdir?: string; // output directory
+  target?: Target; // default: "browser"
+  /**
+   * Output module format. Top-level await is only supported for `"esm"`.
+   *
+   * Can be:
+   * - `"esm"`
+   * - `"cjs"` (**experimental**)
+   * - `"iife"` (**experimental**)
+   *
+   * @default "esm"
+   */
+  format?: "esm" | "cjs" | "iife";
+  /**
+   * JSX configuration object for controlling JSX transform behavior
+   */
+  jsx?: {
+    factory?: string;
+    fragment?: string;
+    importSource?: string;
+    runtime?: "automatic" | "classic";
+  };
+  naming?:
+    | string
+    | {
+        chunk?: string;
+        entry?: string;
+        asset?: string;
+      };
+  root?: string; // project root
+  splitting?: boolean; // default true, enable code splitting
+  plugins?: BunPlugin[];
+  external?: string[];
+  packages?: "bundle" | "external";
+  publicPath?: string;
+  define?: Record<string, string>;
+  loader?: { [k in string]: Loader };
+  sourcemap?: "none" | "linked" | "inline" | "external" | "linked" | boolean; // default: "none", true -> "inline"
+  /**
+   * package.json `exports` conditions used when resolving imports
+   *
+   * Equivalent to `--conditions` in `bun build` or `bun run`.
+   *
+   * https://nodejs.org/api/packages.html#exports
+   */
+  conditions?: Array<string> | string;
 
-	/**
-	 * Controls how environment variables are handled during bundling.
-	 *
-	 * Can be one of:
-	 * - `"inline"`: Injects environment variables into the bundled output by converting `process.env.FOO`
-	 *   references to string literals containing the actual environment variable values
-	 * - `"disable"`: Disables environment variable injection entirely
-	 * - A string ending in `*`: Inlines environment variables that match the given prefix.
-	 *   For example, `"MY_PUBLIC_*"` will only include env vars starting with "MY_PUBLIC_"
-	 */
-	env?: 'inline' | 'disable' | `${string}*`;
-	minify?:
-		| boolean
-		| {
-				whitespace?: boolean;
-				syntax?: boolean;
-				identifiers?: boolean;
-		  };
-	/**
-	 * Ignore dead code elimination/tree-shaking annotations such as @__PURE__ and package.json
-	 * "sideEffects" fields. This should only be used as a temporary workaround for incorrect
-	 * annotations in libraries.
-	 */
-	ignoreDCEAnnotations?: boolean;
-	/**
-	 * Force emitting @__PURE__ annotations even if minify.whitespace is true.
-	 */
-	emitDCEAnnotations?: boolean;
+  /**
+   * Controls how environment variables are handled during bundling.
+   *
+   * Can be one of:
+   * - `"inline"`: Injects environment variables into the bundled output by converting `process.env.FOO`
+   *   references to string literals containing the actual environment variable values
+   * - `"disable"`: Disables environment variable injection entirely
+   * - A string ending in `*`: Inlines environment variables that match the given prefix.
+   *   For example, `"MY_PUBLIC_*"` will only include env vars starting with "MY_PUBLIC_"
+   */
+  env?: "inline" | "disable" | `${string}*`;
+  minify?:
+    | boolean
+    | {
+        whitespace?: boolean;
+        syntax?: boolean;
+        identifiers?: boolean;
+      };
+  /**
+   * Ignore dead code elimination/tree-shaking annotations such as @__PURE__ and package.json
+   * "sideEffects" fields. This should only be used as a temporary workaround for incorrect
+   * annotations in libraries.
+   */
+  ignoreDCEAnnotations?: boolean;
+  /**
+   * Force emitting @__PURE__ annotations even if minify.whitespace is true.
+   */
+  emitDCEAnnotations?: boolean;
 
-	/**
-	 * Generate bytecode for the output. This can dramatically improve cold
-	 * start times, but will make the final output larger and slightly increase
-	 * memory usage.
-	 *
-	 * Bytecode is currently only supported for CommonJS (`format: "cjs"`).
-	 *
-	 * Must be `target: "bun"`
-	 * @default false
-	 */
-	bytecode?: boolean;
-	/**
-	 * Add a banner to the bundled code such as "use client";
-	 */
-	banner?: string;
-	/**
-	 * Add a footer to the bundled code such as a comment block like
-	 *
-	 * `// made with bun!`
-	 */
-	footer?: string;
+  /**
+   * Generate bytecode for the output. This can dramatically improve cold
+   * start times, but will make the final output larger and slightly increase
+   * memory usage.
+   *
+   * Bytecode is currently only supported for CommonJS (`format: "cjs"`).
+   *
+   * Must be `target: "bun"`
+   * @default false
+   */
+  bytecode?: boolean;
+  /**
+   * Add a banner to the bundled code such as "use client";
+   */
+  banner?: string;
+  /**
+   * Add a footer to the bundled code such as a comment block like
+   *
+   * `// made with bun!`
+   */
+  footer?: string;
 
-	/**
-	 * Drop function calls to matching property accesses.
-	 */
-	drop?: string[];
+  /**
+   * Drop function calls to matching property accesses.
+   */
+  drop?: string[];
 
-	/**
-	 * When set to `true`, the returned promise rejects with an AggregateError when a build failure happens.
-	 * When set to `false`, the `success` property of the returned object will be `false` when a build failure happens.
-	 *
-	 * This defaults to `false` in Bun 1.1 and will change to `true` in Bun 1.2
-	 * as most usage of `Bun.build` forgets to check for errors.
-	 */
-	throw?: boolean;
+  /**
+   * When set to `true`, the returned promise rejects with an AggregateError when a build failure happens.
+   * When set to `false`, the `success` property of the returned object will be `false` when a build failure happens.
+   *
+   * This defaults to `false` in Bun 1.1 and will change to `true` in Bun 1.2
+   * as most usage of `Bun.build` forgets to check for errors.
+   */
+  throw?: boolean;
 }
 
 interface BuildOutput {
-	outputs: BuildArtifact[];
-	success: boolean;
-	logs: Array<BuildMessage | ResolveMessage>;
+  outputs: BuildArtifact[];
+  success: boolean;
+  logs: Array<BuildMessage | ResolveMessage>;
 }
 
 interface BuildArtifact extends Blob {
-	path: string;
-	loader: Loader;
-	hash: string | null;
-	kind: 'entry-point' | 'chunk' | 'asset' | 'sourcemap' | 'bytecode';
-	sourcemap: BuildArtifact | null;
+  path: string;
+  loader: Loader;
+  hash: string | null;
+  kind: "entry-point" | "chunk" | "asset" | "sourcemap" | "bytecode";
+  sourcemap: BuildArtifact | null;
 }
 
-type Loader = 'js' | 'jsx' | 'ts' | 'tsx' | 'json' | 'toml' | 'file' | 'napi' | 'wasm' | 'text';
+type Loader = "js" | "jsx" | "ts" | "tsx" | "json" | "toml" | "file" | "napi" | "wasm" | "text";
 
 interface BuildOutput {
-	outputs: BuildArtifact[];
-	success: boolean;
-	logs: Array<BuildMessage | ResolveMessage>;
+  outputs: BuildArtifact[];
+  success: boolean;
+  logs: Array<BuildMessage | ResolveMessage>;
 }
 
 declare class ResolveMessage {
-	readonly name: 'ResolveMessage';
-	readonly position: Position | null;
-	readonly code: string;
-	readonly message: string;
-	readonly referrer: string;
-	readonly specifier: string;
-	readonly importKind:
-		| 'entry_point'
-		| 'stmt'
-		| 'require'
-		| 'import'
-		| 'dynamic'
-		| 'require_resolve'
-		| 'at'
-		| 'at_conditional'
-		| 'url'
-		| 'internal';
-	readonly level: 'error' | 'warning' | 'info' | 'debug' | 'verbose';
+  readonly name: "ResolveMessage";
+  readonly position: Position | null;
+  readonly code: string;
+  readonly message: string;
+  readonly referrer: string;
+  readonly specifier: string;
+  readonly importKind:
+    | "entry_point"
+    | "stmt"
+    | "require"
+    | "import"
+    | "dynamic"
+    | "require_resolve"
+    | "at"
+    | "at_conditional"
+    | "url"
+    | "internal";
+  readonly level: "error" | "warning" | "info" | "debug" | "verbose";
 
-	toString(): string;
+  toString(): string;
 }
 ```
 

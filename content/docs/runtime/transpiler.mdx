@@ -7,7 +7,7 @@ Bun exposes its internal transpiler via the `Bun.Transpiler` class. To create an
 
 ```ts
 const transpiler = new Bun.Transpiler({
-	loader: 'tsx', // "js | "jsx" | "ts" | "tsx"
+  loader: "tsx", // "js | "jsx" | "ts" | "tsx"
 });
 ```
 
@@ -16,7 +16,6 @@ const transpiler = new Bun.Transpiler({
 ## `.transformSync()`
 
 Transpile code synchronously with the `.transformSync()` method. Modules are not resolved and the code is not executed. The result is a string of vanilla JavaScript code.
-
 
 ```ts tab="transpile.ts" 
 const transpiler = new Bun.Transpiler({
@@ -54,16 +53,14 @@ export default jsx(
 To override the default loader specified in the `new Bun.Transpiler()` constructor, pass a second argument to `.transformSync()`.
 
 ```ts
-transpiler.transformSync('<div>hi!</div>', 'tsx');
+transpiler.transformSync("<div>hi!</div>", "tsx");
 ```
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Nitty gritty">
-
 When `.transformSync` is called, the transpiler is run in the same thread as the currently executed code.
 
 If a macro is used, it will be run in the same thread as the transpiler, but in a separate event loop from the rest of your application. Currently, globals between macros and regular code are shared, which means it is possible (but not recommended) to share states between macros and regular code. Attempting to use AST nodes outside of a macro is undefined behavior.
-
 </Accordion>
 </Accordions>
 
@@ -74,17 +71,18 @@ If a macro is used, it will be run in the same thread as the transpiler, but in 
 The `transform()` method is an async version of `.transformSync()` that returns a `Promise<string>`.
 
 ```js
-const transpiler = new Bun.Transpiler({loader: 'jsx'});
-const result = await transpiler.transform('<div>hi!</div>');
+const transpiler = new Bun.Transpiler({ loader: "jsx" });
+const result = await transpiler.transform("<div>hi!</div>");
 console.log(result);
 ```
 
 Unless you're transpiling _many_ large files, you should probably use `Bun.Transpiler.transformSync`. The cost of the threadpool will often take longer than actually transpiling code.
 
 ```ts
-await transpiler.transform('<div>hi!</div>', 'tsx');
+await transpiler.transform("<div>hi!</div>", "tsx");
 ```
-<Accordions>
+
+<Accordions type="single">
 <Accordion title="Nitty gritty">
 
 The `.transform()` method runs the transpiler in Bun's worker threadpool, so if you run it 100 times, it will run it across `Math.floor($cpu_count * 0.8)` threads, without blocking the main JavaScript thread.
@@ -98,10 +96,9 @@ If your code uses a macro, it will potentially spawn a new copy of Bun's JavaScr
 
 The `Transpiler` instance can also scan some source code and return a list of its imports and exports, plus additional metadata about each one. [Type-only](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export) imports and exports are ignored.
 
-
 ```ts tab="example.ts"
 const transpiler = new Bun.Transpiler({
-	loader: 'tsx',
+  loader: "tsx",
 });
 
 const code = `
@@ -118,21 +115,21 @@ const result = transpiler.scan(code);
 
 ```json tab="output"
 {
-	"exports": ["name"],
-	"imports": [
-		{
-			"kind": "import-statement",
-			"path": "react"
-		},
-		{
-			"kind": "import-statement",
-			"path": "remix"
-		},
-		{
-			"kind": "dynamic-import",
-			"path": "./loader"
-		}
-	]
+  "exports": ["name"],
+  "imports": [
+    {
+      "kind": "import-statement",
+      "path": "react"
+    },
+    {
+      "kind": "import-statement",
+      "path": "remix"
+    },
+    {
+      "kind": "dynamic-import",
+      "path": "./loader"
+    }
+  ]
 }
 ```
 
@@ -151,11 +148,9 @@ Each import in the `imports` array has a `path` and `kind`. Bun categories impor
 
 For performance-sensitive code, you can use the `.scanImports()` method to get a list of imports. It's faster than `.scan()` (especially for large files) but marginally less accurate due to some performance optimizations.
 
-
-
 ```ts tab="example.ts"
 const transpiler = new Bun.Transpiler({
-	loader: 'tsx',
+  loader: "tsx",
 });
 
 const code = `
@@ -172,22 +167,20 @@ const result = transpiler.scanImports(code);
 
 ```json tab="results"
 [
-	{
-		"kind": "import-statement",
-		"path": "react"
-	},
-	{
-		"kind": "require-call",
-		"path": "./cjs.js"
-	},
-	{
-		"kind": "dynamic-import",
-		"path": "./loader"
-	}
+  {
+    "kind": "import-statement",
+    "path": "react"
+  },
+  {
+    "kind": "require-call",
+    "path": "./cjs.js"
+  },
+  {
+    "kind": "dynamic-import",
+    "path": "./loader"
+  }
 ]
 ```
-
-
 
 ---
 

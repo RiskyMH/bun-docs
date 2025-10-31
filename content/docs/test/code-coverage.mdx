@@ -1,5 +1,5 @@
 ---
-title: 'Code coverage'
+title: "Code coverage"
 description: "Learn how to use Bun's built-in code coverage reporting to track test coverage and find untested areas in your codebase"
 ---
 
@@ -204,8 +204,8 @@ coverageIgnoreSourcemaps = true  # default false
 ```
 
 <Callout type="warning">
-	When using this option, you probably want to stick a `// @bun` comment at the top of the source
-	file to opt out of the transpilation process.
+  When using this option, you probably want to stick a `// @bun` comment at the top of the source file to opt out of the
+  transpilation process.
 </Callout>
 
 ## Coverage Defaults
@@ -323,29 +323,29 @@ All files    |   85.71 |   90.48 |
 
 ```ts title="test.ts"
 // Good: Test actual functionality
-test('calculateTax should handle different tax rates', () => {
-	expect(calculateTax(100, 0.08)).toBe(8);
-	expect(calculateTax(100, 0.1)).toBe(10);
-	expect(calculateTax(0, 0.08)).toBe(0);
+test("calculateTax should handle different tax rates", () => {
+  expect(calculateTax(100, 0.08)).toBe(8);
+  expect(calculateTax(100, 0.1)).toBe(10);
+  expect(calculateTax(0, 0.08)).toBe(0);
 });
 
 // Avoid: Just hitting lines for coverage
-test('calculateTax exists', () => {
-	calculateTax(100, 0.08); // No assertions!
+test("calculateTax exists", () => {
+  calculateTax(100, 0.08); // No assertions!
 });
 ```
 
 ### Test Edge Cases
 
 ```ts title="test.ts"
-test('user input validation', () => {
-	// Test normal case
-	expect(validateEmail('user@example.com')).toBe(true);
+test("user input validation", () => {
+  // Test normal case
+  expect(validateEmail("user@example.com")).toBe(true);
 
-	// Test edge cases that improve coverage meaningfully
-	expect(validateEmail('')).toBe(false);
-	expect(validateEmail('invalid')).toBe(false);
-	expect(validateEmail(null)).toBe(false);
+  // Test edge cases that improve coverage meaningfully
+  expect(validateEmail("")).toBe(false);
+  expect(validateEmail("invalid")).toBe(false);
+  expect(validateEmail(null)).toBe(false);
 });
 ```
 
@@ -377,10 +377,10 @@ If files aren't appearing in coverage reports, they might not be imported by you
 
 ```ts title="test.ts"
 // Make sure to import the modules you want to test
-import {myFunction} from '../src/my-module';
+import { myFunction } from "../src/my-module";
 
-test('my function works', () => {
-	expect(myFunction()).toBeDefined();
+test("my function works", () => {
+  expect(myFunction()).toBeDefined();
 });
 ```
 

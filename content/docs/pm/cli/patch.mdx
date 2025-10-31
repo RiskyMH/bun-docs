@@ -21,13 +21,13 @@ Features:
 To get started, use `bun patch <pkg>` to prepare the package for patching:
 
 ```bash title="terminal"
-you can supply the package name
+# you can supply the package name
 $ bun patch react
 
-...and a precise version in case multiple versions are installed
+# ...and a precise version in case multiple versions are installed
 $ bun patch react@17.0.2
 
-or the path to the package
+# or the path to the package
 $ bun patch node_modules/react
 ```
 
@@ -49,16 +49,16 @@ Once you're happy with your changes, run `bun patch --commit <path or pkg>`.
 Bun will generate a patch file in `patches/`, update your `package.json` and lockfile, and Bun will start using the patched package:
 
 ```bash title="terminal"
-you can supply the path to the patched package
+# you can supply the path to the patched package
 $ bun patch --commit node_modules/react
 
-... or the package name and optionally the version
+# ... or the package name and optionally the version
 $ bun patch --commit react@17.0.2
 
-choose the directory to store the patch files
+# choose the directory to store the patch files
 $ bun patch --commit react --patches-dir=mypatches
 
-`patch-commit` is available for compatibility with pnpm
+# `patch-commit` is available for compatibility with pnpm
 $ bun patch-commit react
 ```
 

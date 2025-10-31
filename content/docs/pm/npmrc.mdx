@@ -6,8 +6,8 @@ description: "Package Manager npmrc configuration"
 Bun supports loading configuration options from [`.npmrc`](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc) files, allowing you to reuse existing registry/scope configurations.
 
 <Callout type="info">
-	We recommend migrating your `.npmrc` file to Bun's [`bunfig.toml`](/docs/runtime/bunfig) format,
-	as it provides more flexible options and can let you configure Bun-specific options.
+  We recommend migrating your `.npmrc` file to Bun's [`bunfig.toml`](/docs/runtime/bunfig) format, as it provides more
+  flexible options and can let you configure Bun-specific options.
 </Callout>
 
 ---
@@ -53,7 +53,6 @@ myorg = "http://localhost:4873/"
 # set an auth token for the registry
 # ${...} is a placeholder for environment variables
 //http://localhost:4873/:_authToken=${NPM_TOKEN}
-
 
 # or you could set a username and password
 # note that the password is base64 encoded

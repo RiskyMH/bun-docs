@@ -13,8 +13,8 @@ Bun uses the file extension to determine which built-in loader should be used to
 
 You can explicitly specify which loader to use using the `'loader'` import attribute.
 
-```ts title="index.ts""
-import my_toml from './my_file' with {loader: 'toml'};
+```ts title="index.ts"
+import my_toml from "./my_file" with { loader: "toml" };
 ```
 
 ## Built-in loaders
@@ -58,7 +58,7 @@ Transpiles both TypeScript and JSX to vanilla JavaScript.
 JSON files can be directly imported.
 
 ```js
-import pkg from './package.json';
+import pkg from "./package.json";
 pkg.name; // => "my-package"
 ```
 
@@ -66,8 +66,8 @@ During bundling, the parsed JSON is inlined into the bundle as a JavaScript obje
 
 ```js
 const pkg = {
-	name: 'my-package',
-	// ... other fields
+  name: "my-package",
+  // ... other fields
 };
 
 pkg.name;
@@ -75,25 +75,21 @@ pkg.name;
 
 If a `.json` file is passed as an entrypoint to the bundler, it will be converted to a `.js` module that `export default`s the parsed object.
 
-
-
 ```json tab="Input"
 {
-	"name": "John Doe",
-	"age": 35,
-	"email": "johndoe@example.com"
+  "name": "John Doe",
+  "age": 35,
+  "email": "johndoe@example.com"
 }
 ```
 
 ```ts tab="Output"
 export default {
-	name: 'John Doe',
-	age: 35,
-	email: 'johndoe@example.com',
+  name: "John Doe",
+  age: 35,
+  email: "johndoe@example.com",
 };
 ```
-
-
 
 ---
 
@@ -104,7 +100,7 @@ export default {
 TOML files can be directly imported. Bun will parse them with its fast native TOML parser.
 
 ```js
-import config from './bunfig.toml';
+import config from "./bunfig.toml";
 config.logLevel; // => "debug"
 
 // via import attribute:
@@ -115,15 +111,13 @@ During bundling, the parsed TOML is inlined into the bundle as a JavaScript obje
 
 ```js
 var config = {
-	logLevel: 'debug',
-	// ...other fields
+  logLevel: "debug",
+  // ...other fields
 };
 config.logLevel;
 ```
 
 If a `.toml` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the parsed object.
-
-
 
 ```toml tab="Input"
 name = "John Doe"
@@ -133,13 +127,11 @@ email = "johndoe@example.com"
 
 ```ts tab="Output"
 export default {
-	name: 'John Doe',
-	age: 35,
-	email: 'johndoe@example.com',
+  name: "John Doe",
+  age: 35,
+  email: "johndoe@example.com",
 };
 ```
-
-
 
 ---
 
@@ -150,12 +142,12 @@ export default {
 The contents of the text file are read and inlined into the bundle as a string. Text files can be directly imported. The file is read and returned as a string.
 
 ```js
-import contents from './file.txt';
+import contents from "./file.txt";
 console.log(contents); // => "Hello, world!"
 
 // To import an html file as text
 // The "type" attribute can be used to override the default loader.
-import html from './index.html' with {type: 'text'};
+import html from "./index.html" with { type: "text" };
 ```
 
 When referenced during a build, the contents are inlined into the bundle as a string.
@@ -167,17 +159,13 @@ console.log(contents);
 
 If a `.txt` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the file contents.
 
-
-
 ```txt tab="Input"
 Hello, world!
 ```
 
 ```ts tab="Output"
-export default 'Hello, world!';
+export default "Hello, world!";
 ```
-
-
 
 ---
 
@@ -188,7 +176,7 @@ export default 'Hello, world!';
 In the runtime, native addons can be directly imported.
 
 ```js
-import addon from './addon.node';
+import addon from "./addon.node";
 console.log(addon);
 ```
 
@@ -203,7 +191,7 @@ console.log(addon);
 In the runtime and bundler, SQLite databases can be directly imported. This will load the database using `bun:sqlite`.
 
 ```js
-import db from './my.db' with {type: 'sqlite'};
+import db from "./my.db" with { type: "sqlite" };
 ```
 
 <Callout type="warning">This is only supported when the target is `bun`.</Callout>
@@ -214,7 +202,7 @@ You can change this behavior with the `"embed"` attribute:
 
 ```js
 // embed the database into the bundle
-import db from './my.db' with {type: 'sqlite', embed: 'true'};
+import db from "./my.db" with { type: "sqlite", embed: "true" };
 ```
 
 <Callout type="info">
@@ -240,11 +228,11 @@ For example, given this HTML file:
 ```html title="src/index.html"
 <!DOCTYPE html>
 <html>
-	<body>
-		<img src="./image.jpg" alt="Local image" />
-		<img src="https://example.com/image.jpg" alt="External image" />
-		<script type="module" src="./script.js"></script>
-	</body>
+  <body>
+    <img src="./image.jpg" alt="Local image" />
+    <img src="https://example.com/image.jpg" alt="External image" />
+    <script type="module" src="./script.js"></script>
+  </body>
 </html>
 ```
 
@@ -253,17 +241,17 @@ It will output a new HTML file with the bundled assets:
 ```html title="dist/index.html"
 <!DOCTYPE html>
 <html>
-	<body>
-		<img src="./image-HASHED.jpg" alt="Local image" />
-		<img src="https://example.com/image.jpg" alt="External image" />
-		<script type="module" src="./output-ALSO-HASHED.js"></script>
-	</body>
+  <body>
+    <img src="./image-HASHED.jpg" alt="Local image" />
+    <img src="https://example.com/image.jpg" alt="External image" />
+    <script type="module" src="./output-ALSO-HASHED.js"></script>
+  </body>
 </html>
 ```
 
 Under the hood, it uses [`lol-html`](https://github.com/cloudflare/lol-html) to extract script and link tags as entrypoints, and other assets as external.
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="List of supported HTML selectors">
 Currently, the list of selectors is:
 
@@ -288,7 +276,6 @@ Currently, the list of selectors is:
 
 </Accordion>
 </Accordions>
-
 
 <Callout type="info">
 
@@ -324,7 +311,7 @@ The file loader resolves the import as a path/URL to the imported file. It's com
 
 ```js
 // logo.ts
-import logo from './logo.svg';
+import logo from "./logo.svg";
 console.log(logo);
 ```
 
@@ -339,7 +326,7 @@ In the bundler, things are slightly different. The file is copied into `outdir` 
 
 ```js
 // Output
-var logo = './logo.svg';
+var logo = "./logo.svg";
 console.log(logo);
 ```
 

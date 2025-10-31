@@ -1,5 +1,5 @@
 ---
-title: 'File Types'
+title: "File Types"
 description: "File types and loaders supported by Bun's bundler and runtime"
 ---
 
@@ -12,7 +12,7 @@ Bun uses the file extension to determine which built-in _loader_ should be used 
 You can explicitly specify which loader to use using the 'loader' import attribute.
 
 ```ts
-import my_toml from './my_file' with {loader: 'toml'};
+import my_toml from "./my_file" with { loader: "toml" };
 ```
 
 ---
@@ -48,7 +48,7 @@ Strips out all TypeScript syntax, then behaves identically to the `js` loader. B
 JSON files can be directly imported.
 
 ```ts
-import pkg from './package.json';
+import pkg from "./package.json";
 pkg.name; // => "my-package"
 ```
 
@@ -56,33 +56,29 @@ During bundling, the parsed JSON is inlined into the bundle as a JavaScript obje
 
 ```ts
 var pkg = {
-	name: 'my-package',
-	// ... other fields
+  name: "my-package",
+  // ... other fields
 };
 pkg.name;
 ```
 
 If a `.json` file is passed as an entrypoint to the bundler, it will be converted to a `.js` module that `export default`s the parsed object.
 
-
-
 ```json tab="Input"
 {
-	"name": "John Doe",
-	"age": 35,
-	"email": "johndoe@example.com"
+  "name": "John Doe",
+  "age": 35,
+  "email": "johndoe@example.com"
 }
 ```
 
 ```ts tab="Output"
 export default {
-	name: 'John Doe',
-	age: 35,
-	email: 'johndoe@example.com',
+  name: "John Doe",
+  age: 35,
+  email: "johndoe@example.com",
 };
 ```
-
-
 
 ### `toml`
 
@@ -91,7 +87,7 @@ export default {
 TOML files can be directly imported. Bun will parse them with its fast native TOML parser.
 
 ```ts
-import config from './bunfig.toml';
+import config from "./bunfig.toml";
 config.logLevel; // => "debug"
 
 // via import attribute:
@@ -102,15 +98,13 @@ During bundling, the parsed TOML is inlined into the bundle as a JavaScript obje
 
 ```ts
 var config = {
-	logLevel: 'debug',
-	// ...other fields
+  logLevel: "debug",
+  // ...other fields
 };
 config.logLevel;
 ```
 
 If a `.toml` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the parsed object.
-
-
 
 ```toml tab="Input"
 name = "John Doe"
@@ -120,13 +114,11 @@ email = "johndoe@example.com"
 
 ```ts tab="Output"
 export default {
-	name: 'John Doe',
-	age: 35,
-	email: 'johndoe@example.com',
+  name: "John Doe",
+  age: 35,
+  email: "johndoe@example.com",
 };
 ```
-
-
 
 ### `text`
 
@@ -136,12 +128,12 @@ The contents of the text file are read and inlined into the bundle as a string.
 Text files can be directly imported. The file is read and returned as a string.
 
 ```ts
-import contents from './file.txt';
+import contents from "./file.txt";
 console.log(contents); // => "Hello, world!"
 
 // To import an html file as text
 // The "type' attribute can be used to override the default loader.
-import html from './index.html' with {type: 'text'};
+import html from "./index.html" with { type: "text" };
 ```
 
 When referenced during a build, the contents are inlined into the bundle as a string.
@@ -153,17 +145,13 @@ console.log(contents);
 
 If a `.txt` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the file contents.
 
-
-
 ```txt tab="Input"
 Hello, world!
 ```
 
 ```ts tab="Output"
-export default 'Hello, world!';
+export default "Hello, world!";
 ```
-
-
 
 ### `napi`
 
@@ -172,7 +160,7 @@ export default 'Hello, world!';
 In the runtime, native addons can be directly imported.
 
 ```ts
-import addon from './addon.node';
+import addon from "./addon.node";
 console.log(addon);
 ```
 
@@ -185,7 +173,7 @@ In the bundler, `.node` files are handled using the [`file`](#file) loader.
 In the runtime and bundler, SQLite databases can be directly imported. This will load the database using [`bun:sqlite`](/docs/runtime/sqlite).
 
 ```ts
-import db from './my.db' with {type: 'sqlite'};
+import db from "./my.db" with { type: "sqlite" };
 ```
 
 This is only supported when the `target` is `bun`.
@@ -196,7 +184,7 @@ You can change this behavior with the `"embed"` attribute:
 
 ```ts
 // embed the database into the bundle
-import db from './my.db' with {type: 'sqlite', embed: 'true'};
+import db from "./my.db" with { type: "sqlite", embed: "true" };
 ```
 
 When using a [standalone executable](/docs/bundler/executables), the database is embedded into the single-file executable.
@@ -217,11 +205,11 @@ For example, given this HTML file:
 ```html tab="src/index.html"
 <!DOCTYPE html>
 <html>
-	<body>
-		<img src="./image.jpg" alt="Local image" />
-		<img src="https://example.com/image.jpg" alt="External image" />
-		<script type="module" src="./script.js"></script>
-	</body>
+  <body>
+    <img src="./image.jpg" alt="Local image" />
+    <img src="https://example.com/image.jpg" alt="External image" />
+    <script type="module" src="./script.js"></script>
+  </body>
 </html>
 ```
 
@@ -230,11 +218,11 @@ It will output a new HTML file with the bundled assets:
 ```html tab="dist/output.html"
 <!DOCTYPE html>
 <html>
-	<body>
-		<img src="./image-HASHED.jpg" alt="Local image" />
-		<img src="https://example.com/image.jpg" alt="External image" />
-		<script type="module" src="./output-ALSO-HASHED.js"></script>
-	</body>
+  <body>
+    <img src="./image-HASHED.jpg" alt="Local image" />
+    <img src="https://example.com/image.jpg" alt="External image" />
+    <script type="module" src="./output-ALSO-HASHED.js"></script>
+  </body>
 </html>
 ```
 
@@ -291,8 +279,8 @@ $ bun run ./script.sh
 
 The file loader resolves the import as a _path/URL_ to the imported file. It's commonly used for referencing media or font assets.
 
-```ts logo.ts
-import logo from './logo.svg';
+```ts title="logo.ts"
+import logo from "./logo.svg";
 console.log(logo);
 ```
 
@@ -305,8 +293,8 @@ $ bun run logo.ts
 
 _In the bundler_, things are slightly different. The file is copied into `outdir` as-is, and the import is resolved as a relative path pointing to the copied file.
 
-```ts tab="Output"
-var logo = './logo.svg';
+```ts Output
+var logo = "./logo.svg";
 console.log(logo);
 ```
 
@@ -319,13 +307,12 @@ If a value is specified for `publicPath`, the import will use value as a prefix 
 | `"https://cdn.example.com/"` | `https://cdn.example.com/logo.svg` |
 
 <Callout type="info">
-	The location and file name of the copied file is determined by the value of
-	[`naming.asset`](/docs/bundler#naming).
+  The location and file name of the copied file is determined by the value of [`naming.asset`](/docs/bundler#naming).
 </Callout>
-This loader is copied into the `outdir` as-is. The name of the copied file is determined using the
-value of `naming.asset`.
+This loader is copied into the `outdir` as-is. The name of the copied file is determined using the value of
+`naming.asset`.
 
-<Accordions>
+<Accordions type="single">
 <Accordion title="Fixing TypeScript import errors">
 If you're using TypeScript, you may get an error like this:
 
@@ -337,9 +324,9 @@ If you're using TypeScript, you may get an error like this:
 This can be fixed by creating `*.d.ts` file anywhere in your project (any name will work) with the following contents:
 
 ```ts
-declare module '*.svg' {
-	const content: string;
-	export default content;
+declare module "*.svg" {
+  const content: string;
+  export default content;
 }
 ```
 

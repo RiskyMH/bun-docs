@@ -1,5 +1,5 @@
 ---
-title: 'Plugins'
+title: "Plugins"
 description: "Universal plugin API for extending Bun's runtime and bundler"
 ---
 
@@ -22,27 +22,27 @@ A rough overview of the types (please refer to Bun's `bun.d.ts` for the full typ
 
 ```ts title="Plugin Types"
 type PluginBuilder = {
-	onStart(callback: () => void): void;
-	onResolve: (
-		args: {filter: RegExp; namespace?: string},
-		callback: (args: {path: string; importer: string}) => {
-			path: string;
-			namespace?: string;
-		} | void,
-	) => void;
-	onLoad: (
-		args: {filter: RegExp; namespace?: string},
-		defer: () => Promise<void>,
-		callback: (args: {path: string}) => {
-			loader?: Loader;
-			contents?: string;
-			exports?: Record<string, any>;
-		},
-	) => void;
-	config: BuildConfig;
+  onStart(callback: () => void): void;
+  onResolve: (
+    args: { filter: RegExp; namespace?: string },
+    callback: (args: { path: string; importer: string }) => {
+      path: string;
+      namespace?: string;
+    } | void,
+  ) => void;
+  onLoad: (
+    args: { filter: RegExp; namespace?: string },
+    defer: () => Promise<void>,
+    callback: (args: { path: string }) => {
+      loader?: Loader;
+      contents?: string;
+      exports?: Record<string, any>;
+    },
+  ) => void;
+  config: BuildConfig;
 };
 
-type Loader = 'js' | 'jsx' | 'ts' | 'tsx' | 'css' | 'json' | 'toml';
+type Loader = "js" | "jsx" | "ts" | "tsx" | "css" | "json" | "toml";
 ```
 
 ## Usage
@@ -50,13 +50,13 @@ type Loader = 'js' | 'jsx' | 'ts' | 'tsx' | 'css' | 'json' | 'toml';
 A plugin is defined as simple JavaScript object containing a `name` property and a `setup` function.
 
 ```tsx title="myPlugin.ts"
-import type {BunPlugin} from 'bun';
+import type { BunPlugin } from "bun";
 
 const myPlugin: BunPlugin = {
-	name: 'Custom loader',
-	setup(build) {
-		// implementation
-	},
+  name: "Custom loader",
+  setup(build) {
+    // implementation
+  },
 };
 ```
 
@@ -64,9 +64,9 @@ This plugin can be passed into the `plugins` array when calling `Bun.build`.
 
 ```ts title="index.ts"
 await Bun.build({
-	entrypoints: ['./app.ts'],
-	outdir: './out',
-	plugins: [myPlugin],
+  entrypoints: ["./app.ts"],
+  outdir: "./out",
+  plugins: [myPlugin],
 });
 ```
 
@@ -94,16 +94,16 @@ onStart(callback: () => void): Promise<void> | void;
 Registers a callback to be run when the bundler starts a new bundle.
 
 ```ts title="index.ts"
-import {plugin} from 'bun';
+import { plugin } from "bun";
 
 plugin({
-	name: 'onStart example',
+  name: "onStart example",
 
-	setup(build) {
-		build.onStart(() => {
-			console.log('Bundle started!');
-		});
-	},
+  setup(build) {
+    build.onStart(() => {
+      console.log("Bundle started!");
+    });
+  },
 });
 ```
 
@@ -113,28 +113,28 @@ For example:
 
 ```ts title="index.ts"
 const result = await Bun.build({
-	entrypoints: ['./app.ts'],
-	outdir: './dist',
-	sourcemap: 'external',
-	plugins: [
-		{
-			name: 'Sleep for 10 seconds',
-			setup(build) {
-				build.onStart(async () => {
-					await Bunlog.sleep(10_000);
-				});
-			},
-		},
-		{
-			name: 'Log bundle time to a file',
-			setup(build) {
-				build.onStart(async () => {
-					const now = Date.now();
-					await Bun.$`echo ${now} > bundle-time.txt`;
-				});
-			},
-		},
-	],
+  entrypoints: ["./app.ts"],
+  outdir: "./dist",
+  sourcemap: "external",
+  plugins: [
+    {
+      name: "Sleep for 10 seconds",
+      setup(build) {
+        build.onStart(async () => {
+          await Bunlog.sleep(10_000);
+        });
+      },
+    },
+    {
+      name: "Log bundle time to a file",
+      setup(build) {
+        build.onStart(async () => {
+          const now = Date.now();
+          await Bun.$`echo ${now} > bundle-time.txt`;
+        });
+      },
+    },
+  ],
 });
 ```
 
@@ -167,19 +167,19 @@ The callback receives as input the _path_ to the matching module. The callback c
 For example, redirecting all imports to `images/` to `./public/images/`:
 
 ```ts title="index.ts"
-import {plugin} from 'bun';
+import { plugin } from "bun";
 
 plugin({
-	name: 'onResolve example',
-	setup(build) {
-		build.onResolve({filter: /.*/, namespace: 'file'}, args => {
-			if (args.path.startsWith('images/')) {
-				return {
-					path: args.path.replace('images/', './public/images/'),
-				};
-			}
-		});
-	},
+  name: "onResolve example",
+  setup(build) {
+    build.onResolve({ filter: /.*/, namespace: "file" }, args => {
+      if (args.path.startsWith("images/")) {
+        return {
+          path: args.path.replace("images/", "./public/images/"),
+        };
+      }
+    });
+  },
 });
 ```
 
@@ -249,42 +249,42 @@ This is useful for returning contents of a module that depends on other modules.
 ##### Example: tracking and reporting unused exports
 
 ```ts title="index.ts"
-import {plugin} from 'bun';
+import { plugin } from "bun";
 
 plugin({
-	name: 'track imports',
-	setup(build) {
-		const transpiler = new Bun.Transpiler();
+  name: "track imports",
+  setup(build) {
+    const transpiler = new Bun.Transpiler();
 
-		let trackedImports: Record<string, number> = {};
+    let trackedImports: Record<string, number> = {};
 
-		// Each module that goes through this onLoad callback
-		// will record its imports in `trackedImports`
-		build.onLoad({filter: /\.ts/}, async ({path}) => {
-			const contents = await Bun.file(path).arrayBuffer();
+    // Each module that goes through this onLoad callback
+    // will record its imports in `trackedImports`
+    build.onLoad({ filter: /\.ts/ }, async ({ path }) => {
+      const contents = await Bun.file(path).arrayBuffer();
 
-			const imports = transpiler.scanImports(contents);
+      const imports = transpiler.scanImports(contents);
 
-			for (const i of imports) {
-				trackedImports[i.path] = (trackedImports[i.path] || 0) + 1;
-			}
+      for (const i of imports) {
+        trackedImports[i.path] = (trackedImports[i.path] || 0) + 1;
+      }
 
-			return undefined;
-		});
+      return undefined;
+    });
 
-		build.onLoad({filter: /stats\.json/}, async ({defer}) => {
-			// Wait for all files to be loaded, ensuring
-			// that every file goes through the above `onLoad()` function
-			// and their imports tracked
-			await defer();
+    build.onLoad({ filter: /stats\.json/ }, async ({ defer }) => {
+      // Wait for all files to be loaded, ensuring
+      // that every file goes through the above `onLoad()` function
+      // and their imports tracked
+      await defer();
 
-			// Emit JSON containing the stats of each import
-			return {
-				contents: `export default ${JSON.stringify(trackedImports)}`,
-				loader: 'json',
-			};
-		});
-	},
+      // Emit JSON containing the stats of each import
+      return {
+        contents: `export default ${JSON.stringify(trackedImports)}`,
+        loader: "json",
+      };
+    });
+  },
 });
 ```
 
@@ -352,7 +352,6 @@ pub fn replace_foo_with_bar(handle: &mut OnBeforeParse) -> Result<()> {
   // Get the Loader for the file
   let loader = handle.output_loader();
 
-
   let output_source_code = input_source_code.replace("foo", "bar");
 
   handle.set_output_source_code(output_source_code, BunLoader::BUN_LOADER_JSX);
@@ -364,28 +363,28 @@ pub fn replace_foo_with_bar(handle: &mut OnBeforeParse) -> Result<()> {
 And to use it in Bun.build():
 
 ```typescript
-import myNativeAddon from './my-native-addon';
+import myNativeAddon from "./my-native-addon";
 Bun.build({
-	entrypoints: ['./app.tsx'],
-	plugins: [
-		{
-			name: 'my-plugin',
+  entrypoints: ["./app.tsx"],
+  plugins: [
+    {
+      name: "my-plugin",
 
-			setup(build) {
-				build.onBeforeParse(
-					{
-						namespace: 'file',
-						filter: '**/*.tsx',
-					},
-					{
-						napiModule: myNativeAddon,
-						symbol: 'replace_foo_with_bar',
-						// external: myNativeAddon.getSharedState()
-					},
-				);
-			},
-		},
-	],
+      setup(build) {
+        build.onBeforeParse(
+          {
+            namespace: "file",
+            filter: "**/*.tsx",
+          },
+          {
+            napiModule: myNativeAddon,
+            symbol: "replace_foo_with_bar",
+            // external: myNativeAddon.getSharedState()
+          },
+        );
+      },
+    },
+  ],
 });
 ```
 

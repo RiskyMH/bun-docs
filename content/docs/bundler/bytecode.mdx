@@ -125,7 +125,7 @@ Bytecode is **not portable across Bun versions**. The bytecode format is tied to
 When you update Bun, you must regenerate bytecode:
 
 ```bash
-After updating Bun
+# After updating Bun
 $ bun build --bytecode ./index.ts --outdir=./dist
 ```
 
@@ -139,6 +139,7 @@ If bytecode doesn't match the current Bun version, it's automatically ignored an
 - The `.jsc` file (the bytecode cache)
 
 At runtime:
+
 1. Bun loads the `.js` file, sees a `@bytecode` pragma, and checks the `.jsc` file
 2. Bun loads the `.jsc` file
 3. Bun validates the bytecode hash matches the source
@@ -208,6 +209,7 @@ The `.jsc` file should be 2-8x larger than the `.js` file.
 To log if bytecode is being used, set `BUN_JSC_verboseDiskCache=1` in your environment.
 
 On success, it will log something like:
+
 ```txt
 [Disk cache] cache hit for sourceCode
 ```
@@ -321,7 +323,6 @@ This is why you need to deploy both the `.js` and `.jsc` files. The `.jsc` file 
 ## The tradeoff: file size
 
 Bytecode files are significantly larger than source code - typically 2-8x larger.
-
 
 ### Why is bytecode so much larger?
 

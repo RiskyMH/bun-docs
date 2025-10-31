@@ -16,7 +16,7 @@ Specify a port:
 
 ```ts
 const socket = await Bun.udpSocket({
-	port: 41234, // [!code ++]
+  port: 41234, // [!code ++]
 });
 
 console.log(socket.port); // 41234
@@ -27,7 +27,7 @@ console.log(socket.port); // 41234
 Specify the data to send, as well as the destination port and address.
 
 ```ts
-socket.send('Hello, world!', 41234, '127.0.0.1');
+socket.send("Hello, world!", 41234, "127.0.0.1");
 ```
 
 Note that the address must be a valid IP address - `send` does not perform
@@ -39,16 +39,16 @@ When creating your socket, add a callback to specify what should be done when pa
 
 ```ts title="server.ts"
 const server = await Bun.udpSocket({
-	socket: {
-		data(socket, buf, port, addr) {
-			console.log(`message from ${addr}:${port}:`);
-			console.log(buf.toString());
-		},
-	},
+  socket: {
+    data(socket, buf, port, addr) {
+      console.log(`message from ${addr}:${port}:`);
+      console.log(buf.toString());
+    },
+  },
 });
 
 const client = await Bun.udpSocket({});
-client.send('Hello!', server.port, '127.0.0.1');
+client.send("Hello!", server.port, "127.0.0.1");
 ```
 
 ### Connections
@@ -59,22 +59,22 @@ and restricts incoming packets to that peer only.
 
 ```ts title="server.ts"
 const server = await Bun.udpSocket({
-	socket: {
-		data(socket, buf, port, addr) {
-			console.log(`message from ${addr}:${port}:`);
-			console.log(buf.toString());
-		},
-	},
+  socket: {
+    data(socket, buf, port, addr) {
+      console.log(`message from ${addr}:${port}:`);
+      console.log(buf.toString());
+    },
+  },
 });
 
 const client = await Bun.udpSocket({
-	connect: {
-		port: server.port,
-		hostname: '127.0.0.1',
-	},
+  connect: {
+    port: server.port,
+    hostname: "127.0.0.1",
+  },
 });
 
-client.send('Hello');
+client.send("Hello");
 ```
 
 Because connections are implemented on the operating system level, you can potentially observe performance benefits, too.
@@ -91,20 +91,20 @@ The first item is the data to be sent, the second is the target port, and the la
 const socket = await Bun.udpSocket({});
 
 // sends 'Hello' to 127.0.0.1:41234, and 'foo' to 1.1.1.1:53 in a single operation
-socket.sendMany(['Hello', 41234, '127.0.0.1', 'foo', 53, '1.1.1.1']);
+socket.sendMany(["Hello", 41234, "127.0.0.1", "foo", 53, "1.1.1.1"]);
 ```
 
 With a connected socket, `sendMany` simply takes an array, where each element represents the data to be sent to the peer.
 
 ```ts title="server.ts"
 const socket = await Bun.udpSocket({
-	connect: {
-		port: 41234,
-		hostname: 'localhost',
-	},
+  connect: {
+    port: 41234,
+    hostname: "localhost",
+  },
 });
 
-socket.sendMany(['foo', 'bar', 'baz']);
+socket.sendMany(["foo", "bar", "baz"]);
 ```
 
 `sendMany` returns the number of packets that were successfully sent. As with `send`, `sendMany` only takes valid IP addresses
@@ -120,10 +120,10 @@ has happened when:
 
 ```ts
 const socket = await Bun.udpSocket({
-	socket: {
-		drain(socket) {
-			// continue sending data
-		},
-	},
+  socket: {
+    drain(socket) {
+      // continue sending data
+    },
+  },
 });
 ```

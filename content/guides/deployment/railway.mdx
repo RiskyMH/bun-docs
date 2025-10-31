@@ -1,7 +1,7 @@
 ---
 title: Deploy on Railway
-fullTitle: Deploy a Bun application on Railway
 description: Deploy Bun applications to Railway with this step-by-step guide covering CLI and dashboard methods, optional PostgreSQL setup, and automatic SSL configuration.
+fullTitle: Deploy a Bun application on Railway
 mode: center
 ---
 
@@ -12,10 +12,10 @@ This guide walks through deploying a Bun application with a PostgreSQL database 
 You can either follow this guide step-by-step or simply deploy the pre-configured template with one click:
 
 <a
-	href="https://railway.com/deploy/bun-react-postgres?referralCode=Bun&utm_medium=integration&utm_source=template&utm_campaign=bun"
-	target="_blank"
+  href="https://railway.com/deploy/bun-react-postgres?referralCode=Bun&utm_medium=integration&utm_source=template&utm_campaign=bun"
+  target="_blank"
 >
-	<img src="https://railway.com/button.svg" alt="Deploy on Railway" />
+  <img src="https://railway.com/button.svg" alt="Deploy on Railway" />
 </a>
 
 ---
@@ -32,7 +32,9 @@ You can either follow this guide step-by-step or simply deploy the pre-configure
 ## Method 1: Deploy via CLI
 
 <Steps>
-<Step title="Step 1">
+<Step>
+
+  ### Step 1
 Ensure sure you have the Railway CLI installed.
 
 ```bash title="terminal"
@@ -40,15 +42,19 @@ $ bun install -g @railway/cli
 ```
 
 </Step>
-<Step title="Step 2">
+<Step>
+
+  ### Step 2
 Log into your Railway account.
 
 ```bash title="terminal"
-railway login
+$ railway login
 ```
 
 </Step>
-<Step title="Step 3">
+<Step>
+
+  ### Step 3
 After successfully authenticating, initialize a new project.
 
 ```bash title="terminal"
@@ -56,13 +62,12 @@ $ railway init
 ```
 
 </Step>
-<Step title="Step 4">
+<Step>
+
+  ### Step 4
 After initializing the project, add a new database and service.
 
-<Callout type="info">
-	Step 4 is only necessary if your application uses a database. If you don't need PostgreSQL, skip
-	to Step 5.
-</Callout>
+<Callout type="info">Step 4 is only necessary if your application uses a database. If you don't need PostgreSQL, skip to Step 5.</Callout>
 
 ```bash title="terminal"
 # Add PostgreSQL database. Make sure to add this first!
@@ -73,7 +78,9 @@ $ railway add --service bun-react-db --variables DATABASE_URL=\${{Postgres.DATAB
 ```
 
 </Step>
-<Step title="Step 5">
+<Step>
+
+  ### Step 5
 After the services have been created and connected, deploy the application to Railway. By default, services are only accessible within Railway's private network. To make your app publicly accessible, you need to generate a public domain.
 
 ```bash title="terminal"
@@ -94,20 +101,22 @@ Your app is now live! Railway auto-deploys on every GitHub push.
 ## Method 2: Deploy via Dashboard
 
 <Steps>
-<Step title="Step 1">
+<Step>
+
+  ### Step 1
 Create a new project
 
 1. Go to [Railway Dashboard](http://railway.com/dashboard?utm_medium=integration&utm_source=docs&utm_campaign=bun)
 2. Click **"+ New"** → **"GitHub repo"**
 3. Choose your repository
+
 </Step>
-<Step title="Step 2">
+<Step>
+
+  ### Step 2
 Add a PostgreSQL database, and connect this database to the service
 
-<Callout type="info">
-	Step 2 is only necessary if your application uses a database. If you don't need PostgreSQL, skip
-	to Step 3.
-</Callout>
+<Callout type="info">Step 2 is only necessary if your application uses a database. If you don't need PostgreSQL, skip to Step 3.</Callout>
 
 1. Click **"+ New"** → **"Database"** → **"Add PostgreSQL"**
 2. After the database has been created, select your service (not the database)
@@ -116,7 +125,9 @@ Add a PostgreSQL database, and connect this database to the service
 5. Select `DATABASE_URL` from postgres
 
 </Step>
-<Step title="Step 3">
+<Step>
+
+  ### Step 3
 Generate a public domain
 
 1. Select your service
@@ -140,10 +151,10 @@ To enable Railpack in a custom project, add the following to your `railway.json`
 
 ```json title="railway.json"
 {
-	"$schema": "https://railway.com/railway.schema.json",
-	"build": {
-		"builder": "RAILPACK"
-	}
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK"
+  }
 }
 ```
 

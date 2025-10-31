@@ -1,5 +1,5 @@
 ---
-title: 'bun install'
+title: "bun install"
 description: "Install packages with Bun's fast package manager"
 ---
 
@@ -17,8 +17,13 @@ The `bun` CLI contains a Node.js-compatible package manager designed to be a dra
 
 **⚡️ 25x faster** — Switch from `npm install` to `bun install` in any Node.js project to make your installations up to 25x faster.
 
+<Frame>
+  ![Bun installation speed
+  comparison](https://user-images.githubusercontent.com/709451/147004342-571b6123-17a9-49a2-8bfd-dcfc5204047e.png)
+</Frame>
 
 </Callout>
+
 <Accordions type="single">
 <Accordion title="For Linux users">
 The recommended minimum Linux Kernel version is 5.6. If you're on Linux kernel 5.1 - 5.5, `bun install` will work, but HTTP requests will be slow due to a lack of support for io_uring's `connect()` operation.
@@ -32,9 +37,9 @@ $ uname -r
 # Install the official Ubuntu hardware enablement kernel
 $ sudo apt install --install-recommends linux-generic-hwe-20.04
 ```
+
 </Accordion>
 </Accordions>
-
 
 To install all dependencies of a project:
 
@@ -69,9 +74,9 @@ To tell Bun to allow lifecycle scripts for a particular package, add the package
 
 ```json title="package.json"
 {
-	"name": "my-app",
-	"version": "1.0.0",
-	"trustedDependencies": ["my-trusted-package"] // [!code ++]
+  "name": "my-app",
+  "version": "1.0.0",
+  "trustedDependencies": ["my-trusted-package"] // [!code ++]
 }
 ```
 
@@ -91,12 +96,12 @@ Bun supports `"workspaces"` in package.json. For complete documentation refer to
 
 ```json title="package.json"
 {
-	"name": "my-app",
-	"version": "1.0.0",
-	"workspaces": ["packages/*"], // [!code ++]
-	"dependencies": {
-		"preact": "^10.5.13"
-	}
+  "name": "my-app",
+  "version": "1.0.0",
+  "workspaces": ["packages/*"], // [!code ++]
+  "dependencies": {
+    "preact": "^10.5.13"
+  }
 }
 ```
 
@@ -107,10 +112,10 @@ Bun supports `"workspaces"` in package.json. For complete documentation refer to
 In a monorepo, you can install the dependencies for a subset of packages using the `--filter` flag.
 
 ```bash title="terminal"
-Install dependencies for all workspaces except `pkg-c`
+# Install dependencies for all workspaces except `pkg-c`
 $ bun install --filter '!pkg-c'
 
-Install dependencies for only `pkg-a` in `./packages/pkg-a`
+# Install dependencies for only `pkg-a` in `./packages/pkg-a`
 $ bun install --filter './packages/pkg-a'
 ```
 
@@ -124,14 +129,14 @@ Bun supports npm's `"overrides"` and Yarn's `"resolutions"` in `package.json`. T
 
 ```json package.json file="file-json"
 {
-	"name": "my-app",
-	"dependencies": {
-		"foo": "^2.0.0"
-	},
-	"overrides": {
-		// [!code ++]
-		"bar": "~4.4.0" // [!code ++]
-	} // [!code ++]
+  "name": "my-app",
+  "dependencies": {
+    "foo": "^2.0.0"
+  },
+  "overrides": {
+    // [!code ++]
+    "bar": "~4.4.0" // [!code ++]
+  } // [!code ++]
 }
 ```
 
@@ -143,7 +148,7 @@ To install a package globally, use the `-g`/`--global` flag. Typically this is u
 
 ```bash title="terminal"
 $ bun install --global cowsay # or `bun install -g cowsay`
-cowsay "Bun!"
+$ cowsay "Bun!"
 
  ______
 < Bun! >
@@ -207,14 +212,14 @@ Bun supports installing dependencies from Git, GitHub, and local or remotely-hos
 
 ```json title="package.json"
 {
-	"dependencies": {
-		"dayjs": "git+https://github.com/iamkun/dayjs.git",
-		"lodash": "git+ssh://github.com/lodash/lodash.git#4.17.21",
-		"moment": "git@github.com:moment/moment.git",
-		"zod": "github:colinhacks/zod",
-		"react": "https://registry.npmjs.org/react/-/react-18.2.0.tgz",
-		"bun-types": "npm:@types/bun"
-	}
+  "dependencies": {
+    "dayjs": "git+https://github.com/iamkun/dayjs.git",
+    "lodash": "git+ssh://github.com/lodash/lodash.git#4.17.21",
+    "moment": "git@github.com:moment/moment.git",
+    "zod": "github:colinhacks/zod",
+    "react": "https://registry.npmjs.org/react/-/react-18.2.0.tgz",
+    "bun-types": "npm:@types/bun"
+  }
 }
 ```
 
@@ -316,7 +321,6 @@ concurrentScripts = 16 # (cpu count or GOMAXPROCS) x2
 # default: "isolated" (for monorepo projects)
 linker = "hoisted"
 
-
 # minimum age config
 minimumReleaseAge = 259200 # seconds
 minimumReleaseAgeExcludes = ["@types/node", "typescript"]
@@ -397,8 +401,8 @@ When a `pnpm-workspace.yaml` file exists, Bun migrates workspace settings to you
 
 ```yaml title="pnpm-workspace.yaml"
 packages:
-  - 'apps/*'
-  - 'packages/*'
+  - "apps/*"
+  - "packages/*"
 
 catalog:
   react: ^18.0.0
@@ -414,19 +418,19 @@ The workspace packages list and catalogs are moved to the `workspaces` field in 
 
 ```json title="package.json"
 {
-	"workspaces": {
-		"packages": ["apps/*", "packages/*"],
-		"catalog": {
-			"react": "^18.0.0",
-			"typescript": "^5.0.0"
-		},
-		"catalogs": {
-			"build": {
-				"webpack": "^5.0.0",
-				"babel": "^7.0.0"
-			}
-		}
-	}
+  "workspaces": {
+    "packages": ["apps/*", "packages/*"],
+    "catalog": {
+      "react": "^18.0.0",
+      "typescript": "^5.0.0"
+    },
+    "catalogs": {
+      "build": {
+        "webpack": "^5.0.0",
+        "babel": "^7.0.0"
+      }
+    }
+  }
 }
 ```
 
@@ -436,10 +440,10 @@ Dependencies using pnpm's `catalog:` protocol are preserved:
 
 ```json title="package.json"
 {
-	"dependencies": {
-		"react": "catalog:",
-		"webpack": "catalog:build"
-	}
+  "dependencies": {
+    "react": "catalog:",
+    "webpack": "catalog:build"
+  }
 }
 ```
 

@@ -4,7 +4,8 @@ description: Create a new Bun project from a React component, a `create-<templat
 ---
 
 <Callout type="info">
-	You don't need `bun create` to use Bun. You don't need any configuration at all. This command exists to make getting started a bit quicker and easier.
+  You don't need `bun create` to use Bun. You don't need any configuration at all. This command exists to make getting
+  started a bit quicker and easier.
 </Callout>
 
 ---
@@ -16,14 +17,26 @@ If you're looking to create a brand new empty project, use [`bun init`](https://
 ## From a React component
 
 `bun create ./MyComponent.tsx` turns an existing React component into a complete dev environment with hot reload and production builds in one command.
+
 ```bash
 $ bun create ./MyComponent.jsx # .tsx also supported
 ```
 
-<video style={{ aspectRatio: "2062 / 1344", objectFit: "contain" }} loop autoPlay muted playsInline>
-  <source src="https://bun.com/bun-create-shadcn.mp4" style={{ objectFit: "contain" }} type="video/mp4" />
-</video>
-
+<Frame>
+  <video
+    style={{ aspectRatio: "2062 / 1344", width: "100%", height: "100%", objectFit: "contain" }}
+    loop
+    autoPlay
+    muted
+    playsInline
+  >
+    <source
+      src="https://bun.com/images/bun-create-shadcn.mp4"
+      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+      type="video/mp4"
+    />
+  </video>
+</Frame>
 
 <Callout type="info">
 🚀 **Create React App Successor** — `bun create <component>` provides everything developers loved about Create React App, but with modern tooling, faster builds, and backend support.
@@ -81,7 +94,7 @@ And a `${component}.css` file with `@import "tailwindcss";` at the top:
 If it finds any, it runs:
 
 ```bash title="terminal"
-Assuming bun detected imports to @/components/ui/accordion and @/components/ui/button
+# Assuming bun detected imports to @/components/ui/accordion and @/components/ui/button
 $ bunx shadcn@canary add accordion button # and any other components
 ```
 
@@ -135,15 +148,13 @@ Bun will perform the following steps:
 - Initialize a fresh Git repo. Opt out with the `--no-git` flag.
 - Run the template's configured `start` script, if defined.
 
-<Callout type="info">
-By default Bun will _not overwrite_ any existing files. Use the `--force` flag to overwrite existing files.
-</Callout>
-
+<Callout type="info">By default Bun will _not overwrite_ any existing files. Use the `--force` flag to overwrite existing files.</Callout>
 
 ## From a local template
 
 <Callout type="warning">
-Unlike remote templates, running `bun create` with a local template will delete the entire destination folder if it already exists! Be careful.
+  Unlike remote templates, running `bun create` with a local template will delete the entire destination folder if it
+  already exists! Be careful.
 </Callout>
 
 Bun's templater can be extended to support custom templates defined on your local file system. These templates should live in one of the following directories:
@@ -151,9 +162,7 @@ Bun's templater can be extended to support custom templates defined on your loca
 - `$HOME/.bun-create/<name>`: global templates
 - `<project root>/.bun-create/<name>`: project-specific templates
 
-<Callout type="info">
-	You can customize the global template path by setting the `BUN_CREATE_DIR` environment variable.
-</Callout>
+<Callout type="info">You can customize the global template path by setting the `BUN_CREATE_DIR` environment variable.</Callout>
 
 To create a local template, navigate to `$HOME/.bun-create` and create a new directory with the desired name of your template.
 
@@ -196,10 +205,10 @@ You can specify pre- and post-install setup scripts in the `"bun-create"` sectio
 
 The following fields are supported. Each of these can correspond to a string or array of strings. An array of commands will be executed in order.
 
-| Field | Description |
-| --- | --- |
-| `postinstall` | runs after installing dependencies |
-| `preinstall` | runs before installing dependencies |
+| Field         | Description                         |
+| ------------- | ----------------------------------- |
+| `postinstall` | runs after installing dependencies  |
+| `preinstall`  | runs before installing dependencies |
 
 After cloning a template, `bun create` will automatically remove the `"bun-create"` section from `package.json` before writing it to the destination folder.
 
@@ -207,21 +216,21 @@ After cloning a template, `bun create` will automatically remove the `"bun-creat
 
 ### CLI flags
 
-| Flag | Description |
-| --- | --- |
-| `--force` | Overwrite existing files |
+| Flag           | Description                            |
+| -------------- | -------------------------------------- |
+| `--force`      | Overwrite existing files               |
 | `--no-install` | Skip installing `node_modules` & tasks |
-| `--no-git` | Don't initialize a git repository |
-| `--open` | Start & open in-browser after finish |
+| `--no-git`     | Don't initialize a git repository      |
+| `--open`       | Start & open in-browser after finish   |
 
 ### Environment variables
 
-| Name | Description |
-| --- | --- |
-| `GITHUB_API_DOMAIN` | If you're using a GitHub enterprise or a proxy, you can customize the GitHub domain Bun pings for downloads |
+| Name                                      | Description                                                                                                                                          |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GITHUB_API_DOMAIN`                       | If you're using a GitHub enterprise or a proxy, you can customize the GitHub domain Bun pings for downloads                                          |
 | `GITHUB_TOKEN` (or `GITHUB_ACCESS_TOKEN`) | This lets `bun create` work with private repositories or if you get rate-limited. `GITHUB_TOKEN` is chosen over `GITHUB_ACCESS_TOKEN` if both exist. |
 
-<Accordions>
+<Accordions type="single">
 <Accordion title={<span>How <code>bun create</code> works</span>}>
 
 When you run `bun create ${template} ${destination}`, here’s what happens:

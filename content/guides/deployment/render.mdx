@@ -15,24 +15,30 @@ Render supports Bun natively. You can deploy Bun apps as web services, backgroun
 As an example, let's deploy a simple Express HTTP server to Render.
 
 <Steps>
-	<Step title="Step 1">
+	<Step>
+
+	  ### Step 1
 		Create a new GitHub repo named `myapp`. Git clone it locally.
 
     	```sh
     	$ git clone git@github.com:my-github-username/myapp.git
     	$ cd myapp
-```
+    	```
     	</Step>
-    	<Step title="Step 2">
+    	<Step>
+
+    	  ### Step 2
     	Add the Express library.
 
     	```sh
     	$ bun add express
-```
+    	```
 
     </Step>
 
-    <Step title="Step 3">
+    <Step>
+
+      ### Step 3
     	Define a simple server with Express:
 
     	```ts title="app.ts"
@@ -48,9 +54,11 @@ As an example, let's deploy a simple Express HTTP server to Render.
     	app.listen(port, () => {
     		console.log(`Listening on port ${port}...`);
     	});
-```
+    	```
     </Step>
-    <Step title="Step 4">
+    <Step>
+
+      ### Step 4
 
     	Commit your changes and push to GitHub.
 
@@ -58,13 +66,17 @@ As an example, let's deploy a simple Express HTTP server to Render.
     	$ git add app.ts bun.lock package.json
     	$ git commit -m "Create simple Express app"
     	$ git push origin main
-```
+    	```
     </Step>
-    <Step title="Step 5">
+    <Step>
+
+      ### Step 5
     	In your [Render Dashboard](https://dashboard.render.com/), click `New` > `Web Service` and connect your `myapp` repo.
 
     </Step>
-    <Step title="Step 6">
+    <Step>
+
+      ### Step 6
     	In the Render UI, provide the following values during web service creation:
 
     	|                   |               |

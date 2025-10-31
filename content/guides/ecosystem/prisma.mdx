@@ -4,169 +4,173 @@ fullTitle: Use Prisma with Bun
 ---
 
 <Callout type="info">
-**Note** — Prisma's dynamic subcommand loading system currently requires npm to be installed alongside Bun. This affects certain CLI commands like `prisma init`, `prisma migrate`, etc. Generated code works perfectly with Bun using the new `prisma-client` generator.
+  **Note** — Prisma's dynamic subcommand loading system currently requires npm to be installed alongside Bun. This
+  affects certain CLI commands like `prisma init`, `prisma migrate`, etc. Generated code works perfectly with Bun using
+  the new `prisma-client` generator.
 </Callout>
 
 <Steps>
-<Step title="Create a new project">
+	<Step>
 
-Prisma works out of the box with Bun. First, create a directory and initialize it with `bun init`.
+	  ### Create a new project
+		Prisma works out of the box with Bun. First, create a directory and initialize it with `bun init`.
 
-```bash title="terminal"
-$ mkdir prisma-app
-$ cd prisma-app
-$ bun init
-```
+    	```bash title="terminal"
+    	$ mkdir prisma-app
+    	$ cd prisma-app
+    	$ bun init
+    	```
+    </Step>
 
-</Step>
+    <Step>
 
-<Step title="Install Prisma dependencies">
+      ### Install Prisma dependencies
+    	Then install the Prisma CLI (`prisma`), Prisma Client (`@prisma/client`), and the LibSQL adapter as dependencies.
 
-Then install the Prisma CLI (`prisma`), Prisma Client (`@prisma/client`), and the LibSQL adapter as dependencies.
+    	```bash title="terminal"
+    	$ bun add -d prisma
+    	$ bun add @prisma/client @prisma/adapter-libsql
+    	```
+    </Step>
 
-```bash title="terminal"
-$ bun add -d prisma
-$ bun add @prisma/client @prisma/adapter-libsql
-```
+    <Step>
 
-</Step>
+      ### Initialize Prisma with SQLite
+    	We'll use the Prisma CLI with `bunx` to initialize our schema and migration directory. For simplicity we'll be using an in-memory SQLite database.
 
-<Step title="Initialize Prisma with SQLite">
+    	```bash title="terminal"
+    	$ bunx --bun prisma init --datasource-provider sqlite
+    	```
 
-We'll use the Prisma CLI with `bunx` to initialize our schema and migration directory. For simplicity we'll be using an in-memory SQLite database.
+    	This creates a basic schema. We need to update it to use the new Rust-free client with Bun optimization. Open `prisma/schema.prisma` and modify the generator block, then add a simple `User` model.
 
-```bash title="terminal"
-$ bunx --bun prisma init --datasource-provider sqlite
-```
+    	```prisma title="prisma/schema.prisma"
+    	  generator client {
+    	    provider = "prisma-client" // [!code ++]
+    	    output = "./generated" // [!code ++]
+    	    engineType = "client" // [!code ++]
+    	    runtime = "bun" // [!code ++]
+    	  }
 
-This creates a basic schema. We need to update it to use the new Rust-free client with Bun optimization. Open `prisma/schema.prisma` and modify the generator block, then add a simple `User` model.
+    	  datasource db {
+    	    provider = "sqlite"
+    	    url      = env("DATABASE_URL")
+    	  }
 
-```prisma title="prisma/schema.prisma"
-generator client {
-  provider = "prisma-client" // [!code ++]
-  output = "./generated" // [!code ++]
-  engineType = "client" // [!code ++]
-  runtime = "bun" // [!code ++]
-}
+    	  model User { // [!code ++]
+    	    id    Int     @id @default(autoincrement()) // [!code ++]
+    	    email String  @unique // [!code ++]
+    	    name  String? // [!code ++]
+    	  } // [!code ++]
+    	```
+    </Step>
 
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
+    <Step>
 
-model User { // [!code ++]
-  id    Int     @id @default(autoincrement()) // [!code ++]
-  email String  @unique // [!code ++]
-  name  String? // [!code ++]
-} // [!code ++]
-```
+      ### Create and run database migration
+    	Then generate and run initial migration.
 
-</Step>
+    	This will generate a `.sql` migration file in `prisma/migrations`, create a new SQLite instance, and execute the migration against the new instance.
 
-<Step title="Create and run database migration">
+    	```bash title="terminal"
+    	 $ bunx --bun prisma migrate dev --name init
+    	 
+    	Environment variables loaded from .env
+    	Prisma schema loaded from prisma/schema.prisma
+    	Datasource "db": SQLite database "dev.db" at "file:./dev.db"
 
-Then generate and run initial migration.
+    	SQLite database dev.db created at file:./dev.db
 
-This will generate a `.sql` migration file in `prisma/migrations`, create a new SQLite instance, and execute the migration against the new instance.
+    	Applying migration `20251014141233_init`
 
-```bash title="terminal"
-$ bunx --bun prisma migrate dev --name init
+    	The following migration(s) have been created and applied from new schema changes:
 
-Environment variables loaded from .env
-Prisma schema loaded from prisma/schema.prisma
-Datasource "db": SQLite database "dev.db" at "file:./dev.db"
+    	prisma/migrations/
+    	  └─ 20251014141233_init/
+    	    └─ migration.sql
 
-SQLite database dev.db created at file:./dev.db
+    	Your database is now in sync with your schema.
 
-Applying migration `20251014141233_init`
+    	✔ Generated Prisma Client (6.17.1) to ./generated in 18ms
+    	```
+    </Step>
 
-The following migration(s) have been created and applied from new schema changes:
+    <Step>
 
-prisma/migrations/
-  └─ 20251014141233_init/
-    └─ migration.sql
+      ### Generate Prisma Client
+    	As indicated in the output, Prisma re-generates our _Prisma client_ whenever we execute a new migration. The client provides a fully typed API for reading and writing from our database. You can manually re-generate the client with the Prisma CLI.
 
-Your database is now in sync with your schema.
+    	```sh title="terminal"
+    	$ bunx --bun prisma generate
+    	```
+    </Step>
 
-✔ Generated Prisma Client (6.17.1) to ./generated in 18ms
-```
+    <Step>
 
-</Step>
+      ### Initialize Prisma Client with LibSQL
+    	Now we need to create a Prisma client instance. Create a new file `prisma/db.ts` to initialize the PrismaClient with the LibSQL adapter.
 
-<Step title="Generate Prisma Client">
+    	```ts title="prisma/db.ts"
+    	import { PrismaClient } from "./generated/client";
+    	import { PrismaLibSQL } from "@prisma/adapter-libsql";
 
-As indicated in the output, Prisma re-generates our _Prisma client_ whenever we execute a new migration. The client provides a fully typed API for reading and writing from our database. You can manually re-generate the client with the Prisma CLI.
+    	const adapter = new PrismaLibSQL({ url: process.env.DATABASE_URL || "" });
+    	export const prisma = new PrismaClient({ adapter });
+    	```
+    </Step>
 
-```sh title="terminal"
-$ bunx --bun prisma generate
-```
+    <Step>
 
-</Step>
+      ### Create a test script
+    	Let's write a simple script to create a new user, then count the number of users in the database.
 
-<Step title="Initialize Prisma Client with LibSQL">
+    	```ts title="index.ts"
+    	import { prisma } from "./prisma/db";
 
-Now we need to create a Prisma client instance. Create a new file `prisma/db.ts` to initialize the PrismaClient with the LibSQL adapter.
+    	// create a new user
+    	await prisma.user.create({
+    	  data: {
+    	    name: "John Dough",
+    	    email: `john-${Math.random()}@example.com`,
+    	  },
+    	});
 
-```ts title="prisma/db.ts"
-import { PrismaClient } from "./generated/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
+    	// count the number of users
+    	const count = await prisma.user.count();
+    	console.log(`There are ${count} users in the database.`);
+    	```
+    </Step>
 
-const adapter = new PrismaLibSQL({ url: process.env.DATABASE_URL || "" });
-export const prisma = new PrismaClient({ adapter });
-```
+    <Step>
 
-</Step>
+      ### Run and test the application
+    	Let's run this script with `bun run`. Each time we run it, a new user is created.
 
-<Step title="Create a test script">
+    	```bash title="terminal"
+    	$ bun run index.ts
+    	```
+    	```txg
+    	Created john-0.12802932895402364@example.com
+    	There are 1 users in the database.
+    	```
 
-Let's write a simple script to create a new user, then count the number of users in the database.
+    	```bash title="terminal"
+    	$ bun run index.ts
+    	
+    	Created john-0.8671308799782803@example.com
+    	There are 2 users in the database.
+    	```
 
-```ts title="index.ts"
-import { prisma } from "./prisma/db";
+    	```bash title="terminal"
+    	$ bun run index.ts
+    	
+    	Created john-0.4465968383115295@example.com
+    	There are 3 users in the database.
+    	```
+    </Step>
 
-// create a new user
-await prisma.user.create({
-  data: {
-    name: "John Dough",
-    email: `john-${Math.random()}@example.com`,
-  },
-});
-
-// count the number of users
-const count = await prisma.user.count();
-console.log(`There are ${count} users in the database.`);
-```
-
-</Step>
-
-<Step title="Run and test the application">
-
-Let's run this script with `bun run`. Each time we run it, a new user is created.
-
-```bash title="terminal"
-$ bun run index.ts
-
-Created john-0.12802932895402364@example.com
-There are 1 users in the database.
-```
-
-```bash title="terminal"
-$ bun run index.ts
-
-Created john-0.8671308799782803@example.com
-There are 2 users in the database.
-```
-
-```bash title="terminal"
-$ bun run index.ts
-
-Created john-0.4465968383115295@example.com
-There are 3 users in the database.
-```
-
-</Step>
 </Steps>
 
 ---
 
-That's it! Refer to the [Prisma docs](https://prisma.io/docs) to learn more about using Prisma.
+That's it! Now that you've set up Prisma using Bun, we recommend referring to the [official Prisma docs](https://www.prisma.io/docs/concepts/components/prisma-client) as you continue to develop your application.
