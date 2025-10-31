@@ -246,15 +246,15 @@ function handleCodeGroups(content: string): string {
         return `\`\`\`${block.lang} ${attrs}\n${block.code}\n\`\`\``;
       }
       
-      // If attrs is the same as label, just use title=label
-      // Example: attrs="index.tsx", label="index.tsx" → title="index.tsx"
+      // If attrs is the same as label, just use tab=label (matching existing docs format)
+      // Example: attrs="index.tsx", label="index.tsx" → tab="index.tsx"
       if (attrs === block.label) {
-        return `\`\`\`${block.lang} title="${block.label}"\n${block.code}\n\`\`\``;
+        return `\`\`\`${block.lang} tab="${block.label}"\n${block.code}\n\`\`\``;
       }
       
-      // Otherwise, add title and keep attrs
+      // Otherwise, add tab and keep attrs
       if (block.label) {
-        attrs = `title="${block.label}"` + (attrs ? ' ' + attrs : '');
+        attrs = `tab="${block.label}"` + (attrs ? ' ' + attrs : '');
       }
       
       return `\`\`\`${block.lang}${attrs ? ' ' + attrs : ''}\n${block.code}\n\`\`\``;
@@ -575,7 +575,11 @@ function addTerminalPrompts(content: string): string {
         return line;
       }
       
-      // Skip comments and interactive prompts
+      // Skip comments and interactive prompts, BUT convert # Output: to Output:
+      if (trimmed.startsWith("# Output:")) {
+        const leadingSpace = line.match(/^(\s*)/)?.[1] || "";
+        return `${leadingSpace}${trimmed.slice(2)}`; // Remove "# " prefix
+      }
       if (trimmed.startsWith("#") || trimmed.startsWith("//") || trimmed.startsWith(">")) {
         return line;
       }
@@ -608,7 +612,7 @@ function addTerminalPrompts(content: string): string {
       
       // Check if this looks like an actual command - BE VERY SPECIFIC, no generic patterns
       const looksLikeCommand = 
-        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf)\s/.test(trimmed) || // Common commands
+        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf|setcap|systemctl)\s/.test(trimmed) || // Common commands
         /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars  
         (/^[A-Z_]+=/.test(trimmed) && /\s+(bun|npm|node|git)/.test(trimmed)) || // Env var before command like: FOO=bar bun run
         (/^\.\//.test(trimmed) && !/\s+@\d/.test(trimmed)); // Relative paths (but not output like "./path @1.2.3")
