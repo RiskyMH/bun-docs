@@ -363,11 +363,11 @@ function mergeTerminalWithOutput(content: string): string {
     }
   );
   
-  // Merge bash/sh terminal blocks followed by txt blocks (command + output pattern)
-  // Pattern: bash/sh block with "terminal" in attrs, followed by txt block
+  // Merge bash/sh terminal blocks followed by txt/txts blocks (command + output pattern)
+  // Pattern: bash/sh block with "terminal" in attrs, followed by txt/txts block
   // Match space/newline after language to avoid matching "powershell"
   modified = modified.replace(
-    /```(bash|sh|shell|zsh)([ \t])([^\n]*terminal[^\n]*)\n([\s\S]*?)```\s*\n+\s*```txt\n([\s\S]*?)```/g,
+    /```(bash|sh|shell|zsh)([ \t])([^\n]*terminal[^\n]*)\n([\s\S]*?)```\s*\n+\s*```txts?\n([\s\S]*?)```/g,
     (_match: string, lang: string, space: string, attrs: string, commandContent: string, outputContent: string) => {
       incrementStat("terminal-output-merged");
       // Merge the command and output into one block, keeping the terminal attrs
@@ -470,7 +470,7 @@ function addTerminalPrompts(content: string): string {
       
       // Check if this looks like an actual command - BE VERY SPECIFIC, no generic patterns
       const looksLikeCommand = 
-        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway)\s/.test(trimmed) || // Common commands
+        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf)\s/.test(trimmed) || // Common commands
         /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars  
         (/^[A-Z_]+=/.test(trimmed) && /\s+(bun|npm|node|git)/.test(trimmed)) || // Env var before command like: FOO=bar bun run
         (/^\.\//.test(trimmed) && !/\s+@\d/.test(trimmed)); // Relative paths (but not output like "./path @1.2.3")
