@@ -79,20 +79,188 @@ function transformFrontmatter(content: string, isGuide: boolean): string {
 }
 
 /**
- * Handle CodeGroup → just unwrap it
- * CodeGroup is just a visual wrapper in Mintlify, we just remove it and keep the code blocks
- * Code blocks keep their title= attributes
+ * Convert Mintlify Tabs to Fumadocs Tabs
+ * Mintlify uses <Tab title="...">, Fumadocs uses <Tab value="..."> with items array
+ */
+function convertMintlifyTabs(content: string): string {
+  let modified = content;
+  
+  // Find all <Tabs>...</Tabs> blocks
+  const tabsRegex = /<Tabs([^>]*)>([\s\S]*?)<\/Tabs>/g;
+  
+  modified = modified.replace(tabsRegex, (_match: string, tabsAttrs: string, tabsContent: string) => {
+    // Extract all tab titles from <Tab title="...">
+    const tabTitleRegex = /<Tab\s+title="([^"]+)"/g;
+    const titles: string[] = [];
+    let titleMatch;
+    
+    while ((titleMatch = tabTitleRegex.exec(tabsContent)) !== null) {
+      titles.push(titleMatch[1]);
+    }
+    
+    if (titles.length === 0) {
+      // No tabs found, return as-is
+      return _match;
+    }
+    
+    // Check if this should be a JS/CLI synchronized tab group
+    const hasJs = titles.some(t => /^(JavaScript|TypeScript|JS|TS)$/i.test(t));
+    const hasCli = titles.some(t => /^(CLI|Terminal|Bash)$/i.test(t));
+    const groupId = (hasJs && hasCli) ? ' groupId="js/cli"' : '';
+    
+    // Convert <Tab title="..."> to <Tab value="...">
+    let convertedContent = tabsContent.replace(
+      /<Tab\s+title="([^"]+)"/g,
+      '<Tab value="$1"'
+    );
+    
+    // Fix indentation: Mintlify has 4 spaces for closing ```, we need 3 spaces
+    // Match closing ``` that has 4+ spaces of indentation
+    convertedContent = convertedContent.replace(
+      /\n {4,}```(\s*\n)/g,
+      '\n   ```$1'  // Replace with exactly 3 spaces
+    );
+    
+    // Build items array
+    const itemsAttr = `items={[${titles.map(t => `'${t}'`).join(', ')}]}`;
+    
+    incrementStat("mintlify-tabs-converted");
+    
+    return `<Tabs ${itemsAttr}${groupId}>${convertedContent}</Tabs>`;
+  });
+  
+  return modified;
+}
+
+/**
+ * Handle CodeGroup → Convert to tab= attributes or unwrap
+ * Most CodeGroups should just be unwrapped to individual code blocks with tab= attributes
+ * This gives simple tabs without the complexity of <Tabs> components
  */
 function handleCodeGroups(content: string): string {
   let modified = content;
 
-  // Simply remove CodeGroup wrapper and keep the code blocks as-is
   const codeGroupRegex = /\n*<CodeGroup>\n*([\s\S]*?)\n*<\/CodeGroup>\n*/g;
   
   modified = modified.replace(codeGroupRegex, (_match: string, innerContent: string) => {
-    incrementStat("codegroup-removed");
-    // Just return the inner content without the CodeGroup wrapper
-    return `\n\n${innerContent.trim()}\n\n`;
+    // Extract all code blocks from the CodeGroup
+    const codeBlockRegex = /```(\w+)([^\n]*)\n([\s\S]*?)```/g;
+    const blocks: Array<{ lang: string; attrs: string; code: string; label: string }> = [];
+    
+    let blockMatch;
+    while ((blockMatch = codeBlockRegex.exec(innerContent)) !== null) {
+      const [, lang, attrs, code] = blockMatch;
+      
+      // Extract label from attributes
+      // Priority: title="..." > filename > icon type
+      let label = '';
+      
+      // Check for title="..."
+      const titleMatch = attrs.match(/title="([^"]+)"/);
+      if (titleMatch) {
+        label = titleMatch[1];
+      } else {
+        // Check for filename (first non-space word after language)
+        const words = attrs.trim().split(/\s+/);
+        if (words.length > 0 && words[0]) {
+          label = words[0];
+        } else {
+          // Check icon attribute
+          const iconMatch = attrs.match(/icon="([^"]+)"/);
+          if (iconMatch) {
+            const icon = iconMatch[1];
+            if (icon === 'terminal') label = 'terminal';
+            else label = icon.replace(/^.*\//, '').replace(/\.svg$/, '');
+          }
+        }
+      }
+      
+      // Fallback to filename-like label
+      if (!label) {
+        label = 'Example';
+      }
+      
+      blocks.push({ lang, attrs: attrs.trim(), code: code.trim(), label });
+    }
+    
+    if (blocks.length === 0) {
+      incrementStat("codegroup-empty");
+      return '\n\n';
+    }
+    
+    if (blocks.length === 1) {
+      // Single block - just unwrap without tabs
+      incrementStat("codegroup-single-unwrapped");
+      const block = blocks[0];
+      const titleAttr = block.attrs.replace(/icon="[^"]*"\s*/g, '').trim();
+      return `\n\n\`\`\`${block.lang}${titleAttr ? ' ' + titleAttr : ''}\n${block.code}\n\`\`\`\n\n`;
+    }
+    
+    // Check if this is a JS/CLI pair that should become a synchronized <Tabs> component
+    const hasJsLike = blocks.some(b => ['ts', 'tsx', 'js', 'jsx'].includes(b.lang));
+    const hasCliLike = blocks.some(b => ['bash', 'sh'].includes(b.lang) || b.label === 'terminal');
+    
+    if (hasJsLike && hasCliLike && blocks.length === 2) {
+      // This is a JS/CLI pair - convert to <Tabs> component with groupId
+      incrementStat("codegroup-to-tabs-jsvcli");
+      
+      const tabsContent = blocks.map(block => {
+        const label = (['ts', 'tsx', 'js', 'jsx'].includes(block.lang)) ? 'JavaScript' : 'CLI';
+        
+        // Clean attributes - remove icon, keep title
+        let attrs = block.attrs.replace(/icon="[^"]*"\s*/g, '').trim();
+        
+        // For CLI, ensure we have title="terminal"
+        if (label === 'CLI' && !attrs.includes('title=')) {
+          // Remove standalone "terminal" text if present (it will become title="terminal")
+          attrs = attrs.replace(/^\s*terminal\s*$/, '').trim();
+          attrs = 'title="terminal"' + (attrs ? ' ' + attrs : '');
+        }
+        
+        // Format with proper indentation: 4 spaces for opening, code content, 3 spaces for closing
+        const codeLines = block.code.split('\n');
+        const indentedCode = codeLines.map(line => {
+          if (line.trim() === '') return '';
+          return `    ${line}`;
+        }).join('\n');
+        
+        const openFence = `    \`\`\`${block.lang}${attrs ? ' ' + attrs : ''}`;
+        const closeFence = `   \`\`\``;
+        
+        return `  <Tab value="${label}">\n${openFence}\n${indentedCode}\n${closeFence}\n  </Tab>`;
+      }).join('\n');
+      
+      return `\n\n<Tabs items={['JavaScript', 'CLI']} groupId="js/cli">\n${tabsContent}\n</Tabs>\n\n`;
+    }
+    
+    // Multiple blocks - just unwrap to plain individual code blocks
+    // Don't use tab= attributes - just show them as separate code blocks
+    incrementStat("codegroup-unwrapped");
+    
+    const codeBlocks = blocks.map(block => {
+      // Clean attributes - remove icon, keep title if present
+      let attrs = block.attrs.replace(/icon="[^"]*"\s*/g, '').trim();
+      
+      // If attrs contains title=, use it as-is
+      if (attrs.includes('title=')) {
+        return `\`\`\`${block.lang} ${attrs}\n${block.code}\n\`\`\``;
+      }
+      
+      // If attrs is the same as label, just use title=label
+      // Example: attrs="index.tsx", label="index.tsx" → title="index.tsx"
+      if (attrs === block.label) {
+        return `\`\`\`${block.lang} title="${block.label}"\n${block.code}\n\`\`\``;
+      }
+      
+      // Otherwise, add title and keep attrs
+      if (block.label) {
+        attrs = `title="${block.label}"` + (attrs ? ' ' + attrs : '');
+      }
+      
+      return `\`\`\`${block.lang}${attrs ? ' ' + attrs : ''}\n${block.code}\n\`\`\``;
+    }).join('\n\n');
+    
+    return `\n\n${codeBlocks}\n\n`;
   });
 
   return modified;
@@ -343,6 +511,10 @@ function mergeTerminalWithOutput(content: string): string {
   modified = modified.replace(/```env(\s)/g, '```ini$1'); // env → ini (env not supported)
   modified = modified.replace(/```txts(\s)/g, '```txt$1'); // txts → txt (typo)
   modified = modified.replace(/```txg(\s)/g, '```txt$1'); // txg → txt (typo)
+  
+  // Convert css → scss for consistency with our docs
+  // Bun changed from scss to css in their bundler docs, but we keep scss
+  modified = modified.replace(/```css(\s)/g, '```scss$1');
   
   return modified;
 }
@@ -1083,6 +1255,7 @@ async function processFile(filePath: string, bunVersion: string = ""): Promise<b
     modified = await inlineSnippets(modified, filePath);
     modified = removeComponentImports(modified);
     modified = transformFrontmatter(modified, isGuide);
+    modified = convertMintlifyTabs(modified); // Convert Mintlify <Tabs> before processing CodeGroups
     modified = handleCodeGroups(modified); // MUST BE FIRST for code fences
     modified = transformHighlights(modified);
     modified = mergeTerminalWithOutput(modified); // MUST be before revertCodeFences
