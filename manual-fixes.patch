@@ -4090,15 +4090,6 @@ index a22b35e6..2f03f4fc 100644
  ---
  
  <Callout type="info">
-@@ -149,7 +150,7 @@ fullTitle: Use Prisma with Bun
-     	```bash title="terminal"
-     	$ bun run index.ts
-     	```
--    	```txg
-+    	```txt
-     	Created john-0.12802932895402364@example.com
-     	There are 1 users in the database.
-     	```
 diff --git a/content/guides/ecosystem/qwik.mdx b/content/guides/ecosystem/qwik.mdx
 index 4de876b1..95d54cc0 100644
 --- a/content/guides/ecosystem/qwik.mdx
