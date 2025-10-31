@@ -6,6 +6,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { ParamField } from './components/ui/param-field';
 import { Tweet } from 'react-tweet'
 import type { MDXComponents } from 'mdx/types';
+import { cn } from '@/lib/cn';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -21,8 +22,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       </CodeBlock>
     ),
     ReactTweet: Tweet,
-    Frame: (props) => <div {...props}>{props.children}</div>,
-    Badge: (props: { children: React.ReactNode }) => <span className="bg-fd-accent text-fd-accent-foreground rounded-md px-2 py-1 text-xs">{props.children}</span>,
+    Badge: (props) => <span className={cn("bg-fd-accent text-fd-accent-foreground rounded-md px-2 py-1 text-xs", props.className)}>{props.children}</span>,
+    Image: (props) => <img {...props} />,
     ...components,
   };
 }

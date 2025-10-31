@@ -907,7 +907,7 @@ function fixImageLinks(content: string): string {
     /!\[([^\]]*)\]\(\/images\/([^)]+)\)/g,
     (_match: string, alt: string, path: string) => {
       incrementStat("image-link-fixed");
-      return `![${alt}](https://bun.com/images/${path})`;
+      return `![${alt}](https://bun.com/docs/images/${path})`;
     }
   );
 
@@ -916,7 +916,7 @@ function fixImageLinks(content: string): string {
     /(<img[^>]+src=")\/images\/([^"]+)(")/g,
     (_match: string, before: string, path: string, after: string) => {
       incrementStat("image-src-fixed");
-      return `${before}https://bun.com/images/${path}${after}`;
+      return `${before}https://bun.com/docs/images/${path}${after}`;
     }
   );
 
@@ -925,7 +925,7 @@ function fixImageLinks(content: string): string {
     /(<Image[^>]+src=")\/images\/([^"]+)(")/g,
     (_match: string, before: string, path: string, after: string) => {
       incrementStat("image-component-src-fixed");
-      return `${before}https://bun.com/images/${path}${after}`;
+      return `${before}https://bun.com/docs/images/${path}${after}`;
     }
   );
 
@@ -934,7 +934,7 @@ function fixImageLinks(content: string): string {
     /(<source[^>]+src=")\/images\/([^"]+)(")/g,
     (_match: string, before: string, path: string, after: string) => {
       incrementStat("video-src-fixed");
-      return `${before}https://bun.com/images/${path}${after}`;
+      return `${before}https://bun.com/docs/images/${path}${after}`;
     }
   );
 
