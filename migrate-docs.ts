@@ -79,59 +79,20 @@ function transformFrontmatter(content: string, isGuide: boolean): string {
 }
 
 /**
- * Handle CodeGroup → tab= conversion
- * This must run BEFORE other code fence transformations
+ * Handle CodeGroup → just unwrap it
+ * CodeGroup is just a visual wrapper in Mintlify, we just remove it and keep the code blocks
+ * Code blocks keep their title= attributes
  */
 function handleCodeGroups(content: string): string {
   let modified = content;
 
-  // Match CodeGroup blocks with surrounding whitespace
+  // Simply remove CodeGroup wrapper and keep the code blocks as-is
   const codeGroupRegex = /\n*<CodeGroup>\n*([\s\S]*?)\n*<\/CodeGroup>\n*/g;
   
   modified = modified.replace(codeGroupRegex, (_match: string, innerContent: string) => {
-    incrementStat("codegroup-to-tabs");
-    
-    // Transform code blocks inside to use tab=
-    let transformed = innerContent;
-    
-    // Pattern: ```lang filename icon="..."
-    transformed = transformed.replace(
-      /```(\w+)\s+([^\s]+)\s+icon="([^"]+)"/g,
-      (_m: string, lang: string, filename: string, icon: string) => {
-        incrementStat("codegroup-block-to-tab");
-        // If icon was "terminal", add title="terminal" so prompt detection works
-        if (icon === "terminal") {
-          return `\`\`\`${lang} tab="${filename}" title="terminal"`;
-        }
-        return `\`\`\`${lang} tab="${filename}"`;
-      }
-    );
-    
-    // Pattern: ```lang title="filename" icon="..."
-    transformed = transformed.replace(
-      /```(\w+)\s+title="([^"]+)"\s+icon="[^"]+"/g,
-      (_m: string, lang: string, filename: string) => {
-        incrementStat("codegroup-title-to-tab");
-        return `\`\`\`${lang} tab="${filename}"`;
-      }
-    );
-    
-    // Pattern: ```lang label (no icon, but inside CodeGroup)
-    // This handles cases where CodeGroup has blocks without icon attributes
-    transformed = transformed.replace(
-      /```(\w+)\s+([^\n`]+?)\r?\n/g,
-      (_m: string, lang: string, label: string) => {
-        // Only convert if it doesn't already have tab= or title=
-        if (label.includes('tab=') || label.includes('title=')) {
-          return _m;
-        }
-        incrementStat("codegroup-label-to-tab");
-        return `\`\`\`${lang} tab="${label.trim()}"\n`;
-      }
-    );
-    
-    // Don't wrap in Tabs - the tab= attributes work without a wrapper
-    return `\n\n${transformed.trim()}\n\n`;
+    incrementStat("codegroup-removed");
+    // Just return the inner content without the CodeGroup wrapper
+    return `\n\n${innerContent.trim()}\n\n`;
   });
 
   return modified;
