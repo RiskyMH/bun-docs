@@ -516,6 +516,10 @@ function mergeTerminalWithOutput(content: string): string {
   // Bun changed from scss to css in their bundler docs, but we keep scss
   modified = modified.replace(/```css(\s)/g, '```scss$1');
   
+  // Convert txt → ini for .env files (more semantic)
+  modified = modified.replace(/```txt\s+title="\.env"/g, '```ini title=".env"');
+  modified = modified.replace(/```txt\s+\.env\s/g, '```ini .env ');
+  
   return modified;
 }
 
@@ -612,10 +616,12 @@ function addTerminalPrompts(content: string): string {
       
       // Check if this looks like an actual command - BE VERY SPECIFIC, no generic patterns
       const looksLikeCommand = 
-        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf|setcap|systemctl)\s/.test(trimmed) || // Common commands
+        /^(bun|npm|npx|bunx|yarn|pnpm|node|git|cd|ls|mkdir|touch|rm|cp|mv|curl|wget|docker|cargo|go|python|pip|echo|export|source|railway|uname|sudo|cowsay|brew|scoop|apt|apt-get|yum|dnf|setcap|systemctl|set|vercel)\s/.test(trimmed) || // Common commands
         /^(export|source)\s+[A-Z_]+=/.test(trimmed) || // Export/source env vars  
         (/^[A-Z_]+=/.test(trimmed) && /\s+(bun|npm|node|git)/.test(trimmed)) || // Env var before command like: FOO=bar bun run
-        (/^\.\//.test(trimmed) && !/\s+@\d/.test(trimmed)); // Relative paths (but not output like "./path @1.2.3")
+        (/^[A-Z_]+=.+/.test(trimmed) && trimmed.length > 20 && /[:\/]/.test(trimmed)) || // Long env var assignments with URLs (like NPM_CONFIG_REGISTRY=https://...)
+        (/^\.\//.test(trimmed) && !/\s+@\d/.test(trimmed)) || // Relative paths (but not output like "./path @1.2.3")
+        /^\$env:[A-Z_]+="/.test(trimmed); // PowerShell env var commands like $env:FOO="value"
       
       if (looksLikeCommand) {
         sawCommand = true;
