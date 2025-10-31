@@ -376,10 +376,6 @@ function mergeTerminalWithOutput(content: string): string {
   // Convert text blocks back to txt
   modified = modified.replace(/```text\n/g, '```txt\n');
   
-  // Fix typos in Bun source: txts → txt, txg → txt
-  modified = modified.replace(/```txts(\s|\n)/g, '```txt$1');
-  modified = modified.replace(/```txg(\s|\n)/g, '```txt$1');
-  
   return modified;
 }
 
@@ -1085,16 +1081,8 @@ function removeComponentImports(content: string): string {
   
   const importsSection = beforeContent[1];
   const cleanedImports = importsSection.replace(
-    /^import\s+(.+?)\s+from\s+["']([^"']+)["'];\s*\r?\n/gm,
-    (match: string, imported: string, path: string) => {
-      // Preserve snippet imports and fix their paths
-      if (path.includes('/snippets/')) {
-        incrementStat("snippet-import-fixed");
-        // Change /snippets/ to /_snippets/
-        const fixedPath = path.replace('/snippets/', '/_snippets/');
-        return `import ${imported} from "${fixedPath}";\n`;
-      }
-      // Remove component imports
+    /^import\s+\w+\s+from\s+["'][^"']+["'];\s*\r?\n/gm,
+    () => {
       incrementStat("import-removed");
       return "";
     }
