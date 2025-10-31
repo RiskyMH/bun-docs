@@ -172,9 +172,14 @@ function revertCodeFences(content: string): string {
     }
   );
 
-  // Pattern 1: Keep icons - Fumadocs supports icon attribute!
-  // Mintlify uses icon="file-code", icon="/icons/typescript.svg" etc.
-  // Fumadocs supports the same - preserve them!
+  // Pattern 1: Remove icon when title already exists
+  modified = modified.replace(
+    /```(\w+)\s+title="([^"]+)"\s+icon="[^"]+"/g,
+    (_match: string, lang: string, title: string) => {
+      incrementStat("revert-remove-icon-from-title");
+      return `\`\`\`${lang} title="${title}"`;
+    }
+  );
 
   // Pattern 2: filename="..." icon="..." (explicit filename attribute)
   modified = modified.replace(
@@ -194,18 +199,15 @@ function revertCodeFences(content: string): string {
     }
   );
 
-  // Pattern 4: Catch-all - convert LABEL + icon to title, but preserve title + icon  
-  // Only convert patterns like: ```ts myfile.ts icon="..." → ```ts title="myfile.ts"
-  // DON'T touch: ```ts title="..." icon="..." (keep both!)
+  // Pattern 4: Catch-all for any remaining icon attributes
+  // This handles multi-word labels, special chars, etc.
   modified = modified.replace(
-    /```(\w+)\s+([^"=\s]+(?:\s+[^"=\s]+)*?)\s+icon="[^"]+"/g,
+    /```(\w+)\s+(.+?)\s+icon="[^"]+"/g,
     (_match: string, lang: string, label: string) => {
-      // Only convert if it's NOT already a title= or other attribute
-      if (label.includes('=')) {
-        return _match; // Leave it as-is  
-      }
+      // Clean up the label (remove extra attributes if any)
+      const cleanLabel = label.trim();
       incrementStat("revert-catchall-icon-to-title");
-      return `\`\`\`${lang} title="${label}"`;
+      return `\`\`\`${lang} title="${cleanLabel}"`;
     }
   );
 
