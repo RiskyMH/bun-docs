@@ -437,7 +437,9 @@ function addTerminalPrompts(content: string): string {
           /^\|/.test(trimmed) || // Table rows starting with pipe
           /^[└├│─]/.test(trimmed) || // Directory tree characters
           /^(packed|dependencies|Current|Target|Latest|Package)\s/.test(trimmed) || // Common output words
-          /^(you|shouldn)/i.test(trimmed)) { // Words indicating non-command text
+          /^(you|shouldn)/i.test(trimmed) || // Words indicating non-command text
+          /^(bun|npm|node)\s+(test|run|install|build)\s+v[\d.$]/.test(trimmed) || // Version banners like "bun test v1.3.1"
+          /^\.\/[^:]+:\s+(valid|satisfies|error|warning)/.test(trimmed)) { // Path verification output like "./myapp: valid on disk"
         inOutput = true;
         return line;
       }
@@ -1092,7 +1094,8 @@ async function processFile(filePath: string, bunVersion: string = ""): Promise<b
     // TODO: fixStepIndentation is adding blank lines everywhere - needs fixing
     // modified = fixStepIndentation(modified);
     modified = fixAccordionWrapping(modified);
-    modified = unwrapTabs(modified); // Remove Tabs/Tab wrappers, convert to tab= attributes
+    // TODO: unwrapTabs needs to handle indentation properly - disabled for now
+    // modified = unwrapTabs(modified); // Remove Tabs/Tab wrappers, convert to tab= attributes
     modified = fixImageLinks(modified);
     modified = addDocsPrefix(modified, filePath);
     modified = wrapHtmlTagsInCode(modified);
