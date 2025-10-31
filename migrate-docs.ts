@@ -499,8 +499,21 @@ function mergeTerminalWithOutput(content: string): string {
     /```(bash|sh|shell|zsh)([ \t])([^\n]*terminal[^\n]*)\n([\s\S]*?)```\s*\n+\s*```txts?\n([\s\S]*?)```/g,
     (_match: string, lang: string, space: string, attrs: string, commandContent: string, outputContent: string) => {
       incrementStat("terminal-output-merged");
+      
+      // Check if this is a 'bun test' command - if so, add version banner
+      const isBunTest = /bun\s+test/.test(commandContent);
+      let finalContent = commandContent;
+      
+      if (isBunTest && !outputContent.includes('bun test v')) {
+        // Add version banner after command, then output
+        finalContent = `${commandContent}\nbun test v$BUN_LATEST_VERSION (9c68abdb)\n\n${outputContent}`;
+      } else {
+        // Normal merge with just command and output
+        finalContent = `${commandContent}\n${outputContent}`;
+      }
+      
       // Merge the command and output into one block, keeping the terminal attrs
-      return `\`\`\`${lang}${space}${attrs}\n${commandContent}\n${outputContent}\`\`\``;
+      return `\`\`\`${lang}${space}${attrs}\n${finalContent}\`\`\``;
     }
   );
   
