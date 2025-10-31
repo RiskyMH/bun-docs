@@ -46,6 +46,14 @@ const cwd = join(import.meta.dirname, "../");
 
 await Bun.$`cp -r ${join(REPO_PATH, "docs")} content`.cwd(cwd);
 // await Bun.$`cp -r ${BLOG_PATH }/pages/blog content`.cwd('../'+import.meta.dirname);
+
+// Copy snippets directly from Bun repo to content/_snippets/
+await Bun.$`mkdir -p content/_snippets`.cwd(cwd);
+const snippetsPath = join(REPO_PATH, "docs/snippets");
+if (await Bun.file(snippetsPath).exists()) {
+  await Bun.$`cp -r ${snippetsPath}/* content/_snippets/`.cwd(cwd);
+}
+
 await Bun.$`cp -r content/docs/guides content`.cwd(cwd);
 await Bun.$`cp -r content/docs/images public`.cwd(cwd);
 
