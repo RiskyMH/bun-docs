@@ -8,6 +8,8 @@
     "start": "next start",
     "postinstall": "fumadocs-mdx",
     "pull-docs": "bun scripts/pull-docs.ts",
+    "migrate-docs": "bun migrate-docs.ts",
+    "sync-docs": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git apply manual-fixes.patch",
     "check-links": "bun scripts/check-links.ts"
   },
   "dependencies": {

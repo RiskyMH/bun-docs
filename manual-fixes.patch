@@ -1,0 +1,15 @@
+# Manual Fixes Patch
+#
+# This patch contains manual fixes that should be applied after migration.
+# Add any customizations or corrections here that the migration script can't handle.
+#
+# To update this patch:
+# 1. Run: bun run sync-docs (will fail on git apply, that's ok)
+# 2. Manually fix the files that need correction
+# 3. Run: git diff content/ > manual-fixes.patch
+# 4. Commit the updated patch
+#
+# Examples of what to put here:
+# - Custom content you've added
+# - Bug fixes for migration script issues
+# - Manual corrections for complex transformations
