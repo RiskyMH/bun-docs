@@ -1,24 +1,32 @@
 #!/usr/bin/env bun
 
 import { join } from "node:path";
-const REPO_URL = "https://github.com/oven-sh/bun.git";
-const REPO_PATH = join(import.meta.dirname, "../.repos/bun");
-const REPO_BRANCH = "lydia/merge-docs";
 
-const fetchRepo = async () => {
-  if (await Bun.file(join(REPO_PATH, ".git/HEAD")).exists()) {
-    await Bun.$`git fetch origin ${REPO_BRANCH} && git reset --hard origin/${REPO_BRANCH}`.cwd(
-      REPO_PATH
-    );
+const fetchRepo = async (repoUrl: string, destinationPath: string, repoBranch = "main", sparseCheckout?: string[]) => {
+  if (await Bun.file(join(destinationPath, ".git/HEAD")).exists()) {
+    await Bun.$`git fetch origin ${repoBranch} && git reset --hard origin/${repoBranch}`.cwd(destinationPath);
   } else {
-    await Bun.$`rm -rf ${REPO_PATH}`;
-    await Bun.$`git clone --filter=blob:none --sparse --depth=1 --single-branch --no-tags ${REPO_URL} ${REPO_PATH} --branch=${REPO_BRANCH}`;
-    await Bun.$`git sparse-checkout set docs packages/bun-types`.cwd(REPO_PATH);
+    await Bun.$`rm -rf ${destinationPath}`;
+    if (sparseCheckout && sparseCheckout.length > 0) {
+      await Bun.$`git clone --filter=blob:none --sparse --depth=1 --single-branch --no-tags ${repoUrl} ${destinationPath} --branch=${repoBranch}`;
+      await Bun.$`git sparse-checkout set ${{raw: sparseCheckout.join(" ")}}`.cwd(destinationPath);
+    } else {
+      await Bun.$`git clone --depth=1 --single-branch --no-tags ${repoUrl} ${destinationPath} --branch=${repoBranch}`;
+    }
   }
 };
 
+const BUN_REPO_URL = "https://github.com/oven-sh/bun.git";
+const BUN_REPO_PATH = join(import.meta.dirname, "../.repos/bun");
+const DOCS_REPO_URL = "https://github.com/oven-sh/docs.git";
+const DOCS_REPO_PATH = join(import.meta.dirname, "../.repos/docs");
+
+const fetchBun = () => fetchRepo(BUN_REPO_URL, BUN_REPO_PATH, "lydia/merge-docs", ["docs", "packages/bun-types"]);
+const fetchDocs = () => fetchRepo(DOCS_REPO_URL, DOCS_REPO_PATH);
+
 await Promise.all([
-  fetchRepo().catch(() => Bun.$`rm -rf ${REPO_PATH}`.then(() => fetchRepo())),
+  fetchBun().catch(() => Bun.$`rm -rf ${BUN_REPO_PATH}`.then(fetchBun)),
+  // fetchDocs().catch(() => {}),
 ]);
 
 // TODO: copy ./repos/bun/docs to ./content/docs & ./repos/bun/guides to ./content/guides
@@ -28,7 +36,8 @@ await Promise.all([
 
 const cwd = join(import.meta.dirname, "../");
 
-await Bun.$`cp -r ${join(REPO_PATH, "docs")} content`.cwd(cwd);
+// await Bun.$`cp -r ${join(DOCS_REPO_PATH)}/* content/docs`.cwd(cwd);
+await Bun.$`cp -r ${join(BUN_REPO_PATH, "docs")} content`.cwd(cwd);
 // await Bun.$`cp -r ${BLOG_PATH }/pages/blog content`.cwd('../'+import.meta.dirname);
 await Bun.$`cp -r content/docs/guides content`.cwd(cwd);
 await Bun.$`cp -r content/docs/images public`.cwd(cwd);
