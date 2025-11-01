@@ -103,6 +103,7 @@ export function LayoutTabs({
         'flex flex-row items-end gap-6 overflow-auto',
         props.className,
       )}
+      id="nd-sidebar-tabs"
     >
 
       {(options.at(0)?.title === 'Docs') && (
