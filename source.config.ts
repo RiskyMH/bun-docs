@@ -61,8 +61,7 @@ export default defineConfig({
   mdxOptions: {
     // MDX options
     remarkImageOptions: {
-      // todo: enable again (it hangs on some images - prob ratelimited)
-      external: false,
+      external: { timeout: 10_000 /* 10 seconds */ },
       onError: "ignore",
     },
     remarkHeadingOptions: {
