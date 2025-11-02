@@ -12,7 +12,6 @@ const openai = createOpenAICompatible({
 
 export async function POST(req: Request) {
   const reqJson = await req.json();
-  console.log(process.env.INKEEP_API_KEY);
 
   const result = streamText({
     model: openai('inkeep-qa-sonnet-4'),

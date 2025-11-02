@@ -102,6 +102,7 @@ export default defineConfig({
       langAlias: {
         env: "ini",
         zsh: "shellscript",
+        css: "scss",
       },
       icon: {
         // https://github.com/fuma-nama/fumadocs/blob/main/packages/core/src/mdx-plugins/transformer-icon.ts
