@@ -136,92 +136,46 @@ index c58f5908..262f78ce 100644
    background-color: #f0f0f0;
  }
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index 9d2c9237..17d40065 100644
+index 2dc31661..c0c534cc 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
-@@ -123,9 +123,7 @@ Becomes something like this:
+@@ -123,7 +123,7 @@ Becomes something like this:
  
  To use React in your client-side code, import `react-dom/client` and render your app.
  
--<Tabs items={['src/backend.ts', 'src/frontend.tsx', 'public/dashboard.html', 'src/app.tsx']}>
--<Tab value="src/backend.ts">
 -```ts title="src/backend.ts"
 +```ts tab="src/backend.ts"
  import dashboard from "../public/dashboard.html";
  import { serve } from "bun";
  
-@@ -140,24 +138,18 @@ routes: {
-     },
- 
+@@ -138,7 +138,7 @@ return new Response("hello world");
  });
-+```
+ ```
  
--````
--</Tab>
--
--<Tab value="src/frontend.tsx">
 -```tsx title="src/frontend.tsx"
 +```tsx tab="src/frontend.tsx"
  import { createRoot } from 'react-dom/client';
  import App from './app';
  
- const container = document.getElementById('root');
- const root = createRoot(container!);
+@@ -147,7 +147,7 @@ const root = createRoot(container!);
  root.render(<App />);
--````
--
--</Tab>
-+```
+ ```
  
--<Tab value="public/dashboard.html">
 -```html title="public/dashboard.html"
 +```html tab="public/dashboard.html"
  <!DOCTYPE html>
  <html>
    <head>
-@@ -170,10 +162,8 @@ root.render(<App />);
-   </body>
+@@ -161,7 +161,7 @@ root.render(<App />);
  </html>
  ```
--</Tab>
  
--<Tab value="src/app.tsx">
 -```tsx title="src/app.tsx"
 +```tsx tab="src/app.tsx"
- import { useState } from 'react';
+ import { useState } from "react";
  
  export default function App() {
-@@ -189,10 +179,7 @@ export default function App() {
-     );
- 
- }
--
--````
--</Tab>
--</Tabs>
-+```
- 
- ## Development Mode
- 
-@@ -214,7 +201,7 @@ Bun.serve({
-     // ... api requests
-   },
- });
--````
-+```
- 
- ### Development Mode Features
- 
-@@ -454,7 +441,7 @@ This will allow you to use TailwindCSS utility classes in your HTML and CSS file
- 
- Or in your CSS:
- 
--```scss title="style.css"
-+```css title="style.css"
- @import "tailwindcss";
- 
- .custom-class {
-@@ -508,7 +495,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
+@@ -497,7 +497,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
  <Steps>
  <Step>
  
@@ -230,7 +184,7 @@ index 9d2c9237..17d40065 100644
  - Transpiles TypeScript, JSX, and TSX in `<script>` tags
  - Bundles imported dependencies
  - Generates sourcemaps for debugging
-@@ -774,7 +761,7 @@ export function App() {
+@@ -763,7 +763,7 @@ export function App() {
  }
  ```
  
@@ -239,7 +193,7 @@ index 9d2c9237..17d40065 100644
  * {
    margin: 0;
    padding: 0;
-@@ -1016,11 +1003,11 @@ CMD ["bun", "index.js"]
+@@ -1005,11 +1005,11 @@ CMD ["bun", "index.js"]
  
  ### Environment Variables
  
@@ -2996,13 +2950,15 @@ index 700e814b..9114c89b 100644
  
  packed 203B package.json
 diff --git b/content/docs/pm/cli/update.mdx a/content/docs/pm/cli/update.mdx
-index 72ed40a4..98faa4c8 100644
+index 9bcc6ffd..98faa4c8 100644
 --- b/content/docs/pm/cli/update.mdx
 +++ a/content/docs/pm/cli/update.mdx
-@@ -33,6 +33,8 @@ This launches an interactive terminal interface that shows all outdated packages
+@@ -32,7 +32,9 @@ This launches an interactive terminal interface that shows all outdated packages
+ 
  The interface displays packages grouped by dependency type:
  
- ```sh title="terminal"
+-```txt
++```sh title="terminal"
 +$ bun update -i
 +
  ? Select packages to update - Space to toggle, Enter to confirm, a to select all, n to select none, i to invert, l to toggle latest
@@ -3368,7 +3324,7 @@ index a3c1ba4c..6133461b 100644
  <html>
    <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 97ff34b2..b4f56d5a 100644
+index 657ef14c..ac723224 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
 @@ -408,7 +408,7 @@ The `Bun.serve` server can handle roughly 2.5x more requests per second than Nod
@@ -3778,7 +3734,7 @@ index f66ec8c6..cf84322d 100644
    | "entry-point-build"
    | "entry-point-run"
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 4c82ccde..943e27f6 100644
+index 8303559d..990daf19 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
@@ -3799,7 +3755,7 @@ index 4c82ccde..943e27f6 100644
  cpu: 13th Gen Intel(R) Core(TM) i9-13900
  runtime: bun 1.0.29 (x64-linux)
  
-@@ -840,7 +840,7 @@ console.log(Bun.stripANSI(formatted)); // => "Bold and underlined"
+@@ -841,7 +841,7 @@ $ bun bench/snippets/strip-ansi.mjs
  cpu: Apple M3 Max
  runtime: bun 1.2.21 (arm64-darwin)
  
@@ -3808,7 +3764,7 @@ index 4c82ccde..943e27f6 100644
  ------------------------------------------------------- ----------
  Bun.stripANSI      11 chars no-ansi        8.13 ns/iter   8.27 ns
                                     (7.45 ns … 33.59 ns)  10.29 ns
-@@ -860,7 +860,7 @@ Bun.stripANSI 212,992 chars long-ansi    227.65 µs/iter 234.50 µs
+@@ -862,7 +862,7 @@ $ node bench/snippets/strip-ansi.mjs
  cpu: Apple M3 Max
  runtime: node 24.6.0 (arm64-darwin)
  
@@ -4046,7 +4002,7 @@ index a4f6af0d..6ebe4071 100644
  ...
  ```
 diff --git b/content/guides/ecosystem/nuxt.mdx a/content/guides/ecosystem/nuxt.mdx
-index b8e3ad95..30bc89df 100644
+index 407d4d88..367f4922 100644
 --- b/content/guides/ecosystem/nuxt.mdx
 +++ a/content/guides/ecosystem/nuxt.mdx
 @@ -35,7 +35,7 @@ To start the dev server, run `bun --bun run dev` from the project root. This wil
