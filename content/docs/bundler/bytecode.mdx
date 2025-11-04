@@ -11,7 +11,7 @@ Bytecode caching is a build-time optimization that dramatically improves applica
 
 Enable bytecode caching with the `--bytecode` flag:
 
-```bash
+```bash title="terminal"
 $ bun build ./index.ts --target=bun --bytecode --outdir=./dist
 ```
 
@@ -22,7 +22,7 @@ This generates two files:
 
 At runtime, Bun automatically detects and uses the `.jsc` file:
 
-```bash
+```bash title="terminal"
 $ bun ./dist/index.js  # Automatically uses index.jsc
 ```
 
@@ -30,7 +30,7 @@ $ bun ./dist/index.js  # Automatically uses index.jsc
 
 When creating executables with `--compile`, bytecode is embedded into the binary:
 
-```bash
+```bash title="terminal"
 $ bun build ./cli.ts --compile --bytecode --outfile=mycli
 ```
 
@@ -40,7 +40,7 @@ The resulting executable contains both the code and bytecode, giving you maximum
 
 Bytecode works great with minification and source maps:
 
-```bash
+```bash title="terminal"
 $ bun build --compile --bytecode --minify --sourcemap ./cli.ts --outfile=mycli
 ```
 
@@ -113,6 +113,7 @@ async function init() {
   const data = await fetch("https://api.example.com");
   return data;
 }
+
 export default init;
 ```
 
@@ -124,7 +125,7 @@ Bytecode is **not portable across Bun versions**. The bytecode format is tied to
 
 When you update Bun, you must regenerate bytecode:
 
-```bash
+```bash title="terminal"
 # After updating Bun
 $ bun build --bytecode ./index.ts --outdir=./dist
 ```
@@ -156,7 +157,7 @@ Bytecode **does not obscure your source code**. It's an optimization, not a secu
 
 Include bytecode generation in your Dockerfile:
 
-```dockerfile
+```dockerfile title="Dockerfile"
 FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY package.json bun.lock ./
@@ -181,7 +182,7 @@ The bytecode is architecture-independent.
 
 Generate bytecode during your build pipeline:
 
-```yaml
+```yaml title="workflow.yml"
 # GitHub Actions
 - name: Build with bytecode
   run: |
@@ -198,8 +199,9 @@ Generate bytecode during your build pipeline:
 
 Check that the `.jsc` file exists:
 
-```bash
+```bash title="terminal"
 $ ls -lh dist/
+
 -rw-r--r--  1 user  staff   245K  index.js
 -rw-r--r--  1 user  staff   1.1M  index.jsc
 ```

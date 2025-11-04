@@ -836,7 +836,8 @@ console.log(Bun.stripANSI(formatted)); // => "Bold and underlined"
 `Bun.stripANSI` is significantly faster than the popular [`strip-ansi`](https://www.npmjs.com/package/strip-ansi) npm package:
 
 ```bash title="terminal"
-> bun bench/snippets/strip-ansi.mjs
+$ bun bench/snippets/strip-ansi.mjs
+
 cpu: Apple M3 Max
 runtime: bun 1.2.21 (arm64-darwin)
 
@@ -856,7 +857,8 @@ Bun.stripANSI 212,992 chars long-ansi    227.65 µs/iter 234.50 µs
 ```
 
 ```bash title="terminal"
-> node bench/snippets/strip-ansi.mjs
+$ node bench/snippets/strip-ansi.mjs
+
 cpu: Apple M3 Max
 runtime: node 24.6.0 (arm64-darwin)
 

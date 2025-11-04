@@ -131,12 +131,10 @@ serve({
 routes: {
 "/": dashboard,
 },
-
-    async fetch(req) {
-    	// ...api requests
-    	return new Response("hello world");
-    },
-
+async fetch(req) {
+// ...api requests
+return new Response("hello world");
+},
 });
 ```
 
@@ -164,20 +162,17 @@ root.render(<App />);
 ```
 
 ```tsx tab="src/app.tsx"
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function App() {
-	const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-    return (
-    	<div>
-    		<h1>Dashboard</h1>
-    		<button onClick={() => setCount(count + 1)}>
-    			Count: {count}
-    		</button>
-    	</div>
-    );
-
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <button onClick={() => setCount(count + 1)}>Count: {count}</button>
+    </div>
+  );
 }
 ```
 
@@ -411,10 +406,10 @@ To configure plugins for `Bun.serve`, add a `plugins` array in the `[serve.stati
 
 ### TailwindCSS Plugin
 
-For example, enable TailwindCSS on your routes by installing and adding the `bun-plugin-tailwind` plugin:
+You can use TailwindCSS by installing and adding the `tailwindcss` package and `bun-plugin-tailwind` plugin.
 
 ```bash title="terminal"
-$ bun add bun-plugin-tailwind
+$ bun add tailwindcss bun-plugin-tailwind
 ```
 
 ```toml title="bunfig.toml"
@@ -422,31 +417,38 @@ $ bun add bun-plugin-tailwind
 plugins = ["bun-plugin-tailwind"]
 ```
 
-This will allow you to use TailwindCSS utility classes in your HTML and CSS files. All you need to do is import tailwindcss somewhere:
+This will allow you to use TailwindCSS utility classes in your HTML and CSS files. All you need to do is import `tailwindcss` somewhere:
 
 ```html title="index.html"
 <!doctype html>
 <html>
   <head>
-    <title>Home</title>
     <link rel="stylesheet" href="tailwindcss" />
+    <!-- [!code ++] -->
   </head>
-  <body>
-    <div class="bg-blue-500 text-white p-4">
-      <h1 class="text-2xl font-bold">Hello World</h1>
-    </div>
-  </body>
+  <!-- the rest of your HTML... -->
 </html>
 ```
 
-Or in your CSS:
+Alternatively, you can import TailwindCSS in your CSS file:
 
-```css title="style.css"
+```scss title="style.css"
 @import "tailwindcss";
 
 .custom-class {
   @apply bg-red-500 text-white;
 }
+```
+
+```html title="index.html"
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./style.css" />
+    <!-- [!code ++] -->
+  </head>
+  <!-- the rest of your HTML... -->
+</html>
 ```
 
 ### Custom Plugins
