@@ -18,15 +18,11 @@ const fetchRepo = async (repoUrl: string, destinationPath: string, repoBranch = 
 
 const BUN_REPO_URL = "https://github.com/oven-sh/bun.git";
 const BUN_REPO_PATH = join(import.meta.dirname, "../.repos/bun");
-const DOCS_REPO_URL = "https://github.com/oven-sh/docs.git";
-const DOCS_REPO_PATH = join(import.meta.dirname, "../.repos/docs");
 
-const fetchBun = () => fetchRepo(BUN_REPO_URL, BUN_REPO_PATH, "lydia/merge-docs", ["docs", "packages/bun-types"]);
-const fetchDocs = () => fetchRepo(DOCS_REPO_URL, DOCS_REPO_PATH);
+const fetchBun = () => fetchRepo(BUN_REPO_URL, BUN_REPO_PATH, "main", ["docs", "packages/bun-types"]);
 
 await Promise.all([
   fetchBun().catch(() => Bun.$`rm -rf ${BUN_REPO_PATH}`.then(fetchBun)),
-  // fetchDocs().catch(() => {}),
 ]);
 
 // TODO: copy ./repos/bun/docs to ./content/docs & ./repos/bun/guides to ./content/guides
