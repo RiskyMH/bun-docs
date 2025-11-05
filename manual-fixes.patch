@@ -3186,7 +3186,7 @@ index ef588210..3f2ab577 100644
  const {
    symbols: { hello },
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 14bd6ce8..661c0425 100644
+index e0629735..b66d9633 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
 @@ -289,7 +289,7 @@ childProc.disconnect();
@@ -3212,7 +3212,7 @@ index 9f00c1e7..ce38e410 100644
  import { CookieMap } from "bun";
  
 diff --git b/content/docs/runtime/debugger.mdx a/content/docs/runtime/debugger.mdx
-index 3873e1d4..c1fec8e1 100644
+index d122c3c1..b28e1626 100644
 --- b/content/docs/runtime/debugger.mdx
 +++ a/content/docs/runtime/debugger.mdx
 @@ -22,9 +22,7 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This a
@@ -3225,11 +3225,16 @@ index 3873e1d4..c1fec8e1 100644
  ------------------ Bun Inspector ------------------
  Listening at:
    ws://localhost:6499/0tqxs9exrgrm
-@@ -148,11 +146,11 @@ await fetch("https://example.com", {
- This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
+@@ -143,12 +141,16 @@ await fetch("https://example.com", {
+   },
+   body: JSON.stringify({ foo: "bar" }),
+ });
++```
++
++This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
  
- ```sh
 -[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/1.3.1" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
++```sh
 +[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/$BUN_LATEST_VERSION" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
  [fetch] > HTTP/1.1 POST https://example.com/
  [fetch] > content-type: application/json
@@ -3239,7 +3244,15 @@ index 3873e1d4..c1fec8e1 100644
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br
-@@ -194,7 +192,7 @@ This prints the following to the console:
+@@ -183,11 +185,14 @@ await fetch("https://example.com", {
+   body: JSON.stringify({ foo: "bar" }),
+ });
+ ```
+-```txt
++
++This prints the following to the console:
++
++```sh title="terminal"
  [fetch] > HTTP/1.1 POST https://example.com/
  [fetch] > content-type: application/json
  [fetch] > Connection: keep-alive
@@ -3248,6 +3261,18 @@ index 3873e1d4..c1fec8e1 100644
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br
+@@ -312,7 +317,10 @@ const fn = () => {
+ 
+ fn();
+ ```
+-```txt
++
++This logs the following:
++
++```sh title="terminal"
+ Error: here!
+     at myInner (file.js:4:15)
+     at fn (file.js:8:5)
 diff --git b/content/docs/runtime/environment-variables.mdx a/content/docs/runtime/environment-variables.mdx
 index 63032a20..ea05ca2e 100644
 --- b/content/docs/runtime/environment-variables.mdx

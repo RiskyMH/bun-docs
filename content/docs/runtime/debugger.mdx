@@ -129,7 +129,7 @@ The `BUN_CONFIG_VERBOSE_FETCH` environment variable lets you log network request
 
 ### Print fetch & node:http requests as curl commands
 
-Bun also supports printing `fetch()` and `node:http` network requests as `curl` commands by setting the environment variable `BUN_CONFIG_VERBOSE_FETCH` to `curl`.
+Bun also supports printing `fetch()` and `node:http` network requests as `curl` commands by setting the environment variable `BUN_CONFIG_VERBOSE_FETCH` to `curl`. This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
 
 ```ts title="index.ts"
 process.env.BUN_CONFIG_VERBOSE_FETCH = "curl";
