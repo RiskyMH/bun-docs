@@ -10,6 +10,7 @@
     "pull-docs": "bun scripts/pull-docs.ts",
     "migrate-docs": "bun migrate-docs.ts",
     "sync-docs": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git apply manual-fixes.patch --reject",
+    "sync-docs:save": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git diff -R content/ > manual-fixes.patch && git restore content/",
     "check-links": "bun scripts/check-links.ts"
   },
   "dependencies": {
