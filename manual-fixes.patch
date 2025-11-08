@@ -4215,6 +4215,20 @@ index 9095a830..985ade01 100644
  import adapter from "@sveltejs/adapter-auto"; // [!code --]
  import adapter from "svelte-adapter-bun"; // [!code ++]
  import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+diff --git b/content/guides/ecosystem/upstash.mdx a/content/guides/ecosystem/upstash.mdx
+index 3532a260..28cc6a07 100644
+--- b/content/guides/ecosystem/upstash.mdx
++++ a/content/guides/ecosystem/upstash.mdx
+@@ -84,8 +84,7 @@ mode: center
+     	// Get the updated value
+     	counter = await redis.get("counter");
+     	console.log(counter);
+-    	
+-    	1
++    	// => 1
+     	```
+ 
+     	The Redis client automatically handles connections in the background. No need to manually connect or disconnect for basic operations.
 diff --git b/content/guides/index.mdx a/content/guides/index.mdx
 index 107c894c..4e453352 100644
 --- b/content/guides/index.mdx
