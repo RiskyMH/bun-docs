@@ -3887,6 +3887,102 @@ index 2c6a54e5..5f36440b 100644
  {
    "compilerOptions": {
      // Environment setup & latest features
+diff --git b/content/guides/deployment/aws-lambda.mdx a/content/guides/deployment/aws-lambda.mdx
+index bfda459f..4f283e10 100644
+--- b/content/guides/deployment/aws-lambda.mdx
++++ a/content/guides/deployment/aws-lambda.mdx
+@@ -110,6 +110,7 @@ In this guide, we will deploy a Bun HTTP server to AWS Lambda using a `Dockerfil
+     		```bash title="terminal"
+     		$ export ECR_URI=$(aws ecr create-repository --repository-name bun-lambda-demo --region us-east-1 --profile my-sso-app --query 'repository.repositoryUri' --output text)
+     		$ echo $ECR_URI
++			[id].dkr.ecr.us-east-1.amazonaws.com/bun-lambda-demo
+     		```
+     	</Callout>
+ 
+@@ -120,7 +121,7 @@ In this guide, we will deploy a Bun HTTP server to AWS Lambda using a `Dockerfil
+     	Log in to the ECR repository:
+ 
+     	```bash title="terminal"
+-    	aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_URI
++    	$ aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_URI
+     	
+     	Login Succeeded
+     	```
+@@ -129,7 +130,7 @@ In this guide, we will deploy a Bun HTTP server to AWS Lambda using a `Dockerfil
+     		If using a profile, use the `--profile` flag:
+ 
+     		```bash title="terminal"
+-    		aws ecr get-login-password --region us-east-1 --profile my-sso-app | docker login --username AWS --password-stdin $ECR_URI
++    		$ aws ecr get-login-password --region us-east-1 --profile my-sso-app | docker login --username AWS --password-stdin $ECR_URI
+     		```
+ 
+     	</Callout>
+diff --git b/content/guides/deployment/digital-ocean.mdx a/content/guides/deployment/digital-ocean.mdx
+index 42c32b11..646668be 100644
+--- b/content/guides/deployment/digital-ocean.mdx
++++ a/content/guides/deployment/digital-ocean.mdx
+@@ -39,10 +39,10 @@ In this guide, we will deploy a Bun HTTP server to DigitalOcean using a `Dockerf
+     		<Tab value="Through the DigitalOcean CLI">
+ 
+     			```bash title="terminal"
+-    			doctl registry create bun-digitalocean-demo
++    			$ doctl registry create bun-digitalocean-demo
+     			
+     			Name                     Endpoint                                           Region slug
+-    			$ bun-digitalocean-demo    registry.digitalocean.com/bun-digitalocean-demo    sfo2
++    			bun-digitalocean-demo    registry.digitalocean.com/bun-digitalocean-demo    sfo2
+     			```
+ 
+     		</Tab>
+@@ -109,7 +109,7 @@ In this guide, we will deploy a Bun HTTP server to DigitalOcean using a `Dockerf
+     	Before building and pushing the Docker image, authenticate Docker with the DigitalOcean Container Registry:
+ 
+     	```bash title="terminal"
+-    	doctl registry login
++    	$ doctl registry login
+     	
+     	Successfully authenticated with registry.digitalocean.com
+     	```
+diff --git b/content/guides/deployment/google-cloud-run.mdx a/content/guides/deployment/google-cloud-run.mdx
+index 812c7f34..f39ea070 100644
+--- b/content/guides/deployment/google-cloud-run.mdx
++++ a/content/guides/deployment/google-cloud-run.mdx
+@@ -27,7 +27,7 @@ Make sure that you've initialized the Google Cloud CLI. This command logs you in
+ For more help with the Google Cloud CLI, see the [official documentation](https://docs.cloud.google.com/sdk/gcloud/reference/init).
+ 
+ ```bash title="terminal"
+-gcloud init
++$ gcloud init
+ 
+ Welcome! This command will take you through the configuration of gcloud.
+ 
+@@ -68,7 +68,7 @@ my-bun-app-... [PROJECT_NUMBER]
+ List your available billing accounts and link one to your project:
+ 
+ ```bash title="terminal"
+-gcloud billing accounts list
++$ gcloud billing accounts list
+ 
+ ACCOUNT_ID            NAME                OPEN  MASTER_ACCOUNT_ID
+ [BILLING_ACCOUNT_ID]  My Billing Account  True
+@@ -77,7 +77,7 @@ ACCOUNT_ID            NAME                OPEN  MASTER_ACCOUNT_ID
+ Link your billing account to your project. Replace `[BILLING_ACCOUNT_ID]` with the ID of your billing account.
+ 
+ ```bash title="terminal"
+-gcloud billing projects link $PROJECT_ID --billing-account=[BILLING_ACCOUNT_ID]
++$ gcloud billing projects link $PROJECT_ID --billing-account=[BILLING_ACCOUNT_ID]
+ 
+ billingAccountName: billingAccounts/[BILLING_ACCOUNT_ID]
+ billingEnabled: true
+@@ -166,7 +166,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
+ </Callout>
+ 
+ ```bash title="terminal"
+-gcloud run deploy my-bun-app --source . --region=us-west1 --allow-unauthenticated
++$ gcloud run deploy my-bun-app --source . --region=us-west1 --allow-unauthenticated
+ 
+ Deploying from source requires an Artifact Registry Docker repository to store built containers. A repository named
+ [cloud-run-source-deploy] in region [us-west1] will be created.
 diff --git b/content/guides/deployment/vercel.mdx a/content/guides/deployment/vercel.mdx
 index 1493be1a..578bc9bd 100644
 --- b/content/guides/deployment/vercel.mdx
