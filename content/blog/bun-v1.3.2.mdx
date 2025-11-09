@@ -1,0 +1,332 @@
+---
+title: Bun v1.3.2
+description: "Fixes 287 issues (addressing 324 👍). Hoisted installs restored as default for backward compatibility. CPU profiling with --cpu-prof, faster installs for packages with post-install scripts, bun:test onTestFinished hook, ServerWebSocket subscriptions getter, Alpine 3.22 in Docker images, improved Git dependency resolution, bun list alias, and numerous bug fixes across install, HTTP/HTTPS, N-API, bun test, bun build, and runtime."
+date: 2025-11-08T10:11:00.000Z
+authors: ["jarred", "lydia"]
+category: Changelog
+---
+
+This release fixes 287 issues (addressing 324 👍).
+
+<include>../_snippets/blog/install-bun.mdx</include>
+
+## Hoisted installs restored as default
+
+In Bun 1.3.0, we made isolated installs the default for workspaces. While this eliminated phantom dependencies and made installs faster and more predictable, it also introduced some issues for existing monorepos that relied on shared dependencies.
+
+In Bun 1.3.2, Isolated installs are now only the default for _new_ projects, while existing workspaces keep using hoisted installs unless explicitly configured.
+
+**To keep using isolated installs in your existing workspaces/monorepos**:
+
+```toml title="bunfig.toml"
+[install]
+# Explicitly set the linker to isolated
+linker = "isolated"
+```
+
+Or use the `--linker=isolated` flag:
+
+```sh
+$ bun install --linker=isolated
+```
+
+**New projects using workspaces (or those without a lockfile)** continue to use isolated installs as the default.
+
+| `configVersion` | Using workspaces? | Default Linker |
+| --------------- | ----------------- | -------------- |
+| `1`             | ✅                | `isolated`     |
+| `1`             | ❌                | `hoisted`      |
+| `0`             | ✅                | `hoisted`      |
+| `0`             | ❌                | `hoisted`      |
+
+## Lockfile `configVersion` stabilizes install defaults
+
+Flip-flopping between `isolated` and `hoisted` linker is not good for our users. Collectively, breaking changes are a waste of everyone's time.
+
+To make future bun upgrades easier, `bun install` now writes a `configVersion` to `bun.lock` / `bun.lockb`. This lets us change default configuration in the future without impacting existing projects.
+
+Here's how it works:
+
+- **New projects**: Default to `configVersion = 1` (v1). In workspaces, v1 uses the isolated linker by default; otherwise it uses hoisted linking.
+- **Existing Bun projects**: If your existing lockfile doesn't have a version yet, Bun sets `configVersion = 0` (v0) when you run `bun install`, preserving the previous hoisted linker default.
+- **Migrations from other package managers**:
+  - From pnpm: `configVersion = 1` (v1)
+  - From npm or yarn: `configVersion = 0` (v0)
+
+```json title="bun.lock"
+// New projects:
+"configVersion": 1,
+
+// Existing projects without a version (after running `bun install`):
+"configVersion": 0,
+```
+
+## Faster `bun install`
+
+Projects that depend on popular libraries like `esbuild` or `sharp` install faster.
+
+<ReactTweet id="1984596069913887192" />
+
+To disable Bun's built-in defaults via environment variables:
+
+```sh
+BUN_FEATURE_FLAG_DISABLE_NATIVE_DEPENDENCY_LINKER=1  # disables native binlinking
+BUN_FEATURE_FLAG_DISABLE_IGNORE_SCRIPTS=1            # disables script skipping
+```
+
+## CPU profiling with `--cpu-prof`
+
+Bun now supports CPU profiling for any script using the `--cpu-prof` flag. This records detailed information about how much time your program spends in each function, helping you identify performance bottlenecks and optimize hot paths.
+
+<ReactTweet id="1983742270475268169" />
+
+Profiles are saved in the Chrome DevTools–compatible `.cpuprofile` format and can be opened directly in Chrome DevTools (Performance tab) or VS Code's CPU profiler. Sampling runs at 1ms for fine-grained insights.
+
+| Flag                         | Description               |
+| ---------------------------- | ------------------------- |
+| `--cpu-prof`                 | enables profiling         |
+| `--cpu-prof-name <filename>` | sets the output filename  |
+| `--cpu-prof-dir <dir>`       | sets the output directory |
+
+```js
+// script.js
+function fib(n) {
+  return n < 2 ? n : fib(n - 1) + fib(n - 2);
+}
+
+console.log(fib(35)); // some CPU work
+```
+
+You can run this script with CPU profiling enabled:
+
+```sh
+$ bun --cpu-prof script.js
+$ bun --cpu-prof --cpu-prof-name my-profile.cpuprofile script.js
+$ bun --cpu-prof --cpu-prof-dir ./profiles script.js
+```
+
+Open the generated `.cpuprofile` in Chrome DevTools → Performance → Load profile
+
+## bun:test onTestFinished hook
+
+`bun:test` now includes a new `onTestFinished(fn)` hook that runs at the very end of a test, after all `afterEach` hooks have completed. Use it for cleanup or assertions that must happen _after_ every other per-test hook.
+
+- Runs only inside a test (not in `describe` or preload)
+- Supports async and done-style callbacks
+- Not supported in concurrent tests; use `test.serial` instead or remove `test.concurrent`
+
+```ts
+import { test, afterEach, onTestFinished, expect } from "bun:test";
+
+test("runs after afterEach", () => {
+  const calls = [];
+
+  afterEach(() => {
+    calls.push("afterEach");
+  });
+
+  onTestFinished(() => { // [!code ++]
+    calls.push("onTestFinished"); // [!code ++]
+    // afterEach has already run // [!code ++]
+    expect(calls).toEqual(["afterEach", "onTestFinished"]); // [!code ++]
+  }); // [!code ++]
+
+  // test body...
+});
+
+test.serial("async cleanup at the very end", async () => {
+  onTestFinished(async () => { // [!code ++]
+    await new Promise((r) => setTimeout(r, 10)); // [!code ++]
+    // ...close DB connections, stop servers, etc. // [!code ++]
+  }); // [!code ++]
+
+  // test body...
+});
+
+```
+
+Thanks to @pfg for the contribution!
+
+## `ServerWebSocket` subscriptions getter
+
+`ServerWebSocket` now includes a `subscriptions` getter that returns a de-duplicated list of topics the connection is currently subscribed to.
+
+This makes it easy to inspect and manage per-connection state in pub/sub systems, for example, debugging topic subscriptions or cleaning up resources when clients disconnect.
+
+When a socket closes, `subscriptions` automatically returns an empty array.
+
+```js
+const server = Bun.serve({
+  fetch(req, server) {
+    if (server.upgrade(req)) return;
+    return new Response("Not a websocket");
+  },
+  websocket: {
+    open(ws) {
+      ws.subscribe("chat");
+      ws.subscribe("notifications");
+      console.log(ws.subscriptions); // ["chat", "notifications"] // [!code ++]
+
+      ws.unsubscribe("chat");
+      console.log(ws.subscriptions); // ["notifications"] // [!code ++]
+    },
+    close(ws) {
+      console.log(ws.subscriptions); // [] // [!code ++]
+    },
+  },
+});
+```
+
+This makes working with Bun's WebSocket pub/sub model more transparent and easier to debug.
+
+## Alpine 3.22 in official Docker images
+
+Bun's official Alpine Linux Docker images now use **Alpine 3.22** for both `x64` and `arm64(musl)` builds. This update brings the latest security patches, improved package compatibility, and a smaller base footprint.
+
+## Improved Git dependency resolution
+
+`bun install` now has better support for npm-style hosted Git URLs and GitHub shorthands.
+
+GitHub repositories specified with custom protocol prefixes are correctly identified and routed through the fast HTTP tarball pathway.
+
+```json title="package.json"
+{
+  "dependencies": {
+    // GitHub shorthand (now parsed correctly and downloaded via HTTP tarball)
+    "cool-lib": "github:owner/repo#v1.2.3",
+
+    // Different protocols resolve deterministically
+    "tooling-ssh": "git+ssh://git@github.com/owner/repo.git#main",
+    "tooling-https": "git+https://github.com/owner/repo.git#main"
+  }
+}
+
+```
+
+Thanks to @markovejnovic for the contribution!
+
+## `bun list` alias for `bun pm ls`
+
+You can now list your dependency tree with a shorter, top-level command: `bun list`. This is a direct alias for `bun pm ls` and supports the same flags (e.g. `--all`).
+
+It supports all the same flags—including `--all` for a full transitive view, making dependency inspection quicker and easier.
+
+```sh
+# List dependencies from the current lockfile (alias for `bun pm ls`)
+$ bun list
+
+# Show the full transitive dependency tree
+$ bun list --all
+```
+
+## spawnSync now runs on an isolated event loop
+
+`Bun.spawnSync` & `child_process.spawnSync` now run on an isolated event loop from the rest of the process, preventing JavaScript timers and microtasks from firing and interfering with the main process's stdin/stdout. This aligns Bun's spawnSync behavior with Node.js and makes timeouts reliable across platforms, including Windows.
+
+This is how it should've been done in the first place. There were several bugs and stability issues with the previous implementation, including cases where using `execSync` with `vim` would "eat" the first character of keypresses, making it feel very slow to do anything at all.
+
+In rare cases, projects could mistakenly be depending on this behavior. Please let us know if you are negatively impacted by this change.
+
+## More bug fixes
+
+### Node.js compatibility improvements
+
+- Fixed: `EventEmitter` could throw an error when `removeAllListeners(type)` was called from within an event handler while a `removeListener` meta-listener was registered and the target event had no listeners; behavior now matches Node.js (no error).
+- Fixed: `ServerResponse.prototype.writableNeedDrain` incorrectly returned true when the response had no handle, causing `fs.createReadStream().pipe(res)` and other piped streams to pause indefinitely in middleware/connect-to-web scenarios (e.g., Vite staticfile serving). Behavior now matches Node.js, allowing streams to flow and readable/end events to fire as expected.
+- Fixed: `process.mainModule` setter/getter semantics now match Node.js
+- Fixed: Crash when user code overrides `process.nextTick`. Bun now safely uses the overridden function during internal scheduling (e.g., WebSocket internals) instead of crashing.
+- Fixed: `Buffer.isEncoding('')` incorrectly returned `true`; it now returns `false` to match Node.js behavior.
+- Fixed: `Module._resolveFilename` now forwards the options object (including `options.paths`) to overridden implementations and honors `options.paths` when provided. This restores compatibility with Node-style require hooks (e.g., Next.js 16) and fixes Next.js 16 + React Compiler + Turbopack builds that previously failed with "Cannot find module './node_modules/babel-plugin-react-compiler'".
+- Fixed: `Module._resolveFilename` validates that `options.paths` is an array and throws `ERR_INVALID_ARG_TYPE` otherwise, aligning with Node.js.
+- Fixed: `process.dlopen` crashed when passed non-object exports (null, undefined, or primitives). Bun now matches Node.js ToObject semantics—throwing TypeError for null/undefined and boxing primitives—preventing segfaults when loading native addons.
+
+### N-API and native addons
+
+- Fixed: N-API `napi_create_external_buffer` now correctly handles empty inputs (null data and/or length 0) without throwing or creating a detached buffer. When length is 0, it returns a detached ArrayBuffer matching Node.js behavior. `napi_get_buffer_info` and `napi_get_arraybuffer_info` correctly report a null pointer and 0 length, and `napi_is_detached_arraybuffer` returns true. This prevents `napi_create_reference` crashes in addons (e.g. ref-napi, ffi-napi, @tdengine/client) and ensures zero-length buffers are created with safe finalization.
+- Fixed: Crash in N-API when ThreadSafeFunction finalizers or async work deinitialized the environment during dispatch, causing intermittent crashes. Environment references are now safely retained until operations complete, improving reliability for addons using ThreadSafeFunction and finalizers.
+- Fixed: N-API property access now returns undefined for missing properties and out-of-bounds elements (e.g., `napi_get_property` and element getters), matching Node.js behavior.
+- Fixed: Numeric-string keys (e.g., "0", "42") are handled consistently as index access across N-API property operations (get/has/has_own/delete), aligning semantics with Node.js.
+- Fixed: `napi_delete_property`, `napi_has_property`, and `napi_has_own_property` now return correct boolean results and propagate exceptions consistently, improving addon compatibility and correctness.
+- Fixed: Improved error handling across N-API property and element access to avoid spurious failures and improve reliability in native addons.
+- Fixed: Importing `better-sqlite3` now fails fast with a clear, actionable error instead of crashing with a dlopen/symbol lookup error (`undefined symbol: node_module_register`). The message links to the tracking issue and suggests `bun:sqlite` as an alternative.
+
+### HTTP/HTTPS and networking
+
+- Fixed: Restored use of the system CA trust store for TLS verification, resolving a 1.3.0 regression that caused some HTTPS requests to fail with `UNABLE_TO_GET_ISSUER_CERT_LOCALLY`. Bun now again loads default OS CA paths
+- Fixed: HTTP server could incorrectly mark a connection as idle after a write failure, leading to a request taking longer to timeout than expected.
+- Fixed: Upgrading WebSocket connections via `ws` module in certain cases could consume 100% CPU when it should be idling.
+
+### Fetch API
+
+- Fixed: Fetch API methods now reject with `TypeError` instead of `Error` when the body has already been consumed (e.g., calling `text()` then `json()` on the same Request/Response), aligning with the Fetch spec and matching Node/Deno behavior.
+
+### bun test bugfixes
+
+- Fixed: `bun:test` lifecycle hooks (`beforeAll`, `beforeEach`, `afterAll`, `afterEach`) no longer throw when called with a callback and options as the second argument. `(callback, options)` is now correctly parsed, supporting both object and numeric timeouts (e.g., fixes "beforeAll() expects a function as the second argument").
+- Fixed: `bun:test` now emits clearer errors when snapshot creation is attempted in CI. Messages explicitly refer to creation (not updating), include the received value, and (for file snapshots) the snapshot name, with guidance to use `--update-snapshots` or set `CI=false` to override.
+- Fixed: In rare cases, `bun test` could crash when a test prompted for a sudo password or left a dangling process
+- Fixed: `expect(...).toThrow` with an async function no longer crashes the test runner when the rejection occurs after the test timeout. The test now times out and reports a failure as expected.
+- Fixed: bun-types for bun:test incorrectly typed `vi.mock(...)` as `vi.module(...)`, causing TypeScript errors ("Property 'mock' does not exist") and potential runtime TypeError. `vi.mock` is now correctly typed.
+
+### bun build bugfixes
+
+- Fixed: 2 different sourcemap sorting bugs. Please continue letting us know if you run into sourcemap-related issues.
+
+### CSS and styling
+
+- Fixed: CSS view-transition pseudo-elements now support class selector arguments (e.g., `::view-transition-old(.slide-out)`, `::view-transition-new(.fade-in)`, `::view-transition-group(.card)`, `::view-transition-image-pair(.hero)`), resolving "Unexpected token: ." errors during parsing/bundling. These selectors now parse, minify, and serialize correctly.
+- Fixed: CSS minifier now processes `@layer` blocks, ensuring `color-scheme` rules receive the required `--buncss-light`/`--buncss-dark` variable injections and `prefers-color-scheme` fallbacks for browsers without `light-dark()` support.
+
+### bun install bugfixes
+
+- Fixed: `bun update --interactive` (including `--latest`) updated `package.json` but did not install the selected updates. It now installs the updated dependencies and refreshes `node_modules`, so no extra `bun install` is required.
+- Fixed: `bun update --interactive` no longer strips `npm:` alias prefixes when updating dependencies in `package.json`. Aliases and range operators are preserved when bumping versions (e.g., `npm:@jsr/std__semver@1.0.5 → npm:@jsr/std__semver@1.0.6`, `npm:@types/no-deps@^1.0.0 → npm:@types/no-deps@^2.0.0`).
+- Fixed: `bun install` left optional peerDependencies unresolved in isolated installs, causing inconsistent peer resolutions, duplicate package copies in `node_modules/.bun`, and TypeScript type incompatibilities in monorepos (e.g. Elysia + plugins). Optional peers now resolve to an installed package when available, improving deduplication and linker behavior.
+- Fixed: `bun install` no longer conflates `git+ssh` and `git+https` (or other protocol prefixes) references to the same repository; each specifier is resolved and recorded independently.
+- Fixed: GitHub dependencies with custom protocol prefixes (e.g., git+https://github.com/owner/repo#v1.2.3) are now recognized as GitHub tag downloads, enabling the faster HTTP download path and reducing install time. Improved recognition of GitHub shorthand (owner/repo and owner/repo#branch) during dependency resolution increases reliability for hosted git installs.
+
+### Runtime and performance
+
+- Fixed: Global `~/.bunfig.toml` could be loaded more than once in a single run, leading to duplicate configuration application and unexpected behavior. Bun now guarantees the config is loaded at most once per run.
+- Fixed: Crash when parsing MySQL OK packets with truncated or empty payloads. An integer underflow could produce an oversized read and trigger an overflow panic. Remaining bytes are now safely clamped, improving reliability when handling minimal responses (e.g., queries that return no rows).
+- Fixed: A crash in `Bun.CookieMap#delete` in certain cases.
+- Fixed: ANSI color support is now detected per stream (stdout vs stderr). This resolves missing colors in errors/crash reports and test diffs, and prevents misrendered box-drawing characters in interactive commands (e.g., publish, outdated, create, init, update) when the terminal doesn't support color.
+- Fixed: Interactive UIs and installer output only use box-drawing characters when stdout supports ANSI, avoiding garbled tables and lines in plain terminals.
+- Fixed: Hot reload terminal-clearing logic respects stdout color capability, avoiding unnecessary escape sequences in non-ANSI environments.
+- Fixed: Test framework output (expect diffs and matcher messages) consistently respects stderr color support for readable failure output.
+- Fixed: Crash reports on glibc-based Linux could show severely truncated stack traces (sometimes only the signal handler frame). Bun now uses Zig's `std.debug.captureStackTrace` for more complete traces, falling back to glibc `backtrace()` when it provides more frames (e.g., on some ARM systems).
+
+### Module resolution
+
+- Fixed: Requiring an ES module with top‑level await via `require()` or `import.meta.require` would throw and leave a partially initialized module in the cache, causing subsequent `import()` or `require()` to behave incorrectly. The failed module is now evicted from the cache on error so a later dynamic `import()` loads and evaluates it correctly.
+
+### TypeScript and types
+
+- Fixed: TypeScript types for Blob, ReadableStream, and Response now include `text()`, `bytes()`, `json()`, `formData()`, and `arrayBuffer()` convenience methods, resolving errors like "Type 'Blob' is missing ... json, formData" when using `response.blob()`.
+- Fixed: TypeScript definitions for `Bun.spawn` and `spawnSync` now include missing options and match runtime behavior. You can use `detached`, `onDisconnect` (fires when the IPC channel closes), and `lazy` (defer stdout/stderr reads until accessed). Also clarified IPC lifecycle ordering with `onExit`.
+- Fixed: spawn/spawnSync option shapes are unified via `Bun.Spawn.BaseOptions` in the types; the older `Spawn.OptionsObject` alias is deprecated. Use `BaseOptions` or the specific spawn/spawnSync option types going forward.
+
+### Web Crypto
+
+- Fixed: Web Crypto `crypto.exportKey("jwk")` for EC private keys sometimes produced a shorter-than-required "d" parameter (missing leading-zero padding), violating RFC 7518 and causing import failures in Chrome. Bun now pads "d" to the correct length for P-256 (32 bytes), P-384 (48 bytes), and P-521 (66 bytes).
+
+## Thanks to 18 contributors!
+
+- [@alii](https://github.com/alii)
+- [@avarayr](https://github.com/avarayr)
+- [@braden-w](https://github.com/braden-w)
+- [@cirospaciari](https://github.com/cirospaciari)
+- [@csvlad](https://github.com/csvlad)
+- [@dylan-conway](https://github.com/dylan-conway)
+- [@fraidev](https://github.com/fraidev)
+- [@jarred-sumner](https://github.com/jarred-sumner)
+- [@lillious](https://github.com/lillious)
+- [@lydiahallie](https://github.com/lydiahallie)
+- [@markovejnovic](https://github.com/markovejnovic)
+- [@nektro](https://github.com/nektro)
+- [@nkxxll](https://github.com/nkxxll)
+- [@pfgithub](https://github.com/pfgithub)
+- [@riskymh](https://github.com/riskymh)
+- [@robobun](https://github.com/robobun)
+- [@sosukesuzuki](https://github.com/sosukesuzuki)
+- [@taylordotfish](https://github.com/taylordotfish)
