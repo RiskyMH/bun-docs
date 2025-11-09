@@ -3337,9 +3337,18 @@ index a3c1ba4c..6133461b 100644
  <html>
    <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 657ef14c..ac723224 100644
+index 657ef14c..86ac91f3 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
+@@ -126,7 +126,7 @@ $ bun --port=4002 server.ts
+ - `BUN_PORT` environment variable
+ 
+ ```sh
+-bun_PORT=4002 bun server.ts
++$ BUN_PORT=4002 bun server.ts
+ ```
+ 
+ - `PORT` environment variable
 @@ -408,7 +408,7 @@ The `Bun.serve` server can handle roughly 2.5x more requests per second than Nod
  
  Here's a basic database-backed REST API using Bun's router with zero dependencies:
