@@ -57,10 +57,13 @@ export const blog = defineCollections({
   }),
 });
 
-const BUN_VERSION =
-  process.env.BUN_VERSION ||
-  readFileSync(".repos/bun/LATEST", "utf-8").trim() ||
-  "1.3.2";
+let BUN_VERSION = process.env.BUN_VERSION;
+if (!BUN_VERSION) {
+  try {
+    BUN_VERSION = readFileSync(".repos/bun/LATEST", "utf-8").trim();
+  } catch {}
+}
+BUN_VERSION ||= "1.3.2";
 
 export default defineConfig({
   experimentalBuildCache: ".next/cache/fumadocs",
