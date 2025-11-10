@@ -132,6 +132,8 @@ export default defineConfig({
           toml: "config",
           yaml: "config",
           yml: "config",
+          env: "config",
+          ini: "config",
           zsh: "shellscript",
         },
       },
