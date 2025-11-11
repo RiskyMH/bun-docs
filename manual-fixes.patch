@@ -4237,6 +4237,52 @@ index 9095a830..985ade01 100644
  import adapter from "@sveltejs/adapter-auto"; // [!code --]
  import adapter from "svelte-adapter-bun"; // [!code ++]
  import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
+index 35e63561..32faf820 100644
+--- b/content/guides/ecosystem/tanstack-start.mdx
++++ a/content/guides/ecosystem/tanstack-start.mdx
+@@ -138,26 +138,33 @@ mode: center
+       ```
+     </Callout>
+ 
+-    <Columns cols={3}>
+-      <Card title="Vercel" href="/guides/deployment/vercel" icon="/icons/ecosystem/vercel.svg">
++import { VercelIcon } from "@/components/icons/vercel";
++import { RenderIcon } from "@/components/icons/render";
++import { RailwayIcon } from "@/components/icons/railway";
++import { DigitalOceanIcon } from "@/components/icons/digitalocean";
++import { AWSIcon } from "@/components/icons/aws";
++import { GoogleCloudIcon } from "@/components/icons/google-cloud";
++
++    <Cards className="grid-cols-3">
++      <Card title="Vercel" href="/guides/deployment/vercel" icon={<VercelIcon />}>
+         Deploy on Vercel
+       </Card>
+-      <Card title="Render" href="/guides/deployment/render" icon="/icons/ecosystem/render.svg">
++      <Card title="Render" href="/guides/deployment/render" icon={<RenderIcon />}>
+         Deploy on Render
+       </Card>
+-      <Card title="Railway" href="/guides/deployment/railway" icon="/icons/ecosystem/railway.svg">
++      <Card title="Railway" href="/guides/deployment/railway" icon={<RailwayIcon />}>
+         Deploy on Railway
+       </Card>
+-       <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon="/icons/ecosystem/digitalocean.svg">
++       <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon={<DigitalOceanIcon />}>
+         Deploy on DigitalOcean
+       </Card>
+-      <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon="/icons/ecosystem/aws.svg">
++      <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon={<AWSIcon />}>
+         Deploy on AWS Lambda
+       </Card>
+-      <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon="/icons/ecosystem/gcp.svg">
++      <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon={<GoogleCloudIcon />}>
+         Deploy on Google Cloud Run
+       </Card>
+-    </Columns>
++    </Cards>
+ 
+   </Step>
+ </Steps>
 diff --git b/content/guides/ecosystem/upstash.mdx a/content/guides/ecosystem/upstash.mdx
 index 3532a260..28cc6a07 100644
 --- b/content/guides/ecosystem/upstash.mdx
