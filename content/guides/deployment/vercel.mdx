@@ -32,7 +32,7 @@ mode: center
 
     	Vercel automatically detects this configuration and runs your application on Bun. The value has to be `"1.x"`, Vercel handles the minor version internally.
 
-    	For best results, match your local Bun version with the version used by Vercel. **Currently, Bun version `1.2.23` is supported**.
+    	For best results, match your local Bun version with the version used by Vercel.
     </Step>
 
     <Step>
@@ -85,8 +85,7 @@ mode: center
 
     	```ts title="index.ts"
     	console.log("runtime", process.versions.bun);
-    	
-    	runtime 1.2.23
+    	// => runtime $BUN_LATEST_VERSION
     	```
 
     	[See the Vercel Bun Runtime documentation for feature support →](https://vercel.com/docs/functions/runtimes/bun#feature-support)
