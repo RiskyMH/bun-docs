@@ -2823,6 +2823,19 @@ index 24f8ce7a..6614c847 100644
 +```js title="dist/index.js"
  #!/usr/bin/env bun
  ```
+diff --git b/content/docs/pm/cli/install.mdx a/content/docs/pm/cli/install.mdx
+index cc932f00..57832a89 100644
+--- b/content/docs/pm/cli/install.mdx
++++ a/content/docs/pm/cli/install.mdx
+@@ -260,7 +260,7 @@ The default linker strategy depends on whether you're starting fresh or have an
+ 
+ - **New workspaces/monorepos**: `isolated` (prevents phantom dependencies)
+ - **New single-package projects**: `hoisted` (traditional npm behavior)
+-- **Existing projects (made pre-v$BUN_LATEST_VERSION)**: `hoisted` (preserves backward compatibility)
++- **Existing projects (made pre-v1.3.2)**: `hoisted` (preserves backward compatibility)
+ 
+ The default is controlled by a `configVersion` field in your lockfile. For a detailed explanation, see [Package manager > Isolated installs](/docs/pm/isolated-installs).
+ 
 diff --git b/content/docs/pm/cli/link.mdx a/content/docs/pm/cli/link.mdx
 index ee4532d2..88b1821e 100644
 --- b/content/docs/pm/cli/link.mdx
@@ -2879,7 +2892,7 @@ index d9c73e1a..5c7de79d 100644
  
  Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
-index e965e479..23e9735d 100644
+index 833afa40..c1d7aab8 100644
 --- b/content/docs/pm/cli/pm.mdx
 +++ a/content/docs/pm/cli/pm.mdx
 @@ -87,7 +87,6 @@ To print the path to the `bin` directory for the local project:
@@ -2898,7 +2911,7 @@ index e965e479..23e9735d 100644
  <$HOME>/.bun/bin
  ```
  
-@@ -270,16 +268,16 @@ Manage `package.json` data with get, set, delete, and fix operations.
+@@ -274,16 +272,16 @@ Manage `package.json` data with get, set, delete, and fix operations.
  All commands support dot and bracket notation:
  
  ```bash title="terminal"
@@ -2945,6 +2958,19 @@ index 9bcc6ffd..98faa4c8 100644
  ? Select packages to update - Space to toggle, Enter to confirm, a to select all, n to select none, i to invert, l to toggle latest
  
    dependencies                Current  Target   Latest
+diff --git b/content/docs/pm/isolated-installs.mdx a/content/docs/pm/isolated-installs.mdx
+index de2e4a21..410303f8 100644
+--- b/content/docs/pm/isolated-installs.mdx
++++ a/content/docs/pm/isolated-installs.mdx
+@@ -54,7 +54,7 @@ The default linker strategy depends on your project's lockfile `configVersion`:
+ 
+ **New projects**: Default to `configVersion = 1`. In workspaces, v1 uses the isolated linker by default; otherwise it uses hoisted linking.
+ 
+-**Existing Bun projects (made pre-v$BUN_LATEST_VERSION)**: If your existing lockfile doesn't have a version yet, Bun sets `configVersion = 0` when you run `bun install`, preserving the previous hoisted linker default.
++**Existing Bun projects (made pre-v1.3.2)**: If your existing lockfile doesn't have a version yet, Bun sets `configVersion = 0` when you run `bun install`, preserving the previous hoisted linker default.
+ 
+ **Migrations from other package managers**:
+ 
 diff --git b/content/docs/pm/npmrc.mdx a/content/docs/pm/npmrc.mdx
 index f87cd037..812215f9 100644
 --- b/content/docs/pm/npmrc.mdx
@@ -3083,7 +3109,7 @@ index 285474ad..3cd099ed 100644
 -
  </Accordions>
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index e330e5ac..688680a6 100644
+index 5f0e519d..131aab4c 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -179,7 +179,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -3129,6 +3155,15 @@ index e330e5ac..688680a6 100644
 -
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
+ 
+@@ -497,7 +498,7 @@ print = "yarn"
+ 
+ ### `install.linker`
+ 
+-Configure the linker strategy for installing dependencies. Defaults to `"isolated"` for new workspaces, `"hoisted"` for new single-package projects and existing projects (made pre-v$BUN_LATEST_VERSION).
++Configure the linker strategy for installing dependencies. Defaults to `"isolated"` for new workspaces, `"hoisted"` for new single-package projects and existing projects (made pre-v1.3.2).
+ 
+ For complete documentation refer to [Package manager > Isolated installs](/docs/pm/isolated-installs).
  
 @@ -625,9 +626,7 @@ With this option, the command being run will not be printed to the console:
  
@@ -3368,7 +3403,7 @@ index 657ef14c..86ac91f3 100644
    /**
     * Stop the server from accepting new connections.
 diff --git b/content/docs/runtime/http/websockets.mdx a/content/docs/runtime/http/websockets.mdx
-index 24a45a63..2fdfb648 100644
+index 56d9a5f8..305e3ae7 100644
 --- b/content/docs/runtime/http/websockets.mdx
 +++ a/content/docs/runtime/http/websockets.mdx
 @@ -170,7 +170,7 @@ Bun.serve({
@@ -3835,10 +3870,10 @@ index 8599896c..edd5bba1 100644
   --seed=12345
   2 pass
 diff --git b/content/docs/test/lifecycle.mdx a/content/docs/test/lifecycle.mdx
-index 47f524c9..d8cbf4b9 100644
+index 7d975106..95761055 100644
 --- b/content/docs/test/lifecycle.mdx
 +++ a/content/docs/test/lifecycle.mdx
-@@ -247,8 +247,6 @@ describe("outer describe", () => {
+@@ -265,8 +265,6 @@ describe("outer describe", () => {
    });
  });
  
