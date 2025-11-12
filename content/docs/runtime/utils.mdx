@@ -333,8 +333,8 @@ existing code can be easily ported to Bun and vice versa.
 
 [In this benchmark](https://github.com/oven-sh/bun/blob/5147c0ba7379d85d4d1ed0714b84d6544af917eb/bench/snippets/string-width.mjs#L13), `Bun.stringWidth` is a ~6,756x faster than the `string-width` npm package for input larger than about 500 characters. Big thanks to [sindresorhus](https://github.com/sindresorhus) for their work on `string-width`!
 
-```ts
-❯ bun string-width.mjs
+```bash
+$ bun string-width.mjs
 cpu: 13th Gen Intel(R) Core(TM) i9-13900
 runtime: bun 1.0.29 (x64-linux)
 
@@ -342,8 +342,7 @@ benchmark                                          time (avg)             (min �
 ------------------------------------------------------------------------------------- -----------------------------
 Bun.stringWidth     500 chars ascii              37.09 ns/iter   (36.77 ns … 41.11 ns)  37.07 ns  38.84 ns  38.99 ns
 
-❯ node string-width.mjs
-
+$ node string-width.mjs
 benchmark                                          time (avg)             (min … max)       p75       p99      p995
 ------------------------------------------------------------------------------------- -----------------------------
 npm/string-width    500 chars ascii             249,710 ns/iter (239,970 ns … 293,180 ns) 250,930 ns  276,700 ns 281,450 ns
@@ -392,7 +391,7 @@ Bun.stringWidth 95,000 chars ansi+emoji+ascii  572.69 µs/iter (565.52 µs … 6
 ```
 
 ```bash title="terminal"
-❯ node string-width.mjs
+$ node string-width.mjs
 cpu: 13th Gen Intel(R) Core(TM) i9-13900
 runtime: node v21.4.0 (x64-linux)
 
