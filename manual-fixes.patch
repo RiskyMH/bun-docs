@@ -3784,7 +3784,7 @@ index f66ec8c6..cf84322d 100644
    | "entry-point-build"
    | "entry-point-run"
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 8303559d..990daf19 100644
+index 8303559d..5f3da302 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
@@ -3805,24 +3805,6 @@ index 8303559d..990daf19 100644
  cpu: 13th Gen Intel(R) Core(TM) i9-13900
  runtime: bun 1.0.29 (x64-linux)
  
-@@ -841,7 +841,7 @@ $ bun bench/snippets/strip-ansi.mjs
- cpu: Apple M3 Max
- runtime: bun 1.2.21 (arm64-darwin)
- 
--benchmark                               avg (min … max) p75 / p99
-+$ benchmark                               avg (min … max) p75 / p99
- ------------------------------------------------------- ----------
- Bun.stripANSI      11 chars no-ansi        8.13 ns/iter   8.27 ns
-                                    (7.45 ns … 33.59 ns)  10.29 ns
-@@ -862,7 +862,7 @@ $ node bench/snippets/strip-ansi.mjs
- cpu: Apple M3 Max
- runtime: node 24.6.0 (arm64-darwin)
- 
--benchmark                                avg (min … max) p75 / p99
-+$ benchmark                                avg (min … max) p75 / p99
- -------------------------------------------------------- ---------
- npm/strip-ansi      11 chars no-ansi      466.79 ns/iter 468.67 ns
-                                  (454.08 ns … 570.67 ns) 543.67 ns
 diff --git b/content/docs/runtime/watch-mode.mdx a/content/docs/runtime/watch-mode.mdx
 index c5da0cde..cb83108d 100644
 --- b/content/docs/runtime/watch-mode.mdx
@@ -3837,18 +3819,19 @@ index c5da0cde..cb83108d 100644
  Reloaded 2 times
  Reloaded 3 times
 diff --git b/content/docs/test/dom.mdx a/content/docs/test/dom.mdx
-index 20af4d98..8d431a35 100644
+index 20af4d98..612222ba 100644
 --- b/content/docs/test/dom.mdx
 +++ a/content/docs/test/dom.mdx
-@@ -65,7 +65,7 @@ $ bun test
- ```
+@@ -62,9 +62,6 @@ Let's run this test with `bun test`:
  
- ```
--bun test v$BUN_LATEST_VERSION
-+bun test v1.2.20
+ ```bash title="terminal"
+ $ bun test
+-```
+-
+-```
+ bun test v$BUN_LATEST_VERSION
  
  dom.test.ts:
- ✓ dom test [0.82ms]
 diff --git b/content/docs/test/index.mdx a/content/docs/test/index.mdx
 index 8599896c..edd5bba1 100644
 --- b/content/docs/test/index.mdx
