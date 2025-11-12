@@ -150,6 +150,7 @@ export default defineConfig({
               ["zsh", "$"],
               ["fish", "$"],
               ["powershell", ">"],
+              ["ps1", ">"],
               ["cmd", "$"],
             ];
             // if (
