@@ -82,7 +82,7 @@ index 3f9b720f..95320fe7 100644
 +	</Tab>
  </Tabs>
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index c58f5908..262f78ce 100644
+index e8589053..724a08f3 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -5,18 +5,13 @@ description: "Generate standalone executables from TypeScript or JavaScript file
@@ -126,15 +126,6 @@ index c58f5908..262f78ce 100644
  Checked 63 installs across 64 packages (no changes) [5.00ms]
  ```
  
-@@ -259,7 +254,7 @@ console.log(`Server running at http://localhost:${server.port}`);
- console.log("Hello from the client!");
- ```
- 
--```scss tab="styles.css"
-+```css tab="styles.css"
- body {
-   background-color: #f0f0f0;
- }
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
 index 2dc31661..c0c534cc 100644
 --- b/content/docs/bundler/fullstack.mdx
@@ -209,7 +200,7 @@ index 2dc31661..c0c534cc 100644
  
  ## Migration from Other Frameworks
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index 0e520827..300cc0be 100644
+index 0e520827..0ddd7f9e 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -252,15 +243,6 @@ index 0e520827..300cc0be 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -152,7 +144,7 @@ It's also a CSS bundler. You can use `@import` in your CSS files to import other
- 
- For example:
- 
--```scss tab="styles.css"
-+```css tab="styles.css"
- @import "./abc.css";
- 
- .container {
 @@ -160,7 +152,7 @@ For example:
  }
  ```
@@ -315,7 +297,7 @@ index 0e520827..300cc0be 100644
 +<!-- Reference TailwindCSS in your HTML -->
 +<link rel="stylesheet" href="tailwindcss" />
 +```
-+```css tab="styles.css"
++```scss tab="styles.css"
 +@import "tailwindcss";
 +```
 +```ts tab="app.ts"
@@ -3529,7 +3511,7 @@ index df07be2d..97abac44 100644
  
  **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index b71c4b5f..7dd2220f 100644
+index 29ec7ef6..ac6a71d0 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -3627,7 +3609,7 @@ index b71c4b5f..7dd2220f 100644
  ```
  
  As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like using `Object.create` than `new`. The class's prototype is assigned to the object, methods are attached, and getters/setters are set up, but the constructor is not called.
-@@ -372,14 +349,11 @@ const query = db.query(`select $message;`);
+@@ -370,14 +347,11 @@ const query = db.query(`select $message;`);
  
  query.values({ $message: "Hello world" }); // [!code highlight]
  query.values(2); // [!code highlight]
@@ -3647,7 +3629,7 @@ index b71c4b5f..7dd2220f 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -437,13 +411,8 @@ const query = db.query("SELECT ?1, ?2");
+@@ -435,13 +409,8 @@ const query = db.query("SELECT ?1, ?2");
  const results = query.all("hello", "goodbye");
  ```
  
@@ -3663,7 +3645,7 @@ index b71c4b5f..7dd2220f 100644
  ```
  
  ---
-@@ -466,12 +435,7 @@ import { Database } from "bun:sqlite";
+@@ -464,12 +433,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3677,7 +3659,7 @@ index b71c4b5f..7dd2220f 100644
  ```
  
  When `safeIntegers` is `true`, `bun:sqlite` will throw an error if a `bigint` value in a bound parameter exceeds 64 bits:
-@@ -487,14 +451,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+@@ -485,14 +449,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
  try {
    query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
  } catch (e) {
@@ -3693,7 +3675,7 @@ index b71c4b5f..7dd2220f 100644
  ### `safeIntegers: false` (default)
  
  When `safeIntegers` is `false`, `bun:sqlite` will return integers as `number` types and truncate any bits beyond 53:
-@@ -505,11 +465,7 @@ import { Database } from "bun:sqlite";
+@@ -503,11 +463,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3706,7 +3688,7 @@ index b71c4b5f..7dd2220f 100644
  ```
  
  ---
-@@ -602,7 +558,7 @@ db.loadExtension("myext"); // [!code highlight]
+@@ -600,7 +556,7 @@ db.loadExtension("myext"); // [!code highlight]
  
  ```bash title="terminal"
  $ brew install sqlite
@@ -3729,7 +3711,7 @@ index 062e325f..4bc91b3b 100644
   * Fast incremental writer that becomes an `ArrayBuffer` on end().
   */
 diff --git b/content/docs/runtime/templating/create.mdx a/content/docs/runtime/templating/create.mdx
-index 3c981b30..c17f4823 100644
+index 3c981b30..277cba33 100644
 --- b/content/docs/runtime/templating/create.mdx
 +++ a/content/docs/runtime/templating/create.mdx
 @@ -81,7 +81,7 @@ plugins = ["bun-plugin-tailwind"]
@@ -3740,6 +3722,17 @@ index 3c981b30..c17f4823 100644
 +```css title="MyComponent.css"
  @import "tailwindcss";
  ```
+ 
+@@ -231,7 +231,9 @@ After cloning a template, `bun create` will automatically remove the `"bun-creat
+ | `GITHUB_TOKEN` (or `GITHUB_ACCESS_TOKEN`) | This lets `bun create` work with private repositories or if you get rate-limited. `GITHUB_TOKEN` is chosen over `GITHUB_ACCESS_TOKEN` if both exist. |
+ 
+ <Accordions type="single">
+-<Accordion title={<span>How <code>bun create</code> works</span>}>
++<Accordion>
++
++### How `bun create` works
+ 
+ When you run `bun create ${template} ${destination}`, here’s what happens:
  
 diff --git b/content/docs/runtime/transpiler.mdx a/content/docs/runtime/transpiler.mdx
 index f66ec8c6..cf84322d 100644
@@ -3991,10 +3984,20 @@ index 42c32b11..646668be 100644
      	Successfully authenticated with registry.digitalocean.com
      	```
 diff --git b/content/guides/deployment/google-cloud-run.mdx a/content/guides/deployment/google-cloud-run.mdx
-index 812c7f34..f39ea070 100644
+index 812c7f34..bbf5d0b1 100644
 --- b/content/guides/deployment/google-cloud-run.mdx
 +++ a/content/guides/deployment/google-cloud-run.mdx
-@@ -27,7 +27,7 @@ Make sure that you've initialized the Google Cloud CLI. This command logs you in
+@@ -20,14 +20,16 @@ In this guide, we will deploy a Bun HTTP server to Google Cloud Run using a `Doc
+ ---
+ 
+ <Steps> 
+-<Step title={<span>Initialize <code>gcloud</code> by select/creating a project</span>}>
++<Step>
++
++### Initialize `gcloud` by select/creating a project
+ 
+ Make sure that you've initialized the Google Cloud CLI. This command logs you in, and prompts you to either select an existing project or create a new one.
+ 
  For more help with the Google Cloud CLI, see the [official documentation](https://docs.cloud.google.com/sdk/gcloud/reference/init).
  
  ```bash title="terminal"
@@ -4003,7 +4006,7 @@ index 812c7f34..f39ea070 100644
  
  Welcome! This command will take you through the configuration of gcloud.
  
-@@ -68,7 +68,7 @@ my-bun-app-... [PROJECT_NUMBER]
+@@ -68,7 +70,7 @@ my-bun-app-... [PROJECT_NUMBER]
  List your available billing accounts and link one to your project:
  
  ```bash title="terminal"
@@ -4012,7 +4015,7 @@ index 812c7f34..f39ea070 100644
  
  ACCOUNT_ID            NAME                OPEN  MASTER_ACCOUNT_ID
  [BILLING_ACCOUNT_ID]  My Billing Account  True
-@@ -77,7 +77,7 @@ ACCOUNT_ID            NAME                OPEN  MASTER_ACCOUNT_ID
+@@ -77,7 +79,7 @@ ACCOUNT_ID            NAME                OPEN  MASTER_ACCOUNT_ID
  Link your billing account to your project. Replace `[BILLING_ACCOUNT_ID]` with the ID of your billing account.
  
  ```bash title="terminal"
@@ -4021,7 +4024,7 @@ index 812c7f34..f39ea070 100644
  
  billingAccountName: billingAccounts/[BILLING_ACCOUNT_ID]
  billingEnabled: true
-@@ -166,7 +166,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
+@@ -166,7 +168,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
  </Callout>
  
  ```bash title="terminal"
@@ -4076,7 +4079,7 @@ index eb21b004..2f93a995 100644
  ```
  
 diff --git b/content/guides/ecosystem/edgedb.mdx a/content/guides/ecosystem/edgedb.mdx
-index d7fad2e3..a688af8d 100644
+index d7fad2e3..83338b3d 100644
 --- b/content/guides/ecosystem/edgedb.mdx
 +++ a/content/guides/ecosystem/edgedb.mdx
 @@ -15,7 +15,7 @@ $ curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh
@@ -4088,18 +4091,15 @@ index d7fad2e3..a688af8d 100644
  ```
  
  ---
-@@ -33,9 +33,9 @@ $ bun init -y
+@@ -33,7 +33,7 @@ $ bun init -y
  We'll use the EdgeDB CLI to initialize an EdgeDB instance for our project. This creates an `edgedb.toml` file in our project root.
  
  ```sh title="terminal"
 -edgedb project init
 +$ edgedb project init
  
--No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
-+$ No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
+ No `edgedb.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-edgedb-app` or above
  Do you want to initialize a new project? [Y/n]
- > Y
- Specify the name of EdgeDB instance to use with this project [default: my_edgedb_app]:
 @@ -64,7 +64,7 @@ To connect to my_edgedb_app, run `edgedb`
  To see if the database is running, let's open a REPL and run a simple query.
  
@@ -4273,10 +4273,21 @@ index 9095a830..985ade01 100644
  import adapter from "svelte-adapter-bun"; // [!code ++]
  import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
-index 35e63561..32faf820 100644
+index 35e63561..73c63e19 100644
 --- b/content/guides/ecosystem/tanstack-start.mdx
 +++ a/content/guides/ecosystem/tanstack-start.mdx
-@@ -138,26 +138,33 @@ mode: center
+@@ -65,7 +65,9 @@ mode: center
+     ```
+ 
+   </Step>
+-  <Step title={<span>Update your <code>vite.config.ts</code> file</span>}>
++  <Step>
++
++    ### Update your `vite.config.ts` file
+     Update your `vite.config.ts` file to include the necessary plugins for TanStack Start with Bun.
+ 
+     ```ts title="vite.config.ts"
+@@ -138,26 +140,33 @@ mode: center
        ```
      </Callout>
  
