@@ -350,7 +350,7 @@ index 0e520827..0ddd7f9e 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index 4189c7c4..cae4d587 100644
+index 4189c7c4..e6599b22 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -604,6 +604,19 @@ index 4189c7c4..cae4d587 100644
  import { z } from "zod";
  
  // ...
+@@ -863,9 +886,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
+   <Tab value="CLI">
+     ```bash title="terminal"
+     $ bun build ./index.tsx --outdir ./out \
+-      --entry-naming '[dir]/[name].[ext]' \
+-      --chunk-naming '[name]-[hash].[ext]' \
+-      --asset-naming '[name]-[hash].[ext]'
++        --entry-naming '[dir]/[name].[ext]' \
++        --chunk-naming '[name]-[hash].[ext]' \
++        --asset-naming '[name]-[hash].[ext]'
+    ```
+   </Tab>
+ </Tabs>
 @@ -977,12 +1000,12 @@ In many cases, generated bundles will contain no import statements. After all, t
  In any of these cases, the final bundles may contain paths to other files. By default these imports are relative. Here is an example of a simple asset import:
  
@@ -3995,7 +4008,7 @@ index 42c32b11..646668be 100644
      	Successfully authenticated with registry.digitalocean.com
      	```
 diff --git b/content/guides/deployment/google-cloud-run.mdx a/content/guides/deployment/google-cloud-run.mdx
-index 812c7f34..bbf5d0b1 100644
+index 812c7f34..63a9a31b 100644
 --- b/content/guides/deployment/google-cloud-run.mdx
 +++ a/content/guides/deployment/google-cloud-run.mdx
 @@ -20,14 +20,16 @@ In this guide, we will deploy a Bun HTTP server to Google Cloud Run using a `Doc
@@ -4035,7 +4048,28 @@ index 812c7f34..bbf5d0b1 100644
  
  billingAccountName: billingAccounts/[BILLING_ACCOUNT_ID]
  billingEnabled: true
-@@ -166,7 +168,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
+@@ -92,10 +94,10 @@ projectId: my-bun-app-...
+ Activate the necessary services and grant Cloud Build permissions:
+ 
+ ```bash title="terminal"
+-gcloud services enable run.googleapis.com cloudbuild.googleapis.com
+-gcloud projects add-iam-policy-binding $PROJECT_ID \
+-  --member=serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com \
+-  --role=roles/run.builder
++$ gcloud services enable run.googleapis.com cloudbuild.googleapis.com
++$ gcloud projects add-iam-policy-binding $PROJECT_ID \
++    --member=serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com \
++    --role=roles/run.builder
+ ```
+ 
+ <Callout type="info">  
+@@ -161,12 +163,11 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
+ 
+ <Callout type="info">
+   Update the `--region` flag to your preferred region. You can also omit this flag to get an interactive prompt to
+-  select a region. Update the `--region` flag to your preferred region. You can also omit this flag to get an
+-  interactive prompt to select a region.
++  select a region.
  </Callout>
  
  ```bash title="terminal"
@@ -4544,7 +4578,7 @@ index 744a6a46..4779b8fa 100644
  ```ts title="index.ts"
  const buffer = await file.arrayBuffer();
 diff --git b/content/guides/runtime/build-time-constants.mdx a/content/guides/runtime/build-time-constants.mdx
-index 29e47553..ea15ae8f 100644
+index 29e47553..0a63d325 100644
 --- b/content/guides/runtime/build-time-constants.mdx
 +++ a/content/guides/runtime/build-time-constants.mdx
 @@ -63,33 +63,28 @@ await Bun.build({
@@ -4595,14 +4629,29 @@ index 29e47553..ea15ae8f 100644
 +
 +```sh tab="Build command"
 +$ bun build --compile \
-+  --define BUILD_VERSION='"1.2.3"' \
-+  --define BUILD_TIME='"2024-01-15T10:30:00Z"' \
-+  --define GIT_COMMIT='"abc123"' \
-+  src/cli.ts --outfile mycli
++    --define BUILD_VERSION='"1.2.3"' \
++    --define BUILD_TIME='"2024-01-15T10:30:00Z"' \
++    --define GIT_COMMIT='"abc123"' \
++    src/cli.ts --outfile mycli
 +```
  
  ### Feature flags
  
+@@ -166,10 +161,10 @@ Generate build-time constants from shell commands:
+ ```sh
+ # Use git to get current commit and timestamp
+ $ bun build --compile \
+-  --define BUILD_VERSION="\"$(git describe --tags --always)\"" \
+-  --define BUILD_TIME="\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
+-  --define GIT_COMMIT="\"$(git rev-parse HEAD)\"" \
+-  src/cli.ts --outfile mycli
++    --define BUILD_VERSION="\"$(git describe --tags --always)\"" \
++    --define BUILD_TIME="\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
++    --define GIT_COMMIT="\"$(git rev-parse HEAD)\"" \
++    src/cli.ts --outfile mycli
+ ```
+ 
+ ### Build automation script
 diff --git b/content/guides/runtime/cicd.mdx a/content/guides/runtime/cicd.mdx
 index d743fd26..feb5780e 100644
 --- b/content/guides/runtime/cicd.mdx
