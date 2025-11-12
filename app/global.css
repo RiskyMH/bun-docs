@@ -34,7 +34,8 @@
 
 
 /* force comment style for non-commands on sh code blocks */
-span.skiki-sh-comment, span.shiki-sh-true-beginning {
+span.skiki-sh-comment,
+span.shiki-sh-true-beginning {
     --shiki-light: #6A737D !important;
     --shiki-dark: #6A737D !important;
     --shiki: #6A737D !important;
@@ -49,7 +50,7 @@ span.shiki-sh-new-beginning {
 
 .text-sm:not(figure) code {
     @apply text-xs!;
-} 
+}
 
 .text-fd-muted-foreground strong {
     @apply text-fd-foreground
@@ -57,18 +58,24 @@ span.shiki-sh-new-beginning {
 
 code {
     --color-fd-primary: var(--color-fd-muted-foreground);
-    --tw-prose-code: var(--color-fd-muted-foreground);
-} 
+}
 
-.prose td > p, .prose tr > p {
+.text-fd-muted-foreground code {
+    --color-fd-primary: var(--color-fd-muted-foreground);
+    --tw-prose-code: var(--color-fd-muted-foreground);
+}
+
+.prose td>p,
+.prose tr>p {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
 
-.prose table td > figure:last-child {
+.prose table td>figure:last-child {
     margin-bottom: 0 !important;
 }
 
 /* .prose table td > figure:first-child {
     margin-top: 0 !important;
 } */
+ 
