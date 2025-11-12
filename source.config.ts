@@ -169,6 +169,21 @@ export default defineConfig({
             var isCommand = false;
             var commentStated = false;
 
+            // don't over parse lines that are part of a command continuation
+            if (line > 1 && lines[line - 2]?.endsWith("\\") && !lines[line - 1]?.startsWith(prefix + " ")) {
+              const checkLineChain = (lineNum: number): boolean => {
+                if (lineNum < 0) return false;
+                if (lines[lineNum]?.startsWith(prefix + " ")) return true;
+                if (lineNum > 0 && lines[lineNum - 1]?.endsWith("\\")) {
+                  return checkLineChain(lineNum - 1);
+                }
+                return false;
+              };
+              if (checkLineChain(line - 2)) {
+                return hast;
+              }
+            }
+
             for (let index = 0; index < children.length; index++) {
               const child = children[index];
               if (child.type !== "element") continue;
@@ -176,7 +191,7 @@ export default defineConfig({
               if (!c || c.type !== "text") continue;
 
               if (index === 0) {
-                isCommand = c.value === prefix;
+                isCommand = c.value === prefix || c.value === prefix + " ";
                 if (isCommand)
                   this.addClassToHast(child, [
                     "select-none",

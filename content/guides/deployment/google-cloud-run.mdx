@@ -94,10 +94,10 @@ projectId: my-bun-app-...
 Activate the necessary services and grant Cloud Build permissions:
 
 ```bash title="terminal"
-gcloud services enable run.googleapis.com cloudbuild.googleapis.com
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member=serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com \
-  --role=roles/run.builder
+$ gcloud services enable run.googleapis.com cloudbuild.googleapis.com
+$ gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com \
+    --role=roles/run.builder
 ```
 
 <Callout type="info">  

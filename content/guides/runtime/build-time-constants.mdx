@@ -80,10 +80,10 @@ export function getVersion() {
 
 ```sh tab="Build command"
 $ bun build --compile \
-  --define BUILD_VERSION='"1.2.3"' \
-  --define BUILD_TIME='"2024-01-15T10:30:00Z"' \
-  --define GIT_COMMIT='"abc123"' \
-  src/cli.ts --outfile mycli
+    --define BUILD_VERSION='"1.2.3"' \
+    --define BUILD_TIME='"2024-01-15T10:30:00Z"' \
+    --define GIT_COMMIT='"abc123"' \
+    src/cli.ts --outfile mycli
 ```
 
 ### Feature flags
@@ -161,10 +161,10 @@ Generate build-time constants from shell commands:
 ```sh
 # Use git to get current commit and timestamp
 $ bun build --compile \
-  --define BUILD_VERSION="\"$(git describe --tags --always)\"" \
-  --define BUILD_TIME="\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
-  --define GIT_COMMIT="\"$(git rev-parse HEAD)\"" \
-  src/cli.ts --outfile mycli
+    --define BUILD_VERSION="\"$(git describe --tags --always)\"" \
+    --define BUILD_TIME="\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
+    --define GIT_COMMIT="\"$(git rev-parse HEAD)\"" \
+    src/cli.ts --outfile mycli
 ```
 
 ### Build automation script
