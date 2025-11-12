@@ -57,6 +57,7 @@ span.shiki-sh-new-beginning {
 
 code {
     --color-fd-primary: var(--color-fd-muted-foreground);
+    --tw-prose-code: var(--color-fd-muted-foreground);
 } 
 
 .prose td > p, .prose tr > p {
