@@ -4008,7 +4008,7 @@ index 42c32b11..646668be 100644
      	Successfully authenticated with registry.digitalocean.com
      	```
 diff --git b/content/guides/deployment/google-cloud-run.mdx a/content/guides/deployment/google-cloud-run.mdx
-index 812c7f34..63a9a31b 100644
+index 812c7f34..fbb60d22 100644
 --- b/content/guides/deployment/google-cloud-run.mdx
 +++ a/content/guides/deployment/google-cloud-run.mdx
 @@ -20,14 +20,16 @@ In this guide, we will deploy a Bun HTTP server to Google Cloud Run using a `Doc
@@ -4063,7 +4063,19 @@ index 812c7f34..63a9a31b 100644
  ```
  
  <Callout type="info">  
-@@ -161,12 +163,11 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
+@@ -132,10 +134,7 @@ CMD ["bun", "index.ts"]
+ <Callout type="info">
+   Make sure that the start command corresponds to your application's entry point. This can also be `CMD ["bun", "run", "start"]` if you have a start script in your `package.json`.
+ 
+-    This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
+-
+-    This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
+-
++  This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
+ </Callout>
+ 
+ Create a new `.dockerignore` file in the root of your project. This file contains the files and directories that should be _excluded_ from the container image, such as `node_modules`. This makes your builds faster and smaller:
+@@ -161,12 +160,11 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
  
  <Callout type="info">
    Update the `--region` flag to your preferred region. You can also omit this flag to get an interactive prompt to
