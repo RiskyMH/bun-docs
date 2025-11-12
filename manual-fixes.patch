@@ -1,5 +1,5 @@
 diff --git b/content/docs/bundler/esbuild.mdx a/content/docs/bundler/esbuild.mdx
-index 3f9b720f..95320fe7 100644
+index ffc4978d..5dc994c4 100644
 --- b/content/docs/bundler/esbuild.mdx
 +++ a/content/docs/bundler/esbuild.mdx
 @@ -30,7 +30,7 @@ Bun and esbuild both provide a command-line interface.
@@ -11,76 +11,6 @@ index 3f9b720f..95320fe7 100644
  
  # bun
  $ bun build <entrypoint> --outdir=out
-@@ -231,23 +231,55 @@ const myPlugin: BunPlugin = {
- ### onResolve
- 
- <Tabs items={['options', 'arguments', 'results']}>
--  <Tab value="options">- 🟢 `filter` - 🟢 `namespace`</Tab>
--  <Tab value="arguments">
--    - 🟢 `path` - 🟢 `importer` - 🔴 `namespace` - 🔴 `resolveDir` - 🔴 `kind` - 🔴 `pluginData`
--  </Tab>
--  <Tab value="results">
--    - 🟢 `namespace` - 🟢 `path` - 🔴 `errors` - 🔴 `external` - 🔴 `pluginData` - 🔴 `pluginName` - 🔴 `sideEffects` -
--    🔴 `suffix` - 🔴 `warnings` - 🔴 `watchDirs` - 🔴 `watchFiles`
--  </Tab>
-+	<Tab value="options">
-+		- 🟢 `filter`
-+		- 🟢 `namespace`
-+	</Tab>
-+	<Tab value="arguments">
-+		- 🟢 `path`
-+		- 🟢 `importer`
-+		- 🔴 `namespace`
-+		- 🔴 `resolveDir`
-+		- 🔴 `kind`
-+		- 🔴 `pluginData`
-+	</Tab>
-+	<Tab value="results">
-+		- 🟢 `namespace`
-+		- 🟢 `path`
-+		- 🔴 `errors`
-+		- 🔴 `external`
-+		- 🔴 `pluginData`
-+		- 🔴 `pluginName`
-+		- 🔴 `sideEffects`
-+		- 🔴 `suffix`
-+		- 🔴 `warnings`
-+		- 🔴 `watchDirs`
-+		- 🔴 `watchFiles`
-+	</Tab>
- </Tabs>
- 
- ### onLoad
- 
- <Tabs items={['options', 'arguments', 'results']}>
--  <Tab value="options">- 🟢 `filter` - 🟢 `namespace`</Tab>
--  <Tab value="arguments">- 🟢 `path` - 🔴 `namespace` - 🔴 `suffix` - 🔴 `pluginData`</Tab>
--  <Tab value="results">
--    - 🟢 `contents` - 🟢 `loader` - 🔴 `errors` - 🔴 `pluginData` - 🔴 `pluginName` - 🔴 `resolveDir` - 🔴 `warnings` -
--    🔴 `watchDirs` - 🔴 `watchFiles`
--  </Tab>
-+	<Tab value="options">
-+		- 🟢 `filter`
-+		- 🟢 `namespace`
-+	</Tab>
-+	<Tab value="arguments">
-+		- 🟢 `path`
-+		- 🔴 `namespace`
-+		- 🔴 `suffix`
-+		- 🔴 `pluginData`
-+	</Tab>
-+	<Tab value="results">
-+		- 🟢 `contents`
-+		- 🟢 `loader`
-+		- 🔴 `errors`
-+		- 🔴 `pluginData`
-+		- 🔴 `pluginName`
-+		- 🔴 `resolveDir`
-+		- 🔴 `warnings`
-+		- 🔴 `watchDirs`
-+		- 🔴 `watchFiles`
-+	</Tab>
- </Tabs>
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
 index e8589053..724a08f3 100644
 --- b/content/docs/bundler/executables.mdx
@@ -350,7 +280,7 @@ index 0e520827..0ddd7f9e 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index 4189c7c4..e6599b22 100644
+index 15aa2e1b..aa0bf618 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -391,16 +321,22 @@ index 4189c7c4..e6599b22 100644
  // out/index.js
  // ...
  // ~20k lines of code
-@@ -154,11 +154,32 @@ Like the Bun runtime, the bundler supports an array of file types out of the box
+@@ -154,15 +154,48 @@ Like the Bun runtime, the bundler supports an array of file types out of the box
  | Extensions                                            | Details                                                                                                                                                                                                                                                                                                                                                      |
  | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
  | `.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` | Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. The bundler executes a set of default transforms including dead code elimination and tree shaking. At the moment Bun does not attempt to down-convert syntax; if you use recently ECMAScript syntax, that will be reflected in the bundled code. |
 -| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import pkg from "./package.json";<br/>pkg.name; // => "my-package"<br/>`                                                                                                                                                                                          |
+-| `.jsonc`                                              | JSON with comments. Files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./config.jsonc";<br/>config.name; // => "my-config"<br/>`                                                                                                                                                                      |
 -| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./bunfig.toml";<br/>config.logLevel; // => "debug"<br/>`                                                                                                                                                                                      |
+-| `.yaml` `.yml`                                        | YAML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./config.yaml";<br/>config.name; // => "my-app"<br/>`                                                                                                                                                                                         |
 -| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<br/><br/>`js<br/>import contents from "./file.txt";<br/>console.log(contents); // => "Hello, world!"<br/>`                                                                                                                                                                   |
 +| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:json</include>                                                                                                                                                                                                                                    |
++| `.jsonc`                                              | JSON with comments. Files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:jsonc</include>                                                                                                                                                                                                                                    |
 +| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:toml</include>                                                                                                                                                                                                                                    |
++| `.yaml` `.yml`                                        | YAML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:yaml</include>                                                                                                                                                                                                                                    |
 +| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<include>index.mdx#content-types:txt</include>                                                                                                                                                                                                                                |
+ | `.html`                                               | HTML files are processed and any referenced assets (scripts, stylesheets, images) are bundled.                                                                                                                                                                                                                                                               |
+ | `.css`                                                | CSS files are bundled together into a single `.css` file in the output directory.                                                                                                                                                                                                                                                                            |
  | `.node` `.wasm`                                       | These files are supported by the Bun runtime, but during bundling they are treated as assets.                                                                                                                                                                                                                                                                |
  
 +{/* start llm ignored codeblock */}
@@ -410,10 +346,22 @@ index 4189c7c4..e6599b22 100644
 +pkg.name; // => "my-package"
 +```
 +</section>
++<section id="content-types:jsonc" style={{display:"none"}}>
++```js
++import config from "./config.jsonc";
++config.name; // => "my-config"
++```
++</section>
 +<section id="content-types:toml" style={{display:"none"}}>
 +```js
 +import config from "./bunfig.toml";
 +config.logLevel; // => "debug"
++```
++</section>
++<section id="content-types:yaml" style={{display:"none"}}>
++```js
++import config from "./config.yaml";
++config.name; // => "my-app"
 +```
 +</section>
 +<section id="content-types:txt" style={{display:"none"}}>
@@ -427,7 +375,7 @@ index 4189c7c4..e6599b22 100644
  ### Assets
  
  If the bundler encounters an import with an unrecognized extension, it treats the imported file as an external file. The referenced file is copied as-is into `outdir`, and the import is resolved as a path to the file.
-@@ -272,28 +293,30 @@ The intended execution environment for the bundle.
+@@ -276,28 +309,30 @@ The intended execution environment for the bundle.
  
  Depending on the target, Bun will apply different module resolution rules and optimizations.
  
@@ -436,9 +384,6 @@ index 4189c7c4..e6599b22 100644
 -  condition when resolving imports. Importing any built-in modules, like `node:events` or `node:path` will work, but
 -  calling some functions, like `fs.readFile` will not work.
 -</Card>
--
--<Card title="bun" icon="server">
--For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
 +<Cards className="grid-cols-1">
 +  <Card title="Browser (default)">
 +    For generating bundles that are intended for execution by a browser. Prioritizes the
@@ -447,20 +392,23 @@ index 4189c7c4..e6599b22 100644
 +    work.
 +  </Card>
  
--All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
+-<Card title="bun" icon="server">
+-For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
 +  <Card title="Bun">
 +    For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
  
--If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
+-All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
 +    All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
  
--When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
+-If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
 +    If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
  
--</Card>
+-When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
 +    When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
 +  </Card>
  
+-</Card>
+-
 -<Card title="node" icon="node">
 -  For generating bundles that are intended to be run by Node.js. Prioritizes the `"node"` export condition when
 -  resolving imports, and outputs `.mjs`. In the future, this will automatically polyfill the Bun global and other
@@ -475,7 +423,7 @@ index 4189c7c4..e6599b22 100644
  
  ### format
  
-@@ -359,21 +382,21 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+@@ -363,21 +398,21 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
    <Tab value="JavaScript">
      ```ts title="index.ts"
      await Bun.build({
@@ -504,7 +452,7 @@ index 4189c7c4..e6599b22 100644
    </Tab>
  </Tabs>
  
-@@ -383,20 +406,20 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+@@ -387,20 +422,20 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
    <Tab value="JavaScript">
      ```ts title="index.ts"
      await Bun.build({
@@ -533,7 +481,7 @@ index 4189c7c4..e6599b22 100644
    </Tab>
  </Tabs>
  
-@@ -450,7 +473,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
+@@ -454,7 +489,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./entry-a.ts ./entry-b.ts --outdir ./out --splitting
@@ -542,7 +490,7 @@ index 4189c7c4..e6599b22 100644
    </Tab>
  </Tabs>
  
-@@ -506,21 +529,21 @@ Injects environment variables into the bundled output by converting `process.env
+@@ -510,21 +545,21 @@ Injects environment variables into the bundled output by converting `process.env
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out --env inline
@@ -568,7 +516,7 @@ index 4189c7c4..e6599b22 100644
  // output.js
  console.log("bar");
  console.log("123");
-@@ -536,7 +559,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+@@ -540,7 +575,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
      await Bun.build({
        entrypoints: ['./index.tsx'],
        outdir: './out',
@@ -577,7 +525,7 @@ index 4189c7c4..e6599b22 100644
        // Inline all env vars that start with "ACME_PUBLIC_"
        env: "ACME_PUBLIC_*",
      })
-@@ -552,7 +575,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+@@ -556,7 +591,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
  For example, given the following environment variables:
  
  ```bash title="terminal"
@@ -586,7 +534,7 @@ index 4189c7c4..e6599b22 100644
  ```
  
  And source code:
-@@ -565,7 +588,7 @@ console.log(process.env.BAZ);
+@@ -569,7 +604,7 @@ console.log(process.env.BAZ);
  
  The generated bundle will contain the following code:
  
@@ -595,7 +543,7 @@ index 4189c7c4..e6599b22 100644
  console.log(process.env.FOO);
  console.log("https://acme.com");
  console.log(process.env.BAZ);
-@@ -707,7 +730,7 @@ Normally, bundling `index.tsx` would generate a bundle containing the entire sou
+@@ -711,7 +746,7 @@ Normally, bundling `index.tsx` would generate a bundle containing the entire sou
  
  The generated bundle will look something like this:
  
@@ -604,7 +552,7 @@ index 4189c7c4..e6599b22 100644
  import { z } from "zod";
  
  // ...
-@@ -863,9 +886,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
+@@ -867,9 +902,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out \
@@ -617,7 +565,7 @@ index 4189c7c4..e6599b22 100644
     ```
    </Tab>
  </Tabs>
-@@ -977,12 +1000,12 @@ In many cases, generated bundles will contain no import statements. After all, t
+@@ -981,12 +1016,12 @@ In many cases, generated bundles will contain no import statements. After all, t
  In any of these cases, the final bundles may contain paths to other files. By default these imports are relative. Here is an example of a simple asset import:
  
  ```ts tab="Input"
@@ -632,7 +580,7 @@ index 4189c7c4..e6599b22 100644
  console.log(logo);
  ```
  
-@@ -1007,8 +1030,8 @@ Setting `publicPath` will prefix all file paths with the specified value.
+@@ -1011,8 +1046,8 @@ Setting `publicPath` will prefix all file paths with the specified value.
  
  The output file would now look something like this.
  
@@ -643,7 +591,7 @@ index 4189c7c4..e6599b22 100644
  ```
  
  ### define
-@@ -1181,44 +1204,39 @@ return new Response(artifact);
+@@ -1185,44 +1220,39 @@ return new Response(artifact);
  
  The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
  
@@ -721,84 +669,56 @@ index 4189c7c4..e6599b22 100644
  ## Bytecode
  
 diff --git b/content/docs/bundler/minifier.mdx a/content/docs/bundler/minifier.mdx
-index 24e53b81..8d9e9548 100644
+index aaedb143..9d687f61 100644
 --- b/content/docs/bundler/minifier.mdx
 +++ a/content/docs/bundler/minifier.mdx
-@@ -102,14 +102,14 @@ Renames local variables and function names to shorter identifiers using frequenc
+@@ -102,12 +102,12 @@ Renames local variables and function names to shorter identifiers using frequenc
  
  Converts boolean literals to shorter expressions.
  
 -```ts Input
--true;
--false;
 +```ts title="Input"
-+true
-+false
+ true
+ false
  ```
  
--```ts Output
--!0;
--!1;
+-```js Output
 +```js title="Output"
-+!0
-+!1
+ !0
+ !1
  ```
- 
- ### Boolean algebra optimizations
-@@ -118,22 +118,22 @@ false;
+@@ -118,7 +118,7 @@ false
  
  Simplifies boolean expressions using logical rules.
  
 -```ts Input
--!!x;
--x === true;
--x && true;
--x || false;
--!true;
--!false;
 +```ts title="Input"
-+!!x
-+x === true
-+x && true
-+x || false
-+!true
-+!false
+ !!x
+ x === true
+ x && true
+@@ -127,7 +127,7 @@ x || false
+ !false
  ```
  
--```ts Output
--x;
--x;
--x;
--x;
--!1;
--!0;
+-```js Output
 +```js title="Output"
-+x
-+x
-+x
-+x
-+!1
-+!0
- ```
- 
- ### Undefined shortening
-@@ -142,30 +142,29 @@ x;
+ x
+ x
+ x
+@@ -142,28 +142,27 @@ x
  
  Replaces `undefined` with shorter equivalent.
  
 -```ts Input
--undefined;
 +```ts title="Input"
-+undefined
+ undefined
  let x = undefined;
  ```
  
--```ts Output
--void 0;
--let x = void 0;
+-```js Output
 +```js title="Output"
-+void 0
-+let x=void 0;
+ void 0
+ let x=void 0;
  ```
  
  ### Undefined equality optimization
@@ -808,303 +728,182 @@ index 24e53b81..8d9e9548 100644
  Optimizes loose equality checks with undefined.
  
 -```ts Input
--x == undefined;
--x != undefined;
 +```ts title="Input"
-+x == undefined
-+x != undefined
+ x == undefined
+ x != undefined
  ```
  
--```ts Output
--x == null;
--x != null;
+-```js Output
 +```js title="Output"
-+x == null
-+x != null
+ x == null
+ x != null
  ```
- 
- ### Infinity shortening
-@@ -174,12 +173,14 @@ x != null;
+@@ -174,12 +173,12 @@ x != null
  
  Converts Infinity to mathematical expressions.
  
 -```ts Input
--Infinity - Infinity;
 +```ts title="Input"
-+Infinity
-+-Infinity
+ Infinity
+ -Infinity
  ```
  
--```ts Output
--1 / 0 - 1 / 0;
+-```js Output
 +```js title="Output"
-+1/0
-+-1/0
+ 1/0
+ -1/0
  ```
- 
- ### Typeof optimizations
-@@ -188,26 +189,26 @@ Infinity - Infinity;
+@@ -190,7 +189,7 @@ Infinity
  
  Optimizes typeof comparisons and evaluates constant typeof expressions.
  
 -```ts Input
--typeof x === "undefined";
--typeof x !== "undefined";
--typeof require;
--typeof null;
--typeof true;
--typeof 123;
--typeof "str";
--typeof 123n;
 +```ts title="Input"
-+typeof x === 'undefined'
-+typeof x !== 'undefined'
-+typeof require
-+typeof null
-+typeof true
-+typeof 123
-+typeof "str"
-+typeof 123n
+ typeof x === 'undefined'
+ typeof x !== 'undefined'
+ typeof require
+@@ -201,7 +200,7 @@ typeof "str"
+ typeof 123n
  ```
  
--```ts Output
--typeof x > "u";
--typeof x < "u";
--("function");
--("object");
--("boolean");
--("number");
--("string");
--("bigint");
+-```js Output
 +```js title="Output"
-+typeof x>'u'
-+typeof x<'u'
-+"function"
-+"object"
-+"boolean"
-+"number"
-+"string"
-+"bigint"
- ```
- 
- ### Number formatting
-@@ -216,18 +217,20 @@ typeof x < "u";
+ typeof x>'u'
+ typeof x<'u'
+ "function"
+@@ -218,7 +217,7 @@ typeof x<'u'
  
  Formats numbers in the most compact representation.
  
 -```ts Input
--10000;
--100000;
--1000000;
--1.0 - 42.0;
 +```ts title="Input"
-+10000
-+100000
-+1000000
-+1.0
-+-42.0
+ 10000
+ 100000
+ 1000000
+@@ -226,7 +225,7 @@ Formats numbers in the most compact representation.
+ -42.0
  ```
  
--```ts Output
--1e4;
--1e5;
--1e6;
--1 - 42;
+-```js Output
 +```js title="Output"
-+1e4
-+1e5
-+1e6
-+1
-+-42
- ```
- 
- ### Arithmetic constant folding
-@@ -236,22 +239,22 @@ Formats numbers in the most compact representation.
+ 1e4
+ 1e5
+ 1e6
+@@ -240,7 +239,7 @@ Formats numbers in the most compact representation.
  
  Evaluates arithmetic operations at compile time.
  
 -```ts Input
--1 + 2;
--10 - 5;
--3 * 4;
--10 / 2;
--10 % 3;
--2 ** 3;
 +```ts title="Input"
-+1 + 2
-+10 - 5
-+3 * 4
-+10 / 2
-+10 % 3
-+2 ** 3
+ 1 + 2
+ 10 - 5
+ 3 * 4
+@@ -249,7 +248,7 @@ Evaluates arithmetic operations at compile time.
+ 2 ** 3
  ```
  
--```ts Output
--3;
--5;
--12;
--5;
--1;
--8;
+-```js Output
 +```js title="Output"
-+3
-+5
-+12
-+5
-+1
-+8
- ```
- 
- ### Bitwise constant folding
-@@ -260,21 +263,22 @@ Evaluates arithmetic operations at compile time.
+ 3
+ 5
+ 12
+@@ -264,7 +263,7 @@ Evaluates arithmetic operations at compile time.
  
  Evaluates bitwise operations at compile time.
  
 -```ts Input
--5 & 3;
--5 | 3;
--5 ^ 3;
--8 << 2;
--32 >> 2;
--~5;
 +```ts title="Input"
-+5 & 3
-+5 | 3
-+5 ^ 3
-+8 << 2
-+32 >> 2
-+~5
+ 5 & 3
+ 5 | 3
+ 5 ^ 3
+@@ -273,7 +272,7 @@ Evaluates bitwise operations at compile time.
+ ~5
  ```
  
--```ts Output
--1;
--7;
--6;
--32;
--8 - 6;
+-```js Output
 +```js title="Output"
-+1
-+7
-+6
-+32
-+8
-+-6
- ```
- 
- ### String concatenation
-@@ -283,16 +287,16 @@ Evaluates bitwise operations at compile time.
+ 1
+ 7
+ 6
+@@ -288,13 +287,13 @@ Evaluates bitwise operations at compile time.
  
  Combines string literals at compile time.
  
 -```ts Input
--"a" + "b";
--"x" + 123;
--"foo" + "bar" + "baz";
 +```ts title="Input"
-+"a" + "b"
-+"x" + 123
-+"foo" + "bar" + "baz"
+ "a" + "b"
+ "x" + 123
+ "foo" + "bar" + "baz"
  ```
  
--```ts Output
--"ab";
--"x123";
--"foobarbaz";
+-```js Output
 +```js title="Output"
-+"ab"
-+"x123"
-+"foobarbaz"
- ```
- 
- ### String indexing
-@@ -301,14 +305,14 @@ Combines string literals at compile time.
+ "ab"
+ "x123"
+ "foobarbaz"
+@@ -306,12 +305,12 @@ Combines string literals at compile time.
  
  Evaluates string character access at compile time.
  
 -```ts Input
--"foo"[2];
--"hello"[0];
 +```ts title="Input"
-+"foo"[2]
-+"hello"[0]
+ "foo"[2]
+ "hello"[0]
  ```
  
--```ts Output
--"o";
--"h";
+-```js Output
 +```js title="Output"
-+"o"
-+"h"
+ "o"
+ "h"
  ```
- 
- ### Template literal folding
-@@ -317,13 +321,14 @@ Evaluates string character access at compile time.
+@@ -322,12 +321,12 @@ Evaluates string character access at compile time.
  
  Evaluates template literals with constant expressions.
  
 -```ts Input
--`a${123}b``result: ${5 + 10}`;
 +```ts title="Input"
-+`a${123}b`
-+`result: ${5 + 10}`
+ `a${123}b`
+ `result: ${5 + 10}`
  ```
  
--```ts Output
--"a123b";
--"result: 15";
+-```js Output
 +```js title="Output"
-+"a123b"
-+"result: 15"
+ "a123b"
+ "result: 15"
  ```
- 
- ### Template literal to string conversion
-@@ -332,14 +337,15 @@ Evaluates template literals with constant expressions.
+@@ -338,13 +337,13 @@ Evaluates template literals with constant expressions.
  
  Converts simple template literals to regular strings.
  
 -```ts Input
--`Hello World``Line 1
--Line 2`;
 +```ts title="Input"
-+`Hello World`
-+`Line 1
-+Line 2`
+ `Hello World`
+ `Line 1
+ Line 2`
  ```
  
--```ts Output
--"Hello World";
--"Line 1\nLine 2";
+-```js Output
 +```js title="Output"
-+"Hello World"
-+"Line 1\nLine 2"
+ "Hello World"
+ "Line 1\nLine 2"
  ```
- 
- ### String quote optimization
-@@ -348,15 +354,16 @@ Line 2`;
+@@ -355,13 +354,13 @@ Line 2`
  
  Chooses the optimal quote character to minimize escapes.
  
 -```ts Input
--"It's a string";
--'He said "hello"'`Simple string`;
 +```ts title="Input"
-+"It's a string"
-+'He said "hello"'
-+`Simple string`
+ "It's a string"
+ 'He said "hello"'
+ `Simple string`
  ```
  
--```ts Output
--"It's a string";
--'He said "hello"';
--"Simple string";
+-```js Output
 +```js title="Output"
-+"It's a string"
-+'He said "hello"'
-+"Simple string"
- ```
- 
- ### Array spread inlining
-@@ -365,13 +372,14 @@ Chooses the optimal quote character to minimize escapes.
+ "It's a string"
+ 'He said "hello"'
+ "Simple string"
+@@ -373,12 +372,12 @@ Chooses the optimal quote character to minimize escapes.
  
  Inlines array spread operations with constant arrays.
  
@@ -1114,15 +913,12 @@ index 24e53b81..8d9e9548 100644
  [...[a, b]]
  ```
  
--```ts Output
--[1, 2, 3, 4][(a, b)];
+-```js Output
 +```js title="Output"
-+[1,2,3,4]
-+[a,b]
+ [1,2,3,4]
+ [a,b]
  ```
- 
- ### Array indexing
-@@ -380,16 +388,16 @@ Inlines array spread operations with constant arrays.
+@@ -389,13 +388,13 @@ Inlines array spread operations with constant arrays.
  
  Evaluates constant array access at compile time.
  
@@ -1133,235 +929,161 @@ index 24e53b81..8d9e9548 100644
  ['a', , 'c'][1]
  ```
  
--```ts Output
--x;
--("b");
--void 0;
+-```js Output
 +```js title="Output"
-+x
-+'b'
-+void 0
- ```
- 
- ### Property access optimization
-@@ -398,18 +406,18 @@ void 0;
+ x
+ 'b'
+ void 0
+@@ -407,14 +406,14 @@ void 0
  
  Converts bracket notation to dot notation when possible.
  
 -```ts Input
--obj["property"];
--obj["validName"];
--obj["123"];
--obj["invalid-name"];
 +```ts title="Input"
-+obj["property"]
-+obj["validName"]
-+obj["123"]
-+obj["invalid-name"]
+ obj["property"]
+ obj["validName"]
+ obj["123"]
+ obj["invalid-name"]
  ```
  
--```ts Output
--obj.property;
--obj.validName;
--obj["123"];
--obj["invalid-name"];
+-```js Output
 +```js title="Output"
-+obj.property
-+obj.validName
-+obj["123"]
-+obj["invalid-name"]
- ```
- 
- ### Comparison folding
-@@ -418,20 +426,20 @@ obj["invalid-name"];
+ obj.property
+ obj.validName
+ obj["123"]
+@@ -427,7 +426,7 @@ obj["invalid-name"]
  
  Evaluates constant comparisons at compile time.
  
 -```ts Input
--3 < 5;
--5 > 3;
--3 <= 3;
--5 >= 6;
--"a" < "b";
 +```ts title="Input"
-+3 < 5
-+5 > 3
-+3 <= 3
-+5 >= 6
-+"a" < "b"
+ 3 < 5
+ 5 > 3
+ 3 <= 3
+@@ -435,7 +434,7 @@ Evaluates constant comparisons at compile time.
+ "a" < "b"
  ```
  
--```ts Output
--!0;
--!0;
--!0;
--!1;
--!0;
+-```js Output
 +```js title="Output"
-+!0
-+!0
-+!0
-+!1
-+!0
- ```
- 
- ### Logical operation folding
-@@ -440,18 +448,18 @@ Evaluates constant comparisons at compile time.
+ !0
+ !0
+ !0
+@@ -449,14 +448,14 @@ Evaluates constant comparisons at compile time.
  
  Simplifies logical operations with constant values.
  
 -```ts Input
--true && x;
--false && x;
--true || x;
--false || x;
 +```ts title="Input"
-+true && x
-+false && x
-+true || x
-+false || x
+ true && x
+ false && x
+ true || x
+ false || x
  ```
  
--```ts Output
--x;
--!1;
--!0;
--x;
+-```js Output
 +```js title="Output"
-+x
-+!1
-+!0
-+x
- ```
- 
- ### Nullish coalescing folding
-@@ -460,16 +468,16 @@ x;
+ x
+ !1
+ !0
+@@ -469,13 +468,13 @@ x
  
  Evaluates nullish coalescing with known values.
  
 -```ts Input
--null ?? x;
--undefined ?? x;
--42 ?? x;
 +```ts title="Input"
-+null ?? x
-+undefined ?? x
-+42 ?? x
+ null ?? x
+ undefined ?? x
+ 42 ?? x
  ```
  
--```ts Output
--x;
--x;
--42;
+-```js Output
 +```js title="Output"
-+x
-+x
-+42
- ```
- 
- ### Comma expression simplification
-@@ -478,13 +486,14 @@ x;
+ x
+ x
+ 42
+@@ -487,12 +486,12 @@ x
  
  Removes side-effect-free expressions from comma sequences.
  
 -```ts Input
--(0, x)(123, "str", x);
 +```ts title="Input"
-+(0, x)
-+(123, "str", x)
+ (0, x)
+ (123, "str", x)
  ```
  
--```ts Output
--x;
--x;
+-```js Output
 +```js title="Output"
-+x
-+x
+ x
+ x
  ```
- 
- ### Ternary conditional folding
-@@ -493,18 +502,18 @@ x;
+@@ -503,18 +502,18 @@ x
  
  Evaluates conditional expressions with constant conditions.
  
 -```ts Input
--true ? a : b;
--false ? a : b;
--x ? true : false;
--x ? false : true;
 +```ts title="Input"
-+true ? a : b
-+false ? a : b
-+x ? true : false
-+x ? false : true
+ true ? a : b
+ false ? a : b
+ x ? true : false
+ x ? false : true
  ```
  
--```ts Output
--a;
--b;
--x;
--!x;
+-```js Output
 +```js title="Output"
-+a
-+b
+ a
+ b
+-x ? !0 : !1
+-x ? !1 : !0
 +x
 +!x
  ```
  
  ### Unary expression folding
-@@ -513,18 +522,20 @@ x;
+@@ -523,22 +522,19 @@ x ? !1 : !0
  
  Simplifies unary operations.
  
 -```ts Input
--+123 + "123" - -x;
--~~x;
--!!x;
 +```ts title="Input"
-++123
-++"123"
-+-(-x)
+ +123
+ +"123"
+ -(-x)
+-~~x
+-!!x
 +~(~x)
 +!(!x)
  ```
  
--```ts Output
--123;
--123;
--x;
--x;
--x;
+-```js Output
+-123
+-123
 +```js title="Output"
-+123
-+123
+ 123
+ 123
+ x
+-~~x
+-!!x
 +x
-+x
-+x
+ x
  ```
  
- ### Double negation removal
-@@ -533,14 +544,14 @@ x;
+@@ -548,12 +544,12 @@ x
  
  Removes unnecessary double negations.
  
 -```ts Input
--!!x;
--!!!x;
 +```ts title="Input"
-+!!x
-+!!!x
+ !!x
+ !!!x
  ```
  
--```ts Output
--x;
--!x;
+-```js Output
 +```js title="Output"
-+x
-+!x
+ x
+ !x
  ```
- 
- ### If statement optimization
-@@ -549,21 +560,18 @@ x;
+@@ -564,14 +560,14 @@ x
  
  Optimizes if statements with constant conditions.
  
@@ -1369,27 +1091,16 @@ index 24e53b81..8d9e9548 100644
 +```ts title="Input"
  if (true) x;
  if (false) x;
--if (x) {
--  a;
--}
--if (x) {
--} else y;
-+if (x) { a; }
-+if (x) {} else y;
+ if (x) { a; }
+ if (x) {} else y;
  ```
  
--```ts Output
+-```js Output
 +```js title="Output"
  x;
  // removed
--if (x) a;
--if (!x) y;
-+if(x)a;
-+if(!x)y;
- ```
- 
- ### Dead code elimination
-@@ -572,7 +580,7 @@ if (!x) y;
+ if(x)a;
+@@ -584,7 +580,7 @@ if(!x)y;
  
  Removes unreachable code and code without side effects.
  
@@ -1398,20 +1109,16 @@ index 24e53b81..8d9e9548 100644
  if (false) {
    unreachable();
  }
-@@ -582,10 +590,8 @@ function foo() {
+@@ -594,7 +590,7 @@ function foo() {
  }
  ```
  
--```ts Output
--function foo() {
--  return x;
--}
+-```js Output
 +```js title="Output"
-+function foo(){return x}
+ function foo(){return x}
  ```
  
- ### Unreachable branch removal
-@@ -594,13 +600,13 @@ function foo() {
+@@ -604,13 +600,13 @@ function foo(){return x}
  
  Removes branches that can never execute.
  
@@ -1422,31 +1129,28 @@ index 24e53b81..8d9e9548 100644
  }
  ```
  
--```ts Output
+-```js Output
 +```js title="Output"
  // removed entirely
  ```
  
-@@ -610,14 +616,12 @@ while (false) {
+@@ -620,13 +616,12 @@ while (false) {
  
  Removes empty blocks and unnecessary braces.
  
 -```ts Input
--{
--}
--if (x) {
--}
 +```ts title="Input"
-+{ }
-+if (x) { }
+ { }
+ if (x) { }
  ```
  
--```ts Output
+-```js Output
+-;
 +```js title="Output"
  // removed
  ```
  
-@@ -627,33 +631,28 @@ if (x) {
+@@ -636,28 +631,27 @@ if (x) { }
  
  Removes unnecessary braces around single statements.
  
@@ -1457,10 +1161,9 @@ index 24e53b81..8d9e9548 100644
  }
  ```
  
--```ts Output
--if (condition) doSomething();
+-```js Output
 +```js title="Output"
-+if(condition)doSomething();
+ if(condition)doSomething();
  ```
  
  ### TypeScript enum inlining
@@ -1470,24 +1173,17 @@ index 24e53b81..8d9e9548 100644
  Inlines TypeScript enum values at compile time.
  
 -```ts Input
--enum Color {
--  Red,
--  Green,
--  Blue,
--}
 +```ts title="Input"
-+enum Color { Red, Green, Blue }
+ enum Color { Red, Green, Blue }
  const x = Color.Red;
  ```
  
--```ts Output
--const x = 0;
+-```js Output
 +```js title="Output"
-+const x=0;
+ const x=0;
  ```
  
- ### Pure annotation support
-@@ -662,12 +661,12 @@ const x = 0;
+@@ -667,12 +661,12 @@ const x=0;
  
  Respects `/*@__PURE__*/` annotations for tree shaking.
  
@@ -1497,12 +1193,12 @@ index 24e53b81..8d9e9548 100644
  // If x is unused...
  ```
  
--```ts Output
+-```js Output
 +```js title="Output"
  // removed entirely
  ```
  
-@@ -677,18 +676,15 @@ const x = /*@__PURE__*/ expensive();
+@@ -682,14 +676,14 @@ const x = /*@__PURE__*/ expensive();
  
  Renames local variables to shorter names based on usage frequency.
  
@@ -1514,39 +1210,30 @@ index 24e53b81..8d9e9548 100644
  }
  ```
  
--```ts Output
--function a(b, c) {
--  const d = b + c;
--  return d;
--}
+-```js Output
 +```js title="Output"
-+function a(b,c){const d=b+c;return d}
+ function a(b,c){const d=b+c;return d}
  ```
  
- **Naming strategy:**
-@@ -711,18 +707,15 @@ function a(b, c) {
+@@ -713,14 +707,14 @@ function a(b,c){const d=b+c;return d}
  
  Removes all unnecessary whitespace.
  
 -```ts Input
 +```ts title="Input"
  function add(a, b) {
-   return a + b;
+-    return a + b;
++  return a + b;
  }
  let x = 10;
  ```
  
--```ts Output
--function add(a, b) {
--  return a + b;
--}
--let x = 10;
+-```js Output
 +```js title="Output"
-+function add(a,b){return a+b;}let x=10;
+ function add(a,b){return a+b;}let x=10;
  ```
  
- ### Semicolon optimization
-@@ -731,16 +724,14 @@ let x = 10;
+@@ -730,13 +724,13 @@ function add(a,b){return a+b;}let x=10;
  
  Inserts semicolons only when necessary.
  
@@ -1557,38 +1244,31 @@ index 24e53b81..8d9e9548 100644
  return a + b;
  ```
  
--```ts Output
--let a = 1;
--let b = 2;
--return a + b;
+-```js Output
 +```js title="Output"
-+let a=1;let b=2;return a+b
+ let a=1;let b=2;return a+b
  ```
  
- ### Operator spacing removal
-@@ -749,16 +740,16 @@ return a + b;
+@@ -746,13 +740,13 @@ let a=1;let b=2;return a+b
  
  Removes spaces around operators.
  
 -```ts Input
+-a + b
+-x = y * z
+-foo && bar || baz
 +```ts title="Input"
- a + b;
- x = y * z;
- (foo && bar) || baz;
++a + b;
++x = y * z;
++(foo && bar) || baz;
  ```
  
--```ts Output
--a + b;
--x = y * z;
--(foo && bar) || baz;
+-```js Output
 +```js title="Output"
-+a+b
-+x=y*z
-+foo&&bar||baz
- ```
- 
- ### Comment removal
-@@ -767,27 +758,24 @@ x = y * z;
+ a+b
+ x=y*z
+ foo&&bar||baz
+@@ -764,33 +758,32 @@ foo&&bar||baz
  
  Removes comments except important license comments.
  
@@ -1597,17 +1277,13 @@ index 24e53b81..8d9e9548 100644
  // This comment is removed
  /* So is this */
  /*! But this license comment is kept */
--function test() {
--  /* inline comment */
--}
-+function test() { /* inline comment */ }
+ function test() { /* inline comment */ }
  ```
  
--```ts Output
+-```js Output
 +```js title="Output"
  /*! But this license comment is kept */
--function test() {}
-+function test(){}
+ function test(){}
  ```
  
  ### Object and array formatting
@@ -1619,287 +1295,228 @@ index 24e53b81..8d9e9548 100644
 -```ts Input
 +```ts title="Input"
  const obj = {
-   name: "John",
-   age: 30,
-@@ -795,9 +783,8 @@ const obj = {
+-    name: "John",
+-    age: 30
++  name: "John",
++  age: 30,
+ };
  const arr = [1, 2, 3];
  ```
  
--```ts Output
--const obj = { name: "John", age: 30 };
--const arr = [1, 2, 3];
+-```js Output
 +```js title="Output"
-+const obj={name:"John",age:30};const arr=[1,2,3];
+ const obj={name:"John",age:30};const arr=[1,2,3];
  ```
  
- ### Control flow formatting
-@@ -806,7 +793,7 @@ const arr = [1, 2, 3];
+@@ -800,16 +793,16 @@ const obj={name:"John",age:30};const arr=[1,2,3];
  
  Removes whitespace in control structures.
  
 -```ts Input
 +```ts title="Input"
  if (condition) {
-   doSomething();
+-    doSomething();
++  doSomething();
  }
-@@ -815,9 +802,8 @@ for (let i = 0; i < 10; i++) {
+ for (let i = 0; i < 10; i++) {
+-    console.log(i);
++  console.log(i);
  }
  ```
  
--```ts Output
--if (condition) doSomething();
--for (let i = 0; i < 10; i++) console.log(i);
+-```js Output
 +```js title="Output"
-+if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
+ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
  ```
  
- ### Function formatting
-@@ -826,18 +812,15 @@ for (let i = 0; i < 10; i++) console.log(i);
+@@ -819,14 +812,14 @@ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
  
  Removes whitespace in function declarations.
  
 -```ts Input
 +```ts title="Input"
  function myFunction(param1, param2) {
-   return param1 + param2;
+-    return param1 + param2;
++  return param1 + param2;
  }
  const arrow = (a, b) => a + b;
  ```
  
--```ts Output
--function myFunction(a, b) {
--  return a + b;
--}
--const arrow = (a, b) => a + b;
+-```js Output
 +```js title="Output"
-+function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
+ function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
  ```
  
- ### Parentheses minimization
-@@ -846,15 +829,16 @@ const arrow = (a, b) => a + b;
+@@ -836,13 +829,13 @@ function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
  
  Only adds parentheses when necessary for operator precedence.
  
 -```ts Input
--(a + b) * c;
--a + (b * c)(x);
 +```ts title="Input"
-+(a + b) * c
-+a + (b * c)
-+((x))
+ (a + b) * c
+ a + (b * c)
+ ((x))
  ```
  
--```ts Output
--(a + b) * c;
--a + b * c;
--x;
+-```js Output
 +```js title="Output"
-+(a+b)*c
-+a+b*c
-+x
- ```
- 
- ### Property mangling
-@@ -863,13 +847,12 @@ x;
+ (a+b)*c
+ a+b*c
+ x
+@@ -854,11 +847,11 @@ x
  
  Renames object properties to shorter names when configured.
  
--```ts title="input.ts"
--// (with property mangling enabled)
-+```ts title="input.ts (with property mangling enabled)"
+-```ts Input
++```ts title="Input"
  obj.longPropertyName
  ```
  
--```ts Output
--obj.a;
-+```js title="Output"
-+obj.a
+-```js Output (with property mangling enabled)
++```js title="Output (with property mangling enabled)"
+ obj.a
  ```
  
- ### Template literal value folding
-@@ -878,16 +861,20 @@ obj.a;
+@@ -868,7 +861,7 @@ obj.a
  
  Converts non-string interpolated values to strings and folds them into the template.
  
 -```ts Input
--`hello ${123}``value: ${true}``result: ${null}``status: ${undefined}``big: ${10n}`;
 +```ts title="Input"
-+`hello ${123}`
-+`value: ${true}`
-+`result: ${null}`
-+`status: ${undefined}`
-+`big: ${10n}`
+ `hello ${123}`
+ `value: ${true}`
+ `result: ${null}`
+@@ -876,7 +869,7 @@ Converts non-string interpolated values to strings and folds them into the templ
+ `big: ${10n}`
  ```
  
--```ts Output
--"hello 123";
--"value: true";
--"result: null";
--"status: undefined";
--"big: 10";
+-```js Output
 +```js title="Output"
-+"hello 123"
-+"value: true"
-+"result: null"
-+"status: undefined"
-+"big: 10"
- ```
- 
- ### String length constant folding
-@@ -896,14 +883,14 @@ Converts non-string interpolated values to strings and folds them into the templ
+ "hello 123"
+ "value: true"
+ "result: null"
+@@ -890,12 +883,12 @@ Converts non-string interpolated values to strings and folds them into the templ
  
  Evaluates `.length` property on string literals at compile time.
  
 -```ts Input
--"hello world".length;
--"test".length;
 +```ts title="Input"
-+"hello world".length
-+"test".length
+ "hello world".length
+ "test".length
  ```
  
--```ts Output
--11;
--4;
+-```js Output
 +```js title="Output"
-+11
-+4
+ 11
+ 4
  ```
- 
- ### Constructor call simplification
-@@ -912,23 +899,20 @@ Evaluates `.length` property on string literals at compile time.
+@@ -906,7 +899,7 @@ Evaluates `.length` property on string literals at compile time.
  
  Simplifies constructor calls for built-in types.
  
 -```ts Input
--new Object();
--new Object(null);
--new Object({ a: 1 });
--new Array();
--new Array(x, y);
 +```ts title="Input"
-+new Object()
-+new Object(null)
-+new Object({a: 1})
-+new Array()
-+new Array(x, y)
+ new Object()
+ new Object(null)
+ new Object({a: 1})
+@@ -914,7 +907,7 @@ new Array()
+ new Array(x, y)
  ```
  
--```ts Output
--{
--}
--{
--}
--{
--  a: 1;
--}
--[][(x, y)];
+-```js Output
 +```js title="Output"
-+{}
-+{}
-+{a:1}
-+[]
-+[x,y]
- ```
- 
- ### Single property object inlining
-@@ -937,12 +921,12 @@ new Array(x, y);
+ {}
+ {}
+ {a:1}
+@@ -928,11 +921,11 @@ new Array(x, y)
  
  Inlines property access for objects with a single property.
  
 -```ts Input
--({ fn: () => console.log("hi") }).fn();
 +```ts title="Input"
-+({fn: () => console.log('hi')}).fn()
+ ({fn: () => console.log('hi')}).fn()
  ```
  
--```ts Output
--(() => console.log("hi"))();
+-```js Output
 +```js title="Output"
-+(() => console.log('hi'))()
+ (() => console.log('hi'))()
  ```
  
- ### String charCodeAt constant folding
-@@ -951,14 +935,14 @@ Inlines property access for objects with a single property.
+@@ -942,12 +935,12 @@ Inlines property access for objects with a single property.
  
  Evaluates `charCodeAt()` on string literals for ASCII characters.
  
 -```ts Input
--"hello".charCodeAt(1);
--"A".charCodeAt(0);
 +```ts title="Input"
-+"hello".charCodeAt(1)
-+"A".charCodeAt(0)
+ "hello".charCodeAt(1)
+ "A".charCodeAt(0)
  ```
  
--```ts Output
--101;
--65;
+-```js Output
 +```js title="Output"
-+101
-+65
+ 101
+ 65
  ```
- 
- ### Void 0 equality to null equality
-@@ -967,14 +951,14 @@ Evaluates `charCodeAt()` on string literals for ASCII characters.
+@@ -958,12 +951,12 @@ Evaluates `charCodeAt()` on string literals for ASCII characters.
  
  Converts loose equality checks with `void 0` to `null` since they're equivalent.
  
 -```ts Input
--x == void 0;
--x != void 0;
 +```ts title="Input"
-+x == void 0
-+x != void 0
+ x == void 0
+ x != void 0
  ```
  
--```ts Output
--x == null;
--x != null;
+-```js Output
 +```js title="Output"
-+x == null
-+x != null
+ x == null
+ x != null
  ```
- 
- ### Negation operator optimization
-@@ -983,13 +967,14 @@ x != null;
+@@ -974,12 +967,12 @@ x != null
  
  Moves negation operator through comma expressions.
  
 -```ts Input
---(a, b) - (x, y, z);
 +```ts title="Input"
-+-(a, b)
-+-(x, y, z)
+ -(a, b)
+ -(x, y, z)
  ```
  
--```ts Output
--(a, -b);
--(x, y, -z);
+-```js Output
 +```js title="Output"
-+a,-b
-+x,y,-z
+ a,-b
+ x,y,-z
  ```
- 
- ### Import.meta property inlining
-@@ -998,14 +983,14 @@ Moves negation operator through comma expressions.
+@@ -990,18 +983,18 @@ x,y,-z
  
  Inlines `import.meta` properties at build time when values are known.
  
 -```ts Input
+-import.meta.dir
+-import.meta.file
+-import.meta.path
+-import.meta.url
 +```ts title="Input"
- import.meta.dir;
- import.meta.file;
- import.meta.path;
- import.meta.url;
++import.meta.dir;
++import.meta.file;
++import.meta.path;
++import.meta.url;
  ```
  
--```ts Output
+-```js Output
+-"/path/to/directory"
+-"filename.js"
+-"/full/path/to/file.js"
+-"file:///full/path/to/file.js"
 +```js title="Output"
- "/path/to/directory";
- "filename.js";
- "/full/path/to/file.js";
-@@ -1018,18 +1003,16 @@ import.meta.url;
++"/path/to/directory";
++"filename.js";
++"/full/path/to/file.js";
++"file:///full/path/to/file.js";
+ ```
+ 
+ ### Variable declaration merging
+@@ -1010,14 +1003,14 @@ import.meta.url
  
  Merges adjacent variable declarations of the same type.
  
@@ -1911,18 +1528,12 @@ index 24e53b81..8d9e9548 100644
  const d = 4;
  ```
  
--```ts Output
--let a = 1,
--  b = 2;
--const c = 3,
--  d = 4;
+-```js Output
 +```js title="Output"
-+let a=1,b=2;
-+const c=3,d=4;
+ let a=1,b=2;
+ const c=3,d=4;
  ```
- 
- ### Expression statement merging
-@@ -1038,14 +1021,14 @@ const c = 3,
+@@ -1028,13 +1021,13 @@ const c=3,d=4;
  
  Merges adjacent expression statements using comma operator.
  
@@ -1933,14 +1544,12 @@ index 24e53b81..8d9e9548 100644
  console.log(3);
  ```
  
--```ts Output
--(console.log(1), console.log(2), console.log(3));
+-```js Output
 +```js title="Output"
-+console.log(1),console.log(2),console.log(3);
+ console.log(1),console.log(2),console.log(3);
  ```
  
- ### Return statement merging
-@@ -1054,13 +1037,13 @@ console.log(3);
+@@ -1044,12 +1037,12 @@ console.log(1),console.log(2),console.log(3);
  
  Merges expressions before return with comma operator.
  
@@ -1950,14 +1559,12 @@ index 24e53b81..8d9e9548 100644
  return y;
  ```
  
--```ts Output
--return (console.log(x), y);
+-```js Output
 +```js title="Output"
-+return console.log(x),y;
+ return console.log(x),y;
  ```
  
- ### Throw statement merging
-@@ -1069,13 +1052,13 @@ return (console.log(x), y);
+@@ -1059,12 +1052,12 @@ return console.log(x),y;
  
  Merges expressions before throw with comma operator.
  
@@ -1967,31 +1574,27 @@ index 24e53b81..8d9e9548 100644
  throw new Error();
  ```
  
--```ts Output
--throw (console.log(x), new Error());
+-```js Output
 +```js title="Output"
-+throw(console.log(x),new Error());
+ throw(console.log(x),new Error());
  ```
  
- ### TypeScript enum cross-module inlining
-@@ -1084,8 +1067,7 @@ throw (console.log(x), new Error());
+@@ -1074,7 +1067,7 @@ throw(console.log(x),new Error());
  
  Inlines enum values across module boundaries.
  
--```ts title="input.ts"
--// (lib.ts)
-+```ts title="input.ts (lib.ts)"
+-```ts Input 
++```ts title="Input"
+ // lib.ts
  export enum Color { Red, Green, Blue }
  
- // Input (main.ts)
-@@ -1093,25 +1075,22 @@ import { Color } from './lib';
+@@ -1083,22 +1076,21 @@ import { Color } from './lib';
  const x = Color.Red;
  ```
  
--```ts Output
--const x = 0;
+-```js Output
 +```js title="Output"
-+const x=0;
+ const x=0;
  ```
  
  ### Computed property enum inlining
@@ -2001,69 +1604,47 @@ index 24e53b81..8d9e9548 100644
  Inlines enum values used as computed object properties.
  
 -```ts Input
--enum Keys {
--  FOO = "foo",
--}
--const obj = { [Keys.FOO]: value };
 +```ts title="Input"
-+enum Keys { FOO = 'foo' }
-+const obj = { [Keys.FOO]: value }
+ enum Keys { FOO = 'foo' }
+ const obj = { [Keys.FOO]: value }
  ```
  
--```ts Output
--const obj = { foo: value };
+-```js Output
 +```js title="Output"
-+const obj={foo:value}
+ const obj={foo:value}
  ```
  
- ### String number to numeric index
-@@ -1120,14 +1099,14 @@ const obj = { foo: value };
+@@ -1108,12 +1100,12 @@ const obj={foo:value}
  
  Converts string numeric property access to numeric index.
  
 -```ts Input
--obj["0"];
--arr["5"];
 +```ts title="Input"
-+obj["0"]
-+arr["5"]
+ obj["0"]
+ arr["5"]
  ```
  
--```ts Output
--obj[0];
--arr[5];
+-```js Output
 +```js title="Output"
-+obj[0]
-+arr[5]
+ obj[0]
+ arr[5]
  ```
- 
- ### Arrow function body shortening
-@@ -1136,18 +1115,14 @@ arr[5];
+@@ -1124,12 +1116,12 @@ arr[5]
  
  Uses expression body syntax when an arrow function only returns a value.
  
 -```ts Input
--() => {
--  return x;
--};
--a => {
--  return a + 1;
--};
 +```ts title="Input"
-+() => { return x; }
-+(a) => { return a + 1; }
+ () => { return x; }
+ (a) => { return a + 1; }
  ```
  
--```ts Output
--() => x;
--a => a + 1;
+-```js Output
 +```js title="Output"
-+() => x
-+a => a + 1
+ () => x
+ a => a + 1
  ```
- 
- ### Object property shorthand
-@@ -1156,18 +1131,14 @@ a => a + 1;
+@@ -1140,12 +1132,12 @@ a => a + 1
  
  Uses shorthand syntax when property name and value identifier match.
  
@@ -2073,20 +1654,12 @@ index 24e53b81..8d9e9548 100644
  { name: name, age: age }
  ```
  
--```ts Output
--{
--  (x, y);
--}
--{
--  (name, age);
--}
+-```js Output
 +```js title="Output"
-+{ x, y }
-+{ name, age }
+ { x, y }
+ { name, age }
  ```
- 
- ### Method shorthand
-@@ -1176,14 +1147,14 @@ Uses shorthand syntax when property name and value identifier match.
+@@ -1156,14 +1148,14 @@ Uses shorthand syntax when property name and value identifier match.
  
  Uses method shorthand syntax in object literals.
  
@@ -2098,12 +1671,12 @@ index 24e53b81..8d9e9548 100644
  }
  ```
  
--```ts Output
+-```js Output
 +```js title="Output"
  {
    foo() {},
    async bar() {}
-@@ -1196,17 +1167,15 @@ Uses method shorthand syntax in object literals.
+@@ -1176,14 +1168,14 @@ Uses method shorthand syntax in object literals.
  
  Removes `debugger` statements from code.
  
@@ -2115,16 +1688,12 @@ index 24e53b81..8d9e9548 100644
  }
  ```
  
--```ts Output
--function test() {
--  return x;
--}
+-```js Output
 +```js title="Output"
-+function test(){return x}
+ function test(){return x}
  ```
  
- ### Drop console calls
-@@ -1215,16 +1184,16 @@ function test() {
+@@ -1193,13 +1185,13 @@ function test(){return x}
  
  Removes all `console.*` method calls from code.
  
@@ -2135,47 +1704,40 @@ index 24e53b81..8d9e9548 100644
  x = console.error("error");
  ```
  
--```ts Output
+-```js Output
 +```js title="Output"
  void 0;
  void 0;
--x = void 0;
-+x=void 0;
- ```
- 
- ### Drop custom function calls
-@@ -1233,13 +1202,12 @@ x = void 0;
+ x=void 0;
+@@ -1211,12 +1203,12 @@ x=void 0;
  
  Removes calls to specified global functions or methods.
  
--```ts title="input.ts"
--// with --drop=assert
-+```ts title="input.ts with --drop=assert"
+-```ts Input
++```ts title="Input"
  assert(condition);
  obj.assert(test);
  ```
  
--```ts Output
-+```js title="Output"
+-```js Output with --drop=assert
++```js title="Output with --drop=assert"
  void 0;
  void 0;
  ```
-@@ -1284,8 +1252,8 @@ const myFunction = () => {
- const output = myFunction();
- ```
+@@ -1248,7 +1240,7 @@ This preserves the `.name` property on functions and classes while still minifyi
  
--```ts title="output.ts"
--// // Output with --minify (49 bytes, 69% reduction)
-+```js title="output.js"
-+// Output with --minify (49 bytes, 69% reduction)
- const a=42,b=()=>{const c=!0,d=void 0;return c?a:d},e=b();
- ```
+ Using all three minification modes together:
  
+-```ts input.ts (158 bytes)
++```ts title="input.ts (158 bytes)"
+ const myVariable = 42;
+ 
+ const myFunction = () => {
 diff --git b/content/docs/bundler/plugins.mdx a/content/docs/bundler/plugins.mdx
-index e09f6e1e..eaa42850 100644
+index b02117f6..af5c4bb2 100644
 --- b/content/docs/bundler/plugins.mdx
 +++ a/content/docs/bundler/plugins.mdx
-@@ -325,7 +325,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+@@ -339,7 +339,7 @@ To create a native plugin, you must export a C ABI function which matches the si
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -2887,7 +2449,7 @@ index d9c73e1a..5c7de79d 100644
  
  Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
-index 833afa40..c1d7aab8 100644
+index 2ef06140..99c220a7 100644
 --- b/content/docs/pm/cli/pm.mdx
 +++ a/content/docs/pm/cli/pm.mdx
 @@ -87,7 +87,6 @@ To print the path to the `bin` directory for the local project:
@@ -2906,26 +2468,6 @@ index 833afa40..c1d7aab8 100644
  <$HOME>/.bun/bin
  ```
  
-@@ -274,16 +272,16 @@ Manage `package.json` data with get, set, delete, and fix operations.
- All commands support dot and bracket notation:
- 
- ```bash title="terminal"
--scripts.build              # dot notation
-+$ scripts.build              # dot notation
- contributors[0]            # array access
- workspaces.0               # dot with numeric index
--scripts[test:watch]        # bracket for special chars
-+$ scripts[test:watch]        # bracket for special chars
- ```
- 
- Examples:
- 
- ```bash title="terminal"
--# set
-+# get
- $ bun pm pkg get name                               # single property
- $ bun pm pkg get name version                       # multiple properties
- $ bun pm pkg get                                    # entire package.json
 diff --git b/content/docs/pm/cli/publish.mdx a/content/docs/pm/cli/publish.mdx
 index 700e814b..9114c89b 100644
 --- b/content/docs/pm/cli/publish.mdx
@@ -2989,50 +2531,6 @@ index 4509e5b9..5e448032 100644
  ---
  
  Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
-diff --git b/content/docs/pm/workspaces.mdx a/content/docs/pm/workspaces.mdx
-index f653d958..cd43a9af 100644
---- b/content/docs/pm/workspaces.mdx
-+++ a/content/docs/pm/workspaces.mdx
-@@ -7,26 +7,25 @@ Bun supports [`workspaces`](https://docs.npmjs.com/cli/v9/using-npm/workspaces?v
- 
- It's common for a monorepo to have the following structure:
- 
--```
--tree
-+```txt title="tree"
- <root>
- ├── README.md
- ├── bun.lock
- ├── package.json
- ├── tsconfig.json
- └── packages
--    ├── pkg-a
--    │   ├── index.ts
--    │   ├── package.json
--    │   └── tsconfig.json
--    ├── pkg-b
--    │   ├── index.ts
--    │   ├── package.json
--    │   └── tsconfig.json
--    └── pkg-c
--        ├── index.ts
--        ├── package.json
--        └── tsconfig.json
-+    ├── pkg-a
-+    │   ├── index.ts
-+    │   ├── package.json
-+    │   └── tsconfig.json
-+    ├── pkg-b
-+    │   ├── index.ts
-+    │   ├── package.json
-+    │   └── tsconfig.json
-+    └── pkg-c
-+        ├── index.ts
-+        ├── package.json
-+        └── tsconfig.json
- ```
- 
- In the root `package.json`, the `"workspaces"` key is used to indicate which subdirectories should be considered packages/workspaces within the monorepo. It's conventional to place all the workspace in a directory called `packages`.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
 index ab0d4c98..e34a8540 100644
 --- b/content/docs/project/contributing.mdx
@@ -3104,7 +2602,7 @@ index 285474ad..3cd099ed 100644
 -
  </Accordions>
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 5f0e519d..131aab4c 100644
+index 8fe4c537..131aab4c 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -179,7 +179,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -3135,15 +2633,17 @@ index 5f0e519d..131aab4c 100644
  ```
  
  ### `test.randomize`
-@@ -400,6 +401,7 @@ To configure the directory where Bun installs globally installed binaries and CL
+@@ -400,8 +401,8 @@ To configure the directory where Bun installs globally installed binaries and CL
  Environment variable: `BUN_INSTALL_BIN`
  
  ```toml title="bunfig.toml"
-+[install]
- # where globally-installed package bins are linked
+-# where globally-installed package bins are linked
+ [install]
++# where globally-installed package bins are linked
  globalBinDir = "~/.bun/bin"
  ```
-@@ -465,7 +467,6 @@ To configure the cache behavior:
+ 
+@@ -466,7 +467,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -3151,7 +2651,7 @@ index 5f0e519d..131aab4c 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -497,7 +498,7 @@ print = "yarn"
+@@ -498,7 +498,7 @@ print = "yarn"
  
  ### `install.linker`
  
@@ -3160,7 +2660,7 @@ index 5f0e519d..131aab4c 100644
  
  For complete documentation refer to [Package manager > Isolated installs](/docs/pm/isolated-installs).
  
-@@ -625,9 +626,7 @@ With this option, the command being run will not be printed to the console:
+@@ -626,9 +626,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -3424,7 +2924,7 @@ index 629b9863..8bdb4a8a 100644
  ```
  
 diff --git b/content/docs/runtime/module-resolution.mdx a/content/docs/runtime/module-resolution.mdx
-index 7696b6f2..fc14e346 100644
+index 7fc1b33f..80be7b23 100644
 --- b/content/docs/runtime/module-resolution.mdx
 +++ a/content/docs/runtime/module-resolution.mdx
 @@ -66,13 +66,13 @@ import { hello } from "./hello.js"; // this also works
@@ -3466,10 +2966,33 @@ index 02a833dd..55cfb787 100644
  
  The max value for this limit is currently set to 65,336. The maximum port number is 65,535, so it's quite difficult for any one computer to exceed this limit.
 diff --git b/content/docs/runtime/plugins.mdx a/content/docs/runtime/plugins.mdx
-index e3fcc9eb..5875c9b5 100644
+index cfb373f5..5875c9b5 100644
 --- b/content/docs/runtime/plugins.mdx
 +++ a/content/docs/runtime/plugins.mdx
-@@ -316,7 +316,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+@@ -42,21 +42,7 @@ type PluginBuilder = {
+   config: BuildConfig;
+ };
+ 
+-type Loader =
+-  | "js"
+-  | "jsx"
+-  | "ts"
+-  | "tsx"
+-  | "json"
+-  | "jsonc"
+-  | "toml"
+-  | "yaml"
+-  | "file"
+-  | "napi"
+-  | "wasm"
+-  | "text"
+-  | "css"
+-  | "html";
++type Loader = "js" | "jsx" | "ts" | "tsx" | "css" | "json" | "toml";
+ ```
+ 
+ ## Usage
+@@ -330,7 +316,7 @@ To create a native plugin, you must export a C ABI function which matches the si
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -3478,19 +3001,6 @@ index e3fcc9eb..5875c9b5 100644
  ```
  
  Then install this crate:
-diff --git b/content/docs/runtime/s3.mdx a/content/docs/runtime/s3.mdx
-index 25d79097..e36e9b4b 100644
---- b/content/docs/runtime/s3.mdx
-+++ a/content/docs/runtime/s3.mdx
-@@ -697,7 +697,7 @@ To list some or all (up to 1,000) objects in a bucket, you can use the `S3Client
- ```ts title="s3.ts"
- import { S3Client } from "bun";
- 
--const credentials = { ... }
-+const credentials = {
-   accessKeyId: "your-access-key",
-   secretAccessKey: "your-secret-key",
-   bucket: "my-bucket",
 diff --git b/content/docs/runtime/sql.mdx a/content/docs/runtime/sql.mdx
 index df07be2d..97abac44 100644
 --- b/content/docs/runtime/sql.mdx
@@ -4008,7 +3518,7 @@ index 42c32b11..646668be 100644
      	Successfully authenticated with registry.digitalocean.com
      	```
 diff --git b/content/guides/deployment/google-cloud-run.mdx a/content/guides/deployment/google-cloud-run.mdx
-index 812c7f34..fbb60d22 100644
+index 05a12246..fbb60d22 100644
 --- b/content/guides/deployment/google-cloud-run.mdx
 +++ a/content/guides/deployment/google-cloud-run.mdx
 @@ -20,14 +20,16 @@ In this guide, we will deploy a Bun HTTP server to Google Cloud Run using a `Doc
@@ -4063,25 +3573,17 @@ index 812c7f34..fbb60d22 100644
  ```
  
  <Callout type="info">  
-@@ -132,10 +134,7 @@ CMD ["bun", "index.ts"]
+@@ -132,8 +134,7 @@ CMD ["bun", "index.ts"]
  <Callout type="info">
    Make sure that the start command corresponds to your application's entry point. This can also be `CMD ["bun", "run", "start"]` if you have a start script in your `package.json`.
  
--    This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
--
--    This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
+-This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
 -
 +  This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
  </Callout>
  
  Create a new `.dockerignore` file in the root of your project. This file contains the files and directories that should be _excluded_ from the container image, such as `node_modules`. This makes your builds faster and smaller:
-@@ -161,12 +160,11 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
- 
- <Callout type="info">
-   Update the `--region` flag to your preferred region. You can also omit this flag to get an interactive prompt to
--  select a region. Update the `--region` flag to your preferred region. You can also omit this flag to get an
--  interactive prompt to select a region.
-+  select a region.
+@@ -163,7 +164,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
  </Callout>
  
  ```bash title="terminal"
@@ -4807,7 +4309,7 @@ index 5679852e..33c16fdd 100644
  ✓ add [0.03ms]
  ✓ multiply [0.02ms]
 diff --git b/content/guides/test/snapshot.mdx a/content/guides/test/snapshot.mdx
-index a140daba..8263c38f 100644
+index eeeaa43b..8263c38f 100644
 --- b/content/guides/test/snapshot.mdx
 +++ a/content/guides/test/snapshot.mdx
 @@ -20,7 +20,6 @@ The first time this test is executed, Bun will evaluate the value passed into `e
@@ -4818,21 +4320,23 @@ index a140daba..8263c38f 100644
  bun test v$BUN_LATEST_VERSION (9c68abdb)
  
  test/snap.test.ts:
-@@ -66,8 +65,6 @@ Later, when this test file is executed again, Bun will read the snapshot file an
- $ bun test
- bun test v$BUN_LATEST_VERSION (9c68abdb)
+@@ -64,8 +63,8 @@ Later, when this test file is executed again, Bun will read the snapshot file an
  
--bun test v$BUN_LATEST_VERSION (9c68abdb)
+ ```sh title="terminal"
+ $ bun test
 -
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
++
  test/snap.test.ts:
  ✓ snapshot [1.05ms]
  
-@@ -85,8 +82,6 @@ To update snapshots, use the `--update-snapshots` flag.
- $ bun test --update-snapshots
- bun test v$BUN_LATEST_VERSION (9c68abdb)
+@@ -81,8 +80,8 @@ To update snapshots, use the `--update-snapshots` flag.
  
--bun test v$BUN_LATEST_VERSION (9c68abdb)
+ ```sh title="terminal"
+ $ bun test --update-snapshots
 -
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
++
  test/snap.test.ts:
  ✓ snapshot [0.86ms]
  

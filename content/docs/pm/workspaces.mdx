@@ -7,25 +7,25 @@ Bun supports [`workspaces`](https://docs.npmjs.com/cli/v9/using-npm/workspaces?v
 
 It's common for a monorepo to have the following structure:
 
-```txt title="tree"
+```txt title="File Tree"
 <root>
 ├── README.md
 ├── bun.lock
 ├── package.json
 ├── tsconfig.json
 └── packages
-    ├── pkg-a
-    │   ├── index.ts
-    │   ├── package.json
-    │   └── tsconfig.json
-    ├── pkg-b
-    │   ├── index.ts
-    │   ├── package.json
-    │   └── tsconfig.json
-    └── pkg-c
-        ├── index.ts
-        ├── package.json
-        └── tsconfig.json
+    ├── pkg-a
+    │   ├── index.ts
+    │   ├── package.json
+    │   └── tsconfig.json
+    ├── pkg-b
+    │   ├── index.ts
+    │   ├── package.json
+    │   └── tsconfig.json
+    └── pkg-c
+        ├── index.ts
+        ├── package.json
+        └── tsconfig.json
 ```
 
 In the root `package.json`, the `"workspaces"` key is used to indicate which subdirectories should be considered packages/workspaces within the monorepo. It's conventional to place all the workspace in a directory called `packages`.

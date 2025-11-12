@@ -7,7 +7,7 @@ The Bun bundler implements a set of default loaders out of the box.
 
 > As a rule of thumb: **the bundler and the runtime both support the same set of file types out of the box.**
 
-`.js` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` `.jsx` `.toml` `.json` `.txt` `.wasm` `.node` `.html`
+`.js` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` `.jsx` `.css` `.json` `.jsonc` `.toml` `.yaml` `.yml` `.txt` `.wasm` `.node` `.html` `.sh`
 
 Bun uses the file extension to determine which built-in loader should be used to parse the file. Every loader has a name, such as `js`, `tsx`, or `json`. These names are used when building plugins that extend Bun with custom loaders.
 
@@ -83,7 +83,7 @@ If a `.json` file is passed as an entrypoint to the bundler, it will be converte
 }
 ```
 
-```ts tab="Output"
+```js tab="Output"
 export default {
   name: "John Doe",
   age: 35,
@@ -93,7 +93,33 @@ export default {
 
 ---
 
-### toml
+### `jsonc`
+
+**JSON with Comments loader.** Default for `.jsonc`.
+
+JSONC (JSON with Comments) files can be directly imported. Bun will parse them, stripping out comments and trailing commas.
+
+```js
+import config from "./config.jsonc";
+console.log(config);
+```
+
+During bundling, the parsed JSONC is inlined into the bundle as a JavaScript object, identical to the `json` loader.
+
+```js
+var config = {
+  option: "value",
+};
+```
+
+<Callout type="info">
+  Bun automatically uses the `jsonc` loader for `tsconfig.json`, `jsconfig.json`, `package.json`, and `bun.lock` files,
+  allowing comments and trailing commas in these files.
+</Callout>
+
+---
+
+### `toml`
 
 **TOML loader.** Default for `.toml`.
 
@@ -125,7 +151,7 @@ age = 35
 email = "johndoe@example.com"
 ```
 
-```ts tab="Output"
+```js tab="Output"
 export default {
   name: "John Doe",
   age: 35,
@@ -135,7 +161,49 @@ export default {
 
 ---
 
-### text
+### `yaml`
+
+**YAML loader.** Default for `.yaml` and `.yml`.
+
+YAML files can be directly imported. Bun will parse them with its fast native YAML parser.
+
+```js
+import config from "./config.yaml";
+console.log(config);
+
+// via import attribute:
+import data from "./data.txt" with { type: "yaml" };
+```
+
+During bundling, the parsed YAML is inlined into the bundle as a JavaScript object.
+
+```js
+var config = {
+  name: "my-app",
+  version: "1.0.0",
+  // ...other fields
+};
+```
+
+If a `.yaml` or `.yml` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the parsed object.
+
+```yaml tab="Input"
+name: John Doe
+age: 35
+email: johndoe@example.com
+```
+
+```js tab="Output"
+export default {
+  name: "John Doe",
+  age: 35,
+  email: "johndoe@example.com",
+};
+```
+
+---
+
+### `text`
 
 **Text loader.** Default for `.txt`.
 
@@ -163,13 +231,13 @@ If a `.txt` file is passed as an entrypoint, it will be converted to a `.js` mod
 Hello, world!
 ```
 
-```ts tab="Output"
+```js tab="Output"
 export default "Hello, world!";
 ```
 
 ---
 
-### napi
+### `napi`
 
 **Native addon loader.** Default for `.node`.
 
@@ -184,7 +252,7 @@ console.log(addon);
 
 ---
 
-### sqlite
+### `sqlite`
 
 **SQLite loader.** Requires `with { "type": "sqlite" }` import attribute.
 
@@ -214,7 +282,9 @@ Otherwise, the database to embed is copied into the `outdir` with a hashed filen
 
 ---
 
-### html
+### `html`
+
+**HTML loader.** Default for `.html`.
 
 The `html` loader processes HTML files and bundles any referenced assets. It will:
 
@@ -291,7 +361,27 @@ The `html` loader behaves differently depending on how it's used:
 
 ---
 
-### sh
+### `css`
+
+**CSS loader.** Default for `.css`.
+
+CSS files can be directly imported. The bundler will parse and bundle CSS files, handling `@import` statements and `url()` references.
+
+```js
+import "./styles.css";
+```
+
+During bundling, all imported CSS files are bundled together into a single `.css` file in the output directory.
+
+```scss
+.my-class {
+  background: url("./image.png");
+}
+```
+
+---
+
+### `sh`
 
 **Bun Shell loader.** Default for `.sh` files.
 
@@ -303,7 +393,7 @@ $ bun run ./script.sh
 
 ---
 
-### file
+### `file`
 
 **File loader.** Default for all unrecognized file types.
 

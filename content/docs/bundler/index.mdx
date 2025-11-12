@@ -155,8 +155,12 @@ Like the Bun runtime, the bundler supports an array of file types out of the box
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` | Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. The bundler executes a set of default transforms including dead code elimination and tree shaking. At the moment Bun does not attempt to down-convert syntax; if you use recently ECMAScript syntax, that will be reflected in the bundled code. |
 | `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:json</include>                                                                                                                                                                                                                                    |
+| `.jsonc`                                              | JSON with comments. Files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:jsonc</include>                                                                                                                                                                                                                                    |
 | `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:toml</include>                                                                                                                                                                                                                                    |
+| `.yaml` `.yml`                                        | YAML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:yaml</include>                                                                                                                                                                                                                                    |
 | `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<include>index.mdx#content-types:txt</include>                                                                                                                                                                                                                                |
+| `.html`                                               | HTML files are processed and any referenced assets (scripts, stylesheets, images) are bundled.                                                                                                                                                                                                                                                               |
+| `.css`                                                | CSS files are bundled together into a single `.css` file in the output directory.                                                                                                                                                                                                                                                                            |
 | `.node` `.wasm`                                       | These files are supported by the Bun runtime, but during bundling they are treated as assets.                                                                                                                                                                                                                                                                |
 
 {/* start llm ignored codeblock */}
@@ -166,10 +170,22 @@ import pkg from "./package.json";
 pkg.name; // => "my-package"
 ```
 </section>
+<section id="content-types:jsonc" style={{display:"none"}}>
+```js
+import config from "./config.jsonc";
+config.name; // => "my-config"
+```
+</section>
 <section id="content-types:toml" style={{display:"none"}}>
 ```js
 import config from "./bunfig.toml";
 config.logLevel; // => "debug"
+```
+</section>
+<section id="content-types:yaml" style={{display:"none"}}>
+```js
+import config from "./config.yaml";
+config.name; // => "my-app"
 ```
 </section>
 <section id="content-types:txt" style={{display:"none"}}>
@@ -1466,7 +1482,21 @@ interface BuildArtifact extends Blob {
   sourcemap: BuildArtifact | null;
 }
 
-type Loader = "js" | "jsx" | "ts" | "tsx" | "json" | "toml" | "file" | "napi" | "wasm" | "text";
+type Loader =
+  | "js"
+  | "jsx"
+  | "ts"
+  | "tsx"
+  | "css"
+  | "json"
+  | "jsonc"
+  | "toml"
+  | "yaml"
+  | "text"
+  | "file"
+  | "napi"
+  | "wasm"
+  | "html";
 
 interface BuildOutput {
   outputs: BuildArtifact[];
