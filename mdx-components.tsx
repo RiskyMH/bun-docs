@@ -9,6 +9,7 @@ import type { MDXComponents } from 'mdx/types';
 import { cn } from '@/lib/cn';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
+  const idCache = new Map<string, number>();
   return {
     ...defaultMdxComponents,
     ...TabsComponents,
@@ -25,12 +26,17 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Frame: (props) => <div {...props} className={cn("p-2 border bg-fd-card shadow-md rounded-2xl *:my-0! [&_p_>_*]:my-0! [&_p_>_.rounded-lg]:rounded-xl my-[2em]", props.className)}>{props.children}</div>,
     Badge: (props) => <span className={cn("bg-fd-accent text-fd-accent-foreground rounded-md px-2 py-1 text-xs", props.className)}>{props.children}</span>,
     Image: (props) => <img {...props} />,
-    Accordion: (props) => (
-      <AccordionComponents.Accordion
-        id={typeof props.title === 'string' ? props.title.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '') : undefined}
-        {...props}
-      />
-    ),
+    Accordion: (props) => {
+      if (props.id || typeof props.title !== 'string') return <AccordionComponents.Accordion {...props} />;
+
+      let id = props.title.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+      const count = idCache.get(id) || 0;
+      if (count >= 1) {
+        id = `${id}-${count}`;
+      }
+      idCache.set(id, count + 1);
+      return <AccordionComponents.Accordion id={id} {...props} />;
+    },
     ...components,
   };
 }
