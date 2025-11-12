@@ -3711,7 +3711,7 @@ index 062e325f..4bc91b3b 100644
   * Fast incremental writer that becomes an `ArrayBuffer` on end().
   */
 diff --git b/content/docs/runtime/templating/create.mdx a/content/docs/runtime/templating/create.mdx
-index 3c981b30..277cba33 100644
+index 3c981b30..4c418dac 100644
 --- b/content/docs/runtime/templating/create.mdx
 +++ a/content/docs/runtime/templating/create.mdx
 @@ -81,7 +81,7 @@ plugins = ["bun-plugin-tailwind"]
@@ -3723,14 +3723,12 @@ index 3c981b30..277cba33 100644
  @import "tailwindcss";
  ```
  
-@@ -231,7 +231,9 @@ After cloning a template, `bun create` will automatically remove the `"bun-creat
+@@ -231,7 +231,7 @@ After cloning a template, `bun create` will automatically remove the `"bun-creat
  | `GITHUB_TOKEN` (or `GITHUB_ACCESS_TOKEN`) | This lets `bun create` work with private repositories or if you get rate-limited. `GITHUB_TOKEN` is chosen over `GITHUB_ACCESS_TOKEN` if both exist. |
  
  <Accordions type="single">
 -<Accordion title={<span>How <code>bun create</code> works</span>}>
-+<Accordion>
-+
-+### How `bun create` works
++<Accordion title={<span>How <code>bun create</code> works</span>} id="how-bun-create-works">
  
  When you run `bun create ${template} ${destination}`, here’s what happens:
  
