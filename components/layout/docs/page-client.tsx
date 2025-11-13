@@ -4,41 +4,43 @@ import {
   type ComponentProps,
   Fragment,
   useEffect,
+  useEffectEvent,
+  createContext,
   useMemo,
   useRef,
   useState,
+  use,
 } from 'react';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'fumadocs-core/link';
-import { cn } from '../../../lib/cn';
+import { cn } from '@/lib/cn';
 import { useI18n } from 'fumadocs-ui/contexts/i18n';
 import { useTreeContext, useTreePath } from 'fumadocs-ui/contexts/tree';
 import type * as PageTree from 'fumadocs-core/page-tree';
-import { createContext, usePathname } from 'fumadocs-core/framework';
+import { usePathname } from 'fumadocs-core/framework';
 import {
   type BreadcrumbOptions,
   getBreadcrumbItemsFromPath,
 } from 'fumadocs-core/breadcrumb';
 import { useNav } from 'fumadocs-ui/contexts/layout';
-import { isActive } from '../../../lib/is-active';
-import { useEffectEvent } from 'fumadocs-core/utils/use-effect-event';
+import { isActive } from '@/lib/is-active';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '../../ui/collapsible';
+} from '@/components/ui/collapsible';
 import { useSidebar } from 'fumadocs-ui/contexts/sidebar';
-import { useTOCItems } from '../../ui/toc';
+import { useTOCItems } from '@/components/ui/toc';
 import { useActiveAnchor } from 'fumadocs-core/toc';
 
 const TocPopoverContext = createContext<{
   open: boolean;
   setOpen: (open: boolean) => void;
-}>('TocPopoverContext');
+} | null>(null);
 
 export function PageTOCPopoverTrigger(props: ComponentProps<'button'>) {
   const { text } = useI18n();
-  const { open } = TocPopoverContext.use();
+  const { open } = use(TocPopoverContext)!;
   const items = useTOCItems();
   const active = useActiveAnchor();
   const selected = useMemo(
@@ -182,7 +184,7 @@ export function PageTOCPopover(props: ComponentProps<'div'>) {
   }, []);
 
   return (
-    <TocPopoverContext.Provider
+    <TocPopoverContext
       value={useMemo(
         () => ({
           open,
@@ -214,7 +216,7 @@ export function PageTOCPopover(props: ComponentProps<'div'>) {
           {props.children}
         </header>
       </Collapsible>
-    </TocPopoverContext.Provider>
+    </TocPopoverContext>
   );
 }
 
