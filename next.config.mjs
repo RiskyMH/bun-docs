@@ -323,6 +323,6 @@ const permanentRedirects = {
   "/docs/ecosystem/express": "/docs/guides/ecosystem/express",
   "/docs/ecosystem/hono": "/docs/guides/ecosystem/hono",
   "/docs/ecosystem/react": "/docs/guides/ecosystem/react",
-  "/docs/ecosystem/stric": "/docs/guides/ecosystem/stric"
-
+  "/docs/ecosystem/stric": "/docs/guides/ecosystem/stric",
+  "/docs/ecosystem/edgedb": "/docs/guides/ecosystem/gel",
 }
