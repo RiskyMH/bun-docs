@@ -2545,27 +2545,74 @@ index ab0d4c98..e34a8540 100644
  ```
  
 diff --git b/content/docs/quickstart.mdx a/content/docs/quickstart.mdx
-index 42ca0882..f059b21c 100644
+index 9b2dcc96..21cba9b8 100644
 --- b/content/docs/quickstart.mdx
 +++ a/content/docs/quickstart.mdx
-@@ -49,7 +49,7 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
-       	$ cd my-app
-       	$ bun run index.ts
-       	
--      Hello via Bun!
-+        Hello via Bun!
-       	```
+@@ -26,7 +26,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
  
-       	You should see a console output saying `"Hello via Bun!"`.
-@@ -238,7 +238,7 @@ Then run it with `bun run start`.
+     ```bash title="terminal"
+     $ bun init my-app
+-    
+     ✓ Select a project template: Blank
+ 
+     - .gitignore
+@@ -49,7 +48,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+     ```bash title="terminal"
+     $ cd my-app
+     $ bun run index.ts
+-    
+     Hello via Bun!
+     ```
+ 
+@@ -77,14 +75,13 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+ 
+     ```bash title="terminal"
+     $ bun run index.ts
+-    
+     Listening on http://localhost:3000
+     ```
+ 
+     Visit [`http://localhost:3000`](http://localhost:3000) to test the server. You should see a simple page that says `"Bun!"`.
+ 
+     <Accordions type="single">
+-<Accordion title="Seeing TypeScript errors on Bun?">
++    <Accordion title="Seeing TypeScript errors on Bun?">
+ 
+       If you used `bun init`, Bun will have automatically installed Bun's TypeScript declarations and configured your `tsconfig.json`. If you're trying out Bun in an existing project, you may see a type error on the `Bun` global.
+ 
+@@ -112,7 +109,7 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+       ```
+ 
+     </Accordion>
+-</Accordions>
++    </Accordions>
+ 
+   </Step>
+   <Step>
+@@ -149,7 +146,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+ 
+     ```bash title="terminal"
+     $ bun run index.ts
+-    
+     Listening on http://localhost:3000
+     ```
+ 
+@@ -208,7 +204,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+ 
+     ```bash title="terminal"
+     $ bun run index.ts
+-    
+     Listening on http://localhost:3000
+     ```
+ 
+@@ -244,7 +239,6 @@ Then run it with `bun run start`.
+ 
  ```bash title="terminal"
  $ bun run start
- 
-- Listening on http://localhost:3000
-+Listening on http://localhost:3000
+-
+ Listening on http://localhost:3000
  ```
  
- <Callout type="info">⚡️ **Performance** — `bun run` is roughly 28x faster than `npm run` (6ms vs 170ms of overhead).</Callout>
 diff --git b/content/docs/runtime/auto-install.mdx a/content/docs/runtime/auto-install.mdx
 index 285474ad..3cd099ed 100644
 --- b/content/docs/runtime/auto-install.mdx
