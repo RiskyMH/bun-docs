@@ -130,7 +130,7 @@ index 2dc31661..c0c534cc 100644
  
  ## Migration from Other Frameworks
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index 0e520827..0ddd7f9e 100644
+index 55a64947..0ddd7f9e 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -209,19 +209,33 @@ index 0e520827..0ddd7f9e 100644
  body {
    background-image: url("./logo-[ABC123].png");
  }
-@@ -229,16 +221,16 @@ plugins = ["bun-plugin-tailwind"]
+@@ -229,30 +221,16 @@ plugins = ["bun-plugin-tailwind"]
  
  Then, reference TailwindCSS in your HTML via `<link>` tag, `@import` in CSS, or import in JavaScript.
  
 -<Tabs items={['index.html', 'styles.css', 'app.ts']}>
 -  <Tab value="index.html">
+-
 -    ```html title="index.html"
--    {/* Reference TailwindCSS in your HTML */}
+-    <!-- Reference TailwindCSS in your HTML -->
 -    <link rel="stylesheet" href="tailwindcss" />
 -   ```
+-
 -  </Tab>
--  <Tab value="styles.css">```scss title="styles.css" @import "tailwindcss"; ```</Tab>
--  <Tab value="app.ts">```ts title="app.ts" import "tailwindcss"; ```</Tab>
+-  <Tab value="styles.css">
+-
+-    ```scss title="styles.css"
+-    @import "tailwindcss";
+-   ```
+-
+-  </Tab>
+-  <Tab value="app.ts">
+-
+-    ```ts title="app.ts"
+-    import "tailwindcss";
+-   ```
+-
+-  </Tab>
 -</Tabs>
 +```html tab="index.html"
 +<!-- Reference TailwindCSS in your HTML -->
@@ -236,7 +250,7 @@ index 0e520827..0ddd7f9e 100644
  
  <Callout type="info">Only one of those are necessary, not all three.</Callout>
  
-@@ -250,9 +242,7 @@ To enable, pass the `--console` CLI flag.
+@@ -264,9 +242,7 @@ To enable, pass the `--console` CLI flag.
  
  ```bash title="terminal"
  $ bun ./index.html --console
@@ -246,7 +260,7 @@ index 0e520827..0ddd7f9e 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -279,22 +269,16 @@ While the server is running:
+@@ -293,22 +269,16 @@ While the server is running:
  
  When you're ready to deploy, use `bun build` to create optimized production bundles:
  
