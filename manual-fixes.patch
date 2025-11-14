@@ -2906,10 +2906,10 @@ index 415c28ec..b7ce8e3b 100644
  
  ---
 diff --git b/content/docs/runtime/file-types.mdx a/content/docs/runtime/file-types.mdx
-index a3c1ba4c..6133461b 100644
+index 2cdbd4c3..79af8668 100644
 --- b/content/docs/runtime/file-types.mdx
 +++ a/content/docs/runtime/file-types.mdx
-@@ -202,7 +202,7 @@ The html loader processes HTML files and bundles any referenced assets. It will:
+@@ -267,7 +267,7 @@ The html loader processes HTML files and bundles any referenced assets. It will:
  
  For example, given this HTML file:
  
@@ -2918,7 +2918,7 @@ index a3c1ba4c..6133461b 100644
  <!DOCTYPE html>
  <html>
    <body>
-@@ -215,7 +215,7 @@ For example, given this HTML file:
+@@ -280,7 +280,7 @@ For example, given this HTML file:
  
  It will output a new HTML file with the bundled assets:
  
