@@ -1,5 +1,5 @@
-import { docs, guides, blog as blogSrc } from "@/.source";
-import { createMDXSource } from "fumadocs-mdx/runtime/next";
+import { docs, guides, blog as blogSrc } from "fumadocs-mdx:collections/server";
+import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import { type InferPageType, loader, multiple } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 
@@ -26,7 +26,7 @@ export const source = loader(
   }
 );
 
-export const blogs = loader(createMDXSource(blogSrc), {
+export const blogs = loader(toFumadocsSource(blogSrc, []), {
   baseUrl: "/blog",
   // plugins: [lucideIconsPlugin()],
 });

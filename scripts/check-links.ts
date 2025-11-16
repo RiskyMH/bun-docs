@@ -8,6 +8,7 @@ import type { InferPageType } from "fumadocs-core/source";
 
 import { createMdxPlugin } from "fumadocs-mdx/bun";
 Bun.plugin(createMdxPlugin());
+await Bun.sleep(100)
 
 console.time("parse mdx files");
 const { source } = await import("@/lib/source");

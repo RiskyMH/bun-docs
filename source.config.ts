@@ -18,6 +18,7 @@ export const docs = defineDocs({
     }),
     postprocess: {
       includeProcessedMarkdown: true,
+      extractLinkReferences: true,
     },
   },
   dir: "content/docs",
@@ -33,6 +34,7 @@ export const guides = defineDocs({
     }),
     postprocess: {
       includeProcessedMarkdown: true,
+      extractLinkReferences: true,
     },
   },
   dir: "content/guides",
@@ -46,6 +48,7 @@ export const blog = defineCollections({
   dir: "content/blog",
   postprocess: {
     includeProcessedMarkdown: true,
+    extractLinkReferences: true,
   },
   schema: frontmatterSchema.extend({
     authors: z.union([
