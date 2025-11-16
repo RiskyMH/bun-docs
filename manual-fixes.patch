@@ -3064,6 +3064,19 @@ index 02a833dd..55cfb787 100644
  ```
  
  The max value for this limit is currently set to 65,336. The maximum port number is 65,535, so it's quite difficult for any one computer to exceed this limit.
+diff --git b/content/docs/runtime/nodejs-compat.mdx a/content/docs/runtime/nodejs-compat.mdx
+index 7b6b7b0c..ea3537fc 100644
+--- b/content/docs/runtime/nodejs-compat.mdx
++++ a/content/docs/runtime/nodejs-compat.mdx
+@@ -149,7 +149,7 @@ This page is updated regularly to reflect compatibility status of the latest ver
+ 
+ ### [`node:v8`](https://nodejs.org/api/v8.html)
+ 
+-🟡 `writeHeapSnapshot` and `getHeapSnapshot` are implemented. `serialize` and `deserialize` use JavaScriptCore's wire format instead of V8's. Other methods are not implemented. For profiling, use [`bun:jsc`](/docs/project/benchmarking#bunjsc) instead.
++🟡 `writeHeapSnapshot` and `getHeapSnapshot` are implemented. `serialize` and `deserialize` use JavaScriptCore's wire format instead of V8's. Other methods are not implemented. For profiling, use [`bun:jsc`](/docs/project/benchmarking#javascript-heap-stats) instead.
+ 
+ ### [`node:vm`](https://nodejs.org/api/vm.html)
+ 
 diff --git b/content/docs/runtime/plugins.mdx a/content/docs/runtime/plugins.mdx
 index cfb373f5..5875c9b5 100644
 --- b/content/docs/runtime/plugins.mdx
@@ -3509,7 +3522,7 @@ index 7d975106..95761055 100644
  // File beforeAll
  // Outer beforeAll
 diff --git b/content/docs/test/reporters.mdx a/content/docs/test/reporters.mdx
-index 39c9da13..4904c8b3 100644
+index 39c9da13..1a22d4c8 100644
 --- b/content/docs/test/reporters.mdx
 +++ a/content/docs/test/reporters.mdx
 @@ -1,6 +1,5 @@
@@ -3519,6 +3532,15 @@ index 39c9da13..4904c8b3 100644
  ---
  
  bun test supports different output formats through reporters. This document covers both built-in reporters and how to implement your own custom reporters.
+@@ -98,7 +97,7 @@ The JUnit reporter currently has a few limitations that will be addressed in fut
+ 
+ Bun test automatically detects when it's running inside GitHub Actions and emits GitHub Actions annotations to the console directly. No special configuration is needed beyond installing Bun and running `bun test`.
+ 
+-For a GitHub Actions workflow configuration example, see the [CI/CD integration](/docs/pm/cli/install#ci%2Fcd) section of the CLI documentation.
++For a GitHub Actions workflow configuration example, see the [CI/CD integration](/docs/pm/cli/install#ci-cd) section of the CLI documentation.
+ 
+ ---
+ 
 diff --git b/content/docs/test/runtime-behavior.mdx a/content/docs/test/runtime-behavior.mdx
 index 709c7de2..a0dc0080 100644
 --- b/content/docs/test/runtime-behavior.mdx
