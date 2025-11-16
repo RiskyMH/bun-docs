@@ -39,6 +39,17 @@ In addition, the `--save` flag can be used to add `cool-pkg` to the `dependencie
 }
 ```
 
+## Unlinking
+
+Use `bun unlink` in the root directory to unregister a local package.
+
+```bash title="terminal"
+$ cd /path/to/cool-pkg
+$ bun unlink
+
+bun unlink v$BUN_LATEST_VERSION (7416672e)
+```
+
 ---
 
 <include>../../../_snippets/cli/link.mdx</include>

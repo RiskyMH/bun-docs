@@ -12,7 +12,7 @@ index ffc4978d..5dc994c4 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index e8589053..724a08f3 100644
+index bda73973..58b62cb2 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -5,18 +5,13 @@ description: "Generate standalone executables from TypeScript or JavaScript file
@@ -294,7 +294,7 @@ index 55a64947..0ddd7f9e 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index 15aa2e1b..aa0bf618 100644
+index dab660a6..06020d0f 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -2395,7 +2395,7 @@ index 24f8ce7a..6614c847 100644
  #!/usr/bin/env bun
  ```
 diff --git b/content/docs/pm/cli/install.mdx a/content/docs/pm/cli/install.mdx
-index cc932f00..57832a89 100644
+index c5a24659..b7ad0994 100644
 --- b/content/docs/pm/cli/install.mdx
 +++ a/content/docs/pm/cli/install.mdx
 @@ -260,7 +260,7 @@ The default linker strategy depends on whether you're starting fresh or have an
@@ -2408,7 +2408,7 @@ index cc932f00..57832a89 100644
  The default is controlled by a `configVersion` field in your lockfile. For a detailed explanation, see [Package manager > Isolated installs](/docs/pm/isolated-installs).
  
 diff --git b/content/docs/pm/cli/link.mdx a/content/docs/pm/cli/link.mdx
-index ee4532d2..88b1821e 100644
+index 19527c84..49fd90bd 100644
 --- b/content/docs/pm/cli/link.mdx
 +++ a/content/docs/pm/cli/link.mdx
 @@ -7,10 +7,10 @@ Use `bun link` in a local directory to register the current package as a "linkab
@@ -2424,6 +2424,15 @@ index ee4532d2..88b1821e 100644
  Success! Registered "cool-pkg"
  
  To use cool-pkg in a project, run:
+@@ -47,7 +47,7 @@ Use `bun unlink` in the root directory to unregister a local package.
+ $ cd /path/to/cool-pkg
+ $ bun unlink
+ 
+-bun unlink v1.x (7416672e)
++bun unlink v$BUN_LATEST_VERSION (7416672e)
+ ```
+ 
+ ---
 diff --git b/content/docs/pm/cli/outdated.mdx a/content/docs/pm/cli/outdated.mdx
 index d9c73e1a..5c7de79d 100644
 --- b/content/docs/pm/cli/outdated.mdx
@@ -2483,7 +2492,7 @@ index 2ef06140..99c220a7 100644
  ```
  
 diff --git b/content/docs/pm/cli/publish.mdx a/content/docs/pm/cli/publish.mdx
-index 700e814b..9114c89b 100644
+index 8ab4e2b8..a1fc945e 100644
 --- b/content/docs/pm/cli/publish.mdx
 +++ a/content/docs/pm/cli/publish.mdx
 @@ -9,6 +9,7 @@ description: Use `bun publish` to publish a package to the npm registry
@@ -2546,10 +2555,39 @@ index 4509e5b9..5e448032 100644
  
  Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index ab0d4c98..e34a8540 100644
+index 8b53ec5d..9d72fcca 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
-@@ -57,7 +57,7 @@ $ brew install llvm@19
+@@ -12,7 +12,7 @@ If you are using Windows, please refer to [this guide](/docs/project/building-wi
+ A Nix flake is provided as an alternative to manual dependency installation:
+ 
+ ```bash
+-nix develop
++$ nix develop
+ # or explicitly use the pure shell
+ # nix develop .#pure
+ $ export CMAKE_SYSTEM_PROCESSOR=$(uname -m)
+@@ -82,8 +82,8 @@ Core developers have write access to the shared S3 cache. To enable write access
+ 
+ The `cmake` scripts should automatically detect your AWS credentials from the environment or the `~/.aws/credentials` file.
+ 
+-`<details>`
+-    `<summary>`Logging in to the `aws` CLI`</summary>`
++<details>
++    <summary>Logging in to the `aws` CLI</summary>
+ 
+     1. Install the AWS CLI by following [the official guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+     2. Log in to your AWS account console. A team member should provide you with your credentials.
+@@ -100,7 +100,7 @@ The `cmake` scripts should automatically detect your AWS credentials from the en
+     - If you have multiple AWS profiles configured, ensure that the correct profile is set in the `AWS_PROFILE` environment variable.
+     - `sccache` follows a server-client model. If you run into weird issues where `sccache` refuses to use S3, even though you have AWS credentials configured, try killing any running `sccache` servers with `sccache --stop-server` and then re-running the build.
+ 
+-`</details>`
++</details>
+ 
+ ## Install LLVM
+ 
+@@ -111,7 +111,7 @@ $ brew install llvm@19
  ```
  
  ```bash tab="Ubuntu/Debian"
@@ -2559,7 +2597,7 @@ index ab0d4c98..e34a8540 100644
  ```
  
 diff --git b/content/docs/quickstart.mdx a/content/docs/quickstart.mdx
-index 9b2dcc96..21cba9b8 100644
+index f7516c86..f718a3ff 100644
 --- b/content/docs/quickstart.mdx
 +++ a/content/docs/quickstart.mdx
 @@ -26,7 +26,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
@@ -2619,7 +2657,7 @@ index 9b2dcc96..21cba9b8 100644
      Listening on http://localhost:3000
      ```
  
-@@ -244,7 +239,6 @@ Then run it with `bun run start`.
+@@ -249,7 +244,6 @@ Then run it with `bun run start`.
  
  ```bash title="terminal"
  $ bun run start
@@ -2663,7 +2701,7 @@ index 285474ad..3cd099ed 100644
 -
  </Accordions>
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 8fe4c537..131aab4c 100644
+index c41ef7dd..8b56107c 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -179,7 +179,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -2694,7 +2732,7 @@ index 8fe4c537..131aab4c 100644
  ```
  
  ### `test.randomize`
-@@ -400,8 +401,8 @@ To configure the directory where Bun installs globally installed binaries and CL
+@@ -452,8 +453,8 @@ To configure the directory where Bun installs globally installed binaries and CL
  Environment variable: `BUN_INSTALL_BIN`
  
  ```toml title="bunfig.toml"
@@ -2704,7 +2742,7 @@ index 8fe4c537..131aab4c 100644
  globalBinDir = "~/.bun/bin"
  ```
  
-@@ -466,7 +467,6 @@ To configure the cache behavior:
+@@ -518,7 +519,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -2712,7 +2750,7 @@ index 8fe4c537..131aab4c 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -498,7 +498,7 @@ print = "yarn"
+@@ -550,7 +550,7 @@ print = "yarn"
  
  ### `install.linker`
  
@@ -2721,7 +2759,7 @@ index 8fe4c537..131aab4c 100644
  
  For complete documentation refer to [Package manager > Isolated installs](/docs/pm/isolated-installs).
  
-@@ -626,9 +626,7 @@ With this option, the command being run will not be printed to the console:
+@@ -678,9 +678,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -2959,10 +2997,10 @@ index 657ef14c..86ac91f3 100644
    /**
     * Stop the server from accepting new connections.
 diff --git b/content/docs/runtime/http/websockets.mdx a/content/docs/runtime/http/websockets.mdx
-index 56d9a5f8..305e3ae7 100644
+index c10f76fc..53b05928 100644
 --- b/content/docs/runtime/http/websockets.mdx
 +++ a/content/docs/runtime/http/websockets.mdx
-@@ -170,7 +170,7 @@ Bun.serve({
+@@ -176,7 +176,7 @@ Bun.serve({
  
  To connect to this server from the browser, create a new `WebSocket`.
  
@@ -2985,7 +3023,7 @@ index 629b9863..8bdb4a8a 100644
  ```
  
 diff --git b/content/docs/runtime/module-resolution.mdx a/content/docs/runtime/module-resolution.mdx
-index 7fc1b33f..80be7b23 100644
+index 32693421..e3e524e6 100644
 --- b/content/docs/runtime/module-resolution.mdx
 +++ a/content/docs/runtime/module-resolution.mdx
 @@ -66,13 +66,13 @@ import { hello } from "./hello.js"; // this also works
@@ -3366,7 +3404,7 @@ index f66ec8c6..cf84322d 100644
    | "entry-point-build"
    | "entry-point-run"
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 8303559d..7fda746d 100644
+index c8a8bb8d..d6ce4f5e 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
@@ -3471,7 +3509,7 @@ index 7d975106..95761055 100644
  // File beforeAll
  // Outer beforeAll
 diff --git b/content/docs/test/reporters.mdx a/content/docs/test/reporters.mdx
-index d14832f8..8f2e1eca 100644
+index 39c9da13..4904c8b3 100644
 --- b/content/docs/test/reporters.mdx
 +++ a/content/docs/test/reporters.mdx
 @@ -1,6 +1,5 @@
@@ -3794,19 +3832,53 @@ index 62607103..d9818e01 100644
  
  ---
 diff --git b/content/guides/ecosystem/nextjs.mdx a/content/guides/ecosystem/nextjs.mdx
-index a4f6af0d..6ebe4071 100644
+index a8b3cceb..060105a4 100644
 --- b/content/guides/ecosystem/nextjs.mdx
 +++ a/content/guides/ecosystem/nextjs.mdx
-@@ -25,9 +25,7 @@ You can specify a starter template using the `--example` flag.
+@@ -58,32 +58,13 @@ mode: center
  
- ```sh
- $ bun create next-app --example with-supabase
--```
+ Next.js applications on Bun can be deployed to various platforms.
  
--```txt
- ✔ What is your project named? … my-app
- ...
- ```
+-<Columns cols={3}>
+-  <Card title="Vercel" href="/guides/deployment/vercel" icon="/icons/ecosystem/vercel.svg">
+-    Deploy on Vercel
+-  </Card>
+-  <Card title="Railway" href="/guides/deployment/railway" icon="/icons/ecosystem/railway.svg">
+-    Deploy on Railway
+-  </Card>
+-  <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon="/icons/ecosystem/digitalocean.svg">
+-    Deploy on DigitalOcean
+-  </Card>
+-  <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon="/icons/ecosystem/aws.svg">
+-    Deploy on AWS Lambda
+-  </Card>
+-  <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon="/icons/ecosystem/gcp.svg">
+-    Deploy on Google Cloud Run
+-  </Card>
+-  <Card title="Render" href="/guides/deployment/render" icon="/icons/ecosystem/render.svg">
+-    Deploy on Render
+-  </Card>
+-</Columns>
++<include>../../_snippets/guides/deploy.mdx</include>
+ 
+ ---
+ 
+ ## Templates
+ 
+-<Columns cols={2}>
++<Cards>
+   <Card
+     title="Bun + Next.js Basic Starter"
+     img="/images/templates/bun-nextjs-basic.png"
+@@ -102,7 +83,7 @@ Next.js applications on Bun can be deployed to various platforms.
+   >
+     A full-stack todo application built with Bun, Next.js, and PostgreSQL.
+   </Card>
+-</Columns>
++</Cards>
+ 
+ ---
+ 
 diff --git b/content/guides/ecosystem/nuxt.mdx a/content/guides/ecosystem/nuxt.mdx
 index 407d4d88..367f4922 100644
 --- b/content/guides/ecosystem/nuxt.mdx
@@ -3903,62 +3975,116 @@ index 9095a830..985ade01 100644
  import adapter from "svelte-adapter-bun"; // [!code ++]
  import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
-index 35e63561..73c63e19 100644
+index 5a3543ac..2a601ebe 100644
 --- b/content/guides/ecosystem/tanstack-start.mdx
 +++ a/content/guides/ecosystem/tanstack-start.mdx
-@@ -65,7 +65,9 @@ mode: center
-     ```
+@@ -66,7 +66,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
  
-   </Step>
--  <Step title={<span>Update your <code>vite.config.ts</code> file</span>}>
-+  <Step>
-+
-+    ### Update your `vite.config.ts` file
-     Update your `vite.config.ts` file to include the necessary plugins for TanStack Start with Bun.
+         ```sh title="terminal"
+         $ bun add nitro
+-   ```
++        ```
  
-     ```ts title="vite.config.ts"
-@@ -138,26 +140,33 @@ mode: center
-       ```
-     </Callout>
+       </Step>
+       <Step title={<span>Update your <code>vite.config.ts</code> file</span>}>
+@@ -85,7 +85,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+         });
  
--    <Columns cols={3}>
--      <Card title="Vercel" href="/guides/deployment/vercel" icon="/icons/ecosystem/vercel.svg">
-+import { VercelIcon } from "@/components/icons/vercel";
-+import { RenderIcon } from "@/components/icons/render";
-+import { RailwayIcon } from "@/components/icons/railway";
-+import { DigitalOceanIcon } from "@/components/icons/digitalocean";
-+import { AWSIcon } from "@/components/icons/aws";
-+import { GoogleCloudIcon } from "@/components/icons/google-cloud";
-+
-+    <Cards className="grid-cols-3">
-+      <Card title="Vercel" href="/guides/deployment/vercel" icon={<VercelIcon />}>
-         Deploy on Vercel
-       </Card>
--      <Card title="Render" href="/guides/deployment/render" icon="/icons/ecosystem/render.svg">
-+      <Card title="Render" href="/guides/deployment/render" icon={<RenderIcon />}>
-         Deploy on Render
-       </Card>
--      <Card title="Railway" href="/guides/deployment/railway" icon="/icons/ecosystem/railway.svg">
-+      <Card title="Railway" href="/guides/deployment/railway" icon={<RailwayIcon />}>
-         Deploy on Railway
-       </Card>
--       <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon="/icons/ecosystem/digitalocean.svg">
-+       <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon={<DigitalOceanIcon />}>
-         Deploy on DigitalOcean
-       </Card>
--      <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon="/icons/ecosystem/aws.svg">
-+      <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon={<AWSIcon />}>
-         Deploy on AWS Lambda
-       </Card>
--      <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon="/icons/ecosystem/gcp.svg">
-+      <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon={<GoogleCloudIcon />}>
-         Deploy on Google Cloud Run
-       </Card>
--    </Columns>
-+    </Cards>
+         export default config;
+-   ```
++        ```
  
-   </Step>
- </Steps>
+         <Callout type="info">
+           The `bun` preset is optional, but it configures the build output specifically for Bun's runtime.
+@@ -106,7 +106,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+               "start": "bun run .output/server/index.mjs" // [!code ++]
+             }
+           }
+-   ```
++        ```
+ 
+         <Callout type="info">
+           You do **not** need the custom `start` script when deploying to Vercel.
+@@ -139,7 +139,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+               }),
+             ],
+           });
+-   ```
++          ```
+         </Callout>
+       </Step>
+     </Steps>
+@@ -713,7 +713,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+           log.error(`Failed to start server: ${String(error)}`)
+           process.exit(1)
+         })
+-   ```
++       ```
+ 
+       </Step>
+       <Step>
+@@ -728,7 +728,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+             "start": "bun run server.ts" // [!code ++]
+           }
+         }
+-   ```
++       ```
+ 
+       </Step>
+       <Step>
+@@ -739,7 +739,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+         ```sh title="terminal"
+         $ bun run build
+         $ bun run start
+-   ```
++        ```
+ 
+         The server will start on port 3000 by default (configurable via `PORT` environment variable).
+ 
+@@ -749,32 +749,13 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+   </Tab>
+ </Tabs>
+ 
+-<Columns cols={3}>
+-  <Card title="Vercel" href="/guides/deployment/vercel" icon="/icons/ecosystem/vercel.svg">
+-    Deploy on Vercel
+-  </Card>
+-  <Card title="Render" href="/guides/deployment/render" icon="/icons/ecosystem/render.svg">
+-    Deploy on Render
+-  </Card>
+-  <Card title="Railway" href="/guides/deployment/railway" icon="/icons/ecosystem/railway.svg">
+-    Deploy on Railway
+-  </Card>
+-  <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon="/icons/ecosystem/digitalocean.svg">
+-    Deploy on DigitalOcean
+-  </Card>
+-  <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon="/icons/ecosystem/aws.svg">
+-    Deploy on AWS Lambda
+-  </Card>
+-  <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon="/icons/ecosystem/gcp.svg">
+-    Deploy on Google Cloud Run
+-  </Card>
+-</Columns>
++<include>../../_snippets/guides/deploy.mdx</include>
+ 
+ ---
+ 
+ ## Templates
+ 
+-<Columns cols={2}>
++<Cards>
+   <Card
+     title="Todo App with Tanstack + Bun"
+     img="/images/templates/bun-tanstack-todo.png"
+@@ -802,7 +783,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+   >
+     The basic TanStack starter using the Bun runtime and Bun's file APIs.
+   </Card>
+-</Columns>
++</Cards>
+ 
+ ---
+ 
 diff --git b/content/guides/ecosystem/upstash.mdx a/content/guides/ecosystem/upstash.mdx
 index 3532a260..28cc6a07 100644
 --- b/content/guides/ecosystem/upstash.mdx
@@ -3974,7 +4100,7 @@ index 3532a260..28cc6a07 100644
  
      	The Redis client automatically handles connections in the background. No need to manually connect or disconnect for basic operations.
 diff --git b/content/guides/index.mdx a/content/guides/index.mdx
-index 107c894c..4e453352 100644
+index 107c894c..07a4fff2 100644
 --- b/content/guides/index.mdx
 +++ a/content/guides/index.mdx
 @@ -5,6 +5,112 @@ contextual: false
@@ -3988,12 +4114,12 @@ index 107c894c..4e453352 100644
 +import { Card as FancyCard, Cards as FancyCards } from "@/components/ui/card";
 +
 +<FancyCards className="grid-cols-3">
++  <FancyCard title="Use Tanstack Start with Bun" href="/guides/ecosystem/tanstack-start" cta="View Guide" />
++  <FancyCard title="Use Next.js with Bun" href="/guides/ecosystem/nextjs" cta="View Guide" />
 +  <FancyCard title="Build a frontend using Vite and Bun" href="/guides/ecosystem/vite" cta="View Guide" />
 +  <FancyCard title="Install TypeScript declarations for Bun" href="/guides/runtime/typescript" cta="View Guide" />
-+  <FancyCard title="Convert a ReadableStream to a string" href="/guides/streams/to-string" cta="View Guide" />
 +  <FancyCard title="Write a simple HTTP server" href="/guides/http/simple" cta="View Guide" />
 +  <FancyCard title="Build a simple WebSocket server" href="/guides/websocket/simple" cta="View Guide" />
-+  <FancyCard title="Read a file as a string" href="/guides/read-file/string" cta="View Guide" />
 +</FancyCards>
 +
 +## All Guides
@@ -4238,15 +4364,15 @@ index 29e47553..0a63d325 100644
  
  ### Build automation script
 diff --git b/content/guides/runtime/cicd.mdx a/content/guides/runtime/cicd.mdx
-index d743fd26..feb5780e 100644
+index d2ad67dd..e9de250b 100644
 --- b/content/guides/runtime/cicd.mdx
 +++ a/content/guides/runtime/cicd.mdx
 @@ -37,7 +37,7 @@ jobs:
        # ...
        - uses: oven-sh/setup-bun@v2
-         with: // [!code ++]
--          bun-version: 1.2.0 # or "latest", "canary", <sha> // [!code ++]
-+          bun-version: $BUN_LATEST_VERSION # or "latest", "canary", <sha> // [!code ++]
+         with: # [!code ++]
+-          bun-version: 1.2.0 # or "latest", "canary", <sha> # [!code ++]
++          bun-version: $BUN_LATEST_VERSION # or "latest", "canary", <sha> # [!code ++]
  ```
  
  ---
@@ -4411,20 +4537,6 @@ index eeeaa43b..8263c38f 100644
  test/snap.test.ts:
  ✓ snapshot [0.86ms]
  
-diff --git b/content/guides/test/spy-on.mdx a/content/guides/test/spy-on.mdx
-index 29dde3cb..731fa14e 100644
---- b/content/guides/test/spy-on.mdx
-+++ a/content/guides/test/spy-on.mdx
-@@ -35,8 +35,7 @@ const leo = {
- 
- const spy = spyOn(leo, "sayHi");
- 
--test("turtles", () => {
--  // [!code ++]
-+test("turtles", () => { // [!code ++]
-   expect(spy).toHaveBeenCalledTimes(0); // [!code ++]
-   leo.sayHi("pizza"); // [!code ++]
-   expect(spy).toHaveBeenCalledTimes(1); // [!code ++]
 diff --git b/content/guides/test/svelte-test.mdx a/content/guides/test/svelte-test.mdx
 index b38e1b85..4e663175 100644
 --- b/content/guides/test/svelte-test.mdx

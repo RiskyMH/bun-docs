@@ -26,14 +26,14 @@ This will add the package to `peerDependencies` in `package.json`.
 
 Running `bun install` will install peer dependencies by default, unless marked optional in `peerDependenciesMeta`.
 
+{/* prettier-ignore */}
 ```json title="package.json"
 {
   "peerDependencies": {
     "@types/bun": "^$BUN_LATEST_VERSION"
   },
   "peerDependenciesMeta": {
-    "@types/bun": {
-      // [!code ++]
+    "@types/bun": { // [!code ++]
       "optional": true // [!code ++]
     } // [!code ++]
   }

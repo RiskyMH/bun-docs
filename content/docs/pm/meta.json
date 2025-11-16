@@ -15,6 +15,7 @@
     "cli/outdated",
     "cli/why",
     "cli/audit",
+    "cli/info",
     "---[Folders] Workspace Management---",
     "workspaces",
     "catalogs",

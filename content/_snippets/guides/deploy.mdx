@@ -1,0 +1,27 @@
+import { VercelIcon } from "@/components/icons/vercel";
+import { RenderIcon } from "@/components/icons/render";
+import { RailwayIcon } from "@/components/icons/railway";
+import { DigitalOceanIcon } from "@/components/icons/digitalocean";
+import { AWSIcon } from "@/components/icons/aws";
+import { GoogleCloudIcon } from "@/components/icons/google-cloud";
+
+<Cards className="grid-cols-3">
+  <Card title="Vercel" href="/guides/deployment/vercel" icon={<VercelIcon />}>
+    Deploy on Vercel
+  </Card>
+  <Card title="Render" href="/guides/deployment/render" icon={<RenderIcon />}>
+    Deploy on Render
+  </Card>
+  <Card title="Railway" href="/guides/deployment/railway" icon={<RailwayIcon />}>
+    Deploy on Railway
+  </Card>
+  <Card title="DigitalOcean" href="/guides/deployment/digital-ocean" icon={<DigitalOceanIcon />}>
+    Deploy on DigitalOcean
+  </Card>
+  <Card title="AWS Lambda" href="/guides/deployment/aws-lambda" icon={<AWSIcon />}>
+    Deploy on AWS Lambda
+  </Card>
+  <Card title="Google Cloud Run" href="/guides/deployment/google-cloud-run" icon={<GoogleCloudIcon />}>
+    Deploy on Google Cloud Run
+  </Card>
+</Cards>
