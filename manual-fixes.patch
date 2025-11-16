@@ -2891,7 +2891,7 @@ index a25bec0b..b28e1626 100644
      at myInner (file.js:4:15)
      at fn (file.js:8:5)
 diff --git b/content/docs/runtime/environment-variables.mdx a/content/docs/runtime/environment-variables.mdx
-index 63032a20..ea05ca2e 100644
+index 63032a20..bef8961a 100644
 --- b/content/docs/runtime/environment-variables.mdx
 +++ a/content/docs/runtime/environment-variables.mdx
 @@ -29,7 +29,7 @@ $ FOO=helloworld bun run dev
@@ -2903,15 +2903,6 @@ index 63032a20..ea05ca2e 100644
  ```
  
  <Accordions type="single">
-@@ -199,7 +199,7 @@ It is recommended to disable this cache when using ephemeral filesystems like Do
- To disable the runtime transpiler cache, set `BUN_RUNTIME_TRANSPILER_CACHE_PATH` to an empty string or the string `"0"`.
- 
- ```sh
--$ BUN_RUNTIME_TRANSPILER_CACHE_PATH=0 bun run dev
-+$ bun_RUNTIME_TRANSPILER_CACHE_PATH=0 bun run dev
- ```
- 
- ### What does it cache?
 diff --git b/content/docs/runtime/ffi.mdx a/content/docs/runtime/ffi.mdx
 index 415c28ec..b7ce8e3b 100644
 --- b/content/docs/runtime/ffi.mdx
