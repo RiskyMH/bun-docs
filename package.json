@@ -3,12 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "bun pull-docs && next build",
     "dev": "next dev --turbo",
     "start": "next start",
     "postinstall": "fumadocs-mdx",
-    "pull-docs": "bun scripts/pull-docs.ts",
-    "migrate-docs": "bun migrate-docs.ts",
+    "pull-docs": "bun scripts/pull-docs.ts --download-only",
     "sync-docs": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git apply manual-fixes.patch --reject",
     "sync-docs:save": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git diff -R content/ > manual-fixes.patch && git restore content/",
     "check-links": "bun scripts/check-links.ts"

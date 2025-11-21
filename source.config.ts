@@ -7,7 +7,8 @@ import {
 } from "fumadocs-mdx/config";
 import { rehypeCodeDefaultOptions } from "fumadocs-core/mdx-plugins";
 import { z } from "zod";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
 // see https://fumadocs.dev/docs/mdx/collections
@@ -66,10 +67,21 @@ if (!BUN_VERSION) {
     BUN_VERSION = readFileSync(".repos/bun/LATEST", "utf-8").trim();
   } catch {}
 }
-BUN_VERSION ||= "1.3.2";
+
+if (typeof Bun !== "undefined") BUN_VERSION ||= Bun.version;
+BUN_VERSION ||= "1.3.0";
+
+// delete all other fumadocs build caches that is not the current bun version
+try {
+  for (const entry of readdirSync(".next/cache/fumadocs")) {
+    if (entry !== `bun-${BUN_VERSION}`) {
+      rmSync(join(".next/cache/fumadocs", entry), { recursive: true, force: true });
+    }
+  }
+} catch {}
 
 export default defineConfig({
-  experimentalBuildCache: ".next/cache/fumadocs",
+  experimentalBuildCache: ".next/cache/fumadocs/bun-" + BUN_VERSION,
   mdxOptions: {
     // MDX options
     remarkImageOptions: {
@@ -173,7 +185,11 @@ export default defineConfig({
             var commentStated = false;
 
             // don't over parse lines that are part of a command continuation
-            if (line > 1 && lines[line - 2]?.endsWith("\\") && !lines[line - 1]?.startsWith(prefix + " ")) {
+            if (
+              line > 1 &&
+              lines[line - 2]?.endsWith("\\") &&
+              !lines[line - 1]?.startsWith(prefix + " ")
+            ) {
               const checkLineChain = (lineNum: number): boolean => {
                 if (lineNum < 0) return false;
                 if (lines[lineNum]?.startsWith(prefix + " ")) return true;

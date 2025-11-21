@@ -25,6 +25,8 @@ await Promise.all([
   fetchBun().catch(() => Bun.$`rm -rf ${BUN_REPO_PATH}`.then(fetchBun)),
 ]);
 
+if (process.argv.includes("--download-only")) process.exit(0);
+
 // TODO: copy ./repos/bun/docs to ./content/docs & ./repos/bun/guides to ./content/guides
 // BUT right now it is made for previous docs structure, so that can't happen right now.
 //     (also dont forget to make a .gitignore in those copied folders)
