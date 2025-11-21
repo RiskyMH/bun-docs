@@ -88,8 +88,8 @@ You can also pass a `napi_env` to receive the N-API environment used to call the
 For example, if you have a string in C, you can return it to JavaScript like this:
 
 ```ts title="hello.ts"
-import {cc} from 'bun:ffi';
-import source from './hello.c' with {type: 'file'};
+import { cc } from "bun:ffi";
+import source from "./hello.c" with { type: "file" };
 
 const {
   symbols: { hello },

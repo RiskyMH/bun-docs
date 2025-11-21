@@ -19,6 +19,7 @@ The output of `bun test` indicates how many `todo` tests were encountered.
 
 ```sh title="terminal"
 $ bun test
+bun test v$BUN_LATEST_VERSION (9c68abdb)
 
 test.test.ts:
 ✓ add [0.03ms]
@@ -50,6 +51,7 @@ If an implementation is provided, it will not be run unless the `--todo` flag is
 
 ```sh title="terminal"
 $ bun test --todo
+bun test v$BUN_LATEST_VERSION (9c68abdb)
 
 my.test.ts:
 ✗ unimplemented feature
@@ -67,4 +69,4 @@ $ echo $?
 See also:
 
 - [Skip a test](/guides/test/skip-tests)
-- [Docs > Test runner > Writing tests](https://bun.sh/docs/test/writing)
+- [Docs > Test runner > Writing tests](/docs/test/writing-tests)

@@ -12,7 +12,7 @@ index ffc4978d..5dc994c4 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index bda73973..58b62cb2 100644
+index f2141237..5f384bd8 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -5,18 +5,13 @@ description: "Generate standalone executables from TypeScript or JavaScript file
@@ -41,7 +41,7 @@ index bda73973..58b62cb2 100644
  
  This bundles `cli.ts` into an executable that can be executed directly:
  
-@@ -209,11 +204,11 @@ you shouldn't see this
+@@ -238,11 +233,11 @@ you shouldn't see this
  
  However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
  
@@ -57,7 +57,7 @@ index bda73973..58b62cb2 100644
  ```
  
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index 2dc31661..c0c534cc 100644
+index f2254b70..c0c534cc 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
 @@ -123,7 +123,7 @@ Becomes something like this:
@@ -114,23 +114,8 @@ index 2dc31661..c0c534cc 100644
  * {
    margin: 0;
    padding: 0;
-@@ -1005,11 +1005,11 @@ CMD ["bun", "index.js"]
- 
- ### Environment Variables
- 
--```bash title=".env.production"
-+```ini title=".env.production"
- NODE_ENV=production
- PORT=3000
--$ DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
--$ CORS_ORIGIN=https://myapp.com
-+DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
-+CORS_ORIGIN=https://myapp.com
- ```
- 
- ## Migration from Other Frameworks
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index 55a64947..0ddd7f9e 100644
+index 9e8ffb60..d12d184d 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -186,8 +171,8 @@ index 55a64947..0ddd7f9e 100644
  
  This outputs:
  
--```scss
-+```css
+-```scss title="styles.css"
++```css title="styles.css"
  body {
    background-color: red;
  }
@@ -294,7 +279,7 @@ index 55a64947..0ddd7f9e 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index dab660a6..06020d0f 100644
+index 3d2b77e8..18b4581d 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -326,15 +311,6 @@ index dab660a6..06020d0f 100644
      });
     ```
    </Tab>
-@@ -101,7 +101,7 @@ For each file specified in `entrypoints`, Bun will generate a new bundle. This b
- 
- The contents of `out/index.js` will look something like this:
- 
--```ts title="out/index.js"
-+```js title="out/index.js"
- // out/index.js
- // ...
- // ~20k lines of code
 @@ -154,15 +154,48 @@ Like the Bun runtime, the bundler supports an array of file types out of the box
  | Extensions                                            | Details                                                                                                                                                                                                                                                                                                                                                      |
  | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -504,7 +480,7 @@ index dab660a6..06020d0f 100644
    </Tab>
  </Tabs>
  
-@@ -510,21 +545,21 @@ Injects environment variables into the bundled output by converting `process.env
+@@ -510,7 +545,7 @@ Injects environment variables into the bundled output by converting `process.env
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out --env inline
@@ -513,23 +489,6 @@ index dab660a6..06020d0f 100644
    </Tab>
  </Tabs>
  
- For the input below:
- 
--```ts title="input.js"
--// input.js
-+```ts title="input.tsx"
-+// input.tsx
- console.log(process.env.FOO);
- console.log(process.env.BAZ);
- ```
- 
- The generated bundle will contain the following code:
- 
--```ts title="output.js"
-+```js title="output.js"
- // output.js
- console.log("bar");
- console.log("123");
 @@ -540,7 +575,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
      await Bun.build({
        entrypoints: ['./index.tsx'],
@@ -548,24 +507,6 @@ index dab660a6..06020d0f 100644
  ```
  
  And source code:
-@@ -569,7 +604,7 @@ console.log(process.env.BAZ);
- 
- The generated bundle will contain the following code:
- 
--```ts title="output.js"
-+```js title="output.js"
- console.log(process.env.FOO);
- console.log("https://acme.com");
- console.log(process.env.BAZ);
-@@ -711,7 +746,7 @@ Normally, bundling `index.tsx` would generate a bundle containing the entire sou
- 
- The generated bundle will look something like this:
- 
--```ts title="out/index.js"
-+```js title="out/index.js"
- import { z } from "zod";
- 
- // ...
 @@ -867,9 +902,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
    <Tab value="CLI">
      ```bash title="terminal"
@@ -594,17 +535,6 @@ index dab660a6..06020d0f 100644
  console.log(logo);
  ```
  
-@@ -1011,8 +1046,8 @@ Setting `publicPath` will prefix all file paths with the specified value.
- 
- The output file would now look something like this.
- 
--```ts title="out/index.js"
--var logo = "https://cdn.example.com/logo-a7305bdef.svg";
-+```js title="out/index.js"
-+var logo = 'https://cdn.example.com/logo-a7305bdef.svg';
- ```
- 
- ### define
 @@ -1185,44 +1220,39 @@ return new Response(artifact);
  
  The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
@@ -1761,10 +1691,10 @@ index b02117f6..af5c4bb2 100644
  
  Then install this crate:
 diff --git b/content/docs/feedback.mdx a/content/docs/feedback.mdx
-index 3b566865..e4259f86 100644
+index ff966d5a..7bee792d 100644
 --- b/content/docs/feedback.mdx
 +++ a/content/docs/feedback.mdx
-@@ -2,12 +2,13 @@
+@@ -2,11 +2,12 @@
  title: Feedback
  description: Share feedback, bug reports, and feature requests
  mode: center
@@ -1773,35 +1703,22 @@ index 3b566865..e4259f86 100644
  
  Whether you've found a bug, have a performance issue, or just want to suggest an improvement, here's how you can open a helpful issue:
  
--<Callout icon="discord">
--  For general questions, please join our [Discord](https://discord.com/invite/CXdq2DP29u).
-+<Callout>
-+	For general questions, please join our [Discord](https://discord.com/invite/CXdq2DP29u).
- </Callout>
+-<Callout icon="discord">For general questions, please join our [Discord](https://bun.com/discord).</Callout>
++<Callout>For general questions, please join our [Discord](https://bun.com/discord).</Callout>
  
  ## Reporting Issues
-@@ -58,11 +59,14 @@ Whether you've found a bug, have a performance issue, or just want to suggest an
-     	- A detailed description of the issue (what happened, what you expected to happen, and what actually happened)
+ 
+@@ -57,7 +58,7 @@ Whether you've found a bug, have a performance issue, or just want to suggest an
      	- The operating system and version you are using
      		<Callout type="info">
--    			- For MacOS and Linux: copy the output of `uname -mprs`
+     			- For MacOS and Linux: copy the output of `uname -mprs`
 -    		  - For Windows: copy the output of this command in the powershell console:
--    				```powershell
--    					"$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"
--    				```
-+    			- For MacOS and Linux: copy the output of this command in the terminal:
-+					```bash
-+					$ uname -mprs
-+					```
-+    		    - For Windows: copy the output of this command in the powershell console:
-+					```powershell
-+					> "$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"
-+					```
++    		  	- For Windows: copy the output of this command in the powershell console:
+     				`"$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"`
      		</Callout>
      </Step>
- 
 diff --git b/content/docs/index.mdx a/content/docs/index.mdx
-index 717b1c4e..1057c8eb 100644
+index f97d8e33..82de5b7a 100644
 --- b/content/docs/index.mdx
 +++ a/content/docs/index.mdx
 @@ -4,73 +4,68 @@ description: Bun is an all-in-one toolkit for developing modern JavaScript/TypeS
@@ -1929,17 +1846,9 @@ index 717b1c4e..1057c8eb 100644
  ## What's Inside
  
 diff --git b/content/docs/installation.mdx a/content/docs/installation.mdx
-index 4e0f198c..8e7b57be 100644
+index 1384187f..8e7b57be 100644
 --- b/content/docs/installation.mdx
 +++ a/content/docs/installation.mdx
-@@ -1,6 +1,6 @@
- ---
- title: Installation
--description: Install Bun
-+description: Install Bun with npm, Homebrew, Docker, or the official script.
- ---
- 
- ## Overview
 @@ -13,13 +13,9 @@ Bun ships as a single, dependency-free executable. You can install it via script
  
  <Tabs items={['macOS & Linux', 'Windows', 'Package Managers', 'Docker']}>
@@ -2373,45 +2282,11 @@ index 4e0f198c..8e7b57be 100644
 +      ```
 +	</Tab>
  </Tabs>
-diff --git b/content/docs/pm/bunx.mdx a/content/docs/pm/bunx.mdx
-index 24f8ce7a..6614c847 100644
---- b/content/docs/pm/bunx.mdx
-+++ a/content/docs/pm/bunx.mdx
-@@ -30,7 +30,7 @@ Packages can declare executables in the `"bin"` field of their `package.json`. T
- 
- These executables are commonly plain JavaScript files marked with a [shebang line](<https://en.wikipedia.org/wiki/Shebang_(Unix)>) to indicate which program should be used to execute them. The following file indicates that it should be executed with `node`.
- 
--```ts title="dist/index.js"
-+```js title="dist/index.js"
- #!/usr/bin/env node
- 
- console.log("Hello world!");
-@@ -78,6 +78,6 @@ $ bunx --package @angular/cli ng
- 
- To force bun to always be used with a script, use a shebang.
- 
--```ts title="dist/index.js"
-+```js title="dist/index.js"
- #!/usr/bin/env bun
- ```
-diff --git b/content/docs/pm/cli/install.mdx a/content/docs/pm/cli/install.mdx
-index c5a24659..b7ad0994 100644
---- b/content/docs/pm/cli/install.mdx
-+++ a/content/docs/pm/cli/install.mdx
-@@ -260,7 +260,7 @@ The default linker strategy depends on whether you're starting fresh or have an
- 
- - **New workspaces/monorepos**: `isolated` (prevents phantom dependencies)
- - **New single-package projects**: `hoisted` (traditional npm behavior)
--- **Existing projects (made pre-v$BUN_LATEST_VERSION)**: `hoisted` (preserves backward compatibility)
-+- **Existing projects (made pre-v1.3.2)**: `hoisted` (preserves backward compatibility)
- 
- The default is controlled by a `configVersion` field in your lockfile. For a detailed explanation, see [Package manager > Isolated installs](/docs/pm/isolated-installs).
- 
 diff --git b/content/docs/pm/cli/link.mdx a/content/docs/pm/cli/link.mdx
-index 19527c84..49fd90bd 100644
+index c29e1378..49fd90bd 100644
 --- b/content/docs/pm/cli/link.mdx
 +++ a/content/docs/pm/cli/link.mdx
-@@ -7,10 +7,10 @@ Use `bun link` in a local directory to register the current package as a "linkab
+@@ -7,7 +7,7 @@ Use `bun link` in a local directory to register the current package as a "linkab
  
  ```bash title="terminal"
  $ cd /path/to/cool-pkg
@@ -2419,33 +2294,11 @@ index 19527c84..49fd90bd 100644
 +$ cat package.json
  $ bun link
  
--bun link v1.x (7416672e)
-+bun link v$BUN_LATEST_VERSION (7416672e)
- Success! Registered "cool-pkg"
- 
- To use cool-pkg in a project, run:
-@@ -47,7 +47,7 @@ Use `bun unlink` in the root directory to unregister a local package.
- $ cd /path/to/cool-pkg
- $ bun unlink
- 
--bun unlink v1.x (7416672e)
-+bun unlink v$BUN_LATEST_VERSION (7416672e)
- ```
- 
- ---
+ bun link v$BUN_LATEST_VERSION (7416672e)
 diff --git b/content/docs/pm/cli/outdated.mdx a/content/docs/pm/cli/outdated.mdx
-index d9c73e1a..5c7de79d 100644
+index 7bd9cc5c..f3740437 100644
 --- b/content/docs/pm/cli/outdated.mdx
 +++ a/content/docs/pm/cli/outdated.mdx
-@@ -11,7 +11,7 @@ $ bun outdated
- | Package                        | Current | Update    | Latest     |
- | ------------------------------ | ------- | --------- | ---------- |
- | @sinclair/typebox              | 0.34.15 | 0.34.16   | 0.34.16    |
--| @types/bun (dev)               | 1.2.0   | 1.2.23    | 1.2.23     |
-+| @types/bun (dev)               | 1.2.0   | 1.3.1     | 1.3.1      |
- | eslint (dev)                   | 8.57.1  | 8.57.1    | 9.20.0     |
- | eslint-plugin-security (dev)   | 2.1.1   | 2.1.1     | 3.0.1      |
- | eslint-plugin-sonarjs (dev)    | 0.23.0  | 0.23.0    | 3.0.1      |
 @@ -19,7 +19,6 @@ $ bun outdated
  | prettier (dev)                 | 3.4.2   | 3.5.0     | 3.5.0      |
  | tsup (dev)                     | 8.3.5   | 8.3.6     | 8.3.6      |
@@ -2462,15 +2315,6 @@ index d9c73e1a..5c7de79d 100644
  ```
  
  You can also pass glob patterns to check for outdated packages:
-@@ -65,7 +63,7 @@ $ bun outdated '@types/*'
- 
- | Package            | Current | Update | Latest |
- | ------------------ | ------- | ------ | ------ |
--| @types/bun (dev)   | 1.2.0   | 1.2.23 | 1.2.23 |
-+| @types/bun (dev)   | 1.2.0   | 1.3.1  | 1.3.1  |
- ```
- 
- Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
 index 2ef06140..99c220a7 100644
 --- b/content/docs/pm/cli/pm.mdx
@@ -2518,19 +2362,6 @@ index 9bcc6ffd..98faa4c8 100644
  ? Select packages to update - Space to toggle, Enter to confirm, a to select all, n to select none, i to invert, l to toggle latest
  
    dependencies                Current  Target   Latest
-diff --git b/content/docs/pm/isolated-installs.mdx a/content/docs/pm/isolated-installs.mdx
-index de2e4a21..410303f8 100644
---- b/content/docs/pm/isolated-installs.mdx
-+++ a/content/docs/pm/isolated-installs.mdx
-@@ -54,7 +54,7 @@ The default linker strategy depends on your project's lockfile `configVersion`:
- 
- **New projects**: Default to `configVersion = 1`. In workspaces, v1 uses the isolated linker by default; otherwise it uses hoisted linking.
- 
--**Existing Bun projects (made pre-v$BUN_LATEST_VERSION)**: If your existing lockfile doesn't have a version yet, Bun sets `configVersion = 0` when you run `bun install`, preserving the previous hoisted linker default.
-+**Existing Bun projects (made pre-v1.3.2)**: If your existing lockfile doesn't have a version yet, Bun sets `configVersion = 0` when you run `bun install`, preserving the previous hoisted linker default.
- 
- **Migrations from other package managers**:
- 
 diff --git b/content/docs/pm/npmrc.mdx a/content/docs/pm/npmrc.mdx
 index f87cd037..812215f9 100644
 --- b/content/docs/pm/npmrc.mdx
@@ -2701,7 +2532,7 @@ index 285474ad..3cd099ed 100644
 -
  </Accordions>
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index c41ef7dd..8b56107c 100644
+index cd4f91b6..964335d5 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -179,7 +179,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -2732,16 +2563,6 @@ index c41ef7dd..8b56107c 100644
  ```
  
  ### `test.randomize`
-@@ -452,8 +453,8 @@ To configure the directory where Bun installs globally installed binaries and CL
- Environment variable: `BUN_INSTALL_BIN`
- 
- ```toml title="bunfig.toml"
--# where globally-installed package bins are linked
- [install]
-+# where globally-installed package bins are linked
- globalBinDir = "~/.bun/bin"
- ```
- 
 @@ -518,7 +519,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
@@ -2750,16 +2571,7 @@ index c41ef7dd..8b56107c 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -550,7 +550,7 @@ print = "yarn"
- 
- ### `install.linker`
- 
--Configure the linker strategy for installing dependencies. Defaults to `"isolated"` for new workspaces, `"hoisted"` for new single-package projects and existing projects (made pre-v$BUN_LATEST_VERSION).
-+Configure the linker strategy for installing dependencies. Defaults to `"isolated"` for new workspaces, `"hoisted"` for new single-package projects and existing projects (made pre-v1.3.2).
- 
- For complete documentation refer to [Package manager > Isolated installs](/docs/pm/isolated-installs).
- 
-@@ -678,9 +678,7 @@ With this option, the command being run will not be printed to the console:
+@@ -704,9 +704,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -2769,69 +2581,21 @@ index c41ef7dd..8b56107c 100644
  Running "dev"...
  ```
  
-diff --git b/content/docs/runtime/c-compiler.mdx a/content/docs/runtime/c-compiler.mdx
-index ef588210..3f2ab577 100644
---- b/content/docs/runtime/c-compiler.mdx
-+++ a/content/docs/runtime/c-compiler.mdx
-@@ -13,7 +13,7 @@ See the [introduction blog post](https://bun.com/blog/compile-and-run-c-in-js) f
- 
- JavaScript:
- 
--```ts title="hello.js"
-+```ts title="hello.ts"
- import { cc } from "bun:ffi";
- import source from "./hello.c" with { type: "file" };
- 
-@@ -87,9 +87,9 @@ You can also pass a `napi_env` to receive the N-API environment used to call the
- 
- For example, if you have a string in C, you can return it to JavaScript like this:
- 
--```ts title="hello.js"
--import { cc } from "bun:ffi";
--import source from "./hello.c" with { type: "file" };
-+```ts title="hello.ts"
-+import {cc} from 'bun:ffi';
-+import source from './hello.c' with {type: 'file'};
- 
- const {
-   symbols: { hello },
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 41e885df..5802bbde 100644
+index 508dca65..5802bbde 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
 @@ -100,7 +100,7 @@ You can read results from the subprocess via the `stdout` and `stderr` propertie
  ```ts
  const proc = Bun.spawn(["bun", "--version"]);
  const text = await proc.stdout.text();
--console.log(text); // => "1.3.2\n"
+-console.log(text); // => "1.3.3\n"
 +console.log(text); // => "$BUN_LATEST_VERSION\n"
  ```
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
-@@ -289,7 +289,7 @@ childProc.disconnect();
- 
- To use IPC between a `bun` process and a Node.js process, set `serialization: "json"` in `Bun.spawn`. This is because Node.js and Bun use different JavaScript engines with different object serialization formats.
- 
--```ts title="bun-node-ipc.js"
-+```js title="bun-node-ipc.js"
- if (typeof Bun !== "undefined") {
-   const prefix = `[bun ${process.versions.bun} 🐇]`;
-   const node = Bun.spawn({
-diff --git b/content/docs/runtime/cookies.mdx a/content/docs/runtime/cookies.mdx
-index 9f00c1e7..ce38e410 100644
---- b/content/docs/runtime/cookies.mdx
-+++ a/content/docs/runtime/cookies.mdx
-@@ -145,7 +145,7 @@ Returns an array of values for Set-Cookie headers that can be used to apply all
- 
- When using `Bun.serve()`, you don't need to call this method explicitly. Any changes made to the `req.cookies` map are automatically applied to the response headers. This method is primarily useful when working with other HTTP server implementations.
- 
--```ts title="node-server.js"
-+```js title="node-server.js"
- import { createServer } from "node:http";
- import { CookieMap } from "bun";
- 
 diff --git b/content/docs/runtime/debugger.mdx a/content/docs/runtime/debugger.mdx
-index a25bec0b..b28e1626 100644
+index 415c9d7e..20966461 100644
 --- b/content/docs/runtime/debugger.mdx
 +++ a/content/docs/runtime/debugger.mdx
 @@ -22,9 +22,7 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This a
@@ -2850,7 +2614,7 @@ index a25bec0b..b28e1626 100644
  });
 +```
  
--[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/1.3.2" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
+-[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/1.3.3" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
 +This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
 +
 +```sh
@@ -2858,7 +2622,7 @@ index a25bec0b..b28e1626 100644
  [fetch] > HTTP/1.1 POST https://example.com/
  [fetch] > content-type: application/json
  [fetch] > Connection: keep-alive
--[fetch] > User-Agent: Bun/1.3.2
+-[fetch] > User-Agent: Bun/1.3.3
 +[fetch] > User-Agent: Bun/$BUN_LATEST_VERSION
  [fetch] > Accept: */*
  [fetch] > Host: example.com
@@ -2874,7 +2638,7 @@ index a25bec0b..b28e1626 100644
  [fetch] > HTTP/1.1 POST https://example.com/
  [fetch] > content-type: application/json
  [fetch] > Connection: keep-alive
--[fetch] > User-Agent: Bun/1.3.2
+-[fetch] > User-Agent: Bun/1.3.3
 +[fetch] > User-Agent: Bun/$BUN_LATEST_VERSION
  [fetch] > Accept: */*
  [fetch] > Host: example.com
@@ -2891,7 +2655,7 @@ index a25bec0b..b28e1626 100644
      at myInner (file.js:4:15)
      at fn (file.js:8:5)
 diff --git b/content/docs/runtime/environment-variables.mdx a/content/docs/runtime/environment-variables.mdx
-index 63032a20..bef8961a 100644
+index 4248e089..71c7c3ef 100644
 --- b/content/docs/runtime/environment-variables.mdx
 +++ a/content/docs/runtime/environment-variables.mdx
 @@ -29,7 +29,7 @@ $ FOO=helloworld bun run dev
@@ -2957,19 +2721,10 @@ index 2cdbd4c3..79af8668 100644
  <html>
    <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 657ef14c..86ac91f3 100644
+index d3e17d23..ec46735d 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
-@@ -126,7 +126,7 @@ $ bun --port=4002 server.ts
- - `BUN_PORT` environment variable
- 
- ```sh
--bun_PORT=4002 bun server.ts
-+$ BUN_PORT=4002 bun server.ts
- ```
- 
- - `PORT` environment variable
-@@ -408,7 +408,7 @@ The `Bun.serve` server can handle roughly 2.5x more requests per second than Nod
+@@ -404,7 +404,7 @@ The `Bun.serve` server can handle roughly 2.5x more requests per second than Nod
  
  Here's a basic database-backed REST API using Bun's router with zero dependencies:
  
@@ -2978,7 +2733,7 @@ index 657ef14c..86ac91f3 100644
  import type { Post } from "./types.ts";
  import { Database } from "bun:sqlite";
  
-@@ -477,7 +477,7 @@ export interface Post {
+@@ -473,7 +473,7 @@ export interface Post {
  
  ## Reference
  
@@ -2987,21 +2742,8 @@ index 657ef14c..86ac91f3 100644
  interface Server extends Disposable {
    /**
     * Stop the server from accepting new connections.
-diff --git b/content/docs/runtime/http/websockets.mdx a/content/docs/runtime/http/websockets.mdx
-index c10f76fc..53b05928 100644
---- b/content/docs/runtime/http/websockets.mdx
-+++ a/content/docs/runtime/http/websockets.mdx
-@@ -176,7 +176,7 @@ Bun.serve({
- 
- To connect to this server from the browser, create a new `WebSocket`.
- 
--```ts title="browser.js"
-+```js title="browser.js"
- const socket = new WebSocket("ws://localhost:3000/chat");
- 
- socket.addEventListener("message", event => {
 diff --git b/content/docs/runtime/index.mdx a/content/docs/runtime/index.mdx
-index 629b9863..8bdb4a8a 100644
+index d763f366..4fd4251c 100644
 --- b/content/docs/runtime/index.mdx
 +++ a/content/docs/runtime/index.mdx
 @@ -64,7 +64,7 @@ Flags that occur at the end of the command will be ignored and passed through to
@@ -3013,89 +2755,24 @@ index 629b9863..8bdb4a8a 100644
  $ bun [bun flags] run <script> [script flags]
  ```
  
-diff --git b/content/docs/runtime/module-resolution.mdx a/content/docs/runtime/module-resolution.mdx
-index 32693421..e3e524e6 100644
---- b/content/docs/runtime/module-resolution.mdx
-+++ a/content/docs/runtime/module-resolution.mdx
-@@ -66,13 +66,13 @@ import { hello } from "./hello.js"; // this also works
- 
- Bun supports both ES modules (`import`/`export` syntax) and CommonJS modules (`require()`/`module.exports`). The following CommonJS version would also work in Bun.
- 
--```ts tab="index.js"
-+```js tab="index.js"
- const { hello } = require("./hello");
- 
- hello();
- ```
- 
--```ts tab="hello.js"
-+```js tab="hello.js"
- function hello() {
-   console.log("Hello world!");
- }
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
-index 02a833dd..55cfb787 100644
+index 88a01433..55cfb787 100644
 --- b/content/docs/runtime/networking/fetch.mdx
 +++ a/content/docs/runtime/networking/fetch.mdx
 @@ -342,7 +342,7 @@ This will print the request and response headers to your terminal:
  ```sh
  [fetch] > HTTP/1.1 GET http://example.com/
  [fetch] > Connection: keep-alive
--[fetch] > User-Agent: Bun/1.3.2
+-[fetch] > User-Agent: Bun/1.3.3
 +[fetch] > User-Agent: Bun/$BUN_LATEST_VERSION
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br, zstd
-@@ -430,7 +430,7 @@ When the limit is exceeded, the requests are queued and sent as soon as the next
- You can increase the maximum number of simultaneous connections via the `BUN_CONFIG_MAX_HTTP_REQUESTS` environment variable:
- 
- ```sh
--bun_CONFIG_MAX_HTTP_REQUESTS=512 bun ./my-script.ts
-+$ BUN_CONFIG_MAX_HTTP_REQUESTS=512 bun ./my-script.ts
- ```
- 
- The max value for this limit is currently set to 65,336. The maximum port number is 65,535, so it's quite difficult for any one computer to exceed this limit.
-diff --git b/content/docs/runtime/nodejs-compat.mdx a/content/docs/runtime/nodejs-compat.mdx
-index 7b6b7b0c..ea3537fc 100644
---- b/content/docs/runtime/nodejs-compat.mdx
-+++ a/content/docs/runtime/nodejs-compat.mdx
-@@ -149,7 +149,7 @@ This page is updated regularly to reflect compatibility status of the latest ver
- 
- ### [`node:v8`](https://nodejs.org/api/v8.html)
- 
--🟡 `writeHeapSnapshot` and `getHeapSnapshot` are implemented. `serialize` and `deserialize` use JavaScriptCore's wire format instead of V8's. Other methods are not implemented. For profiling, use [`bun:jsc`](/docs/project/benchmarking#bunjsc) instead.
-+🟡 `writeHeapSnapshot` and `getHeapSnapshot` are implemented. `serialize` and `deserialize` use JavaScriptCore's wire format instead of V8's. Other methods are not implemented. For profiling, use [`bun:jsc`](/docs/project/benchmarking#javascript-heap-stats) instead.
- 
- ### [`node:vm`](https://nodejs.org/api/vm.html)
- 
 diff --git b/content/docs/runtime/plugins.mdx a/content/docs/runtime/plugins.mdx
-index cfb373f5..5875c9b5 100644
+index cfb373f5..3ed2c083 100644
 --- b/content/docs/runtime/plugins.mdx
 +++ a/content/docs/runtime/plugins.mdx
-@@ -42,21 +42,7 @@ type PluginBuilder = {
-   config: BuildConfig;
- };
- 
--type Loader =
--  | "js"
--  | "jsx"
--  | "ts"
--  | "tsx"
--  | "json"
--  | "jsonc"
--  | "toml"
--  | "yaml"
--  | "file"
--  | "napi"
--  | "wasm"
--  | "text"
--  | "css"
--  | "html";
-+type Loader = "js" | "jsx" | "ts" | "tsx" | "css" | "json" | "toml";
- ```
- 
- ## Usage
-@@ -330,7 +316,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+@@ -330,7 +330,7 @@ To create a native plugin, you must export a C ABI function which matches the si
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -3105,7 +2782,7 @@ index cfb373f5..5875c9b5 100644
  
  Then install this crate:
 diff --git b/content/docs/runtime/sql.mdx a/content/docs/runtime/sql.mdx
-index df07be2d..97abac44 100644
+index 743ad9bc..341c8d1e 100644
 --- b/content/docs/runtime/sql.mdx
 +++ a/content/docs/runtime/sql.mdx
 @@ -524,11 +524,11 @@ MySQL connections can be configured via environment variables:
@@ -3137,7 +2814,7 @@ index df07be2d..97abac44 100644
  
  **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index 29ec7ef6..ac6a71d0 100644
+index e7c21f54..fc92bc8c 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -3337,7 +3014,7 @@ index 062e325f..4bc91b3b 100644
   * Fast incremental writer that becomes an `ArrayBuffer` on end().
   */
 diff --git b/content/docs/runtime/templating/create.mdx a/content/docs/runtime/templating/create.mdx
-index 3c981b30..4c418dac 100644
+index 15737f8e..25cad0d3 100644
 --- b/content/docs/runtime/templating/create.mdx
 +++ a/content/docs/runtime/templating/create.mdx
 @@ -81,7 +81,7 @@ plugins = ["bun-plugin-tailwind"]
@@ -3359,7 +3036,7 @@ index 3c981b30..4c418dac 100644
  When you run `bun create ${template} ${destination}`, here’s what happens:
  
 diff --git b/content/docs/runtime/transpiler.mdx a/content/docs/runtime/transpiler.mdx
-index f66ec8c6..cf84322d 100644
+index e5e941fd..5eff589b 100644
 --- b/content/docs/runtime/transpiler.mdx
 +++ a/content/docs/runtime/transpiler.mdx
 @@ -17,7 +17,7 @@ const transpiler = new Bun.Transpiler({
@@ -3383,7 +3060,7 @@ index f66ec8c6..cf84322d 100644
  </Accordion>
  </Accordions>
  
-@@ -186,12 +184,12 @@ const result = transpiler.scanImports(code);
+@@ -186,7 +184,7 @@ const result = transpiler.scanImports(code);
  
  ## Reference
  
@@ -3392,30 +3069,15 @@ index f66ec8c6..cf84322d 100644
  type Loader = "jsx" | "js" | "ts" | "tsx";
  
  interface TranspilerOptions {
-   // Replace key with value. Value must be a JSON string.
--  // { "process.env.NODE_ENV": "\"production\"" }
-+  // { "process.env.NODE_ENV": "\"production\" }
-   define?: Record<string, string>,
- 
-   // Default loader for this transpiler
-@@ -270,7 +268,7 @@ type Import = {
-   // url() in CSS
-   | "url-token"
-   // The import was injected by Bun
--  | "internal" 
-+  | "internal"
-   // Entry point (not common)
-   | "entry-point-build"
-   | "entry-point-run"
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index c8a8bb8d..d6ce4f5e 100644
+index d4cc9e9d..d6ce4f5e 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
  
  ```ts title="terminal"
  Bun.version;
--// => "0.6.4"
+-// => "1.3.3"
 +// => "$BUN_LATEST_VERSION"
  ```
  
@@ -3460,7 +3122,7 @@ index c8a8bb8d..d6ce4f5e 100644
  runtime: node v21.4.0 (x64-linux)
  
 diff --git b/content/docs/runtime/watch-mode.mdx a/content/docs/runtime/watch-mode.mdx
-index c5da0cde..cb83108d 100644
+index b7dcc140..99c95602 100644
 --- b/content/docs/runtime/watch-mode.mdx
 +++ a/content/docs/runtime/watch-mode.mdx
 @@ -117,8 +117,6 @@ If you run this file with `bun --hot server.ts`, you'll see the reload count inc
@@ -3487,7 +3149,7 @@ index 20af4d98..612222ba 100644
  
  dom.test.ts:
 diff --git b/content/docs/test/index.mdx a/content/docs/test/index.mdx
-index 8599896c..edd5bba1 100644
+index 96a52558..403993c6 100644
 --- b/content/docs/test/index.mdx
 +++ a/content/docs/test/index.mdx
 @@ -220,8 +220,6 @@ When using `--randomize`, the seed used for randomization will be displayed in t
@@ -3705,50 +3367,19 @@ index 05a12246..fbb60d22 100644
  Deploying from source requires an Artifact Registry Docker repository to store built containers. A repository named
  [cloud-run-source-deploy] in region [us-west1] will be created.
 diff --git b/content/guides/deployment/vercel.mdx a/content/guides/deployment/vercel.mdx
-index 01ff4693..fd6ee486 100644
+index fffc4c51..fd6ee486 100644
 --- b/content/guides/deployment/vercel.mdx
 +++ a/content/guides/deployment/vercel.mdx
-@@ -4,8 +4,6 @@ fullTitle: Deploy a Bun application on Vercel
- mode: center
- ---
- 
--import { ProductCard } from "/snippets/product-card.mdx";
--
- [Vercel](https://vercel.com/) is a cloud platform that lets you build, deploy, and scale your apps.
- 
- <Callout type="warning">
-@@ -87,8 +85,7 @@ import { ProductCard } from "/snippets/product-card.mdx";
+@@ -85,8 +85,7 @@ mode: center
  
      	```ts title="index.ts"
      	console.log("runtime", process.versions.bun);
 -    	
--    	runtime 1.3.2
+-    	runtime 1.3.3
 +    	// => runtime $BUN_LATEST_VERSION
      	```
  
      	[See the Vercel Bun Runtime documentation for feature support →](https://vercel.com/docs/functions/runtimes/bun#feature-support)
-diff --git b/content/guides/ecosystem/discordjs.mdx a/content/guides/ecosystem/discordjs.mdx
-index eb21b004..2f93a995 100644
---- b/content/guides/ecosystem/discordjs.mdx
-+++ a/content/guides/ecosystem/discordjs.mdx
-@@ -22,7 +22,7 @@ $ bun add discord.js
- 
- ---
- 
--Before we go further, we need to go to the [Discord developer portal](https://discord.com/developers/applications), login/signup, create a new _Application_, then create a new _Bot_ within that application. Follow the [official guide](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot) for step-by-step instructions.
-+Before we go further, we need to go to the [Discord developer portal](https://discord.com/developers/applications), login/signup, create a new _Application_, then create a new _Bot_ within that application. Follow the [official guide](https://discordjs.guide/legacy/preparations/app-setup#creating-your-bot) for step-by-step instructions.
- 
- ---
- 
-@@ -30,7 +30,7 @@ Once complete, you'll be presented with your bot's _private key_. Let's add this
- 
- <Callout type="info">This is an example token that has already been invalidated.</Callout>
- 
--```txt title=".env.local"
-+```ini title=".env.local"
- DISCORD_TOKEN=NzkyNzE1NDU0MTk2MDg4ODQy.X-hvzA.Ovy4MCQywSkoMRRclStW4xAYK7I
- ```
- 
 diff --git b/content/guides/ecosystem/gel.mdx a/content/guides/ecosystem/gel.mdx
 index e8444be5..6ac23bf4 100644
 --- b/content/guides/ecosystem/gel.mdx
@@ -3806,44 +3437,6 @@ index e8444be5..6ac23bf4 100644
  
  Applied m1uwekrn4ni4qs7ul7hfar4xemm5kkxlpswolcoyqj3xdhweomwjrq (00001.edgeql)
  ```
-diff --git b/content/guides/ecosystem/mongoose.mdx a/content/guides/ecosystem/mongoose.mdx
-index 97337372..d6b0a42d 100644
---- b/content/guides/ecosystem/mongoose.mdx
-+++ a/content/guides/ecosystem/mongoose.mdx
-@@ -87,4 +87,4 @@ Moo!
- 
- ---
- 
--This is a simple introduction to using Mongoose with TypeScript and Bun. As you build your application, refer to the official [MongoDB](https://docs.mongodb.com/) and [Mongoose](https://mongoosejs.com/docs/) sites for complete documentation.
-+This is a simple introduction to using Mongoose with TypeScript and Bun. As you build your application, refer to the official [MongoDB](https://www.mongodb.com/docs) and [Mongoose](https://mongoosejs.com/docs/) sites for complete documentation.
-diff --git b/content/guides/ecosystem/neon-drizzle.mdx a/content/guides/ecosystem/neon-drizzle.mdx
-index 9c2dc0cc..ca8edaf2 100644
---- b/content/guides/ecosystem/neon-drizzle.mdx
-+++ a/content/guides/ecosystem/neon-drizzle.mdx
-@@ -20,7 +20,7 @@ $ bun add -D drizzle-kit
- 
- Create a `.env.local` file and add your [Neon Postgres connection string](https://neon.tech/docs/connect/connect-from-any-app) to it.
- 
--```txt title=".env.local"
-+```ini title=".env.local"
- DATABASE_URL=postgresql://usertitle:password@ep-adj-noun-guid.us-east-1.aws.neon.tech/neondb?sslmode=require
- ```
- 
-diff --git b/content/guides/ecosystem/neon-serverless-postgres.mdx a/content/guides/ecosystem/neon-serverless-postgres.mdx
-index 62607103..d9818e01 100644
---- b/content/guides/ecosystem/neon-serverless-postgres.mdx
-+++ a/content/guides/ecosystem/neon-serverless-postgres.mdx
-@@ -21,8 +21,8 @@ $ bun add @neondatabase/serverless
- 
- Create a `.env.local` file and add your [Neon Postgres connection string](https://neon.tech/docs/connect/connect-from-any-app) to it.
- 
--```sh title=".env.local"
--$ DATABASE_URL=postgresql://usertitle:password@ep-adj-noun-guid.us-east-1.aws.neon.tech/neondb?sslmode=require
-+```ini title=".env.local"
-+DATABASE_URL=postgresql://usertitle:password@ep-adj-noun-guid.us-east-1.aws.neon.tech/neondb?sslmode=require
- ```
- 
- ---
 diff --git b/content/guides/ecosystem/nextjs.mdx a/content/guides/ecosystem/nextjs.mdx
 index a8b3cceb..060105a4 100644
 --- b/content/guides/ecosystem/nextjs.mdx
@@ -3928,7 +3521,7 @@ index b12fd035..bd94fd3d 100644
  
  ---
 diff --git b/content/guides/ecosystem/prisma.mdx a/content/guides/ecosystem/prisma.mdx
-index 2f03f4fc..fc7d74ea 100644
+index e2f83e55..3cb7c4a5 100644
 --- b/content/guides/ecosystem/prisma.mdx
 +++ a/content/guides/ecosystem/prisma.mdx
 @@ -1,7 +1,6 @@
@@ -3950,7 +3543,7 @@ index 2f03f4fc..fc7d74ea 100644
      	There are 1 users in the database.
      	```
 diff --git b/content/guides/ecosystem/qwik.mdx a/content/guides/ecosystem/qwik.mdx
-index 95d54cc0..4de876b1 100644
+index 99b002b6..ea9e377e 100644
 --- b/content/guides/ecosystem/qwik.mdx
 +++ a/content/guides/ecosystem/qwik.mdx
 @@ -79,7 +79,6 @@ $ bun create qwik
@@ -3958,6 +3551,35 @@ index 95d54cc0..4de876b1 100644
  │
  └  Happy coding! 🎉
 -
+ ```
+ 
+ ---
+diff --git b/content/guides/ecosystem/remix.mdx a/content/guides/ecosystem/remix.mdx
+index 9b24bdc5..fb3d3f2c 100644
+--- b/content/guides/ecosystem/remix.mdx
++++ a/content/guides/ecosystem/remix.mdx
+@@ -69,19 +69,17 @@ To build and start your app, run `bun run build`
+ 
+ ```sh title="terminal"
+ $ bun run build
+-
+-$ remix build
+-info  building... (NODE_ENV=production)
+-info  built (158ms)
++  $ remix build
++  info  building... (NODE_ENV=production)
++  info  built (158ms)
+ ```
+ 
+ Then `bun run start` from the project root.
+ 
+ ```sh title="terminal"
+ $ bun start
+-
+-$ remix-serve ./build/index.js
+-[remix-serve] http://localhost:3000 (http://192.168.86.237:3000)
++  $ remix-serve ./build/index.js
++  [remix-serve] http://localhost:3000 (http://192.168.86.237:3000)
  ```
  
  ---
@@ -3974,19 +3596,6 @@ index 3868ba95..e4618672 100644
  $ bunx solid-start dev
  ```
  
-diff --git b/content/guides/ecosystem/sveltekit.mdx a/content/guides/ecosystem/sveltekit.mdx
-index 9095a830..985ade01 100644
---- b/content/guides/ecosystem/sveltekit.mdx
-+++ a/content/guides/ecosystem/sveltekit.mdx
-@@ -84,7 +84,7 @@ To build for production, you'll need to add the right SvelteKit adapter. Current
- 
- Now, make the following changes to your `svelte.config.js`.
- 
--```ts title="svelte.config.js"
-+```js title="svelte.config.js"
- import adapter from "@sveltejs/adapter-auto"; // [!code --]
- import adapter from "svelte-adapter-bun"; // [!code ++]
- import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
 index 5a3543ac..2a601ebe 100644
 --- b/content/guides/ecosystem/tanstack-start.mdx
@@ -4277,7 +3886,7 @@ index d16182c8..c41d0f5b 100644
 +$ eslint --init
  ```
 diff --git b/content/guides/install/registry-scope.mdx a/content/guides/install/registry-scope.mdx
-index 0da49c23..e9dfb2cc 100644
+index 88ddcc0b..9a204350 100644
 --- b/content/guides/install/registry-scope.mdx
 +++ a/content/guides/install/registry-scope.mdx
 @@ -23,7 +23,6 @@ To configure a registry for a particular npm scope:
@@ -4288,19 +3897,6 @@ index 0da49c23..e9dfb2cc 100644
  ```
  
  ---
-diff --git b/content/guides/read-file/arraybuffer.mdx a/content/guides/read-file/arraybuffer.mdx
-index 744a6a46..4779b8fa 100644
---- b/content/guides/read-file/arraybuffer.mdx
-+++ a/content/guides/read-file/arraybuffer.mdx
-@@ -15,7 +15,7 @@ const buffer = await file.arrayBuffer();
- 
- ---
- 
--The binary content in the `ArrayBuffer` can then be read as a typed array, such as `Int8Array`. For `Uint8Array`, use [`.bytes()`](./uint8array).
-+The binary content in the `ArrayBuffer` can then be read as a typed array, such as `Int8Array`. For `Uint8Array`, use [`.bytes()`](/guides/read-file/uint8array).
- 
- ```ts title="index.ts"
- const buffer = await file.arrayBuffer();
 diff --git b/content/guides/runtime/build-time-constants.mdx a/content/guides/runtime/build-time-constants.mdx
 index 29e47553..0a63d325 100644
 --- b/content/guides/runtime/build-time-constants.mdx
@@ -4377,14 +3973,14 @@ index 29e47553..0a63d325 100644
  
  ### Build automation script
 diff --git b/content/guides/runtime/cicd.mdx a/content/guides/runtime/cicd.mdx
-index d2ad67dd..e9de250b 100644
+index bf22f065..e9de250b 100644
 --- b/content/guides/runtime/cicd.mdx
 +++ a/content/guides/runtime/cicd.mdx
 @@ -37,7 +37,7 @@ jobs:
        # ...
        - uses: oven-sh/setup-bun@v2
          with: # [!code ++]
--          bun-version: 1.2.0 # or "latest", "canary", <sha> # [!code ++]
+-          bun-version: 1.3.3 # or "latest", "canary", <sha> # [!code ++]
 +          bun-version: $BUN_LATEST_VERSION # or "latest", "canary", <sha> # [!code ++]
  ```
  
@@ -4404,7 +4000,7 @@ index cbe257d5..58a41b64 100644
     1 valid identities found
  ```
 diff --git b/content/guides/runtime/set-env.mdx a/content/guides/runtime/set-env.mdx
-index 5d9510ae..13c32a38 100644
+index 18c12c64..fade4263 100644
 --- b/content/guides/runtime/set-env.mdx
 +++ a/content/guides/runtime/set-env.mdx
 @@ -39,7 +39,7 @@ $ FOO=helloworld bun run dev
@@ -4416,21 +4012,8 @@ index 5d9510ae..13c32a38 100644
  ```
  
  ---
-diff --git b/content/guides/runtime/web-debugger.mdx a/content/guides/runtime/web-debugger.mdx
-index b791abd7..90156671 100644
---- b/content/guides/runtime/web-debugger.mdx
-+++ a/content/guides/runtime/web-debugger.mdx
-@@ -4,7 +4,7 @@ fullTitle: Debugging Bun with the web debugger
- mode: center
- ---
- 
--Bun speaks the [WebKit Inspector Protocol](https://github.com/oven-sh/bun/blob/main/packages/bun-vscode/types/jsc.d.ts). To enable debugging when running code with Bun, use the `--inspect` flag. For demonstration purposes, consider the following simple web server.
-+Bun speaks the [WebKit Inspector Protocol](https://github.com/oven-sh/bun/blob/main/packages/bun-inspector-protocol/src/protocol/jsc/index.d.ts). To enable debugging when running code with Bun, use the `--inspect` flag. For demonstration purposes, consider the following simple web server.
- 
- ```ts title="server.ts"
- Bun.serve({
 diff --git b/content/guides/test/coverage-threshold.mdx a/content/guides/test/coverage-threshold.mdx
-index 1ebaf8de..3b0e97b3 100644
+index 802d7559..22747491 100644
 --- b/content/guides/test/coverage-threshold.mdx
 +++ a/content/guides/test/coverage-threshold.mdx
 @@ -9,8 +9,6 @@ Bun's test runner supports built-in code coverage reporting via the `--coverage`
@@ -4451,34 +4034,8 @@ index 1ebaf8de..3b0e97b3 100644
  <test output>
  $ echo $?
  1 # this is the exit code of the previous command
-diff --git b/content/guides/test/coverage.mdx a/content/guides/test/coverage.mdx
-index 067f1fb4..028c41dc 100644
---- b/content/guides/test/coverage.mdx
-+++ a/content/guides/test/coverage.mdx
-@@ -15,8 +15,6 @@ The coverage report lists the source files that were executed during the test ru
- ```sh title="terminal"
- $ bun test --coverage
- 
--bun test v$BUN_LATEST_VERSION (9c68abdb)
--
- test.test.ts:
- ✓ math > add [0.71ms]
- ✓ math > multiply [0.03ms]
-diff --git b/content/guides/test/happy-dom.mdx a/content/guides/test/happy-dom.mdx
-index 499b194c..f7638b27 100644
---- b/content/guides/test/happy-dom.mdx
-+++ a/content/guides/test/happy-dom.mdx
-@@ -56,8 +56,6 @@ With Happy DOM properly configured, this test runs as expected.
- ```sh title="terminal"
- $ bun test
- 
--bun test v$BUN_LATEST_VERSION (9c68abdb)
--
- dom.test.ts:
- ✓ set button text [0.82ms]
- 
 diff --git b/content/guides/test/run-tests.mdx a/content/guides/test/run-tests.mdx
-index deb2cc6f..b1ab1867 100644
+index 5c1cd476..37b289d1 100644
 --- b/content/guides/test/run-tests.mdx
 +++ a/content/guides/test/run-tests.mdx
 @@ -23,7 +23,6 @@ Here's what the output of a typical test run looks like. In this case, there are
@@ -4506,20 +4063,19 @@ index deb2cc6f..b1ab1867 100644
  
  test.test.js:
 diff --git b/content/guides/test/skip-tests.mdx a/content/guides/test/skip-tests.mdx
-index 5679852e..33c16fdd 100644
+index c311c57c..4aebd9b1 100644
 --- b/content/guides/test/skip-tests.mdx
 +++ a/content/guides/test/skip-tests.mdx
-@@ -21,8 +21,6 @@ Running `bun test` will not execute this test. It will be marked as skipped in t
+@@ -20,7 +20,6 @@ Running `bun test` will not execute this test. It will be marked as skipped in t
+ 
  ```sh title="terminal"
  $ bun test
- 
--bun test v$BUN_LATEST_VERSION (9c68abdb)
 -
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
  test.test.ts:
- ✓ add [0.03ms]
- ✓ multiply [0.02ms]
 diff --git b/content/guides/test/snapshot.mdx a/content/guides/test/snapshot.mdx
-index eeeaa43b..8263c38f 100644
+index 023597a7..a3e3e649 100644
 --- b/content/guides/test/snapshot.mdx
 +++ a/content/guides/test/snapshot.mdx
 @@ -20,7 +20,6 @@ The first time this test is executed, Bun will evaluate the value passed into `e
@@ -4550,43 +4106,28 @@ index eeeaa43b..8263c38f 100644
  test/snap.test.ts:
  ✓ snapshot [0.86ms]
  
-diff --git b/content/guides/test/svelte-test.mdx a/content/guides/test/svelte-test.mdx
-index b38e1b85..4e663175 100644
---- b/content/guides/test/svelte-test.mdx
-+++ a/content/guides/test/svelte-test.mdx
-@@ -14,7 +14,7 @@ $ bun add @testing-library/svelte svelte@4 @happy-dom/global-registrator
- 
- Then, save this plugin in your project.
- 
--```ts title="svelte-loader.js"
-+```js title="svelte-loader.js"
- import { plugin } from "bun";
- import { compile } from "svelte/compiler";
- import { readFileSync } from "fs";
 diff --git b/content/guides/test/todo-tests.mdx a/content/guides/test/todo-tests.mdx
-index 95ffd8ae..14e03425 100644
+index 810760b7..d9c25efd 100644
 --- b/content/guides/test/todo-tests.mdx
 +++ a/content/guides/test/todo-tests.mdx
-@@ -20,8 +20,6 @@ The output of `bun test` indicates how many `todo` tests were encountered.
+@@ -19,7 +19,6 @@ The output of `bun test` indicates how many `todo` tests were encountered.
+ 
  ```sh title="terminal"
  $ bun test
- 
--bun test v$BUN_LATEST_VERSION (9c68abdb)
 -
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
  test.test.ts:
- ✓ add [0.03ms]
- ✓ multiply [0.02ms]
-@@ -53,8 +51,6 @@ If an implementation is provided, it will not be run unless the `--todo` flag is
+@@ -52,7 +51,6 @@ If an implementation is provided, it will not be run unless the `--todo` flag is
+ 
  ```sh title="terminal"
  $ bun test --todo
- 
--bun test v$BUN_LATEST_VERSION (9c68abdb)
 -
+ bun test v$BUN_LATEST_VERSION (9c68abdb)
+ 
  my.test.ts:
- ✗ unimplemented feature
-   ^ this test is marked as todo but passes. Remove `.todo` or check that test is correct.
 diff --git b/content/guides/test/update-snapshots.mdx a/content/guides/test/update-snapshots.mdx
-index 96ddd412..e4d49d59 100644
+index eb97b5c6..0f15a187 100644
 --- b/content/guides/test/update-snapshots.mdx
 +++ a/content/guides/test/update-snapshots.mdx
 @@ -31,7 +31,6 @@ To regenerate snapshots, use the `--update-snapshots` flag.
@@ -4598,7 +4139,7 @@ index 96ddd412..e4d49d59 100644
  
  test/snap.test.ts:
 diff --git b/content/guides/util/main.mdx a/content/guides/util/main.mdx
-index e39b4957..a4d9b52f 100644
+index c6c10519..59bf3896 100644
 --- b/content/guides/util/main.mdx
 +++ a/content/guides/util/main.mdx
 @@ -18,15 +18,10 @@ import "./foo.ts";
@@ -4619,14 +4160,14 @@ index e39b4957..a4d9b52f 100644
  ```
  
 diff --git b/content/guides/util/version.mdx a/content/guides/util/version.mdx
-index 86cdeb13..668029f3 100644
+index 4da39ce4..365df233 100644
 --- b/content/guides/util/version.mdx
 +++ a/content/guides/util/version.mdx
 @@ -7,7 +7,7 @@ mode: center
  Get the current version of Bun in a semver format.
  
  ```ts title="index.ts"
--Bun.version; // => "1.3.2"
+-Bun.version; // => "1.3.3"
 +Bun.version; // => "$BUN_LATEST_VERSION"
  ```
  

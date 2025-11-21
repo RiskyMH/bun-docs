@@ -991,13 +991,13 @@ function addDocsPrefix(content: string, filePath: string): string {
       // For ambiguous directories (test/), use the current file's location
       // If we're in a guides file, assume the link is also to guides
       // If we're in a docs file, assume the link is also to docs
-      if (isInGuides) {
-        incrementStat("guides-prefix-added");
-        return `[${text}](/guides/${path})`;
-      } else {
+      // if (isInGuides) {
+      //   incrementStat("guides-prefix-added");
+      //   return `[${text}](/guides/${path})`;
+      // } else {
         incrementStat("docs-prefix-added");
         return `[${text}](/docs/${path})`;
-      }
+      // }
     }
   );
 
