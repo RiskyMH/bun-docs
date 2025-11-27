@@ -2756,10 +2756,10 @@ index d763f366..4fd4251c 100644
  ```
  
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
-index 88a01433..55cfb787 100644
+index 361bdf26..31ec32b8 100644
 --- b/content/docs/runtime/networking/fetch.mdx
 +++ a/content/docs/runtime/networking/fetch.mdx
-@@ -342,7 +342,7 @@ This will print the request and response headers to your terminal:
+@@ -358,7 +358,7 @@ This will print the request and response headers to your terminal:
  ```sh
  [fetch] > HTTP/1.1 GET http://example.com/
  [fetch] > Connection: keep-alive
