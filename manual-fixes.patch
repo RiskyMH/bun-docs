@@ -57,7 +57,7 @@ index f2141237..5f384bd8 100644
  ```
  
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index f2254b70..c0c534cc 100644
+index 4ce16a71..c532e554 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
 @@ -123,7 +123,7 @@ Becomes something like this:
@@ -96,7 +96,7 @@ index f2254b70..c0c534cc 100644
  import { useState } from "react";
  
  export default function App() {
-@@ -497,7 +497,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
+@@ -519,7 +519,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
  <Steps>
  <Step>
  
@@ -105,7 +105,7 @@ index f2254b70..c0c534cc 100644
  - Transpiles TypeScript, JSX, and TSX in `<script>` tags
  - Bundles imported dependencies
  - Generates sourcemaps for debugging
-@@ -763,7 +763,7 @@ export function App() {
+@@ -785,7 +785,7 @@ export function App() {
  }
  ```
  
@@ -115,7 +115,7 @@ index f2254b70..c0c534cc 100644
    margin: 0;
    padding: 0;
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index 9e8ffb60..d12d184d 100644
+index 17bff26f..2d71e763 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -235,7 +235,7 @@ index 9e8ffb60..d12d184d 100644
  
  <Callout type="info">Only one of those are necessary, not all three.</Callout>
  
-@@ -264,9 +242,7 @@ To enable, pass the `--console` CLI flag.
+@@ -351,9 +329,7 @@ To enable, pass the `--console` CLI flag.
  
  ```bash title="terminal"
  $ bun ./index.html --console
@@ -245,7 +245,7 @@ index 9e8ffb60..d12d184d 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -293,22 +269,16 @@ While the server is running:
+@@ -380,22 +356,16 @@ While the server is running:
  
  When you're ready to deploy, use `bun build` to create optimized production bundles:
  
