@@ -2532,10 +2532,10 @@ index 285474ad..3cd099ed 100644
 -
  </Accordions>
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index cd4f91b6..964335d5 100644
+index a8a44f5b..1e98b2d9 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
-@@ -179,7 +179,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
+@@ -181,7 +181,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
  
  ```toml title="bunfig.toml"
  [test]
@@ -2543,7 +2543,7 @@ index cd4f91b6..964335d5 100644
  # to require 90% line-level and function-level coverage
  coverageThreshold = 0.9
  ```
-@@ -224,7 +223,8 @@ By default, coverage reports will be printed to the console. For persistent code
+@@ -226,7 +225,8 @@ By default, coverage reports will be printed to the console. For persistent code
  
  ```toml title="bunfig.toml"
  [test]
@@ -2553,7 +2553,7 @@ index cd4f91b6..964335d5 100644
  ```
  
  ### `test.coverageDir`
-@@ -233,7 +233,8 @@ Set path where coverage reports will be saved. Please notice, that it works only
+@@ -235,7 +235,8 @@ Set path where coverage reports will be saved. Please notice, that it works only
  
  ```toml title="bunfig.toml"
  [test]
@@ -2563,7 +2563,7 @@ index cd4f91b6..964335d5 100644
  ```
  
  ### `test.randomize`
-@@ -518,7 +519,6 @@ To configure the cache behavior:
+@@ -520,7 +521,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -2571,7 +2571,7 @@ index cd4f91b6..964335d5 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -704,9 +704,7 @@ With this option, the command being run will not be printed to the console:
+@@ -706,9 +706,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
