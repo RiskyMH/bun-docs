@@ -1,0 +1,93 @@
+---
+title: Upgrade Bun
+fullTitle: Upgrade Bun to the latest version
+mode: center
+---
+
+Bun can upgrade itself using the built-in `bun upgrade` command. This is the fastest way to get the latest features and bug fixes.
+
+```bash title="terminal"
+$ bun upgrade
+```
+
+This downloads and installs the latest stable version of Bun, replacing the currently installed version.
+
+<Callout type="info">To see the current version of Bun, run `bun --version`.</Callout>
+
+---
+
+## Verify the upgrade
+
+After upgrading, verify the new version:
+
+```bash title="terminal"
+$ bun --version
+Output: 1.x.y
+
+# See the exact commit of the Bun binary
+$ bun --revision
+Output: 1.x.y+abc123def
+```
+
+---
+
+## Upgrade to canary builds
+
+Canary builds are automatically released on every commit to the `main` branch. These are untested but useful for trying new features or verifying bug fixes before they're released.
+
+```bash title="terminal"
+$ bun upgrade --canary
+```
+
+<Callout type="warning">Canary builds are not recommended for production use. They may contain bugs or breaking changes.</Callout>
+
+---
+
+## Switch back to stable
+
+If you're on a canary build and want to return to the latest stable release:
+
+```bash title="terminal"
+$ bun upgrade --stable
+```
+
+---
+
+## Install a specific version
+
+To install a specific version of Bun, use the install script with a version tag:
+
+<Tabs items={['macOS & Linux', 'Windows']}>
+  <Tab value="macOS & Linux">
+    ```bash title="terminal"
+    $ curl -fsSL https://bun.sh/install | bash -s "bun-v$BUN_LATEST_VERSION"
+   ```
+  </Tab>
+  <Tab value="Windows">
+    ```powershell title="PowerShell"
+    > iex "& {$(irm https://bun.sh/install.ps1)} -Version $BUN_LATEST_VERSION"
+   ```
+  </Tab>
+</Tabs>
+
+---
+
+## Package manager users
+
+If you installed Bun via a package manager, use that package manager to upgrade instead of `bun upgrade` to avoid conflicts.
+
+<Callout type="info">
+**Homebrew users** <br />
+To avoid conflicts with Homebrew, use `brew upgrade bun` instead.
+
+**Scoop users** <br />
+To avoid conflicts with Scoop, use `scoop update bun` instead.
+
+</Callout>
+
+---
+
+## See also
+
+- [Installation](/docs/installation) — Install Bun for the first time
+- [Update packages](/docs/pm/cli/update) — Update dependencies to latest versions

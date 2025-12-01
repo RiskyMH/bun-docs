@@ -2282,6 +2282,28 @@ index 1384187f..8e7b57be 100644
 +      ```
 +	</Tab>
  </Tabs>
+diff --git b/content/docs/pm/bunx.mdx a/content/docs/pm/bunx.mdx
+index e3556aba..f79aea1b 100644
+--- b/content/docs/pm/bunx.mdx
++++ a/content/docs/pm/bunx.mdx
+@@ -52,8 +52,6 @@ To pass additional command-line flags and arguments through to the executable, p
+ $ bunx my-cli --foo bar
+ ```
+ 
+----
+-
+ ## Shebangs
+ 
+ By default, Bun respects shebangs. If an executable is marked with `#!/usr/bin/env node`, Bun will spin up a `node` process to execute the file. However, in some cases it may be desirable to run executables using Bun's runtime, even if the executable indicates otherwise. To do so, include the `--bun` flag.
+@@ -83,7 +81,6 @@ To force bun to always be used with a script, use a shebang.
+ ```js title="dist/index.js"
+ #!/usr/bin/env bun
+ ```
+-
+ ---
+ 
+-<Bunx />
++<include>../../_snippets/cli/bunx.mdx</include>
 diff --git b/content/docs/pm/cli/link.mdx a/content/docs/pm/cli/link.mdx
 index c29e1378..49fd90bd 100644
 --- b/content/docs/pm/cli/link.mdx
@@ -2814,7 +2836,7 @@ index 743ad9bc..341c8d1e 100644
  
  **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index e7c21f54..fc92bc8c 100644
+index 3a5227c2..309bc898 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -2846,7 +2868,7 @@ index e7c21f54..fc92bc8c 100644
  ### `.serialize()`
  
  `bun:sqlite` supports SQLite's built-in mechanism for [serializing](https://www.sqlite.org/c3ref/serialize.html) and [deserializing](https://www.sqlite.org/c3ref/deserialize.html) databases to and from memory.
-@@ -198,7 +190,6 @@ db.exec("PRAGMA journal_mode = WAL;");
+@@ -211,7 +203,6 @@ db.run("PRAGMA journal_mode = WAL;");
  In WAL mode, writes to the database are written directly to a separate file called the "WAL file" (write-ahead log). This file will be later integrated into the main database file. Think of it as a buffer for pending writes. Refer to the [SQLite docs](https://www.sqlite.org/wal.html) for a more detailed overview.
  
  On macOS, WAL files may be persistent by default. This is not a bug, it is how macOS configured the system version of SQLite.
@@ -2854,7 +2876,7 @@ index e7c21f54..fc92bc8c 100644
  </Accordion>
  </Accordions>
  
-@@ -267,10 +258,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
+@@ -280,10 +271,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.all({ $message: "Hello world" }); // [!code highlight]
@@ -2866,7 +2888,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -282,10 +270,7 @@ Use `.get()` to run a query and get back the first result as an object.
+@@ -295,10 +283,7 @@ Use `.get()` to run a query and get back the first result as an object.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.get({ $message: "Hello world" }); // [!code highlight]
@@ -2878,7 +2900,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `undefined` is returned.
-@@ -297,13 +282,10 @@ Use `.run()` to run a query and get back `undefined`. This is useful for schema-
+@@ -310,13 +295,10 @@ Use `.run()` to run a query and get back `undefined`. This is useful for schema-
  ```ts title="db.ts"
  const query = db.query(`create table foo;`);
  query.run(); // [!code highlight]
@@ -2896,7 +2918,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) once. Stepping through all the rows is not necessary when you don't care about the results.
-@@ -328,13 +310,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
+@@ -341,13 +323,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
  const movies = query.all();
  const first = query.get();
  
@@ -2912,7 +2934,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like using `Object.create` than `new`. The class's prototype is assigned to the object, methods are attached, and getters/setters are set up, but the constructor is not called.
-@@ -370,14 +347,11 @@ const query = db.query(`select $message;`);
+@@ -383,14 +360,11 @@ const query = db.query(`select $message;`);
  
  query.values({ $message: "Hello world" }); // [!code highlight]
  query.values(2); // [!code highlight]
@@ -2932,7 +2954,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -435,13 +409,8 @@ const query = db.query("SELECT ?1, ?2");
+@@ -448,13 +422,8 @@ const query = db.query("SELECT ?1, ?2");
  const results = query.all("hello", "goodbye");
  ```
  
@@ -2948,7 +2970,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  ---
-@@ -464,12 +433,7 @@ import { Database } from "bun:sqlite";
+@@ -477,12 +446,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -2962,7 +2984,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  When `safeIntegers` is `true`, `bun:sqlite` will throw an error if a `bigint` value in a bound parameter exceeds 64 bits:
-@@ -485,14 +449,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+@@ -498,14 +462,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
  try {
    query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
  } catch (e) {
@@ -2978,7 +3000,7 @@ index e7c21f54..fc92bc8c 100644
  ### `safeIntegers: false` (default)
  
  When `safeIntegers` is `false`, `bun:sqlite` will return integers as `number` types and truncate any bits beyond 53:
-@@ -503,11 +463,7 @@ import { Database } from "bun:sqlite";
+@@ -516,11 +476,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -2991,7 +3013,7 @@ index e7c21f54..fc92bc8c 100644
  ```
  
  ---
-@@ -600,7 +556,7 @@ db.loadExtension("myext"); // [!code highlight]
+@@ -613,7 +569,7 @@ db.loadExtension("myext"); // [!code highlight]
  
  ```bash title="terminal"
  $ brew install sqlite
@@ -3486,7 +3508,7 @@ index a8b3cceb..060105a4 100644
  ---
  
 diff --git b/content/guides/ecosystem/nuxt.mdx a/content/guides/ecosystem/nuxt.mdx
-index 407d4d88..367f4922 100644
+index 95481525..5429f19f 100644
 --- b/content/guides/ecosystem/nuxt.mdx
 +++ a/content/guides/ecosystem/nuxt.mdx
 @@ -35,7 +35,7 @@ To start the dev server, run `bun --bun run dev` from the project root. This wil
@@ -3584,17 +3606,18 @@ index 9b24bdc5..fb3d3f2c 100644
  
  ---
 diff --git b/content/guides/ecosystem/solidstart.mdx a/content/guides/ecosystem/solidstart.mdx
-index 3868ba95..e4618672 100644
+index f2230557..23a151dc 100644
 --- b/content/guides/ecosystem/solidstart.mdx
 +++ a/content/guides/ecosystem/solidstart.mdx
-@@ -47,7 +47,7 @@ Then run the development server.
+@@ -42,8 +42,7 @@ Then run the development server with `bun dev`.
  
  ```sh title="terminal"
- $ bun run dev
--# or, equivalently
-+or, equivalently
- $ bunx solid-start dev
- ```
+ $ bun dev
+-
+-$ vinxi dev
++\$ vinxi dev
+ vinxi v0.5.8
+ vinxi starting dev server
  
 diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
 index 5a3543ac..2a601ebe 100644

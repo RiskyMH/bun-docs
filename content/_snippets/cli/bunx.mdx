@@ -1,0 +1,49 @@
+## Usage
+
+```bash title="terminal"
+$ bunx [flags] <package>[@version] [flags and arguments for the package]
+```
+
+Execute an npm package executable (CLI), automatically installing into a global shared cache if not installed in `node_modules`.
+
+### Flags
+
+<ParamField name="--bun" type="boolean">
+  Force the command to run with Bun instead of Node.js, even if the executable contains a Node shebang (`#!/usr/bin/env
+  node`)
+</ParamField>
+
+<ParamField name="-p, --package" type="string">
+  Specify package to install when binary name differs from package name. Alias: <code>-p</code>
+</ParamField>
+
+<ParamField name="--no-install" type="boolean">
+  Skip installation if package is not already installed. Alias: <code>-n</code>
+</ParamField>
+
+<ParamField name="--verbose" type="boolean">
+  Enable verbose output during installation. Alias: <code>-v</code>
+</ParamField>
+
+<ParamField name="--silent" type="boolean">
+  Suppress output during installation. Alias: <code>-s</code>
+</ParamField>
+
+### Examples
+
+```bash title="terminal"
+# Run Prisma migrations
+$ bunx prisma migrate
+
+# Format a file with Prettier
+$ bunx prettier foo.js
+
+# Run a specific version of a package
+$ bunx uglify-js@3.14.0 app.js
+
+# Use --package when binary name differs from package name
+$ bunx -p @angular/cli ng new my-app
+
+# Force running with Bun instead of Node.js, even if the executable contains a Node shebang
+$ bunx --bun vite dev foo.js
+```

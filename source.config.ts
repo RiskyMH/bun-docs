@@ -156,6 +156,7 @@ export default defineConfig({
         {
           // a thing to make the $ sign not selectable
           // and codeblock lines appear as a comment if not starting with $
+          // if its \$ then show it as coment style with just $ content
           name: "sh-$-transformer",
           line(hast, line) {
             const sh = [
@@ -176,7 +177,7 @@ export default defineConfig({
             const lines = this.source.split("\n");
             const [, prefix] =
               sh.find(([lang, prefix]) => lang === this.options.lang) ?? [];
-            if (!prefix || !lines.some((line) => line.startsWith(prefix + " ")))
+            if (!prefix || !lines.some((line) => line.startsWith(prefix + " ") || line.startsWith("\\" + prefix + " ")))
               return hast;
 
             const children = hast.children;
@@ -210,6 +211,13 @@ export default defineConfig({
               if (!c || c.type !== "text") continue;
 
               if (index === 0) {
+                if (c.value === "\\" + prefix) {
+                  c.value = prefix;
+                  this.addClassToHast(child, "skiki-sh-comment");
+                  isCommand = false;
+                  continue;
+                }
+                
                 isCommand = c.value === prefix || c.value === prefix + " ";
                 if (isCommand)
                   this.addClassToHast(child, [
