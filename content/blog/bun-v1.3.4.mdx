@@ -1,0 +1,270 @@
+---
+title: Bun v1.3.4
+description: "Fixes 194 issues (addressing 412 👍). URLPattern API, Fake Timers for bun:test, Custom Proxy Headers in fetch(),console.log %j format, http.Agent connection pooling fix, Standalone executable config loading changes, SQLite 3.51.1, and numerous bugfixes for bun:test, Node.js compatibility, Windows, Web APIs, bun install, and more"
+date: 2025-12-06T10:11:00.000Z
+authors: jarred
+category: Changelog
+---
+
+<include>../_snippets/blog/install-bun.mdx</include>
+
+## `URLPattern` API
+
+Bun now supports the [`URLPattern`](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern) Web API, providing declarative pattern matching for URLs—similar to how regular expressions work for strings. This is especially useful for routing in web servers and frameworks.
+
+```js
+// Match URLs with a user ID parameter
+const pattern = new URLPattern({ pathname: "/users/:id" });
+
+pattern.test("https://example.com/users/123"); // true
+pattern.test("https://example.com/posts/456"); // false
+
+const result = pattern.exec("https://example.com/users/123");
+console.log(result.pathname.groups.id); // "123"
+
+// Wildcard matching
+const filesPattern = new URLPattern({ pathname: "/files/*" });
+const match = filesPattern.exec("https://example.com/files/image.png");
+console.log(match.pathname.groups[0]); // "image.png"
+```
+
+The implementation includes:
+
+- **Constructor**: Create patterns from strings or `URLPatternInit` dictionaries
+- **`test()`**: Check if a URL matches the pattern (returns boolean)
+- **`exec()`**: Extract matched groups from a URL (returns `URLPatternResult` or null)
+- **Pattern properties**: `protocol`, `username`, `password`, `hostname`, `port`, `pathname`, `search`, `hash`
+- **`hasRegExpGroups`**: Detect if the pattern uses custom regular expressions
+
+408 Web Platform Tests pass for this implementation. Thanks to the WebKit team for implementing this!
+
+## Fake Timers for `bun:test`
+
+Bun's test runner now supports fake timers, allowing you to control time in your tests without waiting for real time to pass. This is essential for testing code that relies on `setTimeout`, `setInterval`, and other timer-based APIs.
+
+```js
+import { test, expect, jest } from "bun:test";
+
+test("fake timers", () => {
+  jest.useFakeTimers();
+
+  let called = false;
+  setTimeout(() => {
+    called = true;
+  }, 1000);
+
+  expect(called).toBe(false);
+
+  // Advance time by 1 second
+  jest.advanceTimersByTime(1000);
+
+  expect(called).toBe(true);
+
+  jest.useRealTimers();
+});
+```
+
+The following methods are available on `jest`:
+
+- `useFakeTimers(options?)` — Enable fake timers, optionally setting the current time with `{ now: number | Date }`
+- `useRealTimers()` — Restore real timers
+- `advanceTimersByTime(ms)` — Advance all timers by the specified milliseconds
+- `advanceTimersToNextTimer()` — Advance to the next scheduled timer
+- `runAllTimers()` — Run all pending timers
+- `runOnlyPendingTimers()` — Run only currently pending timers (not ones scheduled by those timers)
+- `getTimerCount()` — Get the number of pending timers
+- `clearAllTimers()` — Clear all pending timers
+- `isFakeTimers()` — Check if fake timers are active
+
+Thanks to [@pfgithub](https://github.com/pfgithub) for implementing this!
+
+
+## Custom Proxy Headers in `fetch()`
+
+The `fetch()` proxy option now accepts an object format with support for custom headers sent to the proxy server. This is useful for proxy authentication tokens, custom routing headers, or any other proxy-specific configuration.
+
+```js
+// String format still works
+fetch(url, { proxy: "http://proxy.example.com:8080" });
+
+// New object format with custom headers
+fetch(url, {
+  proxy: {
+    url: "http://proxy.example.com:8080",
+    headers: {
+      "Proxy-Authorization": "Bearer token",
+      "X-Custom-Proxy-Header": "value",
+    },
+  },
+});
+```
+
+Headers are sent in `CONNECT` requests for HTTPS targets and in direct proxy requests for HTTP targets. If you provide a `Proxy-Authorization` header, it takes precedence over credentials embedded in the proxy URL.
+
+
+## `http.Agent` Connection Pool Now Properly Reuses Connections
+
+Fixed a critical bug where `http.Agent` with `keepAlive: true` was not reusing connections in certain cases.
+
+```js
+import http from "node:http";
+
+const agent = new http.Agent({ keepAlive: true });
+
+http.request(
+  {
+    hostname: "example.com",
+    port: 80,
+    path: "/",
+    agent: agent,
+  },
+  (res) => {
+    // Connection is now properly reused on subsequent requests
+  },
+);
+```
+
+Three independent bugs were fixed:
+
+- Incorrect property name (`keepalive` vs `keepAlive`) caused the user's setting to be ignored
+- `Connection: keep-alive` request headers weren't being handled
+- Response header parsing used incorrect comparison logic and was case-sensitive (violating RFC 7230)
+
+
+## Standalone Executables No Longer Load Config Files at Runtime
+
+Standalone executables built with `bun build --compile` now skip loading `tsconfig.json` and `package.json` from the filesystem at runtime by default. This improves startup performance and prevents unexpected behavior when config files in the deployment environment differ from those used at compile time.
+
+If your executable needs to read these config files at runtime, you can opt back in with the new CLI flags:
+
+```bash
+# Enable runtime loading of tsconfig.json
+bun build --compile --compile-autoload-tsconfig ./app.ts
+
+# Enable runtime loading of package.json
+bun build --compile --compile-autoload-package-json ./app.ts
+
+# Enable both
+bun build --compile --compile-autoload-tsconfig --compile-autoload-package-json ./app.ts
+```
+
+Or via the JavaScript API:
+
+```js
+await Bun.build({
+  entrypoints: ["./app.ts"],
+  compile: {
+    autoloadTsconfig: true,
+    autoloadPackageJson: true,
+    autoloadDotenv: true,
+    autoloadBunfig: true,
+  },
+});
+```
+
+## `console.log` now supports `%j` format specifier
+
+The `%j` format specifier for `console.log` and related console methods now outputs the JSON stringified representation of a value, matching Node.js behavior.
+
+```js
+console.log("%j", { foo: "bar" });
+// {"foo":"bar"}
+
+console.log("%j %s", { status: "ok" }, "done");
+// {"status":"ok"} done
+
+console.log("%j", [1, 2, 3]);
+// [1,2,3]
+```
+
+Previously, `%j` was not recognized and was left as literal text in the output.
+
+
+## SQLite 3.51.1
+
+`bun:sqlite` has been updated to SQLite v3.51.1, which includes fixes for the EXISTS-to-JOIN optimization and other query planner improvements.
+
+
+## Bugfixes
+
+### bun:test fixes
+
+- Fixed: Fuzzer-detected assertion failure in `spyOn` when used with indexed property keys (e.g., `spyOn(arr, 0)` or `spyOn(arr, "0")`)
+- Fixed: Fuzzer-detected assertion failure in `expect.extend()` when passed objects containing non-function callables (like class constructors), now properly throws a `TypeError` instead
+- Fixed: Fuzzer-detected assertion failure in `jest.mock()` when called with invalid arguments (e.g., non-string first argument)
+
+### Bundler and Dev Server fixes
+
+- Fixed: Error message in Dev Server saying "null" instead of a message string in certain rare cases
+- Fixed: HMR error overlay now displays error information when `event.error` is null by falling back to `event.message`
+- Fixed: Out of memory errors being incorrectly thrown instead of properly handled when rejecting Promise values in the bundler
+- Fixed: Standalone executables (`bun build --compile`) failing to load bytecode cache due to improper 8-byte alignment in embedded Mach-O and PE sections
+
+### bun install fixes
+
+- Fixed: Security scanner not collecting dependencies from workspace packages, causing it to scan only a subset of packages instead of the full dependency tree
+- Fixed: off-by-one error in the lockfile resolution bounds check during `bun install` with update requests
+- Fixed: `bun publish --help` showing incorrect `--dry-run` description ("Don't install anything" → "Perform a dry run without making changes")
+
+### Windows fixes
+
+- Fixed: `fs.access()` and `fs.accessSync()` throwing `EUNKNOWN` errors when checking Windows named pipes (paths like `\\.\pipe\my-pipe`)
+- Fixed: Git dependencies on Windows with long paths now work correctly
+- Fixed: Windows console codepage not being properly saved and restored, which could cause garbled text on non-English Windows systems when using `bunx`
+
+### Node.js compatibility improvements
+
+- Fixed: Fuzzer-detected issues in `Buffer.prototype.hexSlice()` and `Buffer.prototype.toString('base64')` now throw proper errors instead of crashing when the output would exceed JavaScript's maximum string length
+- Fixed: Fuzzer-detected issues in `Buffer.prototype.*Write` methods (utf8Write, base64Write, etc.) now properly handle non-numeric offset and length arguments, matching Node.js behavior where NaN offsets are treated as 0 and lengths are clamped to available buffer space instead of throwing
+- Fixed: `assert.deepStrictEqual()` incorrectly treating `Number` and `Boolean` wrapper objects with different values as equal (e.g., `new Number(1)` and `new Number(2)` would not throw)
+- Fixed: `TLSSocket.isSessionReused()` incorrectly returning `true` when `setSession()` was called, even if the session wasn't actually reused by the SSL layer. Now correctly uses BoringSSL's `SSL_session_reused()` API for accurate session reuse detection, matching Node.js behavior
+- Fixed: `napi_typeof` incorrectly returning `napi_string` for boxed String objects (`new String("hello")`) instead of `napi_object`, now correctly matches JavaScript's `typeof` behavior for all boxed primitives (String, Number, Boolean)
+- Fixed: `Http2Server.setTimeout()` and `Http2SecureServer.setTimeout()` returning `undefined` instead of the server instance, breaking method chaining like `server.setTimeout(1000).listen()`
+- Fixed: crash when populating error stack traces during garbage collection (e.g., when using `node:readline` with certain packages or handling unhandled promise rejections)
+
+### Bun APIs fixes
+
+- Fixed: `Bun.secrets` crashing when called inside `AsyncLocalStorage.run()` or other async context managers
+- Fixed: Fuzzer-detected assertion failure in `Bun.mmap` when `offset` or `size` options were non-numeric values like `null` or functions. Now properly validates and rejects negative values with clear error messages
+- Fixed: `Bun.plugin` now properly returns an error instead of potentially crashing when an invalid `target` option is provided
+- Fixed: `new Bun.FFI.CString(ptr)` throwing "function is not a constructor" error, a regression introduced in v1.2.3
+- Fixed: Fuzzer-detected assertion failure caused by calling class constructors (like `Bun.RedisClient`) without `new`. These constructors now properly throw `TypeError: Class constructor X cannot be invoked without 'new'`
+- Fixed: Fuzzer-detected bug when creating empty or used ReadableStream that could cause errors to be silently ignored
+- Fixed: `Glob.scan()` escaping `cwd` boundary when using patterns like `.*/*` or `.*/**/*.ts`, which incorrectly traversed into parent directories instead of matching hidden files/directories
+- Fixed: Fuzzer-detected issue in `Bun.indexOfLine` when called with a non-number offset argument
+- Fixed: Fuzzer-detected issue in `FormData.from()` when called with very large ArrayBuffer input (>2GB) now throws a proper error
+
+### bun:ffi fixes
+
+- Fixed: `linkSymbols` crashing when `ptr` field was not a valid number or BigInt
+- Fixed: Incorrectly converting JavaScript numbers to FFI pointers, where identical JS number values could produce different pointer values (e.g., `123` becoming `18446744073709551615`), causing crashes when passing numeric arguments to native functions
+- Fixed: Crash when using libraries like `@datadog/pprof` that triggered an overflow in internal bindings
+
+### Security
+
+- Improved: Stricter validation of chunk terminators per RFC 9112
+
+### TypeScript definitions
+
+- Fixed: `Bun.serve()` now includes the `protocol` property, which was already available at runtime but missing from type definitions
+
+### Other fixes
+
+- Fixed: Off-by-one error in string length boundary check that would incorrectly reject strings with length exactly equal to the maximum allowed length
+
+### Thanks to 14 contributors!
+
+- [@alii](https://github.com/alii)
+- [@amdad121](https://github.com/amdad121)
+- [@dylan-conway](https://github.com/dylan-conway)
+- [@eroderust](https://github.com/eroderust)
+- [@jarred-sumner](https://github.com/jarred-sumner)
+- [@lydiahallie](https://github.com/lydiahallie)
+- [@markovejnovic](https://github.com/markovejnovic)
+- [@nektro](https://github.com/nektro)
+- [@pfgithub](https://github.com/pfgithub)
+- [@riskymh](https://github.com/riskymh)
+- [@robobun](https://github.com/robobun)
+- [@shendongming](https://github.com/shendongming)
+- [@tamicktom](https://github.com/tamicktom)
+- [@taylordotfish](https://github.com/taylordotfish)
