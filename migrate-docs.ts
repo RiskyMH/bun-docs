@@ -1352,10 +1352,10 @@ async function main() {
   const startTime = Date.now();
 
   // Read Bun version from .repos/bun/LATEST
-  let bunVersion = "";
+  let bunVersion = "1.3.3";
   try {
-    const latestPath = join(process.cwd(), ".repos", "bun", "LATEST");
-    bunVersion = (await readFile(latestPath, "utf-8")).trim();
+    // const latestPath = join(process.cwd(), ".repos", "bun", "LATEST");
+    // bunVersion = (await readFile(latestPath, "utf-8")).trim();
     console.log(`📦 Bun version: ${bunVersion}\n`);
   } catch (error) {
     console.warn("⚠️  Could not read Bun version from .repos/bun/LATEST, skipping version replacement\n");

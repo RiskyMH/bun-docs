@@ -12,7 +12,7 @@ index ffc4978d..5dc994c4 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index f2141237..5f384bd8 100644
+index d13f1fcc..64d607c1 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -5,18 +5,13 @@ description: "Generate standalone executables from TypeScript or JavaScript file
