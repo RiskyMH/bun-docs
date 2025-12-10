@@ -12,7 +12,7 @@ index ffc4978d..5dc994c4 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index d13f1fcc..64d607c1 100644
+index f5640527..6fc0fa32 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -5,18 +5,13 @@ description: "Generate standalone executables from TypeScript or JavaScript file
@@ -41,7 +41,7 @@ index d13f1fcc..64d607c1 100644
  
  This bundles `cli.ts` into an executable that can be executed directly:
  
-@@ -238,11 +233,11 @@ you shouldn't see this
+@@ -271,11 +266,11 @@ you shouldn't see this
  
  However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
  
@@ -57,7 +57,7 @@ index d13f1fcc..64d607c1 100644
  ```
  
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index 4ce16a71..c532e554 100644
+index c72fc14b..70a3e880 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
 @@ -123,7 +123,7 @@ Becomes something like this:
@@ -2743,19 +2743,10 @@ index 2cdbd4c3..79af8668 100644
  <html>
    <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index d3e17d23..ec46735d 100644
+index a81f3991..43b41baa 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
-@@ -404,7 +404,7 @@ The `Bun.serve` server can handle roughly 2.5x more requests per second than Nod
- 
- Here's a basic database-backed REST API using Bun's router with zero dependencies:
- 
--```ts tab="server.ts"
-+```ts title="tab="server.ts""
- import type { Post } from "./types.ts";
- import { Database } from "bun:sqlite";
- 
-@@ -473,7 +473,7 @@ export interface Post {
+@@ -475,7 +475,7 @@ export interface Post {
  
  ## Reference
  
