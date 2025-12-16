@@ -1,5 +1,5 @@
 diff --git b/content/docs/bundler/esbuild.mdx a/content/docs/bundler/esbuild.mdx
-index ffc4978d..5dc994c4 100644
+index a9d30c4f..223eb3f9 100644
 --- b/content/docs/bundler/esbuild.mdx
 +++ a/content/docs/bundler/esbuild.mdx
 @@ -30,7 +30,7 @@ Bun and esbuild both provide a command-line interface.
@@ -12,36 +12,10 @@ index ffc4978d..5dc994c4 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index f5640527..6fc0fa32 100644
+index b787dc1c..3e90be81 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
-@@ -5,18 +5,13 @@ description: "Generate standalone executables from TypeScript or JavaScript file
- 
- Bun's bundler implements a `--compile` flag for generating a standalone binary from a TypeScript or JavaScript file.
- 
--<Tabs items={['JavaScript', 'CLI']} groupId="js/cli">
--  <Tab value="CLI">
--    ```bash title="terminal"
--    $ bun build ./cli.ts --compile --outfile mycli
--   ```
--  </Tab>
--  <Tab value="JavaScript">
--    ```ts title="cli.ts"
--    console.log("Hello world!");
--   ```
--  </Tab>
--</Tabs>
-+```bash tab="terminal"
-+$ bun build ./cli.ts --compile --outfile mycli
-+```
-+
-+```ts tab="cli.ts"
-+console.log("Hello world!");
-+```
- 
- This bundles `cli.ts` into an executable that can be executed directly:
- 
-@@ -271,11 +266,11 @@ you shouldn't see this
+@@ -458,11 +458,11 @@ you shouldn't see this
  
  However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
  
@@ -279,7 +253,7 @@ index 17bff26f..2d71e763 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index 3d2b77e8..18b4581d 100644
+index 488df693..bd62095a 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -535,7 +509,7 @@ index 3d2b77e8..18b4581d 100644
  console.log(logo);
  ```
  
-@@ -1185,44 +1220,39 @@ return new Response(artifact);
+@@ -1263,44 +1298,39 @@ return new Response(artifact);
  
  The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
  
@@ -2604,7 +2578,7 @@ index a8a44f5b..1e98b2d9 100644
  ```
  
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 508dca65..5802bbde 100644
+index 93f16aba..144a7c3e 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
 @@ -100,7 +100,7 @@ You can read results from the subprocess via the `stdout` and `stderr` propertie
