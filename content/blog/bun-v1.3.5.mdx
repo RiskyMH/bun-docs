@@ -1,0 +1,315 @@
+---
+title: Bun v1.3.5
+description: "Fixes 32 issues (addressing 25 👍). Bun.Terminal API, compile-time feature flags, improved Bun.stringWidth accuracy, V8 C++ value type checking APIs, Content-Disposition support for S3 uploads, environment variable expansion in .npmrc quoted values, and numerous bug fixes & node.js compatibility improvements"
+date: 2025-12-17T10:11:00.000Z
+authors: jarred
+category: Changelog
+---
+
+<include>../_snippets/blog/install-bun.mdx</include>
+
+## `Bun.Terminal` API for pseudo-terminal (PTY) support
+
+Bun now has a built-in API for creating and managing pseudo-terminals, enabling interactive terminal applications like shells, `vim`, `htop`, and any program that expects to run in a real TTY.
+
+Use the new `terminal` option in `Bun.spawn()` to attach a PTY to your subprocess:
+
+```ts
+const commands = ["echo Hello from PTY!", "exit"];
+const proc = Bun.spawn(["bash"], {
+  terminal: {
+    cols: 80,
+    rows: 24,
+    data(terminal, data) {
+      process.stdout.write(data);
+
+      if (data.includes("$")) {
+        terminal.write(commands.shift() + "\n");
+      }
+    },
+  },
+});
+
+await proc.exited;
+proc.terminal.close();
+```
+
+With a PTY attached, the subprocess sees `process.stdout.isTTY` as `true`, enabling colored output, cursor movement, and interactive prompts that normally require a real terminal.
+
+### Running interactive programs
+
+```ts
+const proc = Bun.spawn(["vim", "file.txt"], {
+  terminal: {
+    cols: process.stdout.columns,
+    rows: process.stdout.rows,
+    data(term, data) {
+      process.stdout.write(data);
+    },
+  },
+});
+
+proc.exited.then((code) => process.exit(code));
+
+// Handle terminal resize
+process.stdout.on("resize", () => {
+  proc.terminal.resize(process.stdout.columns, process.stdout.rows);
+});
+
+// Forward input
+process.stdin.setRawMode(true);
+for await (const chunk of process.stdin) {
+  proc.terminal.write(chunk);
+}
+```
+
+### Reusable terminals
+
+Create a standalone terminal with `new Bun.Terminal()` to reuse across multiple subprocesses:
+
+```ts
+await using terminal = new Bun.Terminal({
+  cols: 80,
+  rows: 24,
+  data(term, data) {
+    process.stdout.write(data);
+  },
+});
+
+const proc1 = Bun.spawn(["echo", "first"], { terminal });
+await proc1.exited;
+
+const proc2 = Bun.spawn(["echo", "second"], { terminal });
+await proc2.exited;
+// Terminal is closed automatically by `await using`
+```
+
+The `Terminal` object provides full PTY control with `write()`, `resize()`, `setRawMode()`, `ref()`/`unref()`, and `close()` methods.
+
+**Note:** Terminal support is only available on POSIX systems (Linux, macOS). If you're interested in using this API on Windows, please file an issue and we will implement it.
+
+## Compile-time Feature Flags for Dead-Code Elimination
+
+Bun's bundler now supports compile-time feature flags via `import { feature } from "bun:bundle"`. This enables statically-analyzable dead-code elimination—code paths can be completely removed from your bundle based on which flags are enabled at build time.
+
+```ts
+import { feature } from "bun:bundle";
+
+if (feature("PREMIUM")) {
+  // Only included when PREMIUM flag is enabled
+  initPremiumFeatures();
+}
+
+if (feature("DEBUG")) {
+  // Eliminated entirely when DEBUG flag is disabled
+  console.log("Debug mode");
+}
+```
+
+The `feature()` function is replaced with `true` or `false` at bundle time. Combined with minification, unreachable branches are eliminated completely:
+
+```ts
+// Input
+import { feature } from "bun:bundle";
+const mode = feature("PREMIUM") ? "premium" : "free";
+
+// Output (with --feature PREMIUM --minify)
+var mode = "premium";
+```
+
+### CLI
+
+```bash
+# Enable feature during build
+bun build --feature=PREMIUM ./app.ts --outdir ./out
+
+# Enable at runtime
+bun run --feature=DEBUG ./app.ts
+
+# Enable in tests
+bun test --feature=MOCK_API
+
+# Multiple flags
+bun build --feature=PREMIUM --feature=DEBUG ./app.ts
+```
+
+### JavaScript API
+
+```ts
+await Bun.build({
+  entrypoints: ["./app.ts"],
+  outdir: "./out",
+  features: ["PREMIUM", "DEBUG"],
+});
+```
+
+### Type Safety
+
+For autocomplete and compile-time validation, augment the `Registry` interface:
+
+```ts
+// env.d.ts
+declare module "bun:bundle" {
+  interface Registry {
+    features: "DEBUG" | "PREMIUM" | "BETA_FEATURES";
+  }
+}
+```
+
+Now `feature("TYPO")` becomes a type error.
+
+**Use cases include:** platform-specific builds, environment-based features, A/B testing variants, and paid tier features.
+
+## Improved `Bun.stringWidth` Accuracy
+
+`Bun.stringWidth` now correctly calculates terminal display width for a much wider range of Unicode characters, ANSI escape sequences, and emoji.
+
+### Zero-width Character Support
+
+Previously unhandled invisible characters are now correctly measured as zero-width:
+
+- Soft hyphen (U+00AD)
+- Word joiner and invisible operators (U+2060-U+2064)
+- Arabic formatting characters
+- Indic script combining marks (Devanagari through Malayalam)
+- Thai and Lao combining marks
+- Tag characters and more
+
+### ANSI Escape Sequence Handling
+
+- **CSI sequences**: Now properly handles all CSI final bytes (0x40-0x7E), not just `m`. Cursor movement, erase, scroll, and other control sequences are correctly excluded from width calculation.
+- **OSC sequences**: Added support for OSC sequences including OSC 8 hyperlinks, with both BEL and ST terminators.
+- **Fixed**: `ESC ESC` state machine bug that incorrectly reset state.
+
+### Grapheme-aware Emoji Width
+
+Emoji are now measured correctly as single graphemes:
+
+```js
+Bun.stringWidth("🇺🇸"); // Now: 2 (was: 1) - flag emoji
+Bun.stringWidth("👋🏽"); // Now: 2 (was: 4) - emoji + skin tone
+Bun.stringWidth("👨‍👩‍👧"); // Now: 2 (was: 8) - ZWJ family sequence
+Bun.stringWidth("\u2060"); // Now: 0 (was: 1) - word joiner
+```
+
+Properly handles flag emoji, skin tone modifiers, ZWJ sequences (family, professions), keycap sequences, and variation selectors.
+
+## V8 Value Type Checking APIs
+
+Bun now implements additional V8 C++ API methods for type checking that are commonly used by native Node.js modules:
+
+- `v8::Value::IsMap()` - checks if a value is a Map
+- `v8::Value::IsArray()` - checks if a value is an Array
+- `v8::Value::IsInt32()` - checks if a value is a 32-bit integer
+- `v8::Value::IsBigInt()` - checks if a value is a BigInt
+
+This improves compatibility with native addons that rely on these type checking APIs.
+
+## `Content-Disposition` support for S3 uploads
+
+Bun's built-in S3 client now supports the `contentDisposition` option, allowing you to control how browsers handle downloaded files. This is useful for setting filenames or specifying whether files should be displayed inline or downloaded as attachments.
+
+```js
+import { s3 } from "bun";
+
+// Force download with a specific filename
+const file = s3.file("report.pdf", {
+  contentDisposition: 'attachment; filename="quarterly-report.pdf"',
+});
+
+// Or set it when writing
+await s3.write("image.png", imageData, {
+  contentDisposition: "inline",
+});
+```
+
+The option works across all S3 upload methods—simple uploads, multipart uploads, and streaming uploads.
+
+Thanks to @AltanM for the contribution!
+
+## Environment Variable Expansion in `.npmrc` Quoted Values
+
+Fixed environment variable expansion in quoted `.npmrc` values and added support for the `?` optional modifier, matching npm's behavior.
+
+Previously, environment variables inside quoted strings weren't being expanded. Now all three syntaxes work consistently:
+
+```ini
+# All expand to the value when NPM_TOKEN is set
+token = ${NPM_TOKEN}
+token = "${NPM_TOKEN}"
+token = '${NPM_TOKEN}'
+```
+
+The `?` modifier allows graceful handling of undefined environment variables:
+
+```ini
+# Without ? - undefined vars are left as-is
+token = ${NPM_TOKEN}         # → ${NPM_TOKEN}
+
+# With ? - undefined vars expand to empty string
+token = ${NPM_TOKEN?}        # → (empty)
+auth = "Bearer ${TOKEN?}"    # → Bearer
+```
+
+## Bug Fixes
+
+### Networking
+
+- Fixed: macOS kqueue event loop bug that could cause 100% CPU usage with writable sockets when no actual I/O was pending. This was caused by a filter comparison in the kqueue event handling that used bitwise AND (`&`) instead of equality (`==`). Combined with missing `EV_ONESHOT` flags on writable events, this caused the event loop to spin continuously even when no I/O was pending in certain cases.
+- Fixed: incorrect behavior in certain cases when automatically re-subscribing to writable sockets after a write failure
+- Fixed: `fetch()` throwing an error when a proxy object without a `url` property was passed, restoring compatibility with libraries like `taze` that pass `URL` objects as proxy values
+- Fixed: HTTP proxy authentication failing silently with 401 Unauthorized when passwords exceed 4096 characters (e.g., JWT tokens used as proxy credentials)
+- Fixed: potential crash when upgrading an existing TCP socket to TLS
+
+### Windows fixes
+
+- Fixed: WebSocket crash on Windows when publishing large messages with `perMessageDeflate: true` due to a zlib version mismatch between headers and linked library
+- Fixed: A panic in error handling on Windows when `.bunx` metadata files were corrupted, now gracefully falls back to the slow path instead of panicking
+- Fixed: `bunx` panicking on Windows when passing empty string arguments in certain cases and incorrectly splitting quoted arguments containing spaces
+
+### Node.js compatibility
+
+- Fixed: `url.domainToASCII()` and `url.domainToUnicode()` throwing `TypeError` instead of returning an empty string for invalid domains, matching Node.js behavior
+- Fixed: Native modules failing with `symbol 'napi_register_module_v1' not found` when loaded multiple times, such as during hot module reloading or when the same native addon is required in both the main thread and a worker.
+- Fixed: node:http server's `request.socket._secureEstablished` returning incorrect values on HTTPS servers under concurrent connections in certain cases
+
+### TypeScript definitions
+
+- Fixed: TypeScript type errors when using `expect().not.toContainKey()` and related matchers where the argument was incorrectly inferred as `never`, preventing any value from being passed. The matchers now properly fall back to `PropertyKey` when type inference fails.
+- Fixed: Compatibility with `@types/node@25` in `@types/bun`.
+- Fixed: TypeScript type compatibility with `@types/node@25.0.2` where `process.noDeprecation` property type definition changed
+
+### Web APIs
+
+- Fixed: `Response.clone()` and `Request.clone()` incorrectly locking the original body when `response.body` or `request.body` was accessed before calling `clone()`.
+
+### Bundler
+
+- Fixed: transpiler incorrectly simplifying object spread expressions with nullish coalescing to empty objects (e.g., `{...k, a: k?.x ?? {}}`) which produced invalid JavaScript output and caused "Expected CommonJS module to have a function wrapper" errors when running Webpack-generated bundles.
+
+### YAML
+
+- Fixed: `YAML.stringify` not quoting strings ending with colons (e.g., `"tin:"`), which caused `YAML.parse` to fail with "Unexpected token" when parsing the output back
+- Fixed YAML 1.2 spec compliance issue treating `yes`, `Yes`, `YES`, `no`, `No`, `NO`, `on`, `On`, `ON`, `off`, `Off`, `OFF`, `y`, `Y` as boolean values instead of string values. These are booleans in YAML 1.1 and not in YAML 1.2.
+
+### Security
+
+- Fixed: Security issue where default trusted dependencies list could be spoofed by non-npm packages using matching names through `file:`, `link:`, `git:`, or `github:` dependencies. These sources now require explicit `trustedDependencies` configuration to run lifecycle scripts. Thanks to @orenyomtov for the report!
+- Fixed: Internal JSC `Loader` property leaking into `node:vm` contexts when it should not be visible in sandboxed environments. Thanks to @ChipMonto for the report!
+
+### Linux fixes
+
+- Fixed: `Bun.write` and `fs.copyFile` failing on eCryptfs and other encrypted filesystems on Linux
+
+### Thanks to 10 contributors!
+
+- [@alii](https://github.com/alii)
+- [@cirospaciari](https://github.com/cirospaciari)
+- [@crishoj](https://github.com/crishoj)
+- [@dylan-conway](https://github.com/dylan-conway)
+- [@elfayer](https://github.com/elfayer)
+- [@hamidrezahanafi](https://github.com/hamidrezahanafi)
+- [@jarred-sumner](https://github.com/jarred-sumner)
+- [@kylekz](https://github.com/kylekz)
+- [@robobun](https://github.com/robobun)
+- [@ryangst](https://github.com/ryangst)
