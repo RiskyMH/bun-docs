@@ -12,8 +12,8 @@ const config = {
     unoptimized: true,
   },
   experimental: {
-    turbopackFileSystemCacheForBuild: true,
-    turbopackFileSystemCacheForDev: true,
+    // turbopackFileSystemCacheForBuild: true,
+    // turbopackFileSystemCacheForDev: true,
     // inlineCss: true,
     turbopackImportTypeBytes: true,
   },
