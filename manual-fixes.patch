@@ -2801,7 +2801,7 @@ index 743ad9bc..341c8d1e 100644
  
  **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index 3a5227c2..309bc898 100644
+index 434220fc..316dabd3 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -2865,7 +2865,7 @@ index 3a5227c2..309bc898 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `undefined` is returned.
-@@ -310,13 +295,10 @@ Use `.run()` to run a query and get back `undefined`. This is useful for schema-
+@@ -310,13 +295,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
  ```ts title="db.ts"
  const query = db.query(`create table foo;`);
  query.run(); // [!code highlight]
