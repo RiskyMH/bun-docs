@@ -2382,7 +2382,7 @@ index 4509e5b9..5e448032 100644
  
  Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index 8b53ec5d..9d72fcca 100644
+index 7e11f8df..822c0702 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
 @@ -12,7 +12,7 @@ If you are using Windows, please refer to [this guide](/docs/project/building-wi
@@ -2394,27 +2394,7 @@ index 8b53ec5d..9d72fcca 100644
  # or explicitly use the pure shell
  # nix develop .#pure
  $ export CMAKE_SYSTEM_PROCESSOR=$(uname -m)
-@@ -82,8 +82,8 @@ Core developers have write access to the shared S3 cache. To enable write access
- 
- The `cmake` scripts should automatically detect your AWS credentials from the environment or the `~/.aws/credentials` file.
- 
--`<details>`
--    `<summary>`Logging in to the `aws` CLI`</summary>`
-+<details>
-+    <summary>Logging in to the `aws` CLI</summary>
- 
-     1. Install the AWS CLI by following [the official guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-     2. Log in to your AWS account console. A team member should provide you with your credentials.
-@@ -100,7 +100,7 @@ The `cmake` scripts should automatically detect your AWS credentials from the en
-     - If you have multiple AWS profiles configured, ensure that the correct profile is set in the `AWS_PROFILE` environment variable.
-     - `sccache` follows a server-client model. If you run into weird issues where `sccache` refuses to use S3, even though you have AWS credentials configured, try killing any running `sccache` servers with `sccache --stop-server` and then re-running the build.
- 
--`</details>`
-+</details>
- 
- ## Install LLVM
- 
-@@ -111,7 +111,7 @@ $ brew install llvm@19
+@@ -94,7 +94,7 @@ $ brew install llvm@19
  ```
  
  ```bash tab="Ubuntu/Debian"
