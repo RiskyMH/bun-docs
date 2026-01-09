@@ -253,7 +253,7 @@ index 17bff26f..2d71e763 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index 488df693..bd62095a 100644
+index 65278237..9a9943cd 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -339,7 +339,7 @@ index 488df693..bd62095a 100644
  ### Assets
  
  If the bundler encounters an import with an unrecognized extension, it treats the imported file as an external file. The referenced file is copied as-is into `outdir`, and the import is resolved as a path to the file.
-@@ -276,28 +309,30 @@ The intended execution environment for the bundle.
+@@ -348,28 +381,30 @@ The intended execution environment for the bundle.
  
  Depending on the target, Bun will apply different module resolution rules and optimizations.
  
@@ -348,6 +348,9 @@ index 488df693..bd62095a 100644
 -  condition when resolving imports. Importing any built-in modules, like `node:events` or `node:path` will work, but
 -  calling some functions, like `fs.readFile` will not work.
 -</Card>
+-
+-<Card title="bun" icon="server">
+-For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
 +<Cards className="grid-cols-1">
 +  <Card title="Browser (default)">
 +    For generating bundles that are intended for execution by a browser. Prioritizes the
@@ -356,23 +359,20 @@ index 488df693..bd62095a 100644
 +    work.
 +  </Card>
  
--<Card title="bun" icon="server">
--For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
+-All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
 +  <Card title="Bun">
 +    For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
  
--All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
+-If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
 +    All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
  
--If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
+-When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
 +    If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
  
--When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
+-</Card>
 +    When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
 +  </Card>
  
--</Card>
--
 -<Card title="node" icon="node">
 -  For generating bundles that are intended to be run by Node.js. Prioritizes the `"node"` export condition when
 -  resolving imports, and outputs `.mjs`. In the future, this will automatically polyfill the Bun global and other
@@ -387,7 +387,7 @@ index 488df693..bd62095a 100644
  
  ### format
  
-@@ -363,21 +398,21 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+@@ -435,21 +470,21 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
    <Tab value="JavaScript">
      ```ts title="index.ts"
      await Bun.build({
@@ -416,7 +416,7 @@ index 488df693..bd62095a 100644
    </Tab>
  </Tabs>
  
-@@ -387,20 +422,20 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+@@ -459,20 +494,20 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
    <Tab value="JavaScript">
      ```ts title="index.ts"
      await Bun.build({
@@ -445,7 +445,7 @@ index 488df693..bd62095a 100644
    </Tab>
  </Tabs>
  
-@@ -454,7 +489,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
+@@ -526,7 +561,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./entry-a.ts ./entry-b.ts --outdir ./out --splitting
@@ -454,7 +454,7 @@ index 488df693..bd62095a 100644
    </Tab>
  </Tabs>
  
-@@ -510,7 +545,7 @@ Injects environment variables into the bundled output by converting `process.env
+@@ -582,7 +617,7 @@ Injects environment variables into the bundled output by converting `process.env
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out --env inline
@@ -463,7 +463,7 @@ index 488df693..bd62095a 100644
    </Tab>
  </Tabs>
  
-@@ -540,7 +575,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+@@ -612,7 +647,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
      await Bun.build({
        entrypoints: ['./index.tsx'],
        outdir: './out',
@@ -472,7 +472,7 @@ index 488df693..bd62095a 100644
        // Inline all env vars that start with "ACME_PUBLIC_"
        env: "ACME_PUBLIC_*",
      })
-@@ -556,7 +591,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+@@ -628,7 +663,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
  For example, given the following environment variables:
  
  ```bash title="terminal"
@@ -481,7 +481,7 @@ index 488df693..bd62095a 100644
  ```
  
  And source code:
-@@ -867,9 +902,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
+@@ -939,9 +974,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out \
@@ -494,7 +494,7 @@ index 488df693..bd62095a 100644
     ```
    </Tab>
  </Tabs>
-@@ -981,12 +1016,12 @@ In many cases, generated bundles will contain no import statements. After all, t
+@@ -1053,12 +1088,12 @@ In many cases, generated bundles will contain no import statements. After all, t
  In any of these cases, the final bundles may contain paths to other files. By default these imports are relative. Here is an example of a simple asset import:
  
  ```ts tab="Input"
@@ -509,7 +509,7 @@ index 488df693..bd62095a 100644
  console.log(logo);
  ```
  
-@@ -1263,44 +1298,39 @@ return new Response(artifact);
+@@ -1409,44 +1444,39 @@ return new Response(artifact);
  
  The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
  
@@ -3594,7 +3594,7 @@ index 95481525..5429f19f 100644
  Nuxt 3.6.5 with Nitro 2.5.2
    > Local:    http://localhost:3000/
 diff --git b/content/guides/ecosystem/pm2.mdx a/content/guides/ecosystem/pm2.mdx
-index b12fd035..bd94fd3d 100644
+index df71e875..fb73b918 100644
 --- b/content/guides/ecosystem/pm2.mdx
 +++ a/content/guides/ecosystem/pm2.mdx
 @@ -22,7 +22,7 @@ You can use PM2 with Bun in two ways: as a CLI option or in a configuration file
