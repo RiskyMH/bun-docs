@@ -41,6 +41,7 @@
     "file-io",
     "streams",
     "binary-data",
+    "archive",
     "sql",
     "sqlite",
     "s3",

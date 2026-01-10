@@ -2772,7 +2772,7 @@ index 4248e089..71c7c3ef 100644
  
  <Accordions type="single">
 diff --git b/content/docs/runtime/ffi.mdx a/content/docs/runtime/ffi.mdx
-index 415c28ec..b7ce8e3b 100644
+index 6967cd7c..9d5c0613 100644
 --- b/content/docs/runtime/ffi.mdx
 +++ a/content/docs/runtime/ffi.mdx
 @@ -66,7 +66,7 @@ pub export fn add(a: i32, b: i32) i32 {
