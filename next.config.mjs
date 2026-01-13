@@ -18,26 +18,27 @@ const config = {
     turbopackImportTypeBytes: true,
   },
   reactCompiler: true,
-  assetPrefix: "/docs",
+  assetPrefix: process.env.STATIC_EXPORT ? undefined : "/docs",
+  output: process.env.STATIC_EXPORT ? "export" : undefined,
   // output: "export",
   transpilePackages: ['react-tweet'],
   rewrites: async () => {
     return [
       {
         source: '/docs/:path*.md',
-        destination: '/docs-md/:path*',
+        destination: '/docs-md/:path*.md',
       },
       {
         source: '/guides/:path*.md',
-        destination: '/docs-md/guides/:path*',
+        destination: '/docs-md/guides/:path*.md',
       },
       // {
       //   source: '/guides/:path*',
-      //   destination: '/docs/guides/:path*',
+      //   destination: '/docs/guides/:path*.md',
       // },
       {
         source: '/blog/:path*.md',
-        destination: '/blog-md/:path*',
+        destination: '/blog-md/:path*.md',
       },
       {
         source: '/feedback',

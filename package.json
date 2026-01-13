@@ -10,7 +10,8 @@
     "pull-docs": "bun scripts/pull-docs.ts --download-only",
     "sync-docs": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git apply manual-fixes.patch --reject",
     "sync-docs:save": "bun scripts/pull-docs.ts && bun migrate-docs.ts && git diff -R content/ > manual-fixes.patch && git restore content/",
-    "check-links": "bun scripts/check-links.ts"
+    "check-links": "bun scripts/check-links.ts",
+    "build:static": "bun scripts/cf-pages-build.ts"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^1.0.30",
