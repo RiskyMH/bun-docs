@@ -5,7 +5,11 @@
 </div>
 <h1 align="center">Bun Documentation</h1>
 
-Official documentation for Bun: the fast, all-in-one JavaScript runtime.
+Alternative documentation for Bun: the fast, all-in-one JavaScript runtime.
+
+Official is https://bun.com/docs (mintlify)
+
+This is https://bun-docs.vercel.app (fumadocs)
 
 ## Development
 
@@ -17,25 +21,14 @@ Open http://localhost:3000 with your browser to see the result.
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## Learn More
-
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
-
+For most documentation changes, **contribute upstream** at [Bun Docs](https://github.com/oven-sh/bun/tree/main/docs).
+- If your change applies **generally to the docs (not specific to this fork)**, submit it upstream.
+- If your change is **specific to this fork** (e.g. migration fixes, custom features, metadata edge cases), update `manual-fixes.patch` so your fix persists after future syncs:
+  - After making your changes locally and running the migration, re-generate the patch: `git add . && bun sync-docs:save`
+  - This ensures any non-standard or custom doc changes survive future doc syncs.
 
 ## Extra info
 
-**Docs copied from:** https://github.com/oven-sh/docs/tree/283f35d
-
-check https://github.com/oven-sh/docs/compare/283f35d...main for any new changes.
-
 TODO:
-* full metadata of what og had
+* full metadata of what og (both custom docs & mintlify one) had
 * if subdir and no page that level, redirect to first child page (ie /guides/ecosystem -> /guides/ecosystem/astro)
