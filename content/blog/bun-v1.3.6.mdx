@@ -1,0 +1,592 @@
+---
+title: Bun v1.3.6
+description: "Fixes 45 issues (addressing 125 👍). Bun.Archive API for creating & extracting tarballs with gzip compression, Bun.JSONC for parsing JSON with comments, metafile & files options in Bun.build for bundle analysis and virtual files, Response.json() 3.5x faster, 15% faster async/await, 30% faster Promise.race, 20x faster Bun.hash.crc32, faster Buffer.indexOf/includes with SIMD, HTTP/HTTPS proxy support for WebSocket, S3 Requester Pays support, --grep flag for bun test, fake timers now work with @testing-library/react, SQLite updated to 3.51.2, and numerous Node.js compatibility improvements."
+date: 2026-01-13T01:12:07.484Z
+authors: jarred
+category: Changelog
+---
+
+<include>../_snippets/blog/install-bun.mdx</include>
+
+## `Bun.Archive` API creates & extracts tarballs
+
+Bun now includes a built-in `Bun.Archive` API for creating and extracting tar archives with optional gzip compression. This provides a fast, zero-dependency way to work with tarballs directly in JavaScript.
+
+```js
+// Create an archive from files
+const archive = new Bun.Archive({
+  "hello.txt": "Hello, World!",
+  "data.json": JSON.stringify({ foo: "bar" }),
+  "binary.bin": new Uint8Array([1, 2, 3, 4]),
+});
+
+// Or get as Blob/Uint8Array
+const blob = await archive.blob();
+const bytes = await archive.bytes();
+
+// Or read files:
+const files = await archive.files();
+const text = await archive.files("*.{txt,json}");
+
+// Extract an existing tarball
+const tarball = new Bun.Archive(await Bun.file("package.tar.gz").bytes());
+const fileCount = await tarball.extract("./output-dir");
+console.log(`Extracted ${fileCount} files`);
+
+// Enable gzip compression (.tar.gz)
+const compressed = new Bun.Archive(files, { compress: "gzip" });
+
+// Gzip with custom compression level (1-12)
+const maxCompression = new Bun.Archive(files, { compress: "gzip", level: 12 });
+```
+
+You can write archives to local files:
+
+```js
+// Write to local file
+await Bun.write("archive.tar", archive);
+await Bun.write("archive.tar.gz", compressed);
+```
+
+Or even to S3:
+
+```ts
+// Write to S3
+await Bun.write("s3://bucket/archive.tar.gz", compressed);
+await s3Client.write("archive.tar.gz", compressed);
+```
+
+The API supports creating archives from objects, `Blob`, `TypedArray`, or `ArrayBuffer` inputs. Async operations run on Bun's worker pool threads for non-blocking I/O.
+
+[Read more about Bun.Archive in Bun's docs](https://bun.com/docs/runtime/archive)
+
+## `Bun.JSONC` API for parsing JSON with comments
+
+Bun now provides a native `Bun.JSONC.parse()` API for parsing JSONC (JSON with Comments) — the format used by `tsconfig.json`, VS Code settings, and many other configuration files.
+
+This allows you to parse JSON that includes:
+
+- Single-line comments (`//`)
+- Block comments (`/* */`)
+- Trailing commas in objects and arrays
+
+```js
+const config = Bun.JSONC.parse(`{
+  // Database configuration
+  "host": "localhost",
+  "port": 5432,
+  "options": {
+    "ssl": true, // trailing comma allowed
+  },
+}`);
+
+console.log(config.host); // "localhost"
+```
+
+This is useful when reading `tsconfig.json` files, VS Code configuration, or any JSON files that use the relaxed JSONC format — without needing a third-party library.
+
+
+
+## `metafile` in Bun.build
+
+`Bun.build()` now supports the `metafile` option, matching esbuild's format for seamless compatibility with existing bundle analysis tools.
+
+When enabled, the build result includes detailed metadata about all input files, output chunks, their sizes, imports, and exports—perfect for bundle size tracking, dependency visualization, and CI integration.
+
+```js
+const result = await Bun.build({
+  entrypoints: ["./src/index.ts"],
+  outdir: "./dist",
+  metafile: true,
+});
+
+// Analyze bundle sizes
+for (const [path, meta] of Object.entries(result.metafile.inputs)) {
+  console.log(`${path}: ${meta.bytes} bytes`);
+}
+
+for (const [path, meta] of Object.entries(result.metafile.outputs)) {
+  console.log(`${path}: ${meta.bytes} bytes`);
+}
+
+// Save for external tools like esbuild's bundle analyzer
+await Bun.write("./dist/meta.json", JSON.stringify(result.metafile));
+```
+
+From the CLI:
+
+```bash
+bun build ./src/index.ts --outdir ./dist --metafile ./dist/meta.json
+```
+
+The metafile structure includes:
+
+- **`inputs`**: Map of source files with byte sizes, imports (with kind, path, and whether external), and module format
+- **`outputs`**: Map of output chunks with byte sizes, contributing inputs, imports, exports, entry points, and associated CSS bundles
+
+
+[Learn more in Bun's docs](https://bun.com/docs/bundler#metafile)
+
+## `files` in Bun.build
+
+`Bun.build` now supports a `files` option that lets you bundle virtual files that don't exist on disk, or override the contents of files that do exist.
+
+```ts
+const result = await Bun.build({
+  entrypoints: ["/app/index.ts"],
+  files: {
+    "/app/index.ts": `
+      import { greet } from "./greet.ts";
+      console.log(greet("World"));
+    `,
+    "/app/greet.ts": `
+      export function greet(name: string) {
+        return "Hello, " + name + "!";
+      }
+    `,
+  },
+});
+```
+
+In-memory files take priority over files on disk, so you can override specific files while keeping the rest of your codebase unchanged:
+
+```ts
+await Bun.build({
+  entrypoints: ["./src/index.ts"],
+  files: {
+    // Override config.ts with production values
+    "./src/config.ts": `
+      export const API_URL = "https://api.production.com";
+      export const DEBUG = false;
+    `,
+  },
+  outdir: "./dist",
+});
+```
+
+Real files on disk can import virtual files, and virtual files can import real files—useful for code generation, injecting build-time constants, or testing with mock modules:
+
+```ts
+// ./src/index.ts exists on disk and imports "./generated.ts"
+await Bun.build({
+  entrypoints: ["./src/index.ts"],
+  files: {
+    "./src/generated.ts": `
+      export const BUILD_ID = "${crypto.randomUUID()}";
+      export const BUILD_TIME = ${Date.now()};
+    `,
+  },
+  outdir: "./dist",
+});
+```
+
+File contents can be provided as `string`, `Blob`, `TypedArray`, or `ArrayBuffer`.
+
+[Learn more in Bun's docs](https://bun.com/docs/bundler#files)
+
+
+
+### `--compile-executable-path` CLI flag
+
+When cross-compiling single-file executables with `bun build --compile`, Bun normally downloads the target platform's Bun executable from npm. The new `--compile-executable-path` flag lets you specify a local Bun executable instead.
+
+This is useful for air-gapped environments, custom Bun builds, or when you want to avoid network requests during compilation.
+
+```bash
+bun build --compile --target=bun-linux-x64 \
+  --compile-executable-path=/path/to/bun-linux-x64 app.ts
+```
+
+This exposes the `executablePath` option that was already available in the JavaScript API:
+
+```js
+await Bun.build({
+  entrypoints: ["./app.ts"],
+  compile: true,
+  target: "bun-linux-x64",
+  executablePath: "/path/to/bun-linux-x64",
+});
+```
+
+
+
+### `reactFastRefresh` option in `Bun.build`
+
+The `Bun.build` API now supports the `reactFastRefresh` option, matching the existing `--react-fast-refresh` CLI flag.
+
+```ts
+const result = await Bun.build({
+  reactFastRefresh: true,
+  entrypoints: ["src/App.tsx"],
+  target: "browser",
+});
+```
+
+When enabled, the bundler injects React Fast Refresh transform code (`$RefreshReg$`, `$RefreshSig$`) into the output. This enables hot module replacement for React components without needing a separate plugin.
+
+
+
+## `Response.json(object)` is now 3.5x faster
+
+`Response.json()` was significantly slower than manually calling `JSON.stringify()` + `new Response()`. This has been fixed by triggering JavaScriptCore's SIMD-optimized FastStringifier code path.
+
+```js
+const obj = {
+  items: Array.from({ length: 100 }, (_, i) => ({ id: i, value: `item-${i}` })),
+};
+
+// Now both approaches have equivalent performance
+Response.json(obj);
+new Response(JSON.stringify(obj));
+```
+
+**Before:**
+
+```
+Response.json():                2415ms
+JSON.stringify() + Response():  689ms
+Ratio:                          3.50x slower
+```
+
+**After:**
+
+```
+Response.json():                ~700ms
+JSON.stringify() + Response():  ~700ms
+Ratio:                          ~1.0x (parity)
+```
+
+
+
+## 15% faster async/await
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun &amp; Safari<br /><br />async/await gets 15% faster, thanks to <a href="https://twitter.com/Constellation?ref_src=twsrc%5Etfw">@Constellation</a> <a href="https://t.co/5htdmB0NqB">pic.twitter.com/5htdmB0NqB</a></p>&mdash; Bun (@bunjavascript) <a href="https://twitter.com/bunjavascript/status/2003718175272370610?ref_src=twsrc%5Etfw">December 24, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+## 30% faster Promise.race
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun &amp; Safari<br /><br />Promise.race() gets 30% faster thanks to <a href="https://twitter.com/__sosukesuzuki?ref_src=twsrc%5Etfw">@__sosukesuzuki</a> <a href="https://t.co/LWGQiF3UOR">pic.twitter.com/LWGQiF3UOR</a></p>&mdash; Bun (@bunjavascript) <a href="https://twitter.com/bunjavascript/status/2003721609337872796?ref_src=twsrc%5Etfw">December 24, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+## Faster `Buffer.indexOf`
+
+`Buffer.indexOf` and `Buffer.includes` now use SIMD-optimized search functions, providing significant speedups when searching for patterns in large buffers.
+
+In a simple benchmark, this makes it up to 2x faster:
+
+```sh
+❯ bun bench/snippets/buffer-includes.js
+Run 99,999 times with a warmup:
+
+[21.90ms] 44,500 bytes .includes true
+[1.42s] 44,500 bytes .includes false
+
+❯ bun-1.3.5 bench/snippets/buffer-includes.js
+Run 99,999 times with a warmup:
+
+[25.52ms] 44,500 bytes .includes true
+[3.25s] 44,500 bytes .includes false
+```
+
+```js
+const buffer = Buffer.from("a".repeat(1_000_000) + "needle");
+
+// Both methods are now faster with SIMD acceleration
+buffer.indexOf("needle"); // single and multi-byte patterns
+buffer.includes("needle");
+```
+
+
+
+## Faster embedded `.node` files on Linux
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun<br /><br />Single-file executables load large embedded .node napi addons slightly faster on Linux <a href="https://t.co/RgQVj4bzEf">pic.twitter.com/RgQVj4bzEf</a></p>&mdash; Jarred Sumner (@jarredsumner) <a href="https://twitter.com/jarredsumner/status/2002282245210484922?ref_src=twsrc%5Etfw">December 20, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+## Faster IPC
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun<br /><br />9x faster cross-process JSON IPC with large messages <a href="https://t.co/aFUa3NmKLm">pic.twitter.com/aFUa3NmKLm</a></p>&mdash; Jarred Sumner (@jarredsumner) <a href="https://twitter.com/jarredsumner/status/2005529511132266796?ref_src=twsrc%5Etfw">December 29, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+## Faster `Bun.spawnSync()` on Linux ARM64
+
+Fixed a performance regression where `Bun.spawnSync()` was up to 30x slower than expected on Linux systems with high file descriptor limits.
+
+The issue occurred because the `close_range()` syscall number wasn't being defined at compile time on older glibc versions, causing Bun to fall back to iterating through all possible file descriptors (up to 65K) individually:
+
+```js
+// Before: ~13ms per spawn with default ulimit
+for (let i = 0; i < 100; i++) Bun.spawnSync(["true"]);
+
+// After: ~0.4ms per spawn
+for (let i = 0; i < 100; i++) Bun.spawnSync(["true"]);
+```
+
+
+
+## `--grep` flag for `bun test`
+
+`bun test` now supports `--grep` as an alias for `--test-name-pattern`, matching the familiar flag used by Jest, Mocha, and other test runners.
+
+```bash
+# All of these are now equivalent:
+bun test --grep "should handle"
+bun test --test-name-pattern "should handle"
+bun test -t "should handle"
+```
+
+
+
+## Faster JSON serialization across Bun APIs
+
+JSON serialization is now ~3x faster for several internal APIs by using JSC's SIMD-optimized `FastStringifier` code path:
+
+- **`console.log` with `%j` format** — faster debugging output
+- **PostgreSQL JSON/JSONB types** — faster database operations
+- **MySQL JSON type** — faster database operations
+- **Jest `%j`/`%o` format specifiers** — faster test output
+
+
+
+## Fake Timers Now Work with `@testing-library/react`
+
+`jest.useFakeTimers()` now works correctly with `@testing-library/react` and `@testing-library/user-event`, fixing a bug where tests would hang indefinitely when using `user.click()` or similar interactions.
+
+Two issues were resolved:
+
+1. **Fake timer detection** — Bun now sets `setTimeout.clock = true` when fake timers are enabled, which `@testing-library/react` checks to determine whether to call `jest.advanceTimersByTime()` when draining the microtask queue.
+
+2. **Immediate timer handling** — `advanceTimersByTime(0)` now correctly fires `setTimeout(fn, 0)` callbacks. Per the HTML spec, `setTimeout(fn, 0)` is internally scheduled with a 1ms delay, but Jest and testing-library expect `advanceTimersByTime(0)` to fire these "immediate" timers.
+
+```ts
+import { jest } from "bun:test";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
+it("works with fake timers", async () => {
+  jest.useFakeTimers();
+
+  const { getByRole } = render(<button>Click me</button>);
+  const user = userEvent.setup();
+
+  // This no longer hangs!
+  await user.click(getByRole("button"));
+
+  jest.useRealTimers();
+});
+```
+
+
+
+## `sql()` INSERT helper now respects `undefined` values
+
+The `sql()` tagged template helper now filters out `undefined` values in INSERT statements instead of converting them to `NULL`. This allows columns with `DEFAULT` values to properly use their database defaults when you pass `undefined`, rather than being overridden with `NULL`.
+
+```js
+// Before: Would fail with "null value violates not-null constraint"
+// even if 'foo' has a DEFAULT in your schema
+const [record] = await sql`
+  INSERT INTO "MyTable" ${sql({
+    foo: undefined,
+    id: Bun.randomUUIDv7(),
+  })}
+`;
+
+// After: Generates INSERT INTO "MyTable" (id) VALUES ($1)
+// The 'foo' column is omitted entirely, letting the database use its DEFAULT
+```
+
+This also fixes a data loss bug in bulk inserts where columns were determined only from the first object in an array—values in later objects that weren't present in the first would be silently dropped:
+
+```js
+// Now works correctly - 'bar' column is included even though
+// it's undefined in the first object
+await sql`
+  INSERT INTO "MyTable" ${sql([{ foo: "a" }, { foo: "b", bar: "c" }])}
+`;
+```
+
+
+
+## `Bun.hash.crc32` is now 20x faster
+
+`Bun.hash.crc32` now uses hardware-accelerated CRC32 instructions via zlib, making it approximately 20x faster on typical workloads.
+
+The previous implementation used a software-only algorithm that didn't leverage modern CPU instructions like `PCLMULQDQ` on x86 or native `CRC32` instructions on ARM.
+
+```js
+const data = Buffer.alloc(1024 * 1024); // 1MB buffer
+
+Bun.hash.crc32(data); // ~20x faster
+```
+
+| Benchmark (1MB)  | Before   | After  |
+| ---------------- | -------- | ------ |
+| `Bun.hash.crc32` | 2,644 µs | 124 µs |
+
+Thanks to @sqdshguy for the contribution!
+
+
+
+## S3 Requester Pays Support
+
+Bun's S3 client now supports [Requester Pays buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html), allowing you to access public S3 buckets where the requester is charged for data transfer costs instead of the bucket owner.
+
+Set `requestPayer: true` when accessing objects in Requester Pays buckets:
+
+```js
+import { s3 } from "bun";
+
+// Reading from a Requester Pays bucket
+const file = s3.file("data.csv", {
+  bucket: "requester-pays-bucket",
+  requestPayer: true,
+});
+const content = await file.text();
+
+// Writing to a Requester Pays bucket
+await s3.write("output.json", data, {
+  bucket: "requester-pays-bucket",
+  requestPayer: true,
+});
+```
+
+This option works with all S3 operations including reads, writes, stat, and multipart uploads.
+
+Thanks to [@d4mr](https://github.com/d4mr) for the contribution!
+
+
+
+## HTTP/HTTPS Proxy Support for WebSocket
+
+Bun's `WebSocket` constructor now supports connecting through HTTP and HTTPS proxies via the new `proxy` option. This enables WebSocket connections in corporate environments and other scenarios where direct connections aren't possible.
+
+```js
+// Simple proxy URL
+new WebSocket("wss://example.com", {
+  proxy: "http://proxy:8080",
+});
+
+// With authentication
+new WebSocket("wss://example.com", {
+  proxy: "http://user:pass@proxy:8080",
+});
+
+// Object format with custom headers
+new WebSocket("wss://example.com", {
+  proxy: {
+    url: "http://proxy:8080",
+    headers: { "Proxy-Authorization": "Bearer token" },
+  },
+});
+
+// HTTPS proxy with TLS options
+new WebSocket("wss://example.com", {
+  proxy: "https://proxy:8443",
+  tls: { rejectUnauthorized: false },
+});
+```
+
+All combinations of `ws://` and `wss://` connections through both HTTP and HTTPS proxies are supported, along with Basic authentication and custom proxy headers. The `tls` option now also supports full TLS configuration (`ca`, `cert`, `key`, `passphrase`, etc.) matching the options available in `fetch`.
+
+
+
+## Updated SQLite to 3.51.2
+
+Bun's embedded SQLite database (`bun:sqlite`) has been updated from version 3.51.1 to 3.51.2. This update includes fixes for edge cases with `DISTINCT` and `OFFSET` clauses, improved WAL mode locking behavior, and cursor renumberi
+
+## Bugfixes
+
+### Node.js compatibilty improvements
+
+- Fixed: `node:http` server `CONNECT` event handler not receiving pipelined data in the `head` parameter when sent in the same TCP segment as the request headers, causing compatibility issues with Cap'n Proto's KJ HTTP library used by Cloudflare's workerd runtime
+- Fixed: Temp directory resolution now correctly checks `TMPDIR`, `TMP`, and `TEMP` environment variables in order, matching Node.js's `os.tmpdir()` behavior
+- Fixed: Memory leak in `node:zlib` Brotli, Zstd, and Zlib compression streams where calling `reset()` repeatedly would allocate new encoder/decoder states without freeing previous ones
+- Fixed: `ws` module now correctly supports the `agent` option for proxy connections
+- Improved: `node:http2` module flow control
+
+### Bun APIs
+
+- Fixed: Rare edgecase in Subprocess stdin cleanup has been fixed
+- Fixed: HTTP client requests hanging when multiple concurrent requests fail proxy authentication (407 status code) without going through proxies directly
+- Fixed: Potential data corruption in `Bun.write()` for files larger than 2GB
+- Fixed: Parsing bug with `NO_PROXY` environment variable involving empty entries
+- Fixed: Potential memory leak when proxying streaming responses through `Bun.serve()` involving `ReadableStream`
+- Fixed: Rare crash in Bun Shell impacting opencode
+- Fixed: Hypothetical crash caused in async zstd compression, scrypt, and transpiler operations where buffers could be garbage collected while still being accessed by worker threads
+- Fixed: `EBADF` error when using `&>` redirect with Bun Shell builtin commands
+- Fixed: Bun SQL MySQL driver now correctly returns `Buffer` for `BINARY`, `VARBINARY`, and `BLOB` columns instead of corrupted UTF-8 strings, matching the behavior of PostgreSQL and SQLite drivers.
+- Fixed: Bun SQL Postgres driver incorrectly throwing `InvalidByteSequence` errors when parsing arrays containing strings or JSON larger than 16KB
+- Fixed: Bun SQL Postgres driver failing to read empty PostgreSQL arrays (e.g., `INTEGER[]` stored as `{}`) with `ERR_POSTGRES_INVALID_BINARY_DATA` error, particularly when reusing database connections
+- Fixed: JSON parsing errors from SQL database columns (e.g., PostgreSQL JSON/JSONB) now properly throw `SyntaxError` exceptions instead of silently returning empty values
+- Fixed: S3 credential validation now properly rejects invalid `pageSize`, `partSize`, and `retry` values that fall outside allowed ranges
+- Fixed: `Bun.write()` now correctly respects the `mode` option when copying files from `Bun.file()`, instead of silently inheriting permissions from the source file
+- Improved: Bun now rejects null bytes in arguments passed to `Bun.spawn`, `Bun.spawnSync`, environment variables, and shell template literals. This prevents null byte injection attacks ([CWE-158](https://cwe.mitre.org/data/definitions/158.html))
+- Improved: Bun now enforces stricter wildcard certificate matching following RFC 6125 Section 6.4.3 for improved security
+
+### Web APIs
+
+- Fixed: `URLSearchParams.prototype.size` not being configurable, which didn't align with the Web IDL specification
+- Fixed: WebSocket client now rejects decompression bombs by enforcing a 128MB limit on decompressed message size, preventing potential memory exhaustion attacks.
+- Fixed: Edgecase in `fetch()` with a `ReadableStream` body where streams were not being properly released in rare cases after the request completed, leading to a memory leak
+
+### bun install
+
+- Fixed: Off-by-one bounds check errors in the bundler and package installer that could cause undefined behavior when array indices equal array length
+- Fixed: Reading `ca` option in `.npmrc` for custom certificate authorities
+- Fixed: Rare crash in `bun install` when retrying failed HTTP requests (e.g., when GitHub API returns 504 errors)
+- Fixed: `bun --filter '*'` not respecting dependency order when a package name is longer than 8 characters, causing builds to run concurrently instead of sequentially based on workspace dependencies
+- Fixed: Path traversal vulnerability via symlink in tarball extraction. Bun now rejects absolute symlink targets (paths starting with `/`) and relative symlinks that would escape the extraction directory via `../` traversal
+
+### JavaScript minifier
+
+- Fixed: Dead code elimination producing invalid syntax like `{ ...a, x: }` when simplifying empty objects in spread contexts, which caused build failures in some Next.js 16 (Turbopack) projects
+
+### JavaScript bundler
+
+- Fixed: `bun build --compile` with 8+ embedded files works as expected
+- Fixed: Debugger CLI configuration now properly propagates in single-file executables
+- Fixed: Bytecode-compiled CJS bundles silently failing to execute when the source file contains a shebang (`#!/usr/bin/env bun`)
+- Improved: internal data structure layouts in the bundler by packing boolean flags and reordering fields to minimize struct padding. This reduces memory overhead during large bundle builds by an estimated 200KB–1.5MB.
+
+### CSS Parser
+
+- Fixed: CSS logical properties (e.g., `inset-inline-end`) being stripped from bundler output when nested rules like pseudo-elements (`&:after`, `&:before`) were present in the same block
+
+
+### TypeScript types
+
+- Fixed: Missing TypeScript types for `autoloadTsconfig` and `autoloadPackageJson` options in `Bun.build()` standalone compilation config
+- Fixed: Incorrect TypeScript types and documentation for `bun:sqlite` `.run()` method now correctly show it returns a `Changes` object with `changes` and `lastInsertRowid` properties, not `undefined` or a `Database` instance
+- Fixed: `FileSink.write()` return type now correctly includes `Promise<number>` for async writes when the write is pending
+
+### Windows
+
+- Speculative fix: crash on Windows machiens at start when very little memory is available
+- Fixed: "integer does not fit in destination type" error when reading files that are modified by another process or on network drives, where libuv returns unmapped error codes like `UV_UNKNOWN`
+
+### bun create
+
+- Fixed: crash in `bun create` when using `--no-install` with a template that has a `bun-create.postinstall` task starting with "bun "
+
+## Thanks to 23 contributors!
+
+- [@alii](https://github.com/alii)
+- [@billywhizz](https://github.com/billywhizz)
+- [@bmwalters](https://github.com/bmwalters)
+- [@cirospaciari](https://github.com/cirospaciari)
+- [@d4mr](https://github.com/d4mr)
+- [@darwin808](https://github.com/darwin808)
+- [@dylan-conway](https://github.com/dylan-conway)
+- [@emwadde](https://github.com/emwadde)
+- [@franklinfollis](https://github.com/franklinfollis)
+- [@jackkleeman](https://github.com/jackkleeman)
+- [@jarred-sumner](https://github.com/jarred-sumner)
+- [@kjanat](https://github.com/kjanat)
+- [@makuko](https://github.com/makuko)
+- [@mattermoran](https://github.com/mattermoran)
+- [@nektro](https://github.com/nektro)
+- [@nfreya](https://github.com/nfreya)
+- [@nicocevallos](https://github.com/nicocevallos)
+- [@rekram1-node](https://github.com/rekram1-node)
+- [@remorses](https://github.com/remorses)
+- [@robobun](https://github.com/robobun)
+- [@sosukesuzuki](https://github.com/sosukesuzuki)
+- [@sqdshguy](https://github.com/sqdshguy)
+- [@veggiesaurus](https://github.com/veggiesaurus)
