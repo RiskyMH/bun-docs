@@ -49,6 +49,10 @@ const config = {
         destination: '/docs-md/feedback',
       },
       {
+        source: '/feedback/:path*',
+        destination: '/docs/feedback/:path*',
+      },
+      {
         source: '/llm.txt',
         destination: '/llms.txt',
       },
@@ -153,43 +157,43 @@ const config = {
       })),
     ];
   },
-  "headers": () => [
+  headers: () => [
     {
-      "source": "/install.sh",
-      "headers": [
+      source: "/install.sh",
+      headers: [
         {
-          "key": "Content-Type",
-          "value": "text/plain;charset=utf-8"
+          key: "Content-Type",
+          value: "text/plain;charset=utf-8"
         },
         {
-          "key": "Content-Disposition",
-          "value": "inline"
+          key: "Content-Disposition",
+          value: "inline"
         }
       ]
     },
     {
-      "source": "/install",
-      "headers": [
+      source: "/install",
+      headers: [
         {
-          "key": "Content-Type",
-          "value": "text/plain;charset=utf-8"
+          key: "Content-Type",
+          value: "text/plain;charset=utf-8"
         },
         {
-          "key": "Content-Disposition",
-          "value": "inline"
+          key: "Content-Disposition",
+          value: "inline"
         }
       ]
     },
     {
-      "source": "/install.ps1",
-      "headers": [
+      source: "/install.ps1",
+      headers: [
         {
-          "key": "Content-Type",
-          "value": "text/plain;charset=utf-8"
+          key: "Content-Type",
+          value: "text/plain;charset=utf-8"
         },
         {
-          "key": "Content-Disposition",
-          "value": "inline"
+          key: "Content-Disposition",
+          value: "inline"
         }
       ]
     }

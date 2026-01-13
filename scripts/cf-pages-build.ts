@@ -7,6 +7,7 @@ await Bun.$`rm -rf app/api && STATIC_EXPORT=1 bun run build && git restore app/a
 import nextConfig from '../next.config.mjs';
 
 let _redirectsFile = ""
+let _headersFile = ""
 
 const rewritess = nextConfig.rewrites ? await nextConfig.rewrites() : [];
 if (Array.isArray(rewritess)) {
@@ -31,6 +32,14 @@ for (const redirect of redirectss) {
     if (redirect.has) continue;
     const statusCode = redirect.statusCode || redirect.permanent === false ? 302 : 301;
     _redirectsFile += `${redirect.source}  ${redirect.destination}  ${statusCode}\n`;
+}
+
+const headerss = nextConfig.headers ? await nextConfig.headers() : [];
+for (const header of headerss) {
+    _headersFile += `${header.source}\n`;
+    for (const h of header.headers) {
+        _headersFile += `  ${h.key}: ${h.value}\n`;
+    }
 }
 
 await Bun.write('./out/_redirects', _redirectsFile);
