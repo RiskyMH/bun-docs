@@ -9,7 +9,7 @@ Alternative documentation for Bun: the fast, all-in-one JavaScript runtime.
 
 Official is https://bun.com/docs (mintlify)
 
-This is https://bun-docs.vercel.app (fumadocs)
+This is https://bun-docs.vercel.app/docs (fumadocs)
 
 ## Development
 
