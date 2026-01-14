@@ -2292,7 +2292,7 @@ index c29e1378..49fd90bd 100644
  
  bun link v$BUN_LATEST_VERSION (7416672e)
 diff --git b/content/docs/pm/cli/outdated.mdx a/content/docs/pm/cli/outdated.mdx
-index 7bd9cc5c..f3740437 100644
+index 7bd9cc5c..03996471 100644
 --- b/content/docs/pm/cli/outdated.mdx
 +++ a/content/docs/pm/cli/outdated.mdx
 @@ -19,7 +19,6 @@ $ bun outdated
@@ -2311,6 +2311,15 @@ index 7bd9cc5c..f3740437 100644
  ```
  
  You can also pass glob patterns to check for outdated packages:
+@@ -65,7 +63,7 @@ $ bun outdated '@types/*'
+ 
+ | Package            | Current | Update | Latest |
+ | ------------------ | ------- | ------ | ------ |
+-| @types/bun (dev)   | 1.3.0   | 1.3.3  | 1.3.3 |
++| @types/bun (dev)   | 1.3.0   | 1.3.3  | 1.3.3  |
+ ```
+ 
+ Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
 index 2ef06140..99c220a7 100644
 --- b/content/docs/pm/cli/pm.mdx
@@ -2611,6 +2620,7 @@ index f7516c86..f718a3ff 100644
  Listening on http://localhost:3000
  ```
  
+diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
 index 0542bb42..7876eb8c 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
