@@ -2611,42 +2611,6 @@ index f7516c86..f718a3ff 100644
  Listening on http://localhost:3000
  ```
  
-diff --git b/content/docs/runtime/auto-install.mdx a/content/docs/runtime/auto-install.mdx
-index 285474ad..3cd099ed 100644
---- b/content/docs/runtime/auto-install.mdx
-+++ a/content/docs/runtime/auto-install.mdx
-@@ -75,23 +75,20 @@ This auto-installation approach is useful for a few reasons:
- 
- ## FAQ
- 
--<Accordions type="single">
--
--    <Accordion title="How is this different from what pnpm does?">
--
-+<Accordions>
-+    <Accordion>
-+    ### How is this different from what pnpm does?
-     With pnpm, you have to run `pnpm install`, which creates a `node_modules` folder of symlinks for the runtime to resolve. By contrast, Bun resolves dependencies on the fly when you run a file; there's no need to run any `install` command ahead of time. Bun also doesn't create a `node_modules` folder.
--
-     </Accordion>
- 
--    <Accordion title="How is this different from Yarn Plug'N'Play does?">
-+    <Accordion>
-+    ### How is this different from Yarn Plug'N'Play does?
-     With Yarn, you must run `yarn install` before you run a script. By contrast, Bun resolves dependencies on the fly when you run a file; there's no need to run any `install` command ahead of time.
--
-     Yarn Plug'N'Play also uses zip files to store dependencies. This makes dependency loading [slower at runtime](https://twitter.com/jarredsumner/status/1458207919636287490), as random access reads on zip files tend to be slower than the equivalent disk lookup.
-     </Accordion>
- 
--    <Accordion title="How is this different from what Deno does?">
--
-+    <Accordion>
-+    ### How is this different from what Deno does?
-     Deno requires an `npm:` specifier before each npm `import`, lacks support for import maps via `compilerOptions.paths` in `tsconfig.json`, and has incomplete support for `package.json` settings. Unlike Deno, Bun does not currently support URL imports.
-     </Accordion>
--
- </Accordions>
-diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
 index 0542bb42..7876eb8c 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
