@@ -150,6 +150,8 @@ export default defineConfig({
           env: "config",
           ini: "config",
           zsh: "shellscript",
+          jsonc: "json",
+          json5: "json",
         },
       },
       transformers: [

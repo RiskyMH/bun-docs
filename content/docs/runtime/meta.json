@@ -61,6 +61,7 @@
     "secrets",
     "console",
     "yaml",
+    "json5",
     "jsonl",
     "html-rewriter",
     "hashing",
