@@ -1,0 +1,702 @@
+---
+title: Bun v1.3.7
+description: "Fixes 91 issues (addressing 243 👍). 50% faster `Buffer.from(array)`, 35% faster async/await, 3x faster `array.flat()`, 90% faster `padStart`/`padEnd` via JSC upgrade. New: `Bun.JSON5`, `Bun.JSONL`, `Bun.wrapAnsi()` (33-88x faster than wrap-ansi npm), `--heap-prof-md`, `--cpu-prof-md`, `node:inspector` Profiler API, `replMode` for `Bun.Transpiler`. Fetch now preserves header casing. HTTP/2 fixes for AWS ALB/gRPC/Fauna."
+date: 2026-01-27T06:30:58.849Z
+authors: jarred
+category: Changelog
+---
+
+<include>../_snippets/blog/install-bun.mdx</include>
+
+## Faster `Buffer.from()` with arrays
+
+`Buffer.from()` is now up to **50% faster** when creating buffers from JavaScript arrays.
+
+```js
+const data = [1, 2, 3, 4, 5, 6, 7, 8];
+const buf = Buffer.from(data); // ~50% faster
+```
+
+This optimization bypasses unnecessary construction overhead and leverages JSC's internal array detection to use bulk copy operations for both integer and floating-point arrays.
+
+| Array size    | Improvement |
+| ------------- | ----------- |
+| 8 elements    | ~50% faster |
+| 64 elements   | ~42% faster |
+| 1024 elements | ~29% faster |
+
+## JavaScriptCore upgrade
+
+Bun's underlying JavaScript engine has been upgraded to the latest version of WebKit's JavaScriptCore, bringing performance improvements and bug fixes.
+
+### Faster async/await
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun &amp; Safari<br/><br/>async/await gets 35% faster, thanks to <a href="https://twitter.com/Constellation?ref_src=twsrc%5Etfw">@Constellation</a> <a href="https://t.co/XhUuiIwzRX">pic.twitter.com/XhUuiIwzRX</a></p>&mdash; Bun (@bunjavascript) <a href="https://twitter.com/bunjavascript/status/2011901977631064495?ref_src=twsrc%5Etfw">January 15, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+### Faster `Array.from(arguments)`
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun &amp; Safari<br/><br/>`Array.from(set)`, `Array.from(arguments)`, `Array.from(map.keys())`, `Array.from(map.values())` gets up to 2x faster thanks to <a href="https://twitter.com/__sosukesuzuki?ref_src=twsrc%5Etfw">@__sosukesuzuki</a> <a href="https://t.co/gC8ljFQBDI">https://t.co/gC8ljFQBDI</a></p>&mdash; Bun (@bunjavascript) <a href="https://twitter.com/bunjavascript/status/2011898707537772593?ref_src=twsrc%5Etfw">January 15, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+### Faster string.padStart & string.padEnd
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun &amp; Safari<br/><br/>`string.padStart(len, fill)` &amp; `string.padEnd(len, fill)` get up to 90% faster, thanks to <a href="https://twitter.com/__sosukesuzuki?ref_src=twsrc%5Etfw">@__sosukesuzuki</a> <a href="https://t.co/TdJTfs6B5G">https://t.co/TdJTfs6B5G</a></p>&mdash; Bun (@bunjavascript) <a href="https://twitter.com/bunjavascript/status/2011899747020452290?ref_src=twsrc%5Etfw">January 15, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+### Faster `array.flat()`
+
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun &amp; Safari<br/><br/>`array.flat()` gets up to 3x faster, thanks to <a href="https://twitter.com/__sosukesuzuki?ref_src=twsrc%5Etfw">@__sosukesuzuki</a> <a href="https://t.co/3Oll89bxGf">https://t.co/3Oll89bxGf</a></p>&mdash; Bun (@bunjavascript) <a href="https://twitter.com/bunjavascript/status/2011898197330075845?ref_src=twsrc%5Etfw">January 15, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+
+### ARM64 Performance Improvements
+
+On Apple Silicon and other ARM64 platforms, compound boolean expressions like `if (x === 0 && y === 1)` now compile to more efficient conditional compare instruction chains (`ccmp`/`ccmn`), reducing branch mispredictions and code size.
+
+Additionally, floating-point constants can now be materialized directly in registers using ARM64 vector instructions, avoiding unnecessary memory loads.
+
+### Windows ARM64
+
+We've added JIT & interpreter support for Windows ARM64 to JavaScriptCore. This was the main blocker for unblocking Windows ARM64 support in Bun. We don't yet support Windows ARM64 in Bun, but it's coming soon.
+
+### Bug Fixes
+
+- **Fixed:** Race condition in thread termination that could cause issues when using Web Workers
+- **Fixed:** Exception handling edge cases where termination exceptions could be incorrectly cleared during iterator operations and promise handling
+- **Fixed:** Functions loaded from bytecode cache now correctly respect JIT compilation thresholds instead of compiling immediately on first execution
+
+## `fetch` now preserves header case when sending HTTP requests
+
+HTTP headers are technically case-insensitive per RFC 7230, but many APIs expect specific casing. Previously, Bun would lowercase all headers when sending HTTP requests (e.g., `authorization` instead of `Authorization`), which could break compatibility with services that require exact header names.
+
+Now, `fetch` and the `node:https` module preserve the original casing of headers exactly as you define them, matching Node.js behavior.
+
+```js
+// Headers are now sent with their original casing
+await fetch("https://api.example.com/data", {
+  headers: {
+    "Authorization": "Bearer token123", // sent as "Authorization"
+    "Content-Type": "application/json", // sent as "Content-Type"
+    "X-Custom-Header": "value", // sent as "X-Custom-Header"
+  },
+});
+
+// Also works with the Headers object
+const headers = new Headers();
+headers.set("Content-Type", "text/plain"); // sent as "Content-Type"
+```
+
+## `Bun.wrapAnsi()` for ANSI-aware text wrapping
+
+Bun now includes `Bun.wrapAnsi()`, a native implementation of the popular [wrap-ansi](https://www.npmjs.com/package/wrap-ansi) npm package. It wraps text to a specified column width while preserving ANSI escape codes, making it ideal for CLI tools that need to handle colored or styled output.
+
+```js
+const text = "\x1b[31mThis is a long red text that needs wrapping\x1b[0m";
+const wrapped = Bun.wrapAnsi(text, 20);
+// Wraps at 20 columns, preserving the red color across line breaks
+```
+
+### API
+
+```ts
+Bun.wrapAnsi(text: string, columns: number, options?: {
+  // Break words longer than columns (default: false)
+  hard?: boolean;
+
+  // Wrap at word boundaries (default: true)
+  wordWrap?: boolean;
+
+  // Trim leading/trailing whitespace (default: true)
+  trim?: boolean;
+
+  // Treat ambiguous-width chars as narrow (default: true)
+  ambiguousIsNarrow?: boolean;
+
+}): string
+```
+
+### Features
+
+- Preserves ANSI escape codes (SGR colors/styles)
+- Supports OSC 8 hyperlinks
+- Respects Unicode display widths (full-width characters, emoji)
+- Normalizes carriage return newline to newline
+
+### Performance
+
+`Bun.wrapAnsi` is **33–88x faster** than the `wrap-ansi` npm package:
+
+| Benchmark               | npm      | Bun      | Speedup |
+| ----------------------- | -------- | -------- | ------- |
+| Short text (45 chars)   | 25.81 µs | 685 ns   | 37x     |
+| Medium text (810 chars) | 568 µs   | 11.22 µs | 50x     |
+| Long text (8100 chars)  | 7.66 ms  | 112 µs   | 68x     |
+| Hard wrap colored       | 8.82 ms  | 174 µs   | 50x     |
+| No trim long            | 8.32 ms  | 93.92 µs | 88x     |
+
+## Markdown CPU Profile Output
+
+Bun's built-in CPU profiler now supports a `--cpu-prof-md` flag that generates profiling data in Markdown format, making it easy to share profiles on GitHub or analyze them with LLMs.
+
+```bash
+# Generate markdown profile only
+bun --cpu-prof-md script.js
+
+# Generate both Chrome DevTools JSON and markdown formats
+bun --cpu-prof --cpu-prof-md script.js
+```
+
+The markdown output includes:
+
+- **Summary table** with duration, sample count, and interval
+- **Hot functions** ranked by self-time percentage
+- **Call tree** showing total time including children
+- **Function details** with caller/callee relationships
+- **File breakdown** showing time spent per source file
+
+All existing flags work with the new format:
+
+- `--cpu-prof-name` for custom filenames
+- `--cpu-prof-dir` for custom output directories
+
+## Heap Profiling with `--heap-prof`
+
+Bun now supports heap profiling via new CLI flags, making it easier to diagnose memory leaks and analyze memory usage in your applications.
+
+```bash
+# Generate V8-compatible heap snapshot (opens in Chrome DevTools)
+bun --heap-prof script.js
+
+# Generate markdown heap profile (for CLI analysis with grep/sed/awk)
+bun --heap-prof-md script.js
+
+# Specify output location
+bun --heap-prof --heap-prof-dir ./profiles --heap-prof-name my-snapshot.heapsnapshot script.js
+```
+
+The `--heap-prof` flag generates `.heapsnapshot` files that can be loaded directly into Chrome DevTools for visual analysis. The `--heap-prof-md` flag generates a markdown report optimized for command-line analysis:
+
+```js
+## Summary
+
+| Metric          |    Value |
+| --------------- | -------: |
+| Total Heap Size | 208.2 KB |
+| Total Objects   |     2651 |
+| GC Roots        |      426 |
+
+## Top 50 Types by Retained Size
+
+| Rank | Type        | Count | Self Size | Retained Size |
+| ---: | ----------- | ----: | --------: | ------------: |
+|    1 | `Function`  |   568 |   18.7 KB |        5.4 MB |
+|    2 | `Structure` |   247 |   27.0 KB |        2.0 MB |
+```
+
+The markdown format includes searchable object listings, retainer chains showing how objects are kept alive, and quick grep commands for finding memory issues:
+
+```bash
+grep 'type=Function' profile.md      # Find all Function objects
+grep 'size=[0-9]\{5,\}' profile.md   # Find objects >= 10KB
+grep 'gcroot=1' profile.md           # Find all GC roots
+```
+
+## Native JSON5 Support
+
+Bun now includes a built-in JSON5 parser with `Bun.JSON5.parse()` and `Bun.JSON5.stringify()`, plus native `.json5` file imports.
+
+[JSON5](https://json5.org/) is a superset of JSON that adds developer-friendly features like comments, trailing commas, unquoted keys, single-quoted strings, and hexadecimal numbers. It's used by major projects including Chromium, Next.js, Babel, and WebStorm.
+
+```js
+// Parse JSON5 strings
+const config = Bun.JSON5.parse(`{
+  // Database configuration
+  host: 'localhost',
+  port: 5432,
+  ssl: true,
+}`);
+
+// Stringify objects to JSON5
+const output = Bun.JSON5.stringify({ name: "app", version: 1 });
+
+// Import .json5 files directly
+import settings from "./config.json5";
+```
+
+JSON5 is particularly useful for configuration files where comments and trailing commas improve readability and maintainability.
+
+## `Bun.JSONL` for Streaming JSONL Parsing
+
+Bun now has built-in support for parsing [JSONL](https://jsonlines.org/) (newline-delimited JSON). The parser is implemented in C++ using JavaScriptCore's optimized JSON parser, providing fast parsing for both complete inputs and streaming use cases.
+
+### `Bun.JSONL.parse()`
+
+Parse a complete JSONL string or `Uint8Array` and return an array of all parsed values:
+
+```ts
+const results = Bun.JSONL.parse('{"name":"Alice"}\n{"name":"Bob"}\n');
+// [{ name: "Alice" }, { name: "Bob" }]
+
+// Also works with Uint8Array (UTF-8 BOM automatically skipped)
+const buffer = new TextEncoder().encode('{"a":1}\n{"b":2}\n');
+const records = Bun.JSONL.parse(buffer);
+// [{ a: 1 }, { b: 2 }]
+```
+
+### `Bun.JSONL.parseChunk()`
+
+For streaming scenarios, `parseChunk` parses as many complete values as possible and returns how far it got—useful when receiving data incrementally from a network stream:
+
+```ts
+const chunk = '{"id":1}\n{"id":2}\n{"id":3';
+
+const result = Bun.JSONL.parseChunk(chunk);
+result.values; // [{ id: 1 }, { id: 2 }]
+result.read; // 17 — characters consumed
+result.done; // false — incomplete value remains
+result.error; // null — no parse error
+```
+
+Use `read` to slice off consumed input and carry forward the remainder:
+
+```ts
+let buffer = "";
+
+for await (const chunk of stream) {
+  buffer += chunk;
+  const result = Bun.JSONL.parseChunk(buffer);
+
+  for (const value of result.values) {
+    handleRecord(value);
+  }
+
+  // Keep only the unconsumed portion
+  buffer = buffer.slice(result.read);
+}
+```
+
+## S3 `presign()` now supports `contentDisposition` and `type` options
+
+Fixed an issue where `S3File.presign()` was ignoring the `contentDisposition` and `type` options when generating presigned URLs. These options are now properly included as `response-content-disposition` and `response-content-type` query parameters.
+
+This is particularly useful when you want browsers to download files as attachments instead of displaying them inline:
+
+```js
+import { S3Client } from "bun";
+
+const s3 = new S3Client({
+  region: "us-east-1",
+  endpoint: "https://s3.us-east-1.amazonaws.com",
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  bucket: "my-bucket",
+});
+
+const file = s3.file("report.pdf");
+
+const url = file.presign({
+  method: "GET",
+  expiresIn: 900,
+  contentDisposition: 'attachment; filename="quarterly-report.pdf"',
+  type: "application/octet-stream",
+});
+// URL now includes response-content-disposition and response-content-type parameters
+```
+
+## `bun pm pack` now respects changes to `package.json` from lifecycle scripts
+
+`bun pm pack` now re-reads `package.json` after running `prepack`, `prepare`, and `prepublishOnly` scripts, ensuring any modifications made by these scripts are included in the tarball.
+
+This matches npm's behavior and enables compatibility with tools like [clean-package](https://github.com/roydukkey/clean-package) that modify `package.json` during the pack process.
+
+```js
+// package.json
+{
+  "name": "my-package",
+  "version": "1.0.0",
+  "scripts": {
+    "prepack": "node prepack.js"
+  },
+  "description": "Original description",
+  "devDependencies": { /* ... */ }
+}
+
+// prepack.js - removes devDependencies before packing
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+delete pkg.devDependencies;
+pkg.description = 'Production build';
+fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+```
+
+Previously, the tarball would contain the original `package.json`. Now it correctly contains the modified version.
+
+## `node:inspector` Profiler API
+
+Bun now implements the `node:inspector` Profiler API for CPU profiling via the Chrome DevTools Protocol.
+
+**Supported methods:**
+
+- `Profiler.enable` / `Profiler.disable`
+- `Profiler.start` / `Profiler.stop`
+- `Profiler.setSamplingInterval`
+
+Both callback (`node:inspector`) and promise (`node:inspector/promises`) APIs are supported.
+
+```ts
+import inspector from "node:inspector/promises";
+
+const session = new inspector.Session();
+session.connect();
+
+await session.post("Profiler.enable");
+await session.post("Profiler.start");
+
+// ... code to profile ...
+
+const { profile } = await session.post("Profiler.stop");
+await session.post("Profiler.disable");
+// profile is in Chrome DevTools Protocol format
+```
+
+- Fixed: `Bun.profile()` from `bun:jsc` returning empty traces on subsequent calls
+
+## Faster `Buffer.swap16()` and `Buffer.swap64()`
+
+`Buffer.swap16()` is now **1.8x faster** and `Buffer.swap64()` is now **3.6x faster** by using optimized CPU intrinsics instead of byte-by-byte swapping loops.
+
+```js
+const buf = Buffer.alloc(64 * 1024);
+
+// Swap byte pairs in-place (e.g., for UTF-16 encoding conversion)
+buf.swap16();
+
+// Swap 8-byte chunks in-place (e.g., for 64-bit integer endianness)
+buf.swap64();
+```
+
+| Operation | Before  | After   | Improvement     |
+| --------- | ------- | ------- | --------------- |
+| swap16    | 1.00 µs | 0.56 µs | **1.8x faster** |
+| swap64    | 2.02 µs | 0.56 µs | **3.6x faster** |
+
+Bun now matches or exceeds Node.js performance for all buffer swap operations.
+
+## Fixed: Bun.stringWidth - grapheme breaking with GB9c Support
+
+Bun's grapheme breaking implementation has been upgraded to properly support Unicode's GB9c rule for Indic Conjunct Break. This means Devanagari and other Indic script conjuncts now correctly form single grapheme clusters.
+
+Previously, Indic conjunct sequences (consonant + virama + consonant) were incorrectly split into multiple grapheme clusters. Now `Bun.stringWidth()` and other string operations handle these scripts correctly:
+
+```js
+// Devanagari conjuncts now correctly treated as single grapheme clusters
+Bun.stringWidth("क्ष"); // Ka+Virama+Ssa → width 2 (single cluster)
+Bun.stringWidth("क्‍ष"); // Ka+Virama+ZWJ+Ssa → width 2 (single cluster)
+Bun.stringWidth("क्क्क"); // Ka+Virama+Ka+Virama+Ka → width 3 (single cluster)
+```
+
+This update also reduces the internal table size from ~70KB to ~51KB while adding more comprehensive Unicode support.
+
+## Next.js 16 Cache Components compatibility
+
+Added the `_idleStart` property to `Timeout` objects returned by `setTimeout()` and `setInterval()`, matching Node.js behavior. This property returns a monotonic timestamp (in milliseconds) representing when the timer was created or last rescheduled.
+
+This fixes compatibility with Next.js 16's Cache Components feature, which relies on this internal property to coordinate timers.
+
+```js
+const timer = setTimeout(() => {}, 1000);
+console.log(timer._idleStart); // monotonic timestamp in ms
+clearTimeout(timer);
+```
+
+## `replMode` option for `Bun.Transpiler`
+
+A new `replMode` option for `Bun.Transpiler` transforms code for interactive REPL evaluation. This enables building a Node.js-compatible REPL using `Bun.Transpiler` with `vm.runInContext` for persistent variable scope.
+
+Key features:
+
+- **Variable hoisting**: `var`/`let`/`const` declarations are hoisted outside the IIFE wrapper for persistence across REPL lines
+- **`const` → `let` conversion**: Allows re-declaration in subsequent REPL inputs
+- **Expression result capture**: Wraps the last expression for easy result extraction
+- **Object literal detection**: Auto-detects `{a: 1}` as an object literal instead of a block statement
+- **Top-level await support**: Automatically uses async IIFE wrappers when needed
+
+```typescript
+import vm from "node:vm";
+
+const transpiler = new Bun.Transpiler({
+  loader: "tsx",
+  replMode: true,
+});
+
+const context = vm.createContext({ console, Promise });
+
+async function repl(code: string) {
+  const transformed = transpiler.transformSync(code);
+  const result = await vm.runInContext(transformed, context);
+  return result.value;
+}
+
+// Variables persist across REPL lines
+await repl("var x = 10"); // 10
+await repl("x + 5"); // 15
+
+// Classes and functions are hoisted to the context
+await repl("class Counter {}"); // [class Counter]
+await repl("new Counter()"); // Counter {}
+
+// Object literals are auto-detected
+await repl("{a: 1, b: 2}"); // {a: 1, b: 2}
+
+// Top-level await works
+await repl("await Promise.resolve(42)"); // 42
+```
+
+## Increased Maximum HTTP Header Count
+
+The maximum number of HTTP headers allowed in requests and responses has been doubled from 100 to 200. This improves compatibility with services that send many headers, such as APIs with extensive metadata or proxies that append multiple forwarding headers.
+
+## WebSocket URL Credentials Support
+
+WebSocket connections now properly forward credentials embedded in URLs as Basic Authorization headers, matching Node.js behavior.
+
+When connecting to a WebSocket URL with embedded credentials like `ws://user:pass@host`, Bun now automatically extracts the credentials and sends them as a properly encoded `Authorization: Basic` header during the WebSocket upgrade handshake.
+
+```js
+// Credentials are now automatically forwarded
+const ws = new WebSocket("ws://username:password@example.com/socket");
+
+// User-provided Authorization headers take precedence
+const ws2 = new WebSocket("ws://user:pass@example.com/socket", {
+  headers: {
+    Authorization: "Bearer custom-token", // This will be used instead
+  },
+});
+```
+
+This fixes compatibility with services like Puppeteer connecting to remote browser instances (e.g., Bright Data's scraping browser) that require URL-based authentication.
+
+## Faster JavaScript Built-ins
+
+Bun v1.3.7 upgrades WebKit, bringing significant performance improvements to several JavaScript built-in methods:
+
+**String methods:**
+
+- `String.prototype.isWellFormed` and `String.prototype.toWellFormed` are **5.2-5.4x faster** using simdutf
+
+**RegExp methods:**
+
+- `RegExp.prototype[Symbol.matchAll]` and `RegExp.prototype[Symbol.replace]` reimplemented in C++
+
+## S3 `contentEncoding` Option
+
+Bun's S3 client now supports setting the `Content-Encoding` header when uploading objects via `.write()` and `.writer()` methods.
+
+This is useful when uploading pre-compressed content to S3, allowing you to specify encodings like `gzip`, `br` (Brotli), or `deflate`:
+
+```ts
+import { s3 } from "bun";
+
+const file = s3.file("my-bucket/data.json.gz");
+
+// With .write()
+await file.write(compressedData, { contentEncoding: "gzip" });
+
+// With .writer()
+const writer = file.writer({ contentEncoding: "gzip" });
+writer.write(compressedData);
+await writer.end();
+
+// With bucket.write()
+const bucket = s3.bucket("my-bucket");
+await bucket.write("data.json.br", brotliData, { contentEncoding: "br" });
+```
+
+## `bun:ffi` now respects `C_INCLUDE_PATH` and `LIBRARY_PATH` environment variables
+
+Bun's built-in C compiler (`bun:ffi`) now respects the standard `C_INCLUDE_PATH` and `LIBRARY_PATH` environment variables. This fixes compilation on NixOS and other systems that don't use standard FHS paths like `/usr/include` or `/usr/lib`.
+
+```js
+import { cc } from "bun:ffi";
+
+const {
+  symbols: { hello },
+} = cc({
+  source: "./hello.c",
+  symbols: {
+    hello: {
+      returns: "int",
+    },
+  },
+});
+
+// On NixOS, set C_INCLUDE_PATH and LIBRARY_PATH to point to your Nix store paths
+// C_INCLUDE_PATH=/nix/store/.../include LIBRARY_PATH=/nix/store/.../lib bun run hello.js
+```
+
+## Dependency updates
+
+- Bun now uses Mimalloc v3 for the natively-managed memory heap. This reduces memory usage in multi-threaded scenarios. Please let us know if you run into any increases in memory usage.
+- LOLHTML updated to v2.7.1
+- TinyCC has been updated to the latest version, and we've implemented Windows ARM64 support.
+- BoringSSL has been updated.
+
+## Bugfixes
+
+### Bundler bugfixes
+
+- Fixed: CSS logical border-radius properties (`border-start-start-radius`, `border-start-end-radius`, `border-end-end-radius`, `border-end-start-radius`) being silently dropped by the CSS bundler.
+- Fixed: Bundler producing invalid JavaScript when minifying files with both default and named imports from the `"bun"` module (e.g., `import bun, { embeddedFiles } from "bun"`) due to missing semicolons between statements
+- Fixed: a panic in the bundler when using code splitting on Windows
+- Fixed: Bundler's `module.exports = require()` redirect optimization being disabled when legal comments (`/*! ... */`) were present in wrapper modules like Express's `index.js`, resulting in unnecessary wrapper functions in the output
+- Fixed: Crash in `bun build` when using macros
+- Fixed: `Bun.build` hanging indefinitely when called from within a macro during bundling—now throws a clear error explaining the deadlock and suggesting `Bun.spawnSync` as a workaround.
+- Fixed: `reactFastRefresh` in `bun.build` now works with non-browser targets
+- Fixed: Bundler producing duplicate export statements when one entry point re-exports from another entry point with code splitting enabled.
+- Fixed: Bundler generating invalid import paths (missing `./` prefix) when a file imports from the same directory in code-split builds.
+- Fixed: Named Function Expressions Shadowing Outer Symbols
+
+### `bun build --compile`
+
+- Fixed: Compiled binaries with `autoloadBunfig: false` incorrectly loading `bunfig.toml` when `execArgv` was also provided
+- Fixed: Native module export corruption when using `bun build --compile` with multiple NAPI modules on Linux, where the second module would incorrectly receive the first module's exports
+- Fixed: Standalone executables compiled with `--compile-exec-argv` incorrectly intercepting `--version`, `-v`, `--help`, and `-h` flags before user code could handle them, breaking CLI applications using libraries like Commander.js that define their own version and help commands
+- Fixed: Lazy-loaded chunks from dynamic imports not appearing in `frontend.files` when using `--splitting` with `--compile` in fullstack builds
+- Fixed: `BUN_OPTIONS` environment variable not being applied as runtime options for standalone executables created with `bun build --compile`, which caused options like `--bun` to incorrectly appear in `process.argv` instead of being parsed as Bun runtime options.
+- Fixed: Incorrect offset calculations in single-file executables on non-ARM64 macOS platforms when codesigning was not enabled
+- Fixed a crash when running standalone executables with bytecode cache on Windows caused by incorrect bytecode alignment in PE sections.
+
+### `bun install`
+
+- Fixed: `bun update --interactive` not selecting packages when pressing 'l' to toggle between Target and Latest versions, causing the underline indicator to disappear and packages to be excluded when confirming
+- Fixed: `bun install --yarn` generating invalid `yarn.lock` files when using `workspace:*` dependencies in monorepos
+- Fixed: `bun install --frozen-lockfile` incorrectly using the default npm registry instead of scope-specific registries configured in `bunfig.toml` when the lockfile had an empty registry URL for scoped packages (e.g., `@orgname/package`).
+- Fixed: `bun install` now shows the dependency name in error messages when a `file:` path resolution fails due to a stale lockfile, instead of the misleading "Bun could not find a package.json file to install from" error.
+- Fixed: `bun add` crashing with "panic: Assertion failure: Expected metadata to be set" when HTTP requests fail before receiving response headers (e.g., network connection refused, firewall blocking requests, or timeouts)
+
+### `bun test`
+
+- Fixed: `bun test --inspect` now properly sends `TestReporter.found`, `TestReporter.start`, and `TestReporter.end` events to debugger clients that connect after test discovery has begun, enabling IDE integrations and debugging tools to receive real-time test execution telemetry without requiring `--inspect-wait`.
+- Fixed: `assert.partialDeepStrictEqual` incorrectly requiring exact equality for Map objects instead of checking if the expected Map is a subset of the actual Map
+- Fixed: `jest.useRealTimers()` not properly removing the `setTimeout.clock` property, which broke React Testing Library and other libraries that detect fake timers using `hasOwnProperty` checks
+
+### `Bun.serve()`
+
+- Fixed: Exporting a `Server` instance from `Bun.serve()` as the default export no longer causes a "Maximum call stack" error. Bun's entry point wrapper previously detected the `fetch` method on the running server and incorrectly tried to call `Bun.serve()` on it again.
+- Fixed: Scripts that export `globalThis` (e.g., `module.exports = globalThis` or `export default globalThis`) no longer incorrectly trigger Bun's auto-serve detection and start a development server on port 3000
+- Fixed: `--no-clear-screen` flag and `BUN_CONFIG_NO_CLEAR_TERMINAL_ON_RELOAD` environment variable not being respected during HMR reloads when using `Bun.serve` with `hmr: true`
+
+### Bun Shell
+
+- Fixed: `ls -l` in Bun's shell now correctly displays long listing format with file type, permissions, hard link count, UID, GID, size, modification time, and filename instead of showing the same output as `ls` without flags
+- Fixed: Crash in shell interpreter when an error occurred during initialization in certain cases
+- Fixed: `$`...`.cwd(".")`, `.cwd("")`, and `.cwd("./")` in Bun shell causing ENOENT errors with paths ending in "undefined" when used in loops
+
+### Bun APIs
+
+- Fixed: Added missing stack overflow checks in `Bun.JSONC.parse` and `Bun.TOML.parse`
+
+### `node:http2`
+
+- Fixed: HTTP/2 streams sending an extra empty DATA frame when using `req.write(data)` followed by `req.end()`, which caused AWS ALB and other strict HTTP/2 servers to reject connections with `NGHTTP2_FRAME_SIZE_ERROR`
+- Fixed: initial stream window size to use `DEFAULT_WINDOW_SIZE` until `SETTINGS_ACK` is received per RFC 7540 Section 6.5.1
+- Fixed: HTTP/2 streams failing with `NGHTTP2_PROTOCOL_ERROR` when connecting to Fauna
+- Fixed: gRPC requests failing with `NGHTTP2_FRAME_SIZE_ERROR` when servers advertise non-default `maxFrameSize` settings (regression since v1.2.16)
+- Fixed: Settings validation using incorrect integer conversion that truncated large values
+- Improved: properly adjusts existing stream windows when `INITIAL_WINDOW_SIZE` setting changes
+- Improved: implements `maxHeaderListSize` checking per RFC 7540 Section 6.5.2
+- Improved: tracks cumulative header list size using HPACK entry overhead
+- Improved; adds validation for `customSettings` option (up to 10 custom settings, matching Node.js)
+- Improved: validates setting IDs and values per RFC 7540 specifications
+
+### Fetch API
+
+- Fixed: Hypothetical crash when using HTTP proxy with redirects if the socket closes during redirect processing
+- Fixed: `fetch()` mTLS incorrectly used the first client certificate for subsequent keepalive requests to the same host, ignoring per-request `tls` options
+- Fixed: `Request.prototype.text()` incorrectly throwing "TypeError: undefined is not a function" in certain cases under load
+- Fixed: `Request` constructor ignoring `cache` and `mode` options
+- Fixed: `NO_PROXY` environment variable not respecting port numbers (e.g., `NO_PROXY=localhost:8080` would incorrectly bypass the proxy for all requests to `localhost` regardless of port)
+
+### `node:fs`
+
+- Fixed: `realpathSync` blocking indefinitely when called on a FIFO (named pipe) on POSIX systems
+- Fixed: `Bun.Glob` and `fs.readdirSync` with `recursive: true` failing to find files on bind-mounted filesystems, FUSE, NFS, and some ext4 configurations in Docker environments
+- Fixed: `fs.Dirent.isFIFO()` incorrectly returning `true` for files on sshfs, NFS, and other remote filesystems that don't populate `d_type`
+- Fixed: `fs.watch` on directories not emitting `change` events for file modifications on Linux. Previously, when watching a directory, files created after the watch was established would only emit a `rename` event on creation, but subsequent modifications would not emit `change` events.
+
+### `node:https` & TLS
+
+- Fixed: TLS options (`ca`, `cert`, `key`, `passphrase`, `ciphers`, `servername`, `secureOptions`, `rejectUnauthorized`) from `agent.options` and `agent.connectOpts` not being respected in the `https` module, improving compatibility with libraries like `https-proxy-agent`
+- Fixed: race condition where `request.socket._secureEstablished` could return `false` in HTTPS request handlers even after the TLS handshake had completed
+- Fixed: TLS v1.2 renegotation `rejectUnauthorized` option being incorrectly ignored in TLS socket `setVerifyMode`, which could cause certificate verification to behave unexpectedly during TLS renegotiation.
+
+### `node:http`
+
+- Request bodies in GET requests are now supported.
+- Fixed: Multipart uploads with `form-data` + `node-fetch@2` + `fs.createReadStream()` being truncated
+
+### WebSocket (`ws`)
+
+- Fixed: `handleProtocols` option in `ws` WebSocketServer not correctly setting the selected protocol in WebSocket upgrade responses
+- Fixed: `ws.once()` only working on the first call for each event type in the `ws` package
+
+### Node-API (NAPI)
+
+- Fixed: crash in Node-API that caused corrupted data when using native modules like `impit`. The first issue occurred when property name strings were freed by the caller but Bun retained dangling pointers in the atom string table. The second issue occurred when extracting `.buffer` from an external buffer would prematurely free the backing data when the original Buffer was garbage collected.
+
+### Streams
+
+- Fixed: `ReadableStreamDefaultController.desiredSize` throwing `TypeError: null is not an object` instead of returning `null` when accessing it after the stream has been detached during cleanup (e.g., when piping a `ReadableStream` body to `fetch` and the downstream closes unexpectedly)
+
+### `bun:sql` (MySQL)
+
+- Fixed: MySQL transactions hanging when executing sequential transactions in a loop where an `INSERT` is awaited inside the transaction callback and a `SELECT` query is returned as an array without being awaited
+- Fixed: MySQL VARCHAR/CHAR/TEXT columns with binary collations (like `utf8mb4_bin`) incorrectly returning `Buffer` instead of `string`
+
+### `Bun.Terminal`
+
+- Fixed: `Bun.Terminal` callbacks (`data`, `exit`, `drain`) not being invoked when the terminal was created inside `AsyncLocalStorage.run()`
+
+### Memory Management
+
+- Fixed: Memory leak in YAML parser
+- Fixed: Memory leak when sockets are reused for reconnection (common with MongoDB driver-like usage)
+
+### CLI & Tooling
+
+- Fixed: `bun completions` crashing with `BrokenPipe` error when piped to commands that close stdout early (e.g., `bun completions | true`)
+- Fixed: Fish shell autocompletion not working for `bun update` command and its flags (like `--global`, `--dry-run`, `--force`)
+- Fixed: `bun init --minimal` incorrectly creating Cursor rules files and `CLAUDE.md` when the `--minimal` flag should only create `package.json` and `tsconfig.json`
+- Fixed: `bun <file>` on unsupported file types (`.css`, `.html`, `.yaml`, etc.) now shows "Cannot run" with the file type instead of the misleading "File not found" error
+- Fixed: `bun` npm package now shows a helpful error message when postinstall script hasn't run, instead of silently exiting with code 0. This helps diagnose issues when installing with `--ignore-scripts` or using pnpm (which skips postinstall scripts by default).
+- Fixed: `BUN_OPTIONS` environment variable incorrectly parsing bare flags (flags without `=`) when followed by other flags, causing options like `--cpu-prof` to be ignored when specified as `BUN_OPTIONS="--cpu-prof --cpu-prof-dir=profiles"`
+
+### TypeScript Definitions
+
+- Fixed: Renamed `Bun.Build.Target` type to `Bun.Build.CompileTarget` in TypeScript definitions to avoid confusion with the existing `target` option in `Bun.build()`
+- Fixed: TypeScript errors in the `react-tailwind` template's `build.ts` when using strict type checking
+
+### Node.js Compatibility
+
+- Fixed: Properly handle errors when strings exceed the ~4GB maximum length limit, now correctly throwing `ERR_STRING_TOO_LONG`, fixing a SIGILL crash impacting some Claude Code users
+- Fixed: `process.stdout.write()` not emitting EPIPE errors on broken pipes, causing processes to exit with code 0 instead of 1 when stdout is destroyed
+- Fixed: `TypeError: this._refreshLine is not a function` when using tab completion with `node:readline/promises`
+- Improved: `node:util` now uses `Bun.stringWidth` directly, offering improved performance.
+
+### Windows
+
+- Fixed: panic when reading or writing large files (>4GB) on Windows due to integer overflow in libuv buffer size parameters
+
+### Build System
+
+- Fixed: NixOS debug builds failing with `_FORTIFY_SOURCE requires compiling with optimization` error
+
+### Thanks to 11 contributors!
+
+- [@alii](https://github.com/alii)
+- [@cirospaciari](https://github.com/cirospaciari)
+- [@dylan-conway](https://github.com/dylan-conway)
+- [@jarred-sumner](https://github.com/jarred-sumner)
+- [@kirillmarkelov](https://github.com/kirillmarkelov)
+- [@mmitchellg5](https://github.com/mmitchellg5)
+- [@remorses](https://github.com/remorses)
+- [@robobun](https://github.com/robobun)
+- [@sosukesuzuki](https://github.com/sosukesuzuki)
+- [@vadim-anthropic](https://github.com/vadim-anthropic)
+- [@wovw](https://github.com/wovw)
