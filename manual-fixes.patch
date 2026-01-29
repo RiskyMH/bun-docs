@@ -12,10 +12,10 @@ index a9d30c4f..223eb3f9 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index b787dc1c..3e90be81 100644
+index f4c9dd5e..5087041d 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
-@@ -458,11 +458,11 @@ you shouldn't see this
+@@ -475,11 +475,11 @@ you shouldn't see this
  
  However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
  
@@ -253,7 +253,7 @@ index 17bff26f..2d71e763 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index 65278237..9a9943cd 100644
+index ebc0df8a..a22213c0 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -509,7 +509,7 @@ index 65278237..9a9943cd 100644
  console.log(logo);
  ```
  
-@@ -1409,44 +1444,39 @@ return new Response(artifact);
+@@ -1453,44 +1488,39 @@ return new Response(artifact);
  
  The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
  
@@ -3172,7 +3172,7 @@ index e5e941fd..5eff589b 100644
  
  interface TranspilerOptions {
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index d4cc9e9d..d6ce4f5e 100644
+index 53ffd466..bf1ac746 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
