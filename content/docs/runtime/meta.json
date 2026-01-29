@@ -60,6 +60,7 @@
     "---[Wrench] Utilities---",
     "secrets",
     "console",
+    "markdown",
     "yaml",
     "json5",
     "jsonl",
