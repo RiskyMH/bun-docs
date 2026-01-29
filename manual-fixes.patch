@@ -2794,10 +2794,10 @@ index 6967cd7c..9d5c0613 100644
  
  ---
 diff --git b/content/docs/runtime/file-types.mdx a/content/docs/runtime/file-types.mdx
-index 2cdbd4c3..79af8668 100644
+index 934c4f43..1d1913cc 100644
 --- b/content/docs/runtime/file-types.mdx
 +++ a/content/docs/runtime/file-types.mdx
-@@ -267,7 +267,7 @@ The html loader processes HTML files and bundles any referenced assets. It will:
+@@ -310,7 +310,7 @@ The html loader processes HTML files and bundles any referenced assets. It will:
  
  For example, given this HTML file:
  
@@ -2806,7 +2806,7 @@ index 2cdbd4c3..79af8668 100644
  <!DOCTYPE html>
  <html>
    <body>
-@@ -280,7 +280,7 @@ For example, given this HTML file:
+@@ -323,7 +323,7 @@ For example, given this HTML file:
  
  It will output a new HTML file with the bundled assets:
  
@@ -2840,6 +2840,22 @@ index d763f366..4fd4251c 100644
 +```sh title="terminal"
  $ bun [bun flags] run <script> [script flags]
  ```
+ 
+diff --git b/content/docs/runtime/markdown.mdx a/content/docs/runtime/markdown.mdx
+index c7490cb6..ae8a3c4f 100644
+--- b/content/docs/runtime/markdown.mdx
++++ a/content/docs/runtime/markdown.mdx
+@@ -3,9 +3,9 @@ title: Markdown
+ description: Parse and render Markdown with Bun's built-in Markdown API, supporting GFM extensions and custom rendering callbacks
+ ---
+ 
+-{% callout type="note" %}
++<Callout type="info">
+ **Unstable API** — This API is under active development and may change in future versions of Bun.
+-{% /callout %}
++</Callout>
+ 
+ Bun includes a fast, built-in Markdown parser written in Zig. It supports GitHub Flavored Markdown (GFM) extensions and provides three APIs:
  
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
 index 361bdf26..31ec32b8 100644
