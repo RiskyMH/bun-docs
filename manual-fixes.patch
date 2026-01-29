@@ -12,16 +12,14 @@ index a9d30c4f..223eb3f9 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index f4c9dd5e..5087041d 100644
+index f4c9dd5e..e20413e3 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
-@@ -475,11 +475,11 @@ you shouldn't see this
- 
+@@ -476,10 +476,10 @@ you shouldn't see this
  However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
  
--```bash title="terminal"
+ ```bash title="terminal"
 -# With the env var, the executable acts like the `bun` CLI
-+```bash terminal
 +With the env var, the executable acts like the `bun` CLI
  $ BUN_BE_BUN=1 ./such-bun install
  
