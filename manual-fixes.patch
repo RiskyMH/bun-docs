@@ -12,10 +12,10 @@ index a9d30c4f..223eb3f9 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index f4c9dd5e..e20413e3 100644
+index b1911008..e8be0ffc 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
-@@ -476,10 +476,10 @@ you shouldn't see this
+@@ -473,10 +473,10 @@ you shouldn't see this
  However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
  
  ```bash title="terminal"
@@ -251,7 +251,7 @@ index 17bff26f..2d71e763 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index ebc0df8a..a22213c0 100644
+index fd15593f..d65dabf5 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -2514,7 +2514,7 @@ index f52f1ffa..dba246fd 100644
  
  ## Troubleshooting
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index 496dcdc5..822c0702 100644
+index 72a5e287..f7815c0e 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
 @@ -12,7 +12,7 @@ If you are using Windows, please refer to [this guide](/docs/project/building-wi
@@ -2544,20 +2544,7 @@ index 496dcdc5..822c0702 100644
  x.y.z_debug
  ```
  
-@@ -255,10 +255,10 @@ $ git -C vendor/WebKit checkout <commit_hash>
- $ bun run jsc:build:debug && rm vendor/WebKit/WebKitBuild/Debug/JavaScriptCore/DerivedSources/inspector/InspectorProtocolObjects.h
- 
- # After an initial run of `make jsc-debug`, you can rebuild JSC with:
--cmake --build vendor/WebKit/WebKitBuild/Debug --target jsc && rm vendor/WebKit/WebKitBuild/Debug/JavaScriptCore/DerivedSources/inspector/InspectorProtocolObjects.h
-+$ cmake --build vendor/WebKit/WebKitBuild/Debug --target jsc && rm vendor/WebKit/WebKitBuild/Debug/JavaScriptCore/DerivedSources/inspector/InspectorProtocolObjects.h
- 
- # Build bun with the local JSC build
--bun run build:local
-+$ bun run build:local
- ```
- 
- Using `bun run build:local` will build Bun in the `./build/debug-local` directory (instead of `./build/debug`), you'll have to change a couple of places to use this new directory:
-@@ -335,7 +335,7 @@ $ brew install pkg-config
+@@ -330,7 +330,7 @@ $ brew install pkg-config
  If you see this error when compiling, run:
  
  ```bash
@@ -3170,7 +3157,7 @@ index e5e941fd..5eff589b 100644
  
  interface TranspilerOptions {
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 53ffd466..bf1ac746 100644
+index 8e0ee46a..7340345f 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
