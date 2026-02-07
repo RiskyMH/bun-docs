@@ -2827,21 +2827,20 @@ index d763f366..4fd4251c 100644
  ```
  
 diff --git b/content/docs/runtime/markdown.mdx a/content/docs/runtime/markdown.mdx
-index c7490cb6..ae8a3c4f 100644
+index 061a4211..ae8a3c4f 100644
 --- b/content/docs/runtime/markdown.mdx
 +++ a/content/docs/runtime/markdown.mdx
-@@ -3,9 +3,9 @@ title: Markdown
+@@ -3,8 +3,8 @@ title: Markdown
  description: Parse and render Markdown with Bun's built-in Markdown API, supporting GFM extensions and custom rendering callbacks
  ---
  
--{% callout type="note" %}
+-<Callout type="note">
+-  **Unstable API** — This API is under active development and may change in future versions of Bun.
 +<Callout type="info">
- **Unstable API** — This API is under active development and may change in future versions of Bun.
--{% /callout %}
-+</Callout>
++**Unstable API** — This API is under active development and may change in future versions of Bun.
+ </Callout>
  
  Bun includes a fast, built-in Markdown parser written in Zig. It supports GitHub Flavored Markdown (GFM) extensions and provides three APIs:
- 
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
 index 361bdf26..31ec32b8 100644
 --- b/content/docs/runtime/networking/fetch.mdx
