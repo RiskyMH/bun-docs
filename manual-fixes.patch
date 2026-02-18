@@ -1,5 +1,5 @@
 diff --git b/content/docs/bundler/esbuild.mdx a/content/docs/bundler/esbuild.mdx
-index a9d30c4f..223eb3f9 100644
+index e3a9a9e2..245adda0 100644
 --- b/content/docs/bundler/esbuild.mdx
 +++ a/content/docs/bundler/esbuild.mdx
 @@ -30,7 +30,7 @@ Bun and esbuild both provide a command-line interface.
@@ -12,7 +12,7 @@ index a9d30c4f..223eb3f9 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index b1911008..e8be0ffc 100644
+index abd1214d..9651a8c5 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -473,10 +473,10 @@ you shouldn't see this
@@ -87,7 +87,7 @@ index c72fc14b..70a3e880 100644
    margin: 0;
    padding: 0;
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index 17bff26f..2d71e763 100644
+index 87c46dfc..5c92dd6b 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -1650,10 +1650,10 @@ index aaedb143..9d687f61 100644
  
  const myFunction = () => {
 diff --git b/content/docs/bundler/plugins.mdx a/content/docs/bundler/plugins.mdx
-index b02117f6..af5c4bb2 100644
+index 42498510..34548ffd 100644
 --- b/content/docs/bundler/plugins.mdx
 +++ a/content/docs/bundler/plugins.mdx
-@@ -339,7 +339,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+@@ -341,7 +341,7 @@ To create a native plugin, you must export a C ABI function which matches the si
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -2623,7 +2623,7 @@ index f7516c86..f718a3ff 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 0542bb42..7876eb8c 100644
+index 5eb27c5c..ebeb6aa8 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -201,7 +201,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -2643,7 +2643,7 @@ index 0542bb42..7876eb8c 100644
  ```
  
  ### `test.coverageDir`
-@@ -540,7 +539,6 @@ To configure the cache behavior:
+@@ -551,7 +550,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -2651,7 +2651,7 @@ index 0542bb42..7876eb8c 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -726,9 +724,7 @@ With this option, the command being run will not be printed to the console:
+@@ -737,9 +735,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -3235,10 +3235,10 @@ index 20af4d98..612222ba 100644
  
  dom.test.ts:
 diff --git b/content/docs/test/index.mdx a/content/docs/test/index.mdx
-index 96a52558..403993c6 100644
+index 5409bf2d..d0509f02 100644
 --- b/content/docs/test/index.mdx
 +++ a/content/docs/test/index.mdx
-@@ -220,8 +220,6 @@ When using `--randomize`, the seed used for randomization will be displayed in t
+@@ -249,8 +249,6 @@ When using `--randomize`, the seed used for randomization will be displayed in t
  ```sh title="terminal"
  $ bun test --randomize
  
