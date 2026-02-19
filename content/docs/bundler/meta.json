@@ -11,6 +11,7 @@
     "hot-reloading",
     "---[Image] Asset Processing---",
     "html-static",
+    "standalone-html",
     "css",
     "loaders",
     "---[Binary] Executables---",
