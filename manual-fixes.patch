@@ -251,7 +251,7 @@ index 87c46dfc..5c92dd6b 100644
  <Callout type="warning">
    Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index fd15593f..d65dabf5 100644
+index 8c00e68b..f05db05b 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -55,7 +55,7 @@ Let's jump into the bundler API.
@@ -507,7 +507,7 @@ index fd15593f..d65dabf5 100644
  console.log(logo);
  ```
  
-@@ -1453,44 +1488,39 @@ return new Response(artifact);
+@@ -1475,44 +1510,39 @@ return new Response(artifact);
  
  The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
  
@@ -3684,7 +3684,7 @@ index f2230557..23a151dc 100644
  vinxi starting dev server
  
 diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
-index 5a3543ac..2a601ebe 100644
+index 9ffdada8..38c4bbd5 100644
 --- b/content/guides/ecosystem/tanstack-start.mdx
 +++ a/content/guides/ecosystem/tanstack-start.mdx
 @@ -66,7 +66,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
