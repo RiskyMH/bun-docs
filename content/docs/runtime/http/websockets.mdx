@@ -92,15 +92,15 @@ Bun.serve({
 
 Each `ServerWebSocket` instance has a `.send()` method for sending messages to the client. It supports a range of input types.
 
-```ts title="server.ts" focus={4-6}
+```ts title="server.ts"
 Bun.serve({
   fetch(req, server) {}, // upgrade logic
   websocket: {
-    message(ws, message) {
-      ws.send("Hello world"); // string
-      ws.send(response.arrayBuffer()); // ArrayBuffer
-      ws.send(new Uint8Array([1, 2, 3])); // TypedArray | DataView
-    },
+    message(ws, message) { // [!code highlight]
+      ws.send("Hello world"); // string // [!code highlight]
+      ws.send(response.arrayBuffer()); // ArrayBuffer // [!code highlight]
+      ws.send(new Uint8Array([1, 2, 3])); // TypedArray | DataView // [!code highlight]
+    }, // [!code highlight]
   },
 });
 ```
