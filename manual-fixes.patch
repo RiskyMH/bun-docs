@@ -12,7 +12,7 @@ index e3a9a9e2..245adda0 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index 5fc74894..ee7bc23a 100644
+index 8421b70c..0cd307eb 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -498,10 +498,10 @@ you shouldn't see this
