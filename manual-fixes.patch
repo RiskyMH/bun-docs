@@ -2631,10 +2631,10 @@ index f7516c86..f718a3ff 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 5eb27c5c..ebeb6aa8 100644
+index c3f01343..4bdbc284 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
-@@ -201,7 +201,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
+@@ -212,7 +212,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
  
  ```toml title="bunfig.toml"
  [test]
@@ -2642,7 +2642,7 @@ index 5eb27c5c..ebeb6aa8 100644
  # to require 90% line-level and function-level coverage
  coverageThreshold = 0.9
  ```
-@@ -246,7 +245,7 @@ By default, coverage reports will be printed to the console. For persistent code
+@@ -257,7 +256,7 @@ By default, coverage reports will be printed to the console. For persistent code
  
  ```toml title="bunfig.toml"
  [test]
@@ -2651,7 +2651,7 @@ index 5eb27c5c..ebeb6aa8 100644
  ```
  
  ### `test.coverageDir`
-@@ -551,7 +550,6 @@ To configure the cache behavior:
+@@ -562,7 +561,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -2659,7 +2659,7 @@ index 5eb27c5c..ebeb6aa8 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -737,9 +735,7 @@ With this option, the command being run will not be printed to the console:
+@@ -748,9 +746,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -2682,6 +2682,46 @@ index 93f16aba..144a7c3e 100644
  ```
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
+diff --git b/content/docs/runtime/cron.mdx a/content/docs/runtime/cron.mdx
+index f39b1511..5746343a 100644
+--- b/content/docs/runtime/cron.mdx
++++ a/content/docs/runtime/cron.mdx
+@@ -173,7 +173,7 @@ Bun uses [crontab](https://man7.org/linux/man-pages/man5/crontab.5.html) to regi
+ 
+ The crontab entry looks like:
+ 
+-```
++```sh
+ <schedule> '<bun-path>' run --cron-title=<title> --cron-period='<schedule>' '<script-path>'
+ ```
+ 
+@@ -269,7 +269,7 @@ On headless servers and CI environments where the current user's [Security Ident
+ 
+ #### Trigger limit
+ 
+-:::caution
++<Callout type="warning">
+ Windows Task Scheduler enforces a limit of [48 triggers per task](https://learn.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-triggers-tasktype-element) (the `CalendarTrigger` element has [`maxOccurs="48"`](https://learn.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-calendartrigger-triggergroup-element)). Some cron expressions that work on Linux and macOS exceed this limit on Windows.
+ 
+ **Expressions that work on all platforms:**
+@@ -308,14 +308,13 @@ await Bun.cron("./job.ts", "*/7 9-13 * * *", "my-job");
+ // ✅ Works: use a divisor of 60 instead (Repetition, 1 trigger)
+ await Bun.cron("./job.ts", "*/5 * * * *", "my-job");
+ ```
+-
+-:::
++</Callout>
+ 
+ #### Windows containers
+ 
+-:::caution
++<Callout type="warning">
+ `Bun.cron()` is not supported in Windows Docker containers. The Task Scheduler service is not running in `servercore` or `nanoserver` images. Use an in-process scheduler for containerized workloads.
+-:::
++</Callout>
+ 
+ **Viewing registered jobs:**
+ 
 diff --git b/content/docs/runtime/debugger.mdx a/content/docs/runtime/debugger.mdx
 index 415c9d7e..20966461 100644
 --- b/content/docs/runtime/debugger.mdx
