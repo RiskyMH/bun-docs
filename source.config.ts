@@ -242,7 +242,7 @@ export default defineConfig({
                 }
               }
 
-              if (c.value?.includes("#")) {
+              if (c.value?.trim().startsWith("#")) {
                 commentStated = true;
               }
 
