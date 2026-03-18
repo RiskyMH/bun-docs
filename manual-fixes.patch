@@ -2683,18 +2683,82 @@ index 93f16aba..144a7c3e 100644
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
 diff --git b/content/docs/runtime/cron.mdx a/content/docs/runtime/cron.mdx
-index f39b1511..5746343a 100644
+index f39b1511..f5b1a57e 100644
 --- b/content/docs/runtime/cron.mdx
 +++ a/content/docs/runtime/cron.mdx
-@@ -173,7 +173,7 @@ Bun uses [crontab](https://man7.org/linux/man-pages/man5/crontab.5.html) to regi
+@@ -182,18 +182,18 @@ When the cron daemon fires the job, Bun imports your module and calls the `sched
+ **Viewing registered jobs:**
  
- The crontab entry looks like:
- 
--```
-+```sh
- <schedule> '<bun-path>' run --cron-title=<title> --cron-period='<schedule>' '<script-path>'
+ ```sh
+-crontab -l
++$ crontab -l
  ```
  
+ **Logs:** On Linux, cron output goes to the system log. Check with:
+ 
+ ```sh
+ # systemd-based (Ubuntu, Fedora, Arch, etc.)
+-journalctl -u cron       # or crond on some distros
+-journalctl -u cron --since "1 hour ago"
++$ journalctl -u cron       # or crond on some distros
++$ journalctl -u cron --since "1 hour ago"
+ 
+ # syslog-based (older systems)
+-grep CRON /var/log/syslog
++$ grep CRON /var/log/syslog
+ ```
+ 
+ To capture stdout/stderr to a file, redirect output in the crontab entry directly, or add logging inside your `scheduled()` handler.
+@@ -203,10 +203,10 @@ To capture stdout/stderr to a file, redirect output in the crontab entry directl
+ ```sh
+ # Edit your crontab and remove the "# bun-cron: <title>" comment
+ # and the command line below it
+-crontab -e
++$ crontab -e
+ 
+ # Or remove ALL bun cron jobs at once by filtering them out:
+-crontab -l | grep -v "# bun-cron:" | grep -v "\-\-cron-title=" | crontab -
++$ crontab -l | grep -v "# bun-cron:" | grep -v "\-\-cron-title=" | crontab -
+ ```
+ 
+ ### macOS
+@@ -222,7 +222,7 @@ The plist uses `StartCalendarInterval` to define the schedule. Complex patterns
+ **Viewing registered jobs:**
+ 
+ ```sh
+-launchctl list | grep bun.cron
++$ launchctl list | grep bun.cron
+ ```
+ 
+ **Logs:** stdout and stderr are written to:
+@@ -235,22 +235,22 @@ launchctl list | grep bun.cron
+ For example, a job titled `weekly-report`:
+ 
+ ```sh
+-cat /tmp/bun.cron.weekly-report.stdout.log
+-tail -f /tmp/bun.cron.weekly-report.stderr.log
++$ cat /tmp/bun.cron.weekly-report.stdout.log
++$ tail -f /tmp/bun.cron.weekly-report.stderr.log
+ ```
+ 
+ **Manually uninstalling without code:**
+ 
+ ```sh
+ # Unload the job from launchd
+-launchctl bootout gui/$(id -u)/bun.cron.<title>
++$ launchctl bootout gui/$(id -u)/bun.cron.<title>
+ 
+ # Delete the plist file
+ $ rm ~/Library/LaunchAgents/bun.cron.<title>.plist
+ 
+ # Example for a job titled "weekly-report":
+-launchctl bootout gui/$(id -u)/bun.cron.weekly-report
+-rm ~/Library/LaunchAgents/bun.cron.weekly-report.plist
++$ launchctl bootout gui/$(id -u)/bun.cron.weekly-report
++$ rm ~/Library/LaunchAgents/bun.cron.weekly-report.plist
+ ```
+ 
+ ### Windows
 @@ -269,7 +269,7 @@ On headless servers and CI environments where the current user's [Security Ident
  
  #### Trigger limit
@@ -2974,7 +3038,7 @@ index 743ad9bc..341c8d1e 100644
  
  **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index 434220fc..316dabd3 100644
+index d84dd5ba..701ab494 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -3006,15 +3070,7 @@ index 434220fc..316dabd3 100644
  ### `.serialize()`
  
  `bun:sqlite` supports SQLite's built-in mechanism for [serializing](https://www.sqlite.org/c3ref/serialize.html) and [deserializing](https://www.sqlite.org/c3ref/deserialize.html) databases to and from memory.
-@@ -211,7 +203,6 @@ db.run("PRAGMA journal_mode = WAL;");
- In WAL mode, writes to the database are written directly to a separate file called the "WAL file" (write-ahead log). This file will be later integrated into the main database file. Think of it as a buffer for pending writes. Refer to the [SQLite docs](https://www.sqlite.org/wal.html) for a more detailed overview.
- 
- On macOS, WAL files may be persistent by default. This is not a bug, it is how macOS configured the system version of SQLite.
--
- </Accordion>
- </Accordions>
- 
-@@ -280,10 +271,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
+@@ -304,10 +296,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.all({ $message: "Hello world" }); // [!code highlight]
@@ -3026,7 +3082,7 @@ index 434220fc..316dabd3 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -295,10 +283,7 @@ Use `.get()` to run a query and get back the first result as an object.
+@@ -319,10 +308,7 @@ Use `.get()` to run a query and get back the first result as an object.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.get({ $message: "Hello world" }); // [!code highlight]
@@ -3038,7 +3094,7 @@ index 434220fc..316dabd3 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `undefined` is returned.
-@@ -310,13 +295,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
+@@ -334,13 +320,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
  ```ts title="db.ts"
  const query = db.query(`create table foo;`);
  query.run(); // [!code highlight]
@@ -3056,7 +3112,7 @@ index 434220fc..316dabd3 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) once. Stepping through all the rows is not necessary when you don't care about the results.
-@@ -341,13 +323,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
+@@ -365,13 +348,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
  const movies = query.all();
  const first = query.get();
  
@@ -3072,7 +3128,7 @@ index 434220fc..316dabd3 100644
  ```
  
  As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like using `Object.create` than `new`. The class's prototype is assigned to the object, methods are attached, and getters/setters are set up, but the constructor is not called.
-@@ -383,14 +360,11 @@ const query = db.query(`select $message;`);
+@@ -407,14 +385,11 @@ const query = db.query(`select $message;`);
  
  query.values({ $message: "Hello world" }); // [!code highlight]
  query.values(2); // [!code highlight]
@@ -3092,7 +3148,7 @@ index 434220fc..316dabd3 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -448,13 +422,8 @@ const query = db.query("SELECT ?1, ?2");
+@@ -472,13 +447,8 @@ const query = db.query("SELECT ?1, ?2");
  const results = query.all("hello", "goodbye");
  ```
  
@@ -3108,7 +3164,7 @@ index 434220fc..316dabd3 100644
  ```
  
  ---
-@@ -477,12 +446,7 @@ import { Database } from "bun:sqlite";
+@@ -501,12 +471,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3122,7 +3178,7 @@ index 434220fc..316dabd3 100644
  ```
  
  When `safeIntegers` is `true`, `bun:sqlite` will throw an error if a `bigint` value in a bound parameter exceeds 64 bits:
-@@ -498,14 +462,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+@@ -522,14 +487,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
  try {
    query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
  } catch (e) {
@@ -3138,7 +3194,7 @@ index 434220fc..316dabd3 100644
  ### `safeIntegers: false` (default)
  
  When `safeIntegers` is `false`, `bun:sqlite` will return integers as `number` types and truncate any bits beyond 53:
-@@ -516,11 +476,7 @@ import { Database } from "bun:sqlite";
+@@ -540,11 +501,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3151,7 +3207,7 @@ index 434220fc..316dabd3 100644
  ```
  
  ---
-@@ -613,7 +569,7 @@ db.loadExtension("myext"); // [!code highlight]
+@@ -637,7 +594,7 @@ db.loadExtension("myext"); // [!code highlight]
  
  ```bash title="terminal"
  $ brew install sqlite
