@@ -2683,7 +2683,7 @@ index 93f16aba..144a7c3e 100644
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
 diff --git b/content/docs/runtime/cron.mdx a/content/docs/runtime/cron.mdx
-index f39b1511..f5b1a57e 100644
+index e211ab82..6ee337f7 100644
 --- b/content/docs/runtime/cron.mdx
 +++ a/content/docs/runtime/cron.mdx
 @@ -182,18 +182,18 @@ When the cron daemon fires the job, Bun imports your module and calls the `sched
@@ -2759,33 +2759,6 @@ index f39b1511..f5b1a57e 100644
  ```
  
  ### Windows
-@@ -269,7 +269,7 @@ On headless servers and CI environments where the current user's [Security Ident
- 
- #### Trigger limit
- 
--:::caution
-+<Callout type="warning">
- Windows Task Scheduler enforces a limit of [48 triggers per task](https://learn.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-triggers-tasktype-element) (the `CalendarTrigger` element has [`maxOccurs="48"`](https://learn.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-calendartrigger-triggergroup-element)). Some cron expressions that work on Linux and macOS exceed this limit on Windows.
- 
- **Expressions that work on all platforms:**
-@@ -308,14 +308,13 @@ await Bun.cron("./job.ts", "*/7 9-13 * * *", "my-job");
- // ✅ Works: use a divisor of 60 instead (Repetition, 1 trigger)
- await Bun.cron("./job.ts", "*/5 * * * *", "my-job");
- ```
--
--:::
-+</Callout>
- 
- #### Windows containers
- 
--:::caution
-+<Callout type="warning">
- `Bun.cron()` is not supported in Windows Docker containers. The Task Scheduler service is not running in `servercore` or `nanoserver` images. Use an in-process scheduler for containerized workloads.
--:::
-+</Callout>
- 
- **Viewing registered jobs:**
- 
 diff --git b/content/docs/runtime/debugger.mdx a/content/docs/runtime/debugger.mdx
 index 415c9d7e..20966461 100644
 --- b/content/docs/runtime/debugger.mdx
@@ -3038,7 +3011,7 @@ index 743ad9bc..341c8d1e 100644
  
  **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index d84dd5ba..701ab494 100644
+index a03c0d28..023b253a 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -3070,7 +3043,7 @@ index d84dd5ba..701ab494 100644
  ### `.serialize()`
  
  `bun:sqlite` supports SQLite's built-in mechanism for [serializing](https://www.sqlite.org/c3ref/serialize.html) and [deserializing](https://www.sqlite.org/c3ref/deserialize.html) databases to and from memory.
-@@ -304,10 +296,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
+@@ -305,10 +297,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.all({ $message: "Hello world" }); // [!code highlight]
@@ -3082,7 +3055,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -319,10 +308,7 @@ Use `.get()` to run a query and get back the first result as an object.
+@@ -320,10 +309,7 @@ Use `.get()` to run a query and get back the first result as an object.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.get({ $message: "Hello world" }); // [!code highlight]
@@ -3094,7 +3067,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `undefined` is returned.
-@@ -334,13 +320,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
+@@ -335,13 +321,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
  ```ts title="db.ts"
  const query = db.query(`create table foo;`);
  query.run(); // [!code highlight]
@@ -3112,7 +3085,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) once. Stepping through all the rows is not necessary when you don't care about the results.
-@@ -365,13 +348,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
+@@ -366,13 +349,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
  const movies = query.all();
  const first = query.get();
  
@@ -3128,7 +3101,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like using `Object.create` than `new`. The class's prototype is assigned to the object, methods are attached, and getters/setters are set up, but the constructor is not called.
-@@ -407,14 +385,11 @@ const query = db.query(`select $message;`);
+@@ -408,14 +386,11 @@ const query = db.query(`select $message;`);
  
  query.values({ $message: "Hello world" }); // [!code highlight]
  query.values(2); // [!code highlight]
@@ -3148,7 +3121,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -472,13 +447,8 @@ const query = db.query("SELECT ?1, ?2");
+@@ -473,13 +448,8 @@ const query = db.query("SELECT ?1, ?2");
  const results = query.all("hello", "goodbye");
  ```
  
@@ -3164,7 +3137,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  ---
-@@ -501,12 +471,7 @@ import { Database } from "bun:sqlite";
+@@ -502,12 +472,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3178,7 +3151,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  When `safeIntegers` is `true`, `bun:sqlite` will throw an error if a `bigint` value in a bound parameter exceeds 64 bits:
-@@ -522,14 +487,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+@@ -523,14 +488,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
  try {
    query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
  } catch (e) {
@@ -3194,7 +3167,7 @@ index d84dd5ba..701ab494 100644
  ### `safeIntegers: false` (default)
  
  When `safeIntegers` is `false`, `bun:sqlite` will return integers as `number` types and truncate any bits beyond 53:
-@@ -540,11 +501,7 @@ import { Database } from "bun:sqlite";
+@@ -541,11 +502,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3207,7 +3180,7 @@ index d84dd5ba..701ab494 100644
  ```
  
  ---
-@@ -637,7 +594,7 @@ db.loadExtension("myext"); // [!code highlight]
+@@ -638,7 +595,7 @@ db.loadExtension("myext"); // [!code highlight]
  
  ```bash title="terminal"
  $ brew install sqlite
