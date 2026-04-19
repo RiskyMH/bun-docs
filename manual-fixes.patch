@@ -1785,7 +1785,7 @@ index f97d8e33..82de5b7a 100644
  ## What's Inside
  
 diff --git b/content/docs/installation.mdx a/content/docs/installation.mdx
-index e36cbf98..7d705669 100644
+index b2022b76..7b74af21 100644
 --- b/content/docs/installation.mdx
 +++ a/content/docs/installation.mdx
 @@ -13,13 +13,9 @@ Bun ships as a single, dependency-free executable. You can install it via script
@@ -1803,7 +1803,7 @@ index e36cbf98..7d705669 100644
 +      $ curl -fsSL https://bun.com/install | bash
 +      ```
      <Callout type="info">
-       **Linux users**  The `unzip` package is required to install Bun. Use `sudo apt install unzip` to install the unzip package. Kernel version 5.6 or higher is strongly recommended, but the minimum is 5.1. Use `uname -r` to check Kernel version.
+       **Linux users**  The `unzip` package is required to install Bun. Use `sudo apt install unzip` to install the unzip package. Kernel version 5.6 or higher is recommended; Bun runs on kernels as old as 3.10 (RHEL 7) with graceful degradation of newer syscalls. Use `uname -r` to check your kernel version.
        </Callout>
 @@ -27,12 +23,9 @@ $ curl -fsSL https://bun.com/install | bash
    </Tab>
@@ -2132,19 +2132,7 @@ index e36cbf98..7d705669 100644
  </Cards>
  
  ### Musl Binaries
-@@ -312,8 +293,9 @@ For distributions without `glibc` (Alpine Linux, Void Linux):
- - [Linux ARM64 musl](https://github.com/oven-sh/bun/releases/latest/download/bun-linux-aarch64-musl.zip)
- 
- <Callout type="info">
--  If you encounter an error like `bun: /lib/x86_64-linux-gnu/libm.so.6: version GLIBC_2.29 not found`, try using the
--  musl binary. Bun's install script automatically chooses the correct binary for your system.
-+	If you encounter an error like `bun: /lib/x86_64-linux-gnu/libm.so.6: version GLIBC_2.29 not
-+	found`, try using the musl binary. Bun's install script automatically chooses the correct binary
-+	for your system.
- </Callout>
- 
- ---
-@@ -330,23 +312,22 @@ Bun has specific CPU requirements based on the binary you're using:
+@@ -331,23 +312,22 @@ Bun has specific CPU requirements based on the binary you're using:
      | x64 | Haswell (4th gen Core) or newer | Excavator or newer |
  	</Tab>
  
@@ -2178,7 +2166,7 @@ index e36cbf98..7d705669 100644
  </Callout>
  
  ---
-@@ -357,32 +338,26 @@ To remove Bun from your system:
+@@ -358,32 +338,26 @@ To remove Bun from your system:
  
  <Tabs items={['macOS & Linux', 'Windows', 'Package Managers']}>
  	<Tab value="macOS & Linux">
@@ -2590,10 +2578,10 @@ index 805030ba..24347a1f 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index c3f01343..4bdbc284 100644
+index 4850c98c..98722048 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
-@@ -212,7 +212,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
+@@ -225,7 +225,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
  
  ```toml title="bunfig.toml"
  [test]
@@ -2601,7 +2589,7 @@ index c3f01343..4bdbc284 100644
  # to require 90% line-level and function-level coverage
  coverageThreshold = 0.9
  ```
-@@ -257,7 +256,7 @@ By default, coverage reports will be printed to the console. For persistent code
+@@ -279,7 +278,7 @@ By default, coverage reports will be printed to the console. For persistent code
  
  ```toml title="bunfig.toml"
  [test]
@@ -2610,7 +2598,7 @@ index c3f01343..4bdbc284 100644
  ```
  
  ### `test.coverageDir`
-@@ -562,7 +561,6 @@ To configure the cache behavior:
+@@ -621,7 +620,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -2618,7 +2606,7 @@ index c3f01343..4bdbc284 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -748,9 +746,7 @@ With this option, the command being run will not be printed to the console:
+@@ -824,9 +822,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -3282,6 +3270,28 @@ index 99d7f89c..4d2061ae 100644
  Reloaded 1 times
  Reloaded 2 times
  Reloaded 3 times
+diff --git b/content/docs/runtime/webview.mdx a/content/docs/runtime/webview.mdx
+index 8ed1f453..948b89e4 100644
+--- b/content/docs/runtime/webview.mdx
++++ a/content/docs/runtime/webview.mdx
+@@ -111,7 +111,7 @@ When Bun needs to spawn Chrome, it searches in this order:
+ 
+ If none is found, the constructor throws.
+ 
+-#### Connecting to an already-running Chrome {#existing-chrome}
++#### Connecting to an already-running Chrome [#existing-chrome]
+ 
+ By default, before spawning, Bun checks whether a Chrome-family browser is **already running** with remote debugging enabled by reading the `DevToolsActivePort` file from standard profile directories. If found, Bun connects to that browser over WebSocket instead of spawning a new one — your views open as tabs in your existing browser.
+ 
+@@ -441,7 +441,7 @@ If you don't pass `console`, page-side console output is dropped.
+ 
+ ---
+ 
+-## Raw Chrome DevTools Protocol {#cdp}
++## Raw Chrome DevTools Protocol [#cdp]
+ 
+ When using `backend: "chrome"`, you can drop down to raw [CDP](https://chromedevtools.github.io/devtools-protocol/) commands for anything the high-level API doesn't cover.
+ 
 diff --git b/content/docs/test/dom.mdx a/content/docs/test/dom.mdx
 index 20af4d98..612222ba 100644
 --- b/content/docs/test/dom.mdx

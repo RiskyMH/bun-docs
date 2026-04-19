@@ -54,6 +54,7 @@
     "environment-variables",
     "shell",
     "child-process",
+    "webview",
     "cron",
     "---[Puzzle] Interop & Tooling---",
     "node-api",
