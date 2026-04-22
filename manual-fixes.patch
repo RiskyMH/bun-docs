@@ -2578,7 +2578,7 @@ index 805030ba..24347a1f 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 4850c98c..98722048 100644
+index c53507f1..f35dfae0 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -2606,7 +2606,7 @@ index 4850c98c..98722048 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -824,9 +822,7 @@ With this option, the command being run will not be printed to the console:
+@@ -835,9 +833,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -2617,7 +2617,7 @@ index 4850c98c..98722048 100644
  ```
  
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 93f16aba..144a7c3e 100644
+index 16ba60dd..c702ea1b 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
 @@ -100,7 +100,7 @@ You can read results from the subprocess via the `stdout` and `stderr` propertie

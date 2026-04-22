@@ -25,6 +25,7 @@
     "cli/patch",
     "filter",
     "global-cache",
+    "global-store",
     "isolated-installs",
     "lockfile",
     "lifecycle",
