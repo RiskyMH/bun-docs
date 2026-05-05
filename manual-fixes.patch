@@ -87,7 +87,7 @@ index 50fb209d..357f624a 100644
    margin: 0;
    padding: 0;
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index 4a5b970d..2c9bb61f 100644
+index e0319cbb..d5464fec 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -1657,7 +1657,7 @@ index ff966d5a..7bee792d 100644
      		</Callout>
      </Step>
 diff --git b/content/docs/index.mdx a/content/docs/index.mdx
-index f97d8e33..82de5b7a 100644
+index d16bcb47..9ff660ce 100644
 --- b/content/docs/index.mdx
 +++ a/content/docs/index.mdx
 @@ -4,73 +4,68 @@ description: Bun is an all-in-one toolkit for developing modern JavaScript/TypeS
@@ -2578,7 +2578,7 @@ index 805030ba..24347a1f 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index c53507f1..f35dfae0 100644
+index db3f422f..a87f41e2 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -3172,7 +3172,7 @@ index 4259a1a8..9edd678f 100644
  When you run `bun create ${template} ${destination}`, here’s what happens:
  
 diff --git b/content/docs/runtime/transpiler.mdx a/content/docs/runtime/transpiler.mdx
-index e5e941fd..5eff589b 100644
+index fe583e30..3ac23772 100644
 --- b/content/docs/runtime/transpiler.mdx
 +++ a/content/docs/runtime/transpiler.mdx
 @@ -17,7 +17,7 @@ const transpiler = new Bun.Transpiler({

@@ -71,6 +71,7 @@
     "json5",
     "jsonl",
     "html-rewriter",
+    "image",
     "hashing",
     "glob",
     "semver",
