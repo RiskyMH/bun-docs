@@ -4158,6 +4158,19 @@ index cbe257d5..58a41b64 100644
  1. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "Developer ID Application: Your Name (ZZZZZZZZZZ)"
     1 valid identities found
  ```
+diff --git b/content/guides/runtime/define-constant.mdx a/content/guides/runtime/define-constant.mdx
+index 25a2d582..b7acf7b3 100644
+--- b/content/guides/runtime/define-constant.mdx
++++ a/content/guides/runtime/define-constant.mdx
+@@ -57,7 +57,7 @@ To also collapse the surrounding `if` scaffolding and produce the minimal output
+ $ bun build --define process.env.NODE_ENV="'production'" --minify-syntax src/index.ts
+ ```
+ 
+-```ts
++```js title="output.js"
+ console.log("Production mode");
+ ```
+ 
 diff --git b/content/guides/runtime/set-env.mdx a/content/guides/runtime/set-env.mdx
 index 18c12c64..fade4263 100644
 --- b/content/guides/runtime/set-env.mdx
