@@ -2352,7 +2352,7 @@ index 4509e5b9..5e448032 100644
  
  Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/building-windows.mdx a/content/docs/project/building-windows.mdx
-index 53b22b91..71f9732b 100644
+index 88b873dd..87e8d73a 100644
 --- b/content/docs/project/building-windows.mdx
 +++ a/content/docs/project/building-windows.mdx
 @@ -14,7 +14,7 @@ It is strongly recommended to use [PowerShell 7 (`pwsh.exe`)](https://learn.micr
@@ -2382,16 +2382,16 @@ index 53b22b91..71f9732b 100644
  ```
  
  After Visual Studio, you need the following:
-@@ -47,19 +47,19 @@ After Visual Studio, you need the following:
+@@ -49,19 +49,19 @@ After Visual Studio, you need the following:
  
  Use [Scoop](https://scoop.sh) to install these remaining tools.
  
 -```ps1 Scoop (x64)
 -irm https://get.scoop.sh | iex
--scoop install nodejs-lts go rust nasm ruby perl ccache
+-scoop install nodejs-lts go rustup nasm ruby perl ccache
 +```ps1 title="Scoop (x64)"
 +> irm https://get.scoop.sh | iex
-+> scoop install nodejs-lts go rust nasm ruby perl ccache
++> scoop install nodejs-lts go rustup nasm ruby perl ccache
  # scoop seems to be buggy if you install llvm and the rest at the same time
 -scoop install llvm@21.1.8
 +> scoop install llvm@21.1.8
@@ -2409,7 +2409,7 @@ index 53b22b91..71f9732b 100644
  ```
  
  <Callout type="info">
-@@ -70,21 +70,22 @@ Start-Process -FilePath "$env:TEMP\LLVM-21.1.8-woa64.exe" -ArgumentList "/S" -Wa
+@@ -72,21 +72,22 @@ Start-Process -FilePath "$env:TEMP\LLVM-21.1.8-woa64.exe" -ArgumentList "/S" -Wa
  
  If you intend on building WebKit locally (optional, x64 only), you should install these packages:
  
@@ -2436,7 +2436,7 @@ index 53b22b91..71f9732b 100644
  ```
  
  <Callout type="info">
-@@ -95,16 +96,16 @@ Get-Command mt
+@@ -97,16 +98,16 @@ Get-Command mt
  ## Building
  
  ```ps1
@@ -2456,7 +2456,7 @@ index 53b22b91..71f9732b 100644
  ```
  
  You should add this to `$Env:PATH`. The simplest way to do so is to open the start menu, type "Path", and then navigate the environment variables menu to add `C:\.....\bun\build\debug` to the user environment variable `PATH`. You should then restart your editor (if it does not update still, log out and log back in).
-@@ -120,15 +121,15 @@ You can run the test suite either using `bun test <path>` or by using the wrappe
+@@ -121,15 +122,15 @@ You can run the test suite either using `bun test <path>` or by using the wrappe
  
  ```ps1
  # Setup
@@ -2477,7 +2477,7 @@ index 53b22b91..71f9732b 100644
  
  ## Troubleshooting
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index 3bce6928..693eae2b 100644
+index 5fa52bfa..61de282a 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
 @@ -12,7 +12,7 @@ If you are using Windows, please refer to [this guide](/docs/project/building-wi
@@ -2489,7 +2489,7 @@ index 3bce6928..693eae2b 100644
  # or explicitly use the pure shell
  # nix develop .#pure
  $ export CMAKE_SYSTEM_PROCESSOR=$(uname -m)
-@@ -115,7 +115,7 @@ If none of the above solutions apply, you will have to install it [manually](htt
+@@ -119,7 +119,7 @@ If none of the above solutions apply, you will have to install it [manually](htt
  Make sure Clang/LLVM 21 is in your path:
  
  ```bash
@@ -2498,7 +2498,7 @@ index 3bce6928..693eae2b 100644
  ```
  
  If not, run this to manually add it:
-@@ -146,7 +146,7 @@ $ bun run build
+@@ -150,7 +150,7 @@ $ bun run build
  The binary will be located at `./build/debug/bun-debug`. It is recommended to add this to your `$PATH`. To verify the build worked, let's print the version number on the development build of Bun.
  
  ```bash
@@ -2507,7 +2507,7 @@ index 3bce6928..693eae2b 100644
  x.y.z_debug
  ```
  
-@@ -344,7 +344,7 @@ $ brew install pkg-config
+@@ -348,7 +348,7 @@ $ brew install pkg-config
  If you see this error when compiling, run:
  
  ```bash
