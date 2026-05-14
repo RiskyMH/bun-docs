@@ -2578,7 +2578,7 @@ index 805030ba..24347a1f 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index db3f422f..a87f41e2 100644
+index 5f8800fe..0393bebe 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -2833,10 +2833,10 @@ index 934c4f43..1d1913cc 100644
  <html>
    <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 62c93330..2dda6d9a 100644
+index 05379e9c..59954d7a 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
-@@ -502,7 +502,7 @@ export interface Post {
+@@ -545,7 +545,7 @@ export interface Post {
  
  ## Reference
  
