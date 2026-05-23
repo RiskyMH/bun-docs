@@ -65,7 +65,7 @@ Here's how it works:
 
 Projects that depend on popular libraries like `esbuild` or `sharp` install faster.
 
-<ReactTweet id="1984596069913887192" />
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun<br/><br/>`bun install` gets smarter about choosing which & when postinstall scripts run. <br/><br/>In a repo with next.js & vite, bun install gets 6x faster. <a href="https://t.co/tJfJUD0pF9">pic.twitter.com/tJfJUD0pF9</a></p>— Jarred Sumner (@jarredsumner) <a href="https://twitter.com/jarredsumner/status/1984596069913887192?ref_src=twsrc%5Etfw">November 1, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
 
 To disable Bun's built-in defaults via environment variables:
 
@@ -78,7 +78,7 @@ BUN_FEATURE_FLAG_DISABLE_IGNORE_SCRIPTS=1            # disables script skipping
 
 Bun now supports CPU profiling for any script using the `--cpu-prof` flag. This records detailed information about how much time your program spends in each function, helping you identify performance bottlenecks and optimize hot paths.
 
-<ReactTweet id="1983742270475268169" />
+<blockquote className="twitter-tweet"><p lang="en" dir="ltr">In the next version of Bun<br/><br/>`bun --cpu-prof &lt;script&gt;` generates CPU profiles you can open in Chrome DevTools, powered by JavaScriptCore's sampling profiler. <a href="https://t.co/cEPVDfw40S">pic.twitter.com/cEPVDfw40S</a></p>— Jarred Sumner (@jarredsumner) <a href="https://twitter.com/jarredsumner/status/1983742270475268169?ref_src=twsrc%5Etfw">October 30, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
 
 Profiles are saved in the Chrome DevTools–compatible `.cpuprofile` format and can be opened directly in Chrome DevTools (Performance tab) or VS Code's CPU profiler. Sampling runs at 1ms for fine-grained insights.
 
