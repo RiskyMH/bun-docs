@@ -28,5 +28,8 @@ export const metadata: Metadata = {
   },
   description: 'Bun is a fast, modern runtime for JavaScript and TypeScript',
   metadataBase: new URL("https://bun-docs.vercel.app"),
-  icons: "https://bun.com/logo.svg"
+  icons: "https://bun.com/logo.svg",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
