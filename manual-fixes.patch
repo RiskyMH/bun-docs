@@ -2352,7 +2352,7 @@ index 4509e5b9..5e448032 100644
  
  Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/building-windows.mdx a/content/docs/project/building-windows.mdx
-index 88b873dd..87e8d73a 100644
+index 71e516cb..5989ccc7 100644
 --- b/content/docs/project/building-windows.mdx
 +++ a/content/docs/project/building-windows.mdx
 @@ -14,7 +14,7 @@ It is strongly recommended to use [PowerShell 7 (`pwsh.exe`)](https://learn.micr
@@ -2476,6 +2476,24 @@ index 88b873dd..87e8d73a 100644
  ```
  
  ## Troubleshooting
+@@ -155,14 +156,14 @@ Windows binaries (both x64 and arm64) can also be built on a Linux host. The bui
+ 
+ ```bash
+ $ cargo install xwin # or download a release binary
+-xwin --accept-license --arch x86_64,aarch64 --include-atl splat \
++$ xwin --accept-license --arch x86_64,aarch64 --include-atl splat \
+   --use-winsysroot-style --preserve-ms-arch-notation --include-debug-libs \
+   --output /opt/winsysroot
+ # clang-cl/lld-link look up SDK paths as "Include"/"Lib"; the splat writes
+ # them lowercase, so alias both spellings (needs the same privileges as the
+ # splat — configure creates these itself when the directory is writable).
+-ln -s include "/opt/winsysroot/Windows Kits/10/Include"
+-ln -s lib "/opt/winsysroot/Windows Kits/10/Lib"
++$ ln -s include "/opt/winsysroot/Windows Kits/10/Include"
++$ ln -s lib "/opt/winsysroot/Windows Kits/10/Lib"
+ ```
+ 
+ The build looks for the sysroot at `/opt/winsysroot` (or `/opt/xwin`) automatically; elsewhere, set `WINDOWS_SYSROOT=<path>` or pass `--winsysroot=<path>` (a user-writable path also lets configure manage the aliases for you). Configure validates the splat at the start of every cross build. CI agents bake the same splat into their images (`.buildkite/Dockerfile`, `scripts/bootstrap.sh`); when an agent doesn't have one, the build fetches it into its cache dir at configure time.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
 index 5fa52bfa..61de282a 100644
 --- b/content/docs/project/contributing.mdx
