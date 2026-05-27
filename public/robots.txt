@@ -1,0 +1,9 @@
+# Allow all search engine crawlers access to the entire website
+User-agent: *
+Disallow:
+
+# List of individual XML sitemaps for search engine discovery
+Sitemap: https://bun-docs.vercel.app/sitemap.xml
+Sitemap: https://bun-docs.vercel.app/blog/sitemap.xml
+Sitemap: https://bun-docs.vercel.app/docs/sitemap.xml
+Sitemap: https://bun-docs.vercel.app/guides/sitemap.xml

@@ -39,13 +39,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         }
     };
 
-    const docsPages = source.getPages().map((page) => ({
-        url: `${canonical}${page.url}`,
-        lastModified: getLastMod(page.absolutePath),
-        changeFrequency: 'weekly' as const,
-        priority: 0.5,
-    }));
-
     const blogPages = blogs.getPages().map((page) => ({
         url: `${canonical}${page.url}`,
         lastModified: getLastMod(page.absolutePath) || (page.data.date ? new Date(page.data.date) : undefined),
@@ -60,7 +53,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly' as const,
             priority: 1,
         },
-        ...docsPages,
         ...blogPages,
     ];
 }
