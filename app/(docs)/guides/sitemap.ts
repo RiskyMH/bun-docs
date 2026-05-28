@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next'
 import { execSync } from 'node:child_process';
 import { source, blogs } from "@/lib/source";
 
+export const dynamic = "force-static";
+
 const canonical = 'https://bun-docs.vercel.app';
 
 function buildGitLastModMap(): Map<string, Date> {
