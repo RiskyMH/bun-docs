@@ -2352,7 +2352,7 @@ index 4509e5b9..5e448032 100644
  
  Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/building-windows.mdx a/content/docs/project/building-windows.mdx
-index 71e516cb..5989ccc7 100644
+index d41948b2..f4d023de 100644
 --- b/content/docs/project/building-windows.mdx
 +++ a/content/docs/project/building-windows.mdx
 @@ -14,7 +14,7 @@ It is strongly recommended to use [PowerShell 7 (`pwsh.exe`)](https://learn.micr
@@ -2480,8 +2480,8 @@ index 71e516cb..5989ccc7 100644
  
  ```bash
  $ cargo install xwin # or download a release binary
--xwin --accept-license --arch x86_64,aarch64 --include-atl splat \
-+$ xwin --accept-license --arch x86_64,aarch64 --include-atl splat \
+-xwin --accept-license --arch x86_64,aarch64 --sdk-version 10.0.26100 --crt-version 14.44.17.14 --include-atl splat \
++$ xwin --accept-license --arch x86_64,aarch64 --sdk-version 10.0.26100 --crt-version 14.44.17.14 --include-atl splat \
    --use-winsysroot-style --preserve-ms-arch-notation --include-debug-libs \
    --output /opt/winsysroot
  # clang-cl/lld-link look up SDK paths as "Include"/"Lib"; the splat writes
