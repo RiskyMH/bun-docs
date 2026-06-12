@@ -2944,7 +2944,7 @@ index 747ff123..16d2f508 100644
  
  Then install this crate:
 diff --git b/content/docs/runtime/sql.mdx a/content/docs/runtime/sql.mdx
-index 75841232..7360ec11 100644
+index e18a7f27..ecf8c610 100644
 --- b/content/docs/runtime/sql.mdx
 +++ a/content/docs/runtime/sql.mdx
 @@ -524,11 +524,11 @@ MySQL connections can be configured via environment variables:
