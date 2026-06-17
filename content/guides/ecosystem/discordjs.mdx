@@ -152,11 +152,13 @@ When you deploy, there's no build or bundling step. Bun runs `bot.ts` and every 
 
 To keep the bot online and bring it back after a crash or reboot, run it under a process manager.
 
-<Columns cols={2}>
-  <Card title="systemd" href="/guides/ecosystem/systemd" icon="server">
+import { ServerIcon, CogIcon } from "lucide-react";
+
+<Cards className="grid-cols-2">
+  <Card title="systemd" href="/guides/ecosystem/systemd" icon={<ServerIcon />}>
     Run your bot as a Linux daemon
   </Card>
-  <Card title="PM2" href="/guides/ecosystem/pm2" icon="cog">
+  <Card title="PM2" href="/guides/ecosystem/pm2" icon={<CogIcon />}>
     Manage your bot with PM2
   </Card>
-</Columns>
+</Cards>
