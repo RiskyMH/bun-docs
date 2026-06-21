@@ -2282,7 +2282,7 @@ index 7bd9cc5c..03996471 100644
  
  Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
-index 2ef06140..99c220a7 100644
+index 0aba265c..452113ee 100644
 --- b/content/docs/pm/cli/pm.mdx
 +++ a/content/docs/pm/cli/pm.mdx
 @@ -87,7 +87,6 @@ To print the path to the `bin` directory for the local project:
