@@ -12,7 +12,7 @@ index b9845712..44cfbf50 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index c72c6093..6f7584be 100644
+index 15112f25..86802f1d 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -498,10 +498,10 @@ you shouldn't see this
@@ -2341,7 +2341,7 @@ index 5bc2a4cc..191b0b02 100644
  
  Bun supports loading configuration options from [`.npmrc`](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc) files, allowing you to reuse existing registry/scope configurations.
 diff --git b/content/docs/pm/security-scanner-api.mdx a/content/docs/pm/security-scanner-api.mdx
-index 4509e5b9..5e448032 100644
+index 212b06ac..0388c50d 100644
 --- b/content/docs/pm/security-scanner-api.mdx
 +++ a/content/docs/pm/security-scanner-api.mdx
 @@ -1,6 +1,5 @@
@@ -2596,7 +2596,7 @@ index 805030ba..24347a1f 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 5f8800fe..0393bebe 100644
+index ed49b034..6c2e7f7e 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
@@ -2624,7 +2624,7 @@ index 5f8800fe..0393bebe 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -835,9 +833,7 @@ With this option, the command being run will not be printed to the console:
+@@ -841,9 +839,7 @@ With this option, the command being run will not be printed to the console:
  
  ```sh
  $ bun run dev
@@ -3155,10 +3155,10 @@ index 02bb47d3..8ff91bb9 100644
  
  To point `bun:sqlite` to the new build, call `Database.setCustomSQLite(path)` before creating any `Database` instances. (On other operating systems, this is a no-op.) Pass a path to the SQLite `.dylib` file, _not_ the executable. With recent versions of Homebrew this is something like `/opt/homebrew/Cellar/sqlite/<version>/libsqlite3.dylib`.
 diff --git b/content/docs/runtime/streams.mdx a/content/docs/runtime/streams.mdx
-index a829e58a..74129f2b 100644
+index 1135a297..10a41bce 100644
 --- b/content/docs/runtime/streams.mdx
 +++ a/content/docs/runtime/streams.mdx
-@@ -195,7 +195,7 @@ sink.start({
+@@ -219,7 +219,7 @@ sink.start({
  
  ## Reference
  
