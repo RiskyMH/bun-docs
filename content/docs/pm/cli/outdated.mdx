@@ -3,7 +3,7 @@ title: "bun outdated"
 description: "Check for outdated dependencies"
 ---
 
-Use `bun outdated` to check for outdated dependencies in your project. This command displays a table of dependencies that have newer versions available.
+`bun outdated` displays a table of the dependencies in your project that have newer versions available.
 
 ```sh title="terminal"
 $ bun outdated
@@ -31,9 +31,7 @@ The output table shows three version columns:
 
 ### Dependency Filters
 
-`bun outdated` supports searching for outdated dependencies by package names and glob patterns.
-
-To check if specific dependencies are outdated, pass the package names as positional arguments:
+To check specific dependencies, pass their names as positional arguments:
 
 ```sh title="terminal"
 $ bun outdated eslint-plugin-security eslint-plugin-sonarjs
@@ -44,7 +42,7 @@ $ bun outdated eslint-plugin-security eslint-plugin-sonarjs
 | eslint-plugin-sonarjs (dev)    | 0.23.0  | 0.23.0 | 3.0.1     |
 ```
 
-You can also pass glob patterns to check for outdated packages:
+Glob patterns work too:
 
 ```sh title="terminal"
 $ bun outdated 'eslint*'
@@ -96,7 +94,7 @@ $ bun outdated --filter='@monorepo/types'
 | typescript (dev)   | 5.7.2   | 5.7.3  | 5.7.3  |
 ```
 
-You can pass multiple `--filter` flags to check multiple workspaces:
+Pass `--filter` more than once to check multiple workspaces:
 
 ```sh title="terminal"
 $ bun outdated --filter @monorepo/types --filter @monorepo/cli
@@ -111,7 +109,7 @@ $ bun outdated --filter @monorepo/types --filter @monorepo/cli
 | typescript (dev)               | 5.7.2   | 5.7.3  | 5.7.3      |
 ```
 
-You can also pass glob patterns to filter by workspace names:
+`--filter` also accepts glob patterns for workspace names:
 
 ```sh title="terminal"
 $ bun outdated --filter='@monorepo/{types,cli}'
@@ -128,7 +126,7 @@ $ bun outdated --filter='@monorepo/{types,cli}'
 
 ### Catalog Dependencies
 
-`bun outdated` supports checking catalog dependencies defined in`package.json`:
+`bun outdated` also checks [catalog](/docs/pm/catalogs) dependencies defined in `package.json`:
 
 ```sh title="terminal"
 $ bun outdated -r

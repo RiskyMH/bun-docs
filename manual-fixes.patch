@@ -1,8 +1,8 @@
 diff --git b/content/docs/bundler/esbuild.mdx a/content/docs/bundler/esbuild.mdx
-index b9845712..44cfbf50 100644
+index 72cdb8af..8beddd48 100644
 --- b/content/docs/bundler/esbuild.mdx
 +++ a/content/docs/bundler/esbuild.mdx
-@@ -30,7 +30,7 @@ Bun and esbuild both provide a command-line interface.
+@@ -27,7 +27,7 @@ Bun's bundler is 1.75x faster than esbuild on esbuild's three.js benchmark.
  
  ```bash title="terminal"
  # esbuild
@@ -12,27 +12,23 @@ index b9845712..44cfbf50 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index 15112f25..86802f1d 100644
+index a02e056f..0c8e0e4b 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
-@@ -498,10 +498,10 @@ you shouldn't see this
- However, with the `BUN_BE_BUN=1` environment variable, it acts just like the `bun` binary:
- 
- ```bash title="terminal"
--# With the env var, the executable acts like the `bun` CLI
-+With the env var, the executable acts like the `bun` CLI
+@@ -495,7 +495,7 @@ However, with the `BUN_BE_BUN=1` environment variable, it acts like the `bun` bi
+ # With the env var, the executable acts like the `bun` CLI
  $ BUN_BE_BUN=1 ./such-bun install
  
 -bun install v1.2.16-canary.1 (1d1db811)
-+bun install v$BUN_LATEST_VERSION (1d1db811)
++$ bun install v$BUN_LATEST_VERSION (1d1db811)
  Checked 63 installs across 64 packages (no changes) [5.00ms]
  ```
  
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index 50fb209d..357f624a 100644
+index aa4dc45a..6973ca76 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
-@@ -123,7 +123,7 @@ Becomes something like this:
+@@ -121,7 +121,7 @@ Becomes something like this:
  
  To use React in your client-side code, import `react-dom/client` and render your app.
  
@@ -41,7 +37,7 @@ index 50fb209d..357f624a 100644
  import dashboard from "../public/dashboard.html";
  import { serve } from "bun";
  
-@@ -138,7 +138,7 @@ serve({
+@@ -136,7 +136,7 @@ serve({
  });
  ```
  
@@ -50,7 +46,7 @@ index 50fb209d..357f624a 100644
  import { createRoot } from "react-dom/client";
  import App from "./app";
  
-@@ -147,7 +147,7 @@ const root = createRoot(container!);
+@@ -145,7 +145,7 @@ const root = createRoot(container!);
  root.render(<App />);
  ```
  
@@ -59,7 +55,7 @@ index 50fb209d..357f624a 100644
  <!DOCTYPE html>
  <html>
    <head>
-@@ -161,7 +161,7 @@ root.render(<App />);
+@@ -159,7 +159,7 @@ root.render(<App />);
  </html>
  ```
  
@@ -68,7 +64,7 @@ index 50fb209d..357f624a 100644
  import { useState } from "react";
  
  export default function App() {
-@@ -519,7 +519,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
+@@ -514,7 +514,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
  <Steps>
  <Step>
  
@@ -77,7 +73,7 @@ index 50fb209d..357f624a 100644
  - Transpiles TypeScript, JSX, and TSX in `<script>` tags
  - Bundles imported dependencies
  - Generates sourcemaps for debugging
-@@ -785,7 +785,7 @@ export function App() {
+@@ -778,7 +778,7 @@ export function App() {
  }
  ```
  
@@ -87,7 +83,7 @@ index 50fb209d..357f624a 100644
    margin: 0;
    padding: 0;
 diff --git b/content/docs/bundler/html-static.mdx a/content/docs/bundler/html-static.mdx
-index e0319cbb..d5464fec 100644
+index d00ed01f..28cbd163 100644
 --- b/content/docs/bundler/html-static.mdx
 +++ a/content/docs/bundler/html-static.mdx
 @@ -22,9 +22,7 @@ To get started, pass HTML files to `bun`.
@@ -100,7 +96,7 @@ index e0319cbb..d5464fec 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -48,9 +46,7 @@ When you pass a single `.html` file to Bun, Bun will use it as a fallback route
+@@ -48,9 +46,7 @@ When you pass a single `.html` file to Bun, Bun uses it as a fallback route for
  
  ```bash title="terminal"
  $ bun index.html
@@ -110,7 +106,7 @@ index e0319cbb..d5464fec 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -99,9 +95,7 @@ To specify multiple files, you can use glob patterns that end in `.html`:
+@@ -99,9 +95,7 @@ To specify multiple files, use a glob pattern that ends in `.html`:
  
  ```bash title="terminal"
  $ bun ./**/*.html
@@ -120,7 +116,7 @@ index e0319cbb..d5464fec 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -117,9 +111,7 @@ The base path is chosen from the longest common prefix among all the files.
+@@ -117,9 +111,7 @@ Bun chooses the base path from the longest common prefix among all the files.
  
  ```bash title="terminal"
  $ bun ./index.html ./about/index.html ./about/foo/index.html
@@ -148,27 +144,18 @@ index e0319cbb..d5464fec 100644
  body {
    background-color: red;
  }
-@@ -182,7 +174,7 @@ body {
+@@ -188,7 +180,7 @@ body {
  
- You can reference local assets in your CSS files.
- 
--```scss title="styles.css"
-+```css title="styles.css"
- body {
-   background-image: url("./logo.png");
- }
-@@ -190,7 +182,7 @@ body {
- 
- This will copy `./logo.png` to the output directory and rewrite the path in the CSS file to include a content hash.
+ Bun copies `./logo.png` to the output directory and rewrites the path in the CSS file to include a content hash.
  
 -```scss title="styles.css"
 +```css title="styles.css"
  body {
    background-image: url("./logo-[ABC123].png");
  }
-@@ -229,30 +221,16 @@ plugins = ["bun-plugin-tailwind"]
+@@ -227,30 +219,16 @@ plugins = ["bun-plugin-tailwind"]
  
- Then, reference TailwindCSS in your HTML via `<link>` tag, `@import` in CSS, or import in JavaScript.
+ Then, reference TailwindCSS in your HTML with a `<link>` tag, an `@import` in CSS, or an import in JavaScript.
  
 -<Tabs items={['index.html', 'styles.css', 'app.ts']}>
 -  <Tab value="index.html">
@@ -205,9 +192,9 @@ index e0319cbb..d5464fec 100644
 +import "tailwindcss";
 +```
  
- <Callout type="info">Only one of those are necessary, not all three.</Callout>
+ <Callout type="info">Only one of these is necessary, not all three.</Callout>
  
-@@ -351,9 +329,7 @@ To enable, pass the `--console` CLI flag.
+@@ -347,9 +325,7 @@ Bun's dev server can stream console logs from the browser to the terminal. To en
  
  ```bash title="terminal"
  $ bun ./index.html --console
@@ -217,7 +204,7 @@ index e0319cbb..d5464fec 100644
  Bun v$BUN_LATEST_VERSION
  ready in 6.62ms
  → http://localhost:3000/
-@@ -380,22 +356,16 @@ While the server is running:
+@@ -376,22 +352,16 @@ While the server is running:
  
  When you're ready to deploy, use `bun build` to create optimized production bundles:
  
@@ -249,12 +236,12 @@ index e0319cbb..d5464fec 100644
 +```
  
  <Callout type="warning">
-   Currently, plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server
+   Plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server, not
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index dbcc5aaf..494e6551 100644
+index da811ead..f840f1bc 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
-@@ -77,8 +77,8 @@ To create our bundle:
+@@ -75,8 +75,8 @@ To create the bundle:
    <Tab value="JavaScript">
      ```ts title="build.ts"
      await Bun.build({
@@ -265,24 +252,33 @@ index dbcc5aaf..494e6551 100644
      });
     ```
    </Tab>
-@@ -154,15 +154,48 @@ Like the Bun runtime, the bundler supports an array of file types out of the box
- | Extensions                                            | Details                                                                                                                                                                                                                                                                                                                                                      |
- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
- | `.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` | Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. The bundler executes a set of default transforms including dead code elimination and tree shaking. At the moment Bun does not attempt to down-convert syntax; if you use recently ECMAScript syntax, that will be reflected in the bundled code. |
--| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import pkg from "./package.json";<br/>pkg.name; // => "my-package"<br/>`                                                                                                                                                                                          |
--| `.jsonc`                                              | JSON with comments. Files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./config.jsonc";<br/>config.name; // => "my-config"<br/>`                                                                                                                                                                      |
--| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./bunfig.toml";<br/>config.logLevel; // => "debug"<br/>`                                                                                                                                                                                      |
--| `.yaml` `.yml`                                        | YAML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./config.yaml";<br/>config.name; // => "my-app"<br/>`                                                                                                                                                                                         |
--| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<br/><br/>`js<br/>import contents from "./file.txt";<br/>console.log(contents); // => "Hello, world!"<br/>`                                                                                                                                                                   |
+@@ -149,17 +149,50 @@ $ bun build ./index.tsx --outdir ./out --watch
+ 
+ Like the Bun runtime, the bundler supports a range of file types by default. The following table lists the bundler's standard "loaders". See [loaders](/docs/bundler/loaders).
+ 
+-| Extensions                                            | Details                                                                                                                                                                                                                                                                                                                     |
+-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+-| `.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` | Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. The bundler executes a set of default transforms including dead code elimination and tree shaking. Bun does not down-convert syntax; if you use recent ECMAScript syntax, it appears as-is in the bundled code. |
+-| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import pkg from "./package.json";<br/>pkg.name; // => "my-package"<br/>`                                                                                                                                                         |
+-| `.jsonc`                                              | JSON with comments. Files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./config.jsonc";<br/>config.name; // => "my-config"<br/>`                                                                                                                                     |
+-| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./bunfig.toml";<br/>config.logLevel; // => "debug"<br/>`                                                                                                                                                     |
+-| `.yaml` `.yml`                                        | YAML files are parsed and inlined into the bundle as a JavaScript object.<br/><br/>`js<br/>import config from "./config.yaml";<br/>config.name; // => "my-app"<br/>`                                                                                                                                                        |
+-| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<br/><br/>`js<br/>import contents from "./file.txt";<br/>console.log(contents); // => "Hello, world!"<br/>`                                                                                                                                  |
+-| `.html`                                               | HTML files are processed and any referenced assets (scripts, stylesheets, images) are bundled.                                                                                                                                                                                                                              |
+-| `.css`                                                | CSS files are bundled together into a single `.css` file in the output directory.                                                                                                                                                                                                                                           |
+-| `.node` `.wasm`                                       | These files are supported by the Bun runtime, but during bundling they are treated as assets.                                                                                                                                                                                                                               |
++| Extensions                                            | Details                                                                                                                                                                                                                                                                                                                                                      |
++| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
++| `.js` `.jsx` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` | Uses Bun's built-in transpiler to parse the file and transpile TypeScript/JSX syntax to vanilla JavaScript. The bundler executes a set of default transforms including dead code elimination and tree shaking. At the moment Bun does not attempt to down-convert syntax; if you use recently ECMAScript syntax, that will be reflected in the bundled code. |
 +| `.json`                                               | JSON files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:json</include>                                                                                                                                                                                                                                    |
 +| `.jsonc`                                              | JSON with comments. Files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:jsonc</include>                                                                                                                                                                                                                                    |
 +| `.toml`                                               | TOML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:toml</include>                                                                                                                                                                                                                                    |
 +| `.yaml` `.yml`                                        | YAML files are parsed and inlined into the bundle as a JavaScript object. <include>index.mdx#content-types:yaml</include>                                                                                                                                                                                                                                    |
 +| `.txt`                                                | The contents of the text file are read and inlined into the bundle as a string.<include>index.mdx#content-types:txt</include>                                                                                                                                                                                                                                |
- | `.html`                                               | HTML files are processed and any referenced assets (scripts, stylesheets, images) are bundled.                                                                                                                                                                                                                                                               |
- | `.css`                                                | CSS files are bundled together into a single `.css` file in the output directory.                                                                                                                                                                                                                                                                            |
- | `.node` `.wasm`                                       | These files are supported by the Bun runtime, but during bundling they are treated as assets.                                                                                                                                                                                                                                                                |
- 
++| `.html`                                               | HTML files are processed and any referenced assets (scripts, stylesheets, images) are bundled.                                                                                                                                                                                                                                                               |
++| `.css`                                                | CSS files are bundled together into a single `.css` file in the output directory.                                                                                                                                                                                                                                                                            |
++| `.node` `.wasm`                                       | These files are supported by the Bun runtime, but during bundling they are treated as assets.                                                                                                                                                                                                                                                                |
++
 +{/* start llm ignored codeblock */}
 +<section id="content-types:json" style={{display:"none"}}>
 +```js
@@ -315,59 +311,53 @@ index dbcc5aaf..494e6551 100644
 +```
 +</section>
 +{/* end llm ignored codeblock */}
-+
+ 
  ### Assets
  
- If the bundler encounters an import with an unrecognized extension, it treats the imported file as an external file. The referenced file is copied as-is into `outdir`, and the import is resolved as a path to the file.
-@@ -348,28 +381,30 @@ The intended execution environment for the bundle.
+@@ -346,27 +379,28 @@ The intended execution environment for the bundle.
  
- Depending on the target, Bun will apply different module resolution rules and optimizations.
+ Depending on the target, Bun applies different module resolution rules and optimizations.
  
 -<Card title="browser" icon="globe">
--  **Default.** For generating bundles that are intended for execution by a browser. Prioritizes the `"browser"` export
--  condition when resolving imports. Importing any built-in modules, like `node:events` or `node:path` will work, but
--  calling some functions, like `fs.readFile` will not work.
+-  **Default.** For bundles that run in a browser. Prioritizes the `"browser"` export condition when resolving imports.
++<Cards className="grid-cols-1">
++  <Card title="Browser (default)">
++    **Default.** For bundles that run in a browser. Prioritizes the `"browser"` export condition when resolving imports.
+   Importing built-in modules like `node:events` or `node:path` works, but calling some functions, like `fs.readFile`,
+   does not.
 -</Card>
 -
 -<Card title="bun" icon="server">
--For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
-+<Cards className="grid-cols-1">
-+  <Card title="Browser (default)">
-+    For generating bundles that are intended for execution by a browser. Prioritizes the
-+    `"browser"` export condition when resolving imports. Importing any built-in modules, like
-+    `node:events` or `node:path` will work, but calling some functions, like `fs.readFile` will not
-+    work.
+-For bundles that run in the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. Use this target for full-stack applications with build-time HTML imports, where server and client code are bundled together.
 +  </Card>
  
--All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
+-All bundles generated with `target: "bun"` are marked with a `// @bun` pragma, which tells the Bun runtime that there's no need to re-transpile the file before execution.
 +  <Card title="Bun">
-+    For generating bundles that are intended to be run by the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. This is the target to use for building full-stack applications with build-time HTML imports, where both server and client code are bundled together.
++    For bundles that run in the Bun runtime. In many cases, it isn't necessary to bundle server-side code; you can directly execute the source code without modification. However, bundling your server code can reduce startup times and improve running performance. Use this target for full-stack applications with build-time HTML imports, where server and client code are bundled together.
  
--If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
-+    All bundles generated with `target: "bun"` are marked with a special `// @bun` pragma, which indicates to the Bun runtime that there's no need to re-transpile the file before execution.
+-If any entrypoint contains a Bun shebang (`#!/usr/bin/env bun`), the bundler defaults to `target: "bun"` instead of `"browser"`.
++    All bundles generated with `target: "bun"` are marked with a `// @bun` pragma, which tells the Bun runtime that there's no need to re-transpile the file before execution.
  
 -When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
-+    If any entrypoints contains a Bun shebang (`#!/usr/bin/env bun`) the bundler will default to `target: "bun"` instead of `"browser"`.
++    If any entrypoint contains a Bun shebang (`#!/usr/bin/env bun`), the bundler defaults to `target: "bun"` instead of `"browser"`.
  
 -</Card>
 +    When using `target: "bun"` and `format: "cjs"` together, the `// @bun @bun-cjs` pragma is added and the CommonJS wrapper function is not compatible with Node.js.
 +  </Card>
  
 -<Card title="node" icon="node">
--  For generating bundles that are intended to be run by Node.js. Prioritizes the `"node"` export condition when
--  resolving imports, and outputs `.mjs`. In the future, this will automatically polyfill the Bun global and other
--  built-in `bun:*` modules, though this is not yet implemented.
+-  For bundles that run in Node.js. Prioritizes the `"node"` export condition when resolving imports, and outputs `.mjs`.
+-  Bun does not polyfill the `Bun` global or the built-in `bun:*` modules.
 -</Card>
 +  <Card title="Node">
-+    For generating bundles that are intended to be run by Node.js. Prioritizes the `"node"` export
-+    condition when resolving imports, and outputs `.mjs`. In the future, this will automatically
-+    polyfill the Bun global and other built-in `bun:*` modules, though this is not yet implemented.
++    For bundles that run in Node.js. Prioritizes the `"node"` export condition when resolving imports, and outputs `.mjs`.
++    Bun does not polyfill the `Bun` global or the built-in `bun:*` modules.
 +  </Card>
 +</Cards>
  
  ### format
  
-@@ -435,21 +470,21 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+@@ -432,21 +466,21 @@ Configures how JSX is compiled.
    <Tab value="JavaScript">
      ```ts title="index.ts"
      await Bun.build({
@@ -396,7 +386,7 @@ index dbcc5aaf..494e6551 100644
    </Tab>
  </Tabs>
  
-@@ -459,20 +494,20 @@ Configure JSX transform behavior. Allows fine-grained control over how JSX is co
+@@ -456,20 +490,20 @@ Configures how JSX is compiled.
    <Tab value="JavaScript">
      ```ts title="index.ts"
      await Bun.build({
@@ -425,7 +415,7 @@ index dbcc5aaf..494e6551 100644
    </Tab>
  </Tabs>
  
-@@ -526,7 +561,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
+@@ -523,7 +557,7 @@ To bundle `entry-a.ts` and `entry-b.ts` with code-splitting enabled:
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./entry-a.ts ./entry-b.ts --outdir ./out --splitting
@@ -434,7 +424,7 @@ index dbcc5aaf..494e6551 100644
    </Tab>
  </Tabs>
  
-@@ -582,7 +617,7 @@ Injects environment variables into the bundled output by converting `process.env
+@@ -579,7 +613,7 @@ Injects environment variables into the bundled output by converting `process.env
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out --env inline
@@ -443,7 +433,7 @@ index dbcc5aaf..494e6551 100644
    </Tab>
  </Tabs>
  
-@@ -612,7 +647,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+@@ -609,7 +643,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
      await Bun.build({
        entrypoints: ['./index.tsx'],
        outdir: './out',
@@ -452,7 +442,7 @@ index dbcc5aaf..494e6551 100644
        // Inline all env vars that start with "ACME_PUBLIC_"
        env: "ACME_PUBLIC_*",
      })
-@@ -628,7 +663,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
+@@ -625,7 +659,7 @@ Inlines environment variables matching the given prefix (the part before the `*`
  For example, given the following environment variables:
  
  ```bash title="terminal"
@@ -461,7 +451,7 @@ index dbcc5aaf..494e6551 100644
  ```
  
  And source code:
-@@ -939,9 +974,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
+@@ -936,9 +970,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out \
@@ -474,9 +464,9 @@ index dbcc5aaf..494e6551 100644
     ```
    </Tab>
  </Tabs>
-@@ -1475,44 +1510,39 @@ return new Response(artifact);
+@@ -1472,44 +1506,39 @@ return new Response(artifact);
  
- The Bun runtime implements special pretty-printing of `BuildArtifact` object to make debugging easier.
+ The Bun runtime pretty-prints `BuildArtifact` objects to make debugging easier.
  
 -<Tabs items={['JavaScript', 'CLI']} groupId="js/cli">
 -  <Tab value="JavaScript">
@@ -552,7 +542,7 @@ index dbcc5aaf..494e6551 100644
  ## Bytecode
  
 diff --git b/content/docs/bundler/minifier.mdx a/content/docs/bundler/minifier.mdx
-index aaedb143..9d687f61 100644
+index c82a23f6..98230e7a 100644
 --- b/content/docs/bundler/minifier.mdx
 +++ a/content/docs/bundler/minifier.mdx
 @@ -102,12 +102,12 @@ Renames local variables and function names to shorter identifiers using frequenc
@@ -756,7 +746,7 @@ index aaedb143..9d687f61 100644
  ```
 @@ -338,13 +337,13 @@ Evaluates template literals with constant expressions.
  
- Converts simple template literals to regular strings.
+ Converts template literals with no substitutions to regular strings.
  
 -```ts Input
 +```ts title="Input"
@@ -1068,7 +1058,7 @@ index aaedb143..9d687f61 100644
  
 @@ -667,12 +661,12 @@ const x=0;
  
- Respects `/*@__PURE__*/` annotations for tree shaking.
+ Respects `/*@__PURE__*/` annotations for tree shaking (removing unused code).
  
 -```ts Input
 +```ts title="Input"
@@ -1607,7 +1597,7 @@ index aaedb143..9d687f61 100644
  void 0;
  void 0;
  ```
-@@ -1248,7 +1240,7 @@ This preserves the `.name` property on functions and classes while still minifyi
+@@ -1248,7 +1240,7 @@ await Bun.build({
  
  Using all three minification modes together:
  
@@ -1617,10 +1607,10 @@ index aaedb143..9d687f61 100644
  
  const myFunction = () => {
 diff --git b/content/docs/bundler/plugins.mdx a/content/docs/bundler/plugins.mdx
-index b85954ab..a24e1dcf 100644
+index 509b85f2..26ee80cc 100644
 --- b/content/docs/bundler/plugins.mdx
 +++ a/content/docs/bundler/plugins.mdx
-@@ -341,7 +341,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+@@ -325,7 +325,7 @@ To create a native plugin, export a C ABI function that matches the signature of
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -1630,7 +1620,7 @@ index b85954ab..a24e1dcf 100644
  
  Then install this crate:
 diff --git b/content/docs/feedback.mdx a/content/docs/feedback.mdx
-index ff966d5a..7bee792d 100644
+index 3fd3fbe5..1bae2457 100644
 --- b/content/docs/feedback.mdx
 +++ a/content/docs/feedback.mdx
 @@ -2,11 +2,12 @@
@@ -1640,24 +1630,24 @@ index ff966d5a..7bee792d 100644
 +icon: Lightbulb
  ---
  
- Whether you've found a bug, have a performance issue, or just want to suggest an improvement, here's how you can open a helpful issue:
+ Here's how to open a helpful issue for a bug, a performance problem, or a feature request:
  
--<Callout icon="discord">For general questions, please join our [Discord](https://bun.com/discord).</Callout>
-+<Callout>For general questions, please join our [Discord](https://bun.com/discord).</Callout>
+-<Callout icon="discord">For general questions, join the [Discord](https://bun.com/discord).</Callout>
++<Callout>For general questions, join the [Discord](https://bun.com/discord).</Callout>
  
  ## Reporting Issues
  
-@@ -57,7 +58,7 @@ Whether you've found a bug, have a performance issue, or just want to suggest an
+@@ -57,7 +58,7 @@ Here's how to open a helpful issue for a bug, a performance problem, or a featur
      	- The operating system and version you are using
      		<Callout type="info">
-     			- For MacOS and Linux: copy the output of `uname -mprs`
--    		  - For Windows: copy the output of this command in the powershell console:
-+    		  	- For Windows: copy the output of this command in the powershell console:
+     			- For macOS and Linux: copy the output of `uname -mprs`
+-    		  - For Windows: copy the output of this command in the PowerShell console:
++    		    - For Windows: copy the output of this command in the PowerShell console:
      				`"$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"`
      		</Callout>
      </Step>
 diff --git b/content/docs/index.mdx a/content/docs/index.mdx
-index d16bcb47..9ff660ce 100644
+index 85601e51..5de20dbd 100644
 --- b/content/docs/index.mdx
 +++ a/content/docs/index.mdx
 @@ -4,73 +4,68 @@ description: Bun is an all-in-one toolkit for developing modern JavaScript/TypeS
@@ -1785,10 +1775,10 @@ index d16bcb47..9ff660ce 100644
  ## What's Inside
  
 diff --git b/content/docs/installation.mdx a/content/docs/installation.mdx
-index b2022b76..7b74af21 100644
+index e90a89e1..d24e92ae 100644
 --- b/content/docs/installation.mdx
 +++ a/content/docs/installation.mdx
-@@ -13,13 +13,9 @@ Bun ships as a single, dependency-free executable. You can install it via script
+@@ -13,13 +13,9 @@ Bun ships as a single, dependency-free executable. Install it with the install s
  
  <Tabs items={['macOS & Linux', 'Windows', 'Package Managers', 'Docker']}>
    <Tab value="macOS & Linux">
@@ -1803,7 +1793,7 @@ index b2022b76..7b74af21 100644
 +      $ curl -fsSL https://bun.com/install | bash
 +      ```
      <Callout type="info">
-       **Linux users**  The `unzip` package is required to install Bun. Use `sudo apt install unzip` to install the unzip package. Kernel version 5.6 or higher is recommended; Bun runs on kernels as old as 3.10 (RHEL 7) with graceful degradation of newer syscalls. Use `uname -r` to check your kernel version.
+       **Linux users**  The `unzip` package is required to install Bun (`sudo apt install unzip`). Kernel version 5.6 or higher is recommended; Bun runs on kernels as old as 3.10 (RHEL 7) with graceful degradation of newer syscalls. Use `uname -r` to check your kernel version.
        </Callout>
 @@ -27,12 +23,9 @@ $ curl -fsSL https://bun.com/install | bash
    </Tab>
@@ -1822,7 +1812,7 @@ index b2022b76..7b74af21 100644
        Bun requires Windows 10 version 1809 or later.
      </Callout>
 @@ -40,22 +33,16 @@ $ curl -fsSL https://bun.com/install | bash
-     For support and discussion, please join the **#windows** channel on our [Discord](https://bun.com/discord).
+     For support and discussion, join the **#windows** channel on the [Discord](https://bun.com/discord).
  
    </Tab>
 -
@@ -1872,7 +1862,7 @@ index b2022b76..7b74af21 100644
    </Tab>
  </Tabs>
  
-@@ -84,96 +70,93 @@ To check that Bun was installed successfully, open a new terminal window and run
+@@ -84,11 +70,11 @@ To check that Bun was installed successfully, open a new terminal window and run
  
  ```bash title="terminal"
  $ bun --version
@@ -1886,10 +1876,8 @@ index b2022b76..7b74af21 100644
  ```
  
  <Callout type="warning">
--  If you've installed Bun but are seeing a `command not found` error, you may have to manually add the installation
--  directory (`~/.bun/bin`) to your `PATH`.
-+	If you've installed Bun but are seeing a `command not found` error, you may have to manually add
-+	the installation directory (`~/.bun/bin`) to your `PATH`.
+@@ -96,84 +82,80 @@ Output: 1.x.y+b7982ac13189
+   directory (`~/.bun/bin`) to your `PATH`.
  </Callout>
  
 -<Accordions type="single">
@@ -1955,7 +1943,7 @@ index b2022b76..7b74af21 100644
 -        & "$env:USERPROFILE\.bun\bin\bun" --version
 -   ```
  
--        If the command runs successfully but `bun --version` is not recognized, it means that bun is not in your system's PATH. To fix this, open a Powershell terminal and run the following command:
+-        If the command runs successfully but `bun --version` is not recognized, bun is not in your system's PATH. To fix this, open a PowerShell terminal and run the following command:
 +          ```bash title="terminal"
 +          $ & "$env:USERPROFILE\.bun\bin\bun" --version
 +          ```
@@ -1967,7 +1955,7 @@ index b2022b76..7b74af21 100644
 -          [System.EnvironmentVariableTarget]::User
 -        )
 -   ```
-+          If the command runs successfully but `bun --version` is not recognized, it means that bun is not in your system's PATH. To fix this, open a Powershell terminal and run the following command:
++          If the command runs successfully but `bun --version` is not recognized, bun is not in your system's PATH. To fix this, open a PowerShell terminal and run the following command:
  
 +          ```bash title="terminal"
 +          [System.Environment]::SetEnvironmentVariable(
@@ -1980,9 +1968,8 @@ index b2022b76..7b74af21 100644
          <Step>
 -
            ### Restart your terminal
--           After running the command, restart your terminal and test with `bun --version`
-+
-+          After running the command, restart your terminal and test with `bun --version`
+-           Restart your terminal and test with `bun --version`.
++          Restart your terminal and test with `bun --version`.
  
            ```bash title="terminal"
            $ bun --version
@@ -2000,7 +1987,7 @@ index b2022b76..7b74af21 100644
  ---
  
  ## Upgrading
-@@ -223,16 +206,14 @@ Since Bun is a single binary, you can install older versions by re-running the i
+@@ -223,16 +205,14 @@ Since Bun is a single binary, you can install older versions by re-running the i
  
      ```bash title="terminal"
      $ curl -fsSL https://bun.com/install | bash -s "bun-v$BUN_LATEST_VERSION"
@@ -2019,7 +2006,7 @@ index b2022b76..7b74af21 100644
    </Tab>
  </Tabs>
  
-@@ -245,62 +226,62 @@ To download Bun binaries directly, visit the [releases page on GitHub](https://g
+@@ -245,62 +225,62 @@ To download Bun binaries directly, visit the [releases page on GitHub](https://g
  ### Latest Version Downloads
  
  <Cards cols={2}>
@@ -2132,7 +2119,7 @@ index b2022b76..7b74af21 100644
  </Cards>
  
  ### Musl Binaries
-@@ -331,23 +312,22 @@ Bun has specific CPU requirements based on the binary you're using:
+@@ -331,18 +311,17 @@ CPU requirements depend on which binary you're using:
      | x64 | Haswell (4th gen Core) or newer | Excavator or newer |
  	</Tab>
  
@@ -2159,14 +2146,7 @@ index b2022b76..7b74af21 100644
  </Tabs>
  
  <Callout type="info">
--  Bun does not support CPUs older than the baseline target, which mandates the SSE4.2 extension. macOS requires version
--  13.0 or later.
-+	Bun does not support CPUs older than the baseline target, which mandates the SSE4.2 extension.
-+	macOS requires version 13.0 or later.
- </Callout>
- 
- ---
-@@ -358,32 +338,26 @@ To remove Bun from your system:
+@@ -358,32 +337,26 @@ To remove Bun from your system:
  
  <Tabs items={['macOS & Linux', 'Windows', 'Package Managers']}>
  	<Tab value="macOS & Linux">
@@ -2218,7 +2198,7 @@ index b2022b76..7b74af21 100644
 +	</Tab>
  </Tabs>
 diff --git b/content/docs/pm/bunx.mdx a/content/docs/pm/bunx.mdx
-index e3556aba..f79aea1b 100644
+index 71a690e1..62722724 100644
 --- b/content/docs/pm/bunx.mdx
 +++ a/content/docs/pm/bunx.mdx
 @@ -52,8 +52,6 @@ To pass additional command-line flags and arguments through to the executable, p
@@ -2229,8 +2209,8 @@ index e3556aba..f79aea1b 100644
 -
  ## Shebangs
  
- By default, Bun respects shebangs. If an executable is marked with `#!/usr/bin/env node`, Bun will spin up a `node` process to execute the file. However, in some cases it may be desirable to run executables using Bun's runtime, even if the executable indicates otherwise. To do so, include the `--bun` flag.
-@@ -83,7 +81,6 @@ To force bun to always be used with a script, use a shebang.
+ By default, Bun respects shebangs. If an executable is marked with `#!/usr/bin/env node`, Bun spins up a `node` process to execute the file. To run the executable with Bun's runtime instead, pass the `--bun` flag.
+@@ -83,7 +81,6 @@ To force a script to always run with Bun, give it a `bun` shebang.
  ```js title="dist/index.js"
  #!/usr/bin/env bun
  ```
@@ -2240,7 +2220,7 @@ index e3556aba..f79aea1b 100644
 -<Bunx />
 +<include>../../_snippets/cli/bunx.mdx</include>
 diff --git b/content/docs/pm/cli/link.mdx a/content/docs/pm/cli/link.mdx
-index c29e1378..49fd90bd 100644
+index 981eac72..56fa1bf6 100644
 --- b/content/docs/pm/cli/link.mdx
 +++ a/content/docs/pm/cli/link.mdx
 @@ -7,7 +7,7 @@ Use `bun link` in a local directory to register the current package as a "linkab
@@ -2253,7 +2233,7 @@ index c29e1378..49fd90bd 100644
  
  bun link v$BUN_LATEST_VERSION (7416672e)
 diff --git b/content/docs/pm/cli/outdated.mdx a/content/docs/pm/cli/outdated.mdx
-index 7bd9cc5c..03996471 100644
+index b1d60778..9b2485fd 100644
 --- b/content/docs/pm/cli/outdated.mdx
 +++ a/content/docs/pm/cli/outdated.mdx
 @@ -19,7 +19,6 @@ $ bun outdated
@@ -2264,15 +2244,15 @@ index 7bd9cc5c..03996471 100644
  ```
  
  ## Version Information
-@@ -43,7 +42,6 @@ $ bun outdated eslint-plugin-security eslint-plugin-sonarjs
+@@ -41,7 +40,6 @@ $ bun outdated eslint-plugin-security eslint-plugin-sonarjs
  | ------------------------------ | ------- | ------ | --------- |
  | eslint-plugin-security (dev)   | 2.1.1   | 2.1.1  | 3.0.1     |
  | eslint-plugin-sonarjs (dev)    | 0.23.0  | 0.23.0 | 3.0.1     |
 -
  ```
  
- You can also pass glob patterns to check for outdated packages:
-@@ -65,7 +63,7 @@ $ bun outdated '@types/*'
+ Glob patterns work too:
+@@ -63,7 +61,7 @@ $ bun outdated '@types/*'
  
  | Package            | Current | Update | Latest |
  | ------------------ | ------- | ------ | ------ |
@@ -2282,10 +2262,10 @@ index 7bd9cc5c..03996471 100644
  
  Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
-index 0aba265c..452113ee 100644
+index 3c5f8ec9..337de2e7 100644
 --- b/content/docs/pm/cli/pm.mdx
 +++ a/content/docs/pm/cli/pm.mdx
-@@ -87,7 +87,6 @@ To print the path to the `bin` directory for the local project:
+@@ -85,7 +85,6 @@ To print the path to the `bin` directory for the local project:
  
  ```bash title="terminal"
  $ bun pm bin
@@ -2293,7 +2273,7 @@ index 0aba265c..452113ee 100644
  /path/to/current/project/node_modules/.bin
  ```
  
-@@ -95,7 +94,6 @@ To print the path to the global `bin` directory:
+@@ -93,7 +92,6 @@ To print the path to the global `bin` directory:
  
  ```bash title="terminal"
  $ bun pm bin -g
@@ -2302,7 +2282,7 @@ index 0aba265c..452113ee 100644
  ```
  
 diff --git b/content/docs/pm/cli/publish.mdx a/content/docs/pm/cli/publish.mdx
-index 8ab4e2b8..a1fc945e 100644
+index ddf3c652..ec1c920c 100644
 --- b/content/docs/pm/cli/publish.mdx
 +++ a/content/docs/pm/cli/publish.mdx
 @@ -9,6 +9,7 @@ description: Use `bun publish` to publish a package to the npm registry
@@ -2314,10 +2294,10 @@ index 8ab4e2b8..a1fc945e 100644
  
  packed 203B package.json
 diff --git b/content/docs/pm/cli/update.mdx a/content/docs/pm/cli/update.mdx
-index 9bcc6ffd..98faa4c8 100644
+index b33d7993..1a6cb74e 100644
 --- b/content/docs/pm/cli/update.mdx
 +++ a/content/docs/pm/cli/update.mdx
-@@ -32,7 +32,9 @@ This launches an interactive terminal interface that shows all outdated packages
+@@ -32,7 +32,9 @@ The flag opens a terminal interface that lists every outdated package with its c
  
  The interface displays packages grouped by dependency type:
  
@@ -2329,7 +2309,7 @@ index 9bcc6ffd..98faa4c8 100644
  
    dependencies                Current  Target   Latest
 diff --git b/content/docs/pm/npmrc.mdx a/content/docs/pm/npmrc.mdx
-index 5bc2a4cc..191b0b02 100644
+index 90441055..cd95b7c9 100644
 --- b/content/docs/pm/npmrc.mdx
 +++ a/content/docs/pm/npmrc.mdx
 @@ -1,6 +1,6 @@
@@ -2339,9 +2319,9 @@ index 5bc2a4cc..191b0b02 100644
 +description: "Package Manager npmrc configuration"
  ---
  
- Bun supports loading configuration options from [`.npmrc`](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc) files, allowing you to reuse existing registry/scope configurations.
+ Bun loads configuration options from [`.npmrc`](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc) files, so you can reuse your existing registry and scope configuration.
 diff --git b/content/docs/pm/security-scanner-api.mdx a/content/docs/pm/security-scanner-api.mdx
-index 212b06ac..0388c50d 100644
+index 7c51a30c..86a2e09a 100644
 --- b/content/docs/pm/security-scanner-api.mdx
 +++ a/content/docs/pm/security-scanner-api.mdx
 @@ -1,6 +1,5 @@
@@ -2350,13 +2330,13 @@ index 212b06ac..0388c50d 100644
 -description:
  ---
  
- Bun's package manager can scan packages for security vulnerabilities before installation, helping protect your applications from supply chain attacks and known vulnerabilities.
+ Bun's package manager can scan packages before installing them, to catch supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/building-windows.mdx a/content/docs/project/building-windows.mdx
-index d41948b2..f4d023de 100644
+index 1b2e243a..0bed3e3c 100644
 --- b/content/docs/project/building-windows.mdx
 +++ a/content/docs/project/building-windows.mdx
-@@ -14,7 +14,7 @@ It is strongly recommended to use [PowerShell 7 (`pwsh.exe`)](https://learn.micr
- By default, running unverified scripts are blocked.
+@@ -12,7 +12,7 @@ Use [PowerShell 7 (`pwsh.exe`)](https://learn.microsoft.com/en-us/powershell/scr
+ By default, running unverified scripts is blocked.
  
  ```ps1
 -Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
@@ -2364,17 +2344,17 @@ index d41948b2..f4d023de 100644
  ```
  
  ### System Dependencies
-@@ -22,7 +22,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
- Bun v1.1 or later. We use Bun to run it's own code generators.
+@@ -20,7 +20,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+ Bun v1.1 or later. The build uses Bun to run its own code generators.
  
  ```ps1
 -irm bun.sh/install.ps1 | iex
 +> irm bun.sh/install.ps1 | iex
  ```
  
- [Visual Studio](https://visualstudio.microsoft.com) with the "Desktop Development with C++" workload. While installing, make sure to install Git as well, if Git for Windows is not already installed.
-@@ -30,7 +30,7 @@ irm bun.sh/install.ps1 | iex
- Visual Studio can be installed graphically using the wizard or through WinGet:
+ [Visual Studio](https://visualstudio.microsoft.com) with the "Desktop Development with C++" workload. While installing, also install Git if Git for Windows is not already installed.
+@@ -28,7 +28,7 @@ irm bun.sh/install.ps1 | iex
+ Install Visual Studio with the graphical wizard or through WinGet:
  
  ```ps1
 -winget install "Visual Studio Community 2022" --override "--add Microsoft.VisualStudio.Workload.NativeDesktop Microsoft.VisualStudio.Component.Git " -s msstore
@@ -2382,7 +2362,7 @@ index d41948b2..f4d023de 100644
  ```
  
  After Visual Studio, you need the following:
-@@ -49,19 +49,19 @@ After Visual Studio, you need the following:
+@@ -45,19 +45,19 @@ After Visual Studio, you need the following:
  
  Use [Scoop](https://scoop.sh) to install these remaining tools.
  
@@ -2409,9 +2389,9 @@ index d41948b2..f4d023de 100644
  ```
  
  <Callout type="info">
-@@ -72,21 +72,22 @@ Start-Process -FilePath "$env:TEMP\LLVM-21.1.8-woa64.exe" -ArgumentList "/S" -Wa
+@@ -68,8 +68,8 @@ Start-Process -FilePath "$env:TEMP\LLVM-21.1.8-woa64.exe" -ArgumentList "/S" -Wa
  
- If you intend on building WebKit locally (optional, x64 only), you should install these packages:
+ To build WebKit locally (optional, x64 only), install these packages:
  
 -```ps1 Scoop
 -scoop install make cygwin python
@@ -2419,16 +2399,9 @@ index d41948b2..f4d023de 100644
 +> scoop install make cygwin python
  ```
  
- <Callout type="info">Cygwin is not required for ARM64 builds as WebKit is provided as a pre-built binary.</Callout>
- 
- From here on out, it is **expected you use a PowerShell Terminal with `.\scripts\vs-shell.ps1` sourced**. This script is available in the Bun repository and can be loaded by executing it:
- 
--```ps1 title=".\scripts\vs-shell.ps1"
-+```ps1
-+> .\scripts\vs-shell.ps1
- ```
- 
- To verify, you can check for an MSVC-only command line such as `mt.exe`
+ <Callout type="info">ARM64 builds do not need Cygwin because WebKit is provided as a pre-built binary.</Callout>
+@@ -82,7 +82,7 @@ From here on out, **use a PowerShell terminal with `.\scripts\vs-shell.ps1` sour
+ To verify, check for an MSVC-only command such as `mt.exe`:
  
  ```ps1
 -Get-Command mt
@@ -2436,27 +2409,23 @@ index d41948b2..f4d023de 100644
  ```
  
  <Callout type="info">
-@@ -97,16 +98,16 @@ Get-Command mt
- ## Building
- 
- ```ps1
--bun run build
-+> bun run build
+@@ -96,13 +96,13 @@ Get-Command mt
+ bun run build
  
  # after the initial `bun run build` you can use the following to build
 -ninja -Cbuild/debug
 +> ninja -Cbuild/debug
  ```
  
- If this was successful, you should have a `bun-debug.exe` in the `build/debug` folder.
+ A successful build writes `bun-debug.exe` to the `build/debug` folder.
  
  ```ps1
 -.\build\debug\bun-debug.exe --revision
 +> .\build\debug\bun-debug.exe --revision
  ```
  
- You should add this to `$Env:PATH`. The simplest way to do so is to open the start menu, type "Path", and then navigate the environment variables menu to add `C:\.....\bun\build\debug` to the user environment variable `PATH`. You should then restart your editor (if it does not update still, log out and log back in).
-@@ -121,15 +122,15 @@ You can run the test suite either using `bun test <path>` or by using the wrappe
+ Add this folder to `$Env:PATH`: open the Start menu, type "Path", and use the environment variables menu to add `C:\.....\bun\build\debug` to the user environment variable `PATH`. Then restart your editor (if it still does not pick up the change, log out and log back in).
+@@ -117,15 +117,15 @@ Run the test suite with `bun test <path>` or with the wrapper script `bun node:t
  
  ```ps1
  # Setup
@@ -2476,7 +2445,7 @@ index d41948b2..f4d023de 100644
  ```
  
  ## Troubleshooting
-@@ -155,14 +156,14 @@ Windows binaries (both x64 and arm64) can also be built on a Linux host. The bui
+@@ -151,14 +151,14 @@ You can also build Windows binaries (both x64 and arm64) on a Linux host. The bu
  
  ```bash
  $ cargo install xwin # or download a release binary
@@ -2495,11 +2464,11 @@ index d41948b2..f4d023de 100644
  
  The build looks for the sysroot at `/opt/winsysroot` (or `/opt/xwin`) automatically; elsewhere, set `WINDOWS_SYSROOT=<path>` or pass `--winsysroot=<path>` (a user-writable path also lets configure manage the aliases for you). Configure validates the splat at the start of every cross build. CI agents bake the same splat into their images (`.buildkite/Dockerfile`, `scripts/bootstrap.sh`); when an agent doesn't have one, the build fetches it into its cache dir at configure time.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index 5fa52bfa..61de282a 100644
+index 5c551e89..c05a28be 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
-@@ -12,7 +12,7 @@ If you are using Windows, please refer to [this guide](/docs/project/building-wi
- A Nix flake is provided as an alternative to manual dependency installation:
+@@ -12,7 +12,7 @@ If you are using Windows, see [Building Windows](/docs/project/building-windows)
+ The repository includes a Nix flake as an alternative to installing dependencies manually:
  
  ```bash
 -nix develop
@@ -2507,7 +2476,7 @@ index 5fa52bfa..61de282a 100644
  # or explicitly use the pure shell
  # nix develop .#pure
  $ export CMAKE_SYSTEM_PROCESSOR=$(uname -m)
-@@ -119,7 +119,7 @@ If none of the above solutions apply, you will have to install it [manually](htt
+@@ -119,7 +119,7 @@ If none of these work, install it [manually](https://github.com/llvm/llvm-projec
  Make sure Clang/LLVM 21 is in your path:
  
  ```bash
@@ -2515,9 +2484,9 @@ index 5fa52bfa..61de282a 100644
 +$ which clang-21
  ```
  
- If not, run this to manually add it:
+ If not, add it manually:
 @@ -150,7 +150,7 @@ $ bun run build
- The binary will be located at `./build/debug/bun-debug`. It is recommended to add this to your `$PATH`. To verify the build worked, let's print the version number on the development build of Bun.
+ The binary is at `./build/debug/bun-debug`. It is recommended to add this to your `$PATH`. To verify the build worked, print its version:
  
  ```bash
 -build/debug/bun-debug --version
@@ -2525,7 +2494,7 @@ index 5fa52bfa..61de282a 100644
  x.y.z_debug
  ```
  
-@@ -348,7 +348,7 @@ $ brew install pkg-config
+@@ -345,7 +345,7 @@ $ brew install pkg-config
  If you see this error when compiling, run:
  
  ```bash
@@ -2535,7 +2504,7 @@ index 5fa52bfa..61de282a 100644
  
  ### Cannot find `libatomic.a`
 diff --git b/content/docs/quickstart.mdx a/content/docs/quickstart.mdx
-index 805030ba..24347a1f 100644
+index 3deee3b9..cbc36656 100644
 --- b/content/docs/quickstart.mdx
 +++ a/content/docs/quickstart.mdx
 @@ -26,7 +26,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
@@ -2554,7 +2523,7 @@ index 805030ba..24347a1f 100644
      Hello via Bun!
      ```
  
-@@ -77,7 +75,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+@@ -75,7 +73,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
  
      ```bash title="terminal"
      $ bun run index.ts
@@ -2562,7 +2531,7 @@ index 805030ba..24347a1f 100644
      Listening on http://localhost:3000
      ```
  
-@@ -112,7 +109,7 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+@@ -110,7 +107,7 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
        ```
  
      </Accordion>
@@ -2571,7 +2540,7 @@ index 805030ba..24347a1f 100644
  
    </Step>
    <Step>
-@@ -149,7 +146,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+@@ -147,7 +144,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
  
      ```bash title="terminal"
      $ bun run index.ts
@@ -2579,7 +2548,7 @@ index 805030ba..24347a1f 100644
      Listening on http://localhost:3000
      ```
  
-@@ -208,7 +204,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
+@@ -206,7 +202,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
  
      ```bash title="terminal"
      $ bun run index.ts
@@ -2587,7 +2556,7 @@ index 805030ba..24347a1f 100644
      Listening on http://localhost:3000
      ```
  
-@@ -249,7 +244,6 @@ Then run it with `bun run start`.
+@@ -247,7 +242,6 @@ Then run it with `bun run start`.
  
  ```bash title="terminal"
  $ bun run start
@@ -2596,10 +2565,10 @@ index 805030ba..24347a1f 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index ed49b034..6c2e7f7e 100644
+index 4af28d25..274326bc 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
-@@ -225,7 +225,6 @@ To specify a coverage threshold. By default, no threshold is set. If your test s
+@@ -225,7 +225,6 @@ The coverage threshold. By default, no threshold is set. If your test suite does
  
  ```toml title="bunfig.toml"
  [test]
@@ -2607,7 +2576,7 @@ index ed49b034..6c2e7f7e 100644
  # to require 90% line-level and function-level coverage
  coverageThreshold = 0.9
  ```
-@@ -279,7 +278,7 @@ By default, coverage reports will be printed to the console. For persistent code
+@@ -279,7 +278,7 @@ By default, coverage reports are printed to the console. For persistent reports
  
  ```toml title="bunfig.toml"
  [test]
@@ -2616,7 +2585,7 @@ index ed49b034..6c2e7f7e 100644
  ```
  
  ### `test.coverageDir`
-@@ -621,7 +620,6 @@ To configure the cache behavior:
+@@ -615,7 +614,6 @@ To configure the cache behavior:
  
  ```toml title="bunfig.toml"
  [install.cache]
@@ -2624,7 +2593,7 @@ index ed49b034..6c2e7f7e 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -841,9 +839,7 @@ With this option, the command being run will not be printed to the console:
+@@ -833,9 +831,7 @@ With this option, the command being run is not printed:
  
  ```sh
  $ bun run dev
@@ -2635,10 +2604,10 @@ index ed49b034..6c2e7f7e 100644
  ```
  
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 16ba60dd..c702ea1b 100644
+index 53226156..5666cd1f 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
-@@ -100,7 +100,7 @@ You can read results from the subprocess via the `stdout` and `stderr` propertie
+@@ -100,7 +100,7 @@ Read the subprocess's output from the `stdout` and `stderr` properties. By defau
  ```ts
  const proc = Bun.spawn(["bun", "--version"]);
  const text = await proc.stdout.text();
@@ -2648,7 +2617,7 @@ index 16ba60dd..c702ea1b 100644
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
 diff --git b/content/docs/runtime/cron.mdx a/content/docs/runtime/cron.mdx
-index 49796025..315383b7 100644
+index cc91cd82..25fe4cd7 100644
 --- b/content/docs/runtime/cron.mdx
 +++ a/content/docs/runtime/cron.mdx
 @@ -266,18 +266,18 @@ When the cron daemon fires the job, Bun imports your module and calls the `sched
@@ -2725,10 +2694,10 @@ index 49796025..315383b7 100644
  
  ### Windows
 diff --git b/content/docs/runtime/debugger.mdx a/content/docs/runtime/debugger.mdx
-index 5d65b594..17abb2c9 100644
+index 95d84b48..d664c439 100644
 --- b/content/docs/runtime/debugger.mdx
 +++ a/content/docs/runtime/debugger.mdx
-@@ -22,9 +22,7 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This a
+@@ -22,9 +22,7 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This s
  
  ```sh title="terminal"
  $ bun --inspect server.ts
@@ -2757,7 +2726,7 @@ index 5d65b594..17abb2c9 100644
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br
-@@ -184,11 +186,13 @@ await fetch("https://example.com", {
+@@ -182,11 +184,13 @@ await fetch("https://example.com", {
  });
  ```
  
@@ -2773,7 +2742,7 @@ index 5d65b594..17abb2c9 100644
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br
-@@ -314,7 +318,9 @@ const fn = () => {
+@@ -310,7 +314,9 @@ const fn = () => {
  fn();
  ```
  
@@ -2785,7 +2754,7 @@ index 5d65b594..17abb2c9 100644
      at myInner (file.js:4:15)
      at fn (file.js:8:5)
 diff --git b/content/docs/runtime/environment-variables.mdx a/content/docs/runtime/environment-variables.mdx
-index bafdcbb1..a0ebf1bc 100644
+index 4434c604..a7deb893 100644
 --- b/content/docs/runtime/environment-variables.mdx
 +++ a/content/docs/runtime/environment-variables.mdx
 @@ -29,7 +29,7 @@ $ FOO=helloworld bun run dev
@@ -2798,7 +2767,7 @@ index bafdcbb1..a0ebf1bc 100644
  
  <Accordions type="single">
 diff --git b/content/docs/runtime/ffi.mdx a/content/docs/runtime/ffi.mdx
-index 6967cd7c..9d5c0613 100644
+index abf8996b..b5445797 100644
 --- b/content/docs/runtime/ffi.mdx
 +++ a/content/docs/runtime/ffi.mdx
 @@ -66,7 +66,7 @@ pub export fn add(a: i32, b: i32) i32 {
@@ -2819,20 +2788,24 @@ index 6967cd7c..9d5c0613 100644
  ```
  
  ### C++
-@@ -116,7 +116,7 @@ extern "C" int32_t add(int32_t a, int32_t b) {
- To compile:
+@@ -117,10 +117,10 @@ To compile:
  
  ```bash
--zig build-lib add.cpp -dynamic -lc -lc++
-+$ zig build-lib add.cpp -dynamic -lc -lc++
+ # Linux
+-clang++ -shared -fPIC add.cpp -o libadd.so
++$ clang++ -shared -fPIC add.cpp -o libadd.so
+ 
+ # macOS
+-clang++ -dynamiclib add.cpp -o libadd.dylib
++$ clang++ -dynamiclib add.cpp -o libadd.dylib
  ```
  
  ---
 diff --git b/content/docs/runtime/file-types.mdx a/content/docs/runtime/file-types.mdx
-index 934c4f43..1d1913cc 100644
+index 61808e83..fc098988 100644
 --- b/content/docs/runtime/file-types.mdx
 +++ a/content/docs/runtime/file-types.mdx
-@@ -310,7 +310,7 @@ The html loader processes HTML files and bundles any referenced assets. It will:
+@@ -309,7 +309,7 @@ The `html` loader processes HTML files and bundles any referenced assets. It:
  
  For example, given this HTML file:
  
@@ -2841,17 +2814,8 @@ index 934c4f43..1d1913cc 100644
  <!DOCTYPE html>
  <html>
    <body>
-@@ -323,7 +323,7 @@ For example, given this HTML file:
- 
- It will output a new HTML file with the bundled assets:
- 
--```html title="dist/output.html"
-+```html tab="dist/output.html"
- <!DOCTYPE html>
- <html>
-   <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 05379e9c..59954d7a 100644
+index 220c5e92..c9b425b1 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
 @@ -545,7 +545,7 @@ export interface Post {
@@ -2864,10 +2828,10 @@ index 05379e9c..59954d7a 100644
    /**
     * Stop the server from accepting new connections.
 diff --git b/content/docs/runtime/http/websockets.mdx a/content/docs/runtime/http/websockets.mdx
-index ddb815ba..396d5a3e 100644
+index ebeb7f92..1d868815 100644
 --- b/content/docs/runtime/http/websockets.mdx
 +++ a/content/docs/runtime/http/websockets.mdx
-@@ -92,15 +92,15 @@ Bun.serve({
+@@ -90,15 +90,15 @@ Bun.serve({
  
  Each `ServerWebSocket` instance has a `.send()` method for sending messages to the client. It supports a range of input types.
  
@@ -2890,10 +2854,10 @@ index ddb815ba..396d5a3e 100644
  });
  ```
 diff --git b/content/docs/runtime/index.mdx a/content/docs/runtime/index.mdx
-index 0618d886..dbf0c460 100644
+index ee910864..1c8e28e0 100644
 --- b/content/docs/runtime/index.mdx
 +++ a/content/docs/runtime/index.mdx
-@@ -64,7 +64,7 @@ Flags that occur at the end of the command will be ignored and passed through to
+@@ -64,7 +64,7 @@ Flags at the end of the command are ignored by `bun` and passed through to the `
  Compare to `npm run <script>` or `yarn <script>`
  </Callout>
  
@@ -2903,25 +2867,23 @@ index 0618d886..dbf0c460 100644
  ```
  
 diff --git b/content/docs/runtime/markdown.mdx a/content/docs/runtime/markdown.mdx
-index 684a7d12..b0d5d2f5 100644
+index 73fc0a1d..bbe52f44 100644
 --- b/content/docs/runtime/markdown.mdx
 +++ a/content/docs/runtime/markdown.mdx
-@@ -3,8 +3,8 @@ title: Markdown
+@@ -3,7 +3,7 @@ title: Markdown
  description: Parse and render Markdown with Bun's built-in Markdown API, supporting GFM extensions and custom rendering callbacks
  ---
  
 -<Callout type="note">
--  **Unstable API** — This API is under active development and may change in future versions of Bun.
 +<Callout type="info">
-+**Unstable API** — This API is under active development and may change in future versions of Bun.
+   **Unstable API** — This API is under active development and may change in future versions of Bun.
  </Callout>
  
- Bun includes a fast, built-in Markdown parser written in Zig. It supports GitHub Flavored Markdown (GFM) extensions and provides three APIs:
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
-index 0525926b..1116e0d6 100644
+index 3cf1626e..818fedbf 100644
 --- b/content/docs/runtime/networking/fetch.mdx
 +++ a/content/docs/runtime/networking/fetch.mdx
-@@ -358,7 +358,7 @@ This will print the request and response headers to your terminal:
+@@ -358,7 +358,7 @@ This prints the request and response headers to your terminal:
  ```sh
  [fetch] > HTTP/1.1 GET http://example.com/
  [fetch] > Connection: keep-alive
@@ -2931,10 +2893,10 @@ index 0525926b..1116e0d6 100644
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br, zstd
 diff --git b/content/docs/runtime/plugins.mdx a/content/docs/runtime/plugins.mdx
-index 747ff123..16d2f508 100644
+index 30ae8c76..dbfeae28 100644
 --- b/content/docs/runtime/plugins.mdx
 +++ a/content/docs/runtime/plugins.mdx
-@@ -330,7 +330,7 @@ To create a native plugin, you must export a C ABI function which matches the si
+@@ -314,7 +314,7 @@ Native plugins are NAPI modules which expose lifecycle hooks as C ABI functions.
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -2944,10 +2906,10 @@ index 747ff123..16d2f508 100644
  
  Then install this crate:
 diff --git b/content/docs/runtime/sql.mdx a/content/docs/runtime/sql.mdx
-index e18a7f27..ecf8c610 100644
+index 0900bfb3..4af1114e 100644
 --- b/content/docs/runtime/sql.mdx
 +++ a/content/docs/runtime/sql.mdx
-@@ -524,11 +524,11 @@ MySQL connections can be configured via environment variables:
+@@ -524,11 +524,11 @@ MySQL connections can be configured with environment variables:
  
  ```bash
  # Primary connection URL (checked first)
@@ -2961,8 +2923,8 @@ index e18a7f27..ecf8c610 100644
 +DATABASE_URL="mysql2://user:pass@localhost:3306/mydb"
  ```
  
- If no connection URL is provided, MySQL checks these individual parameters:
-@@ -572,9 +572,9 @@ SQLite connections can be configured via `DATABASE_URL` when it contains a SQLit
+ If no connection URL is provided, Bun checks these individual parameters:
+@@ -572,9 +572,9 @@ SQLite connections can be configured with `DATABASE_URL` when it contains a SQLi
  
  ```bash
  # These are all recognized as SQLite
@@ -2974,9 +2936,9 @@ index e18a7f27..ecf8c610 100644
 +DATABASE_URL="file:///absolute/path/to/db.sqlite"
  ```
  
- **Note:** PostgreSQL-specific environment variables (`POSTGRES_URL`, `PGHOST`, etc.) are ignored when using SQLite.
+ **Note:** PostgreSQL-specific environment variables such as `POSTGRES_URL` and `PGHOST` are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index 02bb47d3..8ff91bb9 100644
+index 9b4b71f5..2ba1478f 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -3065,7 +3027,7 @@ index 02bb47d3..8ff91bb9 100644
 +console.log(first.isMarvel); // => true
  ```
  
- As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like using `Object.create` than `new`. The class's prototype is assigned to the object, methods are attached, and getters/setters are set up, but the constructor is not called.
+ As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like `Object.create` than `new`: the class's prototype is assigned to the object, so its methods, getters, and setters work.
 @@ -408,14 +386,11 @@ const query = db.query(`select $message;`);
  
  query.values({ $message: "Hello world" }); // [!code highlight]
@@ -3102,7 +3064,7 @@ index 02bb47d3..8ff91bb9 100644
  ```
  
  ---
-@@ -502,12 +472,7 @@ import { Database } from "bun:sqlite";
+@@ -500,12 +470,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3115,8 +3077,8 @@ index 02bb47d3..8ff91bb9 100644
 +console.log(result.max_int); // => 9007199254741093n
  ```
  
- When `safeIntegers` is `true`, `bun:sqlite` will throw an error if a `bigint` value in a bound parameter exceeds 64 bits:
-@@ -523,14 +488,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+ When `safeIntegers` is `true`, `bun:sqlite` throws an error if a `bigint` value in a bound parameter exceeds 64 bits:
+@@ -521,14 +486,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
  try {
    query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
  } catch (e) {
@@ -3131,8 +3093,8 @@ index 02bb47d3..8ff91bb9 100644
 -
  ### `safeIntegers: false` (default)
  
- When `safeIntegers` is `false`, `bun:sqlite` will return integers as `number` types and truncate any bits beyond 53:
-@@ -541,11 +502,7 @@ import { Database } from "bun:sqlite";
+ When `safeIntegers` is `false`, `bun:sqlite` returns integers as `number` types and truncates any bits beyond 53:
+@@ -539,11 +500,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3145,7 +3107,7 @@ index 02bb47d3..8ff91bb9 100644
  ```
  
  ---
-@@ -638,7 +595,7 @@ db.loadExtension("myext"); // [!code highlight]
+@@ -636,7 +593,7 @@ db.loadExtension("myext"); // [!code highlight]
  
  ```bash title="terminal"
  $ brew install sqlite
@@ -3155,7 +3117,7 @@ index 02bb47d3..8ff91bb9 100644
  
  To point `bun:sqlite` to the new build, call `Database.setCustomSQLite(path)` before creating any `Database` instances. (On other operating systems, this is a no-op.) Pass a path to the SQLite `.dylib` file, _not_ the executable. With recent versions of Homebrew this is something like `/opt/homebrew/Cellar/sqlite/<version>/libsqlite3.dylib`.
 diff --git b/content/docs/runtime/streams.mdx a/content/docs/runtime/streams.mdx
-index 1135a297..10a41bce 100644
+index 5845f0b8..9b51d644 100644
 --- b/content/docs/runtime/streams.mdx
 +++ a/content/docs/runtime/streams.mdx
 @@ -219,7 +219,7 @@ sink.start({
@@ -3168,20 +3130,11 @@ index 1135a297..10a41bce 100644
   * Fast incremental writer that becomes an `ArrayBuffer` on end().
   */
 diff --git b/content/docs/runtime/templating/create.mdx a/content/docs/runtime/templating/create.mdx
-index 4259a1a8..9edd678f 100644
+index 57e0c6e5..df9d69af 100644
 --- b/content/docs/runtime/templating/create.mdx
 +++ a/content/docs/runtime/templating/create.mdx
-@@ -80,7 +80,7 @@ plugins = ["bun-plugin-tailwind"]
- 
- And a `${component}.css` file with `@import "tailwindcss";` at the top:
- 
--```scss title="MyComponent.css"
-+```css title="MyComponent.css"
- @import "tailwindcss";
- ```
- 
-@@ -230,7 +230,7 @@ After cloning a template, `bun create` will automatically remove the `"bun-creat
- | `GITHUB_TOKEN` (or `GITHUB_ACCESS_TOKEN`) | This lets `bun create` work with private repositories or if you get rate-limited. `GITHUB_TOKEN` is chosen over `GITHUB_ACCESS_TOKEN` if both exist. |
+@@ -230,7 +230,7 @@ After cloning a template, `bun create` removes the `"bun-create"` section from `
+ | `GITHUB_TOKEN` (or `GITHUB_ACCESS_TOKEN`) | Lets `bun create` access private repositories and avoid rate limits. `GITHUB_TOKEN` is chosen over `GITHUB_ACCESS_TOKEN` if both exist. |
  
  <Accordions type="single">
 -<Accordion title={<span>How <code>bun create</code> works</span>}>
@@ -3190,7 +3143,7 @@ index 4259a1a8..9edd678f 100644
  When you run `bun create ${template} ${destination}`, here’s what happens:
  
 diff --git b/content/docs/runtime/transpiler.mdx a/content/docs/runtime/transpiler.mdx
-index fe583e30..3ac23772 100644
+index efe5d86d..33e72fbd 100644
 --- b/content/docs/runtime/transpiler.mdx
 +++ a/content/docs/runtime/transpiler.mdx
 @@ -17,7 +17,7 @@ const transpiler = new Bun.Transpiler({
@@ -3202,19 +3155,7 @@ index fe583e30..3ac23772 100644
  const transpiler = new Bun.Transpiler({
    loader: 'tsx',
  });
-@@ -56,11 +56,9 @@ transpiler.transformSync("<div>hi!</div>", "tsx");
- 
- <Accordions type="single">
- <Accordion title="Nitty gritty">
--
- When `.transformSync` is called, the transpiler is run in the same thread as the currently executed code.
- 
- If a macro is used, it will be run in the same thread as the transpiler, but in a separate event loop from the rest of your application. Currently, globals between macros and regular code are shared, which means it is possible (but not recommended) to share states between macros and regular code. Attempting to use AST nodes outside of a macro is undefined behavior.
--
- </Accordion>
- </Accordions>
- 
-@@ -186,7 +184,7 @@ const result = transpiler.scanImports(code);
+@@ -186,7 +186,7 @@ const result = transpiler.scanImports(code);
  
  ## Reference
  
@@ -3224,7 +3165,7 @@ index fe583e30..3ac23772 100644
  
  interface TranspilerOptions {
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 9cab968f..8e37e420 100644
+index 0c7a26a4..cb6c9cd8 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
@@ -3236,9 +3177,9 @@ index 9cab968f..8e37e420 100644
  ```
  
  ## `Bun.revision`
-@@ -333,8 +333,8 @@ existing code can be ported to Bun and vice versa.
+@@ -328,8 +328,8 @@ The API matches the "string-width" npm package, so existing code can be ported t
  
- [In this benchmark](https://github.com/oven-sh/bun/blob/5147c0ba7379d85d4d1ed0714b84d6544af917eb/bench/snippets/string-width.mjs#L13), `Bun.stringWidth` is a ~6,756x faster than the `string-width` npm package for input larger than about 500 characters. Big thanks to [sindresorhus](https://github.com/sindresorhus) for their work on `string-width`!
+ [In this benchmark](https://github.com/oven-sh/bun/blob/5147c0ba7379d85d4d1ed0714b84d6544af917eb/bench/snippets/string-width.mjs#L13), `Bun.stringWidth` is ~6,756x faster than the `string-width` npm package for input larger than about 500 characters. Big thanks to [sindresorhus](https://github.com/sindresorhus) for their work on `string-width`.
  
 -```ts
 -❯ bun string-width.mjs
@@ -3247,7 +3188,7 @@ index 9cab968f..8e37e420 100644
  cpu: 13th Gen Intel(R) Core(TM) i9-13900
  runtime: bun 1.0.29 (x64-linux)
  
-@@ -342,8 +342,7 @@ benchmark                                          time (avg)             (min 
+@@ -337,8 +337,7 @@ benchmark                                          time (avg)             (min 
  ------------------------------------------------------------------------------------- -----------------------------
  Bun.stringWidth     500 chars ascii              37.09 ns/iter   (36.77 ns … 41.11 ns)  37.07 ns  38.84 ns  38.99 ns
  
@@ -3257,7 +3198,7 @@ index 9cab968f..8e37e420 100644
  benchmark                                          time (avg)             (min … max)       p75       p99      p995
  ------------------------------------------------------------------------------------- -----------------------------
  npm/string-width    500 chars ascii             249,710 ns/iter (239,970 ns … 293,180 ns) 250,930 ns  276,700 ns 281,450 ns
-@@ -363,7 +362,7 @@ As a reminder, 1 nanosecond (ns) is 1 billionth of a second. Here's a reference
+@@ -358,7 +357,7 @@ npm/string-width    500 chars ascii             249,710 ns/iter (239,970 ns …
  | ms   | 1             |
  
  ```bash title="terminal"
@@ -3266,7 +3207,7 @@ index 9cab968f..8e37e420 100644
  cpu: 13th Gen Intel(R) Core(TM) i9-13900
  runtime: bun 1.0.29 (x64-linux)
  
-@@ -392,7 +391,7 @@ Bun.stringWidth 95,000 chars ansi+emoji+ascii  572.69 µs/iter (565.52 µs … 6
+@@ -387,7 +386,7 @@ Bun.stringWidth 95,000 chars ansi+emoji+ascii  572.69 µs/iter (565.52 µs … 6
  ```
  
  ```bash title="terminal"
@@ -3276,10 +3217,10 @@ index 9cab968f..8e37e420 100644
  runtime: node v21.4.0 (x64-linux)
  
 diff --git b/content/docs/runtime/watch-mode.mdx a/content/docs/runtime/watch-mode.mdx
-index 99d7f89c..4d2061ae 100644
+index 6eca6ebc..95de9ec7 100644
 --- b/content/docs/runtime/watch-mode.mdx
 +++ a/content/docs/runtime/watch-mode.mdx
-@@ -117,8 +117,6 @@ If you run this file with `bun --hot server.ts`, you'll see the reload count inc
+@@ -114,8 +114,6 @@ If you run this file with `bun --hot server.ts`, you'll see the reload count inc
  ```bash title="terminal"
  $ bun --hot index.ts
  
@@ -3289,7 +3230,7 @@ index 99d7f89c..4d2061ae 100644
  Reloaded 2 times
  Reloaded 3 times
 diff --git b/content/docs/runtime/webview.mdx a/content/docs/runtime/webview.mdx
-index 8ed1f453..948b89e4 100644
+index cb942f50..44ddd1b2 100644
 --- b/content/docs/runtime/webview.mdx
 +++ a/content/docs/runtime/webview.mdx
 @@ -111,7 +111,7 @@ When Bun needs to spawn Chrome, it searches in this order:
@@ -3311,10 +3252,10 @@ index 8ed1f453..948b89e4 100644
  When using `backend: "chrome"`, you can drop down to raw [CDP](https://chromedevtools.github.io/devtools-protocol/) commands for anything the high-level API doesn't cover.
  
 diff --git b/content/docs/test/dom.mdx a/content/docs/test/dom.mdx
-index 20af4d98..612222ba 100644
+index 6e6961e5..631dc09a 100644
 --- b/content/docs/test/dom.mdx
 +++ a/content/docs/test/dom.mdx
-@@ -62,9 +62,6 @@ Let's run this test with `bun test`:
+@@ -62,9 +62,6 @@ Run the test with `bun test`:
  
  ```bash title="terminal"
  $ bun test
@@ -3325,10 +3266,10 @@ index 20af4d98..612222ba 100644
  
  dom.test.ts:
 diff --git b/content/docs/test/index.mdx a/content/docs/test/index.mdx
-index 5409bf2d..d0509f02 100644
+index b1609fc1..b334b280 100644
 --- b/content/docs/test/index.mdx
 +++ a/content/docs/test/index.mdx
-@@ -249,8 +249,6 @@ When using `--randomize`, the seed used for randomization will be displayed in t
+@@ -246,8 +246,6 @@ With `--randomize`, the seed used for randomization is displayed in the test sum
  ```sh title="terminal"
  $ bun test --randomize
  
@@ -3338,7 +3279,7 @@ index 5409bf2d..d0509f02 100644
   --seed=12345
   2 pass
 diff --git b/content/docs/test/lifecycle.mdx a/content/docs/test/lifecycle.mdx
-index 7d975106..95761055 100644
+index 035665c8..2d2917ec 100644
 --- b/content/docs/test/lifecycle.mdx
 +++ a/content/docs/test/lifecycle.mdx
 @@ -265,8 +265,6 @@ describe("outer describe", () => {
@@ -3351,7 +3292,7 @@ index 7d975106..95761055 100644
  // File beforeAll
  // Outer beforeAll
 diff --git b/content/docs/test/reporters.mdx a/content/docs/test/reporters.mdx
-index 39c9da13..1a22d4c8 100644
+index fcf0be2c..57db1171 100644
 --- b/content/docs/test/reporters.mdx
 +++ a/content/docs/test/reporters.mdx
 @@ -1,6 +1,5 @@
@@ -3360,21 +3301,21 @@ index 39c9da13..1a22d4c8 100644
 -description:
  ---
  
- bun test supports different output formats through reporters. This document covers both built-in reporters and how to implement your own custom reporters.
-@@ -98,7 +97,7 @@ The JUnit reporter currently has a few limitations that will be addressed in fut
+ `bun test` supports different output formats through reporters, both built-in and custom.
+@@ -96,7 +95,7 @@ The JUnit reporter does not include:
  
- Bun test automatically detects when it's running inside GitHub Actions and emits GitHub Actions annotations to the console directly. No special configuration is needed beyond installing Bun and running `bun test`.
+ `bun test` detects when it's running inside GitHub Actions and emits GitHub Actions annotations to the console directly. No configuration is needed beyond installing Bun and running `bun test`.
  
--For a GitHub Actions workflow configuration example, see the [CI/CD integration](/docs/pm/cli/install#ci%2Fcd) section of the CLI documentation.
-+For a GitHub Actions workflow configuration example, see the [CI/CD integration](/docs/pm/cli/install#ci-cd) section of the CLI documentation.
+-For an example GitHub Actions workflow, see [CI/CD integration](/docs/pm/cli/install#ci%2Fcd).
++For an example GitHub Actions workflow, see [CI/CD integration](/docs/pm/cli/install#ci-cd).
  
  ---
  
 diff --git b/content/docs/test/runtime-behavior.mdx a/content/docs/test/runtime-behavior.mdx
-index 66ae01c0..23ca3a86 100644
+index 493db0a7..2c4462b2 100644
 --- b/content/docs/test/runtime-behavior.mdx
 +++ a/content/docs/test/runtime-behavior.mdx
-@@ -275,10 +275,10 @@ The test runner properly handles common signals:
+@@ -275,10 +275,10 @@ The test runner handles common signals:
  
  ```bash title="terminal"
  # Gracefully stops test execution
@@ -3388,12 +3329,12 @@ index 66ae01c0..23ca3a86 100644
  
  ### Environment Detection
 diff --git b/content/docs/typescript.mdx a/content/docs/typescript.mdx
-index 862870fc..ad639115 100644
+index 511e39b8..a9324139 100644
 --- b/content/docs/typescript.mdx
 +++ a/content/docs/typescript.mdx
 @@ -5,8 +5,8 @@ description: Using TypeScript with Bun, including type definitions and compiler
  
- To install the TypeScript definitions for Bun's built-in APIs, install `@types/bun`.
+ To get TypeScript definitions for Bun's built-in APIs, install `@types/bun`.
  
 -```zsh title="terminal"
 -$ bun add -d @types/bun # dev dependency
@@ -3401,10 +3342,10 @@ index 862870fc..ad639115 100644
 +$ bun add -d @types/bun  # dev dependency
  ```
  
- At this point, you should be able to reference the `Bun` global in your TypeScript files without seeing errors in your editor.
-@@ -15,7 +15,7 @@ At this point, you should be able to reference the `Bun` global in your TypeScri
+ You can now reference the `Bun` global in your TypeScript files without errors in your editor.
+@@ -15,7 +15,7 @@ You can now reference the `Bun` global in your TypeScript files without errors i
  
- Bun supports things like top-level await, JSX, and extensioned `.ts` imports, which TypeScript doesn't allow by default. Below is a set of recommended `compilerOptions` for a Bun project, so you can use these features without seeing compiler warnings from TypeScript.
+ Bun supports top-level await, JSX, and imports with `.ts` extensions, which TypeScript doesn't allow by default. Use these `compilerOptions` in a Bun project so TypeScript doesn't warn about those features.
  
 -```json title="tsconfig.json"
 +```jsonc title="tsconfig.json"
@@ -3412,10 +3353,10 @@ index 862870fc..ad639115 100644
    "compilerOptions": {
      // Environment setup & latest features
 diff --git b/content/guides/deployment/aws-lambda.mdx a/content/guides/deployment/aws-lambda.mdx
-index bfda459f..4f283e10 100644
+index 8f09aeab..afa5f995 100644
 --- b/content/guides/deployment/aws-lambda.mdx
 +++ a/content/guides/deployment/aws-lambda.mdx
-@@ -110,6 +110,7 @@ In this guide, we will deploy a Bun HTTP server to AWS Lambda using a `Dockerfil
+@@ -110,6 +110,7 @@ This guide deploys a Bun HTTP server to AWS Lambda using a `Dockerfile`.
      		```bash title="terminal"
      		$ export ECR_URI=$(aws ecr create-repository --repository-name bun-lambda-demo --region us-east-1 --profile my-sso-app --query 'repository.repositoryUri' --output text)
      		$ echo $ECR_URI
@@ -3423,7 +3364,7 @@ index bfda459f..4f283e10 100644
      		```
      	</Callout>
  
-@@ -120,7 +121,7 @@ In this guide, we will deploy a Bun HTTP server to AWS Lambda using a `Dockerfil
+@@ -120,7 +121,7 @@ This guide deploys a Bun HTTP server to AWS Lambda using a `Dockerfile`.
      	Log in to the ECR repository:
  
      	```bash title="terminal"
@@ -3432,7 +3373,7 @@ index bfda459f..4f283e10 100644
      	
      	Login Succeeded
      	```
-@@ -129,7 +130,7 @@ In this guide, we will deploy a Bun HTTP server to AWS Lambda using a `Dockerfil
+@@ -129,7 +130,7 @@ This guide deploys a Bun HTTP server to AWS Lambda using a `Dockerfile`.
      		If using a profile, use the `--profile` flag:
  
      		```bash title="terminal"
@@ -3442,10 +3383,10 @@ index bfda459f..4f283e10 100644
  
      	</Callout>
 diff --git b/content/guides/deployment/digital-ocean.mdx a/content/guides/deployment/digital-ocean.mdx
-index 42c32b11..646668be 100644
+index c2e9b5fc..ab6356c6 100644
 --- b/content/guides/deployment/digital-ocean.mdx
 +++ a/content/guides/deployment/digital-ocean.mdx
-@@ -39,10 +39,10 @@ In this guide, we will deploy a Bun HTTP server to DigitalOcean using a `Dockerf
+@@ -39,10 +39,10 @@ This guide deploys a Bun HTTP server to DigitalOcean using a `Dockerfile`.
      		<Tab value="Through the DigitalOcean CLI">
  
      			```bash title="terminal"
@@ -3458,7 +3399,7 @@ index 42c32b11..646668be 100644
      			```
  
      		</Tab>
-@@ -109,7 +109,7 @@ In this guide, we will deploy a Bun HTTP server to DigitalOcean using a `Dockerf
+@@ -109,7 +109,7 @@ This guide deploys a Bun HTTP server to DigitalOcean using a `Dockerfile`.
      	Before building and pushing the Docker image, authenticate Docker with the DigitalOcean Container Registry:
  
      	```bash title="terminal"
@@ -3468,10 +3409,10 @@ index 42c32b11..646668be 100644
      	Successfully authenticated with registry.digitalocean.com
      	```
 diff --git b/content/guides/deployment/google-cloud-run.mdx a/content/guides/deployment/google-cloud-run.mdx
-index 2342d801..b6ca1866 100644
+index 8b56a987..6c8565c1 100644
 --- b/content/guides/deployment/google-cloud-run.mdx
 +++ a/content/guides/deployment/google-cloud-run.mdx
-@@ -20,14 +20,16 @@ In this guide, we will deploy a Bun HTTP server to Google Cloud Run using a `Doc
+@@ -20,14 +20,16 @@ This guide deploys a Bun HTTP server to Google Cloud Run using a `Dockerfile`.
  ---
  
  <Steps> 
@@ -3480,7 +3421,7 @@ index 2342d801..b6ca1866 100644
 +
 +### Initialize `gcloud` by select/creating a project
  
- Make sure that you've initialized the Google Cloud CLI. This command logs you in, and prompts you to either select an existing project or create a new one.
+ Make sure that you've initialized the Google Cloud CLI. `gcloud init` logs you in and prompts you to either select an existing project or create a new one.
  
  For more help with the Google Cloud CLI, see the [official documentation](https://docs.cloud.google.com/sdk/gcloud/reference/init).
  
@@ -3523,18 +3464,8 @@ index 2342d801..b6ca1866 100644
  ```
  
  <Callout type="info">  
-@@ -131,8 +133,7 @@ CMD ["bun", "index.ts"]
- <Callout type="info">
-   Make sure that the start command corresponds to your application's entry point. This can also be `CMD ["bun", "run", "start"]` if you have a start script in your `package.json`.
- 
--This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
--
-+  This image installs dependencies and runs your app with Bun inside a container. If your app doesn't have dependencies, you can omit the `RUN bun install --production --frozen-lockfile` line.
- </Callout>
- 
- Create a new `.dockerignore` file in the root of your project. This file contains the files and directories that should be _excluded_ from the container image, such as `node_modules`. This makes your builds faster and smaller:
-@@ -162,7 +163,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
- </Callout>
+@@ -159,7 +161,7 @@ Make sure you're in the directory containing your `Dockerfile`, then deploy dire
+ <Callout type="info">Update the `--region` flag to your preferred region, or omit it to select a region interactively.</Callout>
  
  ```bash title="terminal"
 -gcloud run deploy my-bun-app --source . --region=us-west1 --allow-unauthenticated
@@ -3543,7 +3474,7 @@ index 2342d801..b6ca1866 100644
  Deploying from source requires an Artifact Registry Docker repository to store built containers. A repository named
  [cloud-run-source-deploy] in region [us-west1] will be created.
 diff --git b/content/guides/deployment/vercel.mdx a/content/guides/deployment/vercel.mdx
-index fffc4c51..fd6ee486 100644
+index f63e2231..97efac52 100644
 --- b/content/guides/deployment/vercel.mdx
 +++ a/content/guides/deployment/vercel.mdx
 @@ -85,8 +85,7 @@ mode: center
@@ -3579,7 +3510,7 @@ index ad39c975..2be9fcbc 100644
 -</Columns>
 +</Cards>
 diff --git b/content/guides/ecosystem/gel.mdx a/content/guides/ecosystem/gel.mdx
-index ec0be932..eccdde29 100644
+index d27331be..64f2bc13 100644
 --- b/content/guides/ecosystem/gel.mdx
 +++ a/content/guides/ecosystem/gel.mdx
 @@ -14,8 +14,8 @@ First, [install Gel](https://docs.geldata.com/learn/installation) if you haven't
@@ -3594,7 +3525,7 @@ index ec0be932..eccdde29 100644
  
  ```sh tab="Homebrew terminal"
 @@ -37,7 +37,7 @@ $ bun init -y
- We'll use the Gel CLI to initialize a Gel instance for our project. This creates a `gel.toml` file in our project root.
+ Initialize a Gel instance for the project with the Gel CLI. The `gel project init` command creates a `gel.toml` file in the project root.
  
  ```sh title="terminal"
 -gel project init
@@ -3603,7 +3534,7 @@ index ec0be932..eccdde29 100644
  No `gel.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-gel-app` or above
  Do you want to initialize a new project? [Y/n]
 @@ -68,7 +68,7 @@ To connect to my_gel_app, run `gel`
- To see if the database is running, let's open a REPL and run a query.
+ To check that the database is running, open a REPL and run a query.
  
  ```sh title="terminal"
 -gel
@@ -3636,12 +3567,12 @@ index ec0be932..eccdde29 100644
  Applied m1uwekrn4ni4qs7ul7hfar4xemm5kkxlpswolcoyqj3xdhweomwjrq (00001.edgeql)
  ```
 diff --git b/content/guides/ecosystem/nextjs.mdx a/content/guides/ecosystem/nextjs.mdx
-index a8b3cceb..060105a4 100644
+index 86664db4..487b3294 100644
 --- b/content/guides/ecosystem/nextjs.mdx
 +++ a/content/guides/ecosystem/nextjs.mdx
-@@ -58,32 +58,13 @@ mode: center
+@@ -56,32 +56,15 @@ mode: center
  
- Next.js applications on Bun can be deployed to various platforms.
+ ## Hosting
  
 -<Columns cols={3}>
 -  <Card title="Vercel" href="/guides/deployment/vercel" icon="/icons/ecosystem/vercel.svg">
@@ -3663,6 +3594,8 @@ index a8b3cceb..060105a4 100644
 -    Deploy on Render
 -  </Card>
 -</Columns>
++Next.js applications on Bun can be deployed to various platforms.
++
 +<include>../../_snippets/guides/deploy.mdx</include>
  
  ---
@@ -3674,7 +3607,7 @@ index a8b3cceb..060105a4 100644
    <Card
      title="Bun + Next.js Basic Starter"
      img="/images/templates/bun-nextjs-basic.png"
-@@ -102,7 +83,7 @@ Next.js applications on Bun can be deployed to various platforms.
+@@ -100,7 +83,7 @@ mode: center
    >
      A full-stack todo application built with Bun, Next.js, and PostgreSQL.
    </Card>
@@ -3684,10 +3617,10 @@ index a8b3cceb..060105a4 100644
  ---
  
 diff --git b/content/guides/ecosystem/nuxt.mdx a/content/guides/ecosystem/nuxt.mdx
-index 95481525..5429f19f 100644
+index 5317c295..7a5f7606 100644
 --- b/content/guides/ecosystem/nuxt.mdx
 +++ a/content/guides/ecosystem/nuxt.mdx
-@@ -35,7 +35,7 @@ To start the dev server, run `bun --bun run dev` from the project root. This wil
+@@ -35,7 +35,7 @@ To start the dev server, run `bun --bun run dev` from the project root. This exe
  $ cd my-nuxt-app
  $ bun --bun run dev
  
@@ -3697,11 +3630,11 @@ index 95481525..5429f19f 100644
  Nuxt 3.6.5 with Nitro 2.5.2
    > Local:    http://localhost:3000/
 diff --git b/content/guides/ecosystem/pm2.mdx a/content/guides/ecosystem/pm2.mdx
-index 74c23676..d7a9bb29 100644
+index 728305f0..d47d4c0c 100644
 --- b/content/guides/ecosystem/pm2.mdx
 +++ a/content/guides/ecosystem/pm2.mdx
-@@ -22,7 +22,7 @@ You can use PM2 with Bun in two ways: as a CLI option or in a configuration file
- To start your application with PM2 and Bun as the interpreter, open your terminal and run the following command:
+@@ -17,7 +17,7 @@ You can use PM2 with Bun in two ways: as a CLI option or in a configuration file
+ To start your application with PM2 and Bun as the interpreter, run:
  
  ```bash title="terminal"
 -pm2 start --interpreter ~/.bun/bin/bun index.ts
@@ -3709,8 +3642,8 @@ index 74c23676..d7a9bb29 100644
  ```
  
  ---
-@@ -47,7 +47,7 @@ module.exports = {
- After saving the file, you can start your application with PM2
+@@ -42,7 +42,7 @@ module.exports = {
+ After saving the file, start your application with PM2.
  
  ```bash title="terminal"
 -pm2 start pm2.config.js
@@ -3719,7 +3652,7 @@ index 74c23676..d7a9bb29 100644
  
  ---
 diff --git b/content/guides/ecosystem/prisma.mdx a/content/guides/ecosystem/prisma.mdx
-index e0fffed5..e5911907 100644
+index df4f79aa..3b3c50a8 100644
 --- b/content/guides/ecosystem/prisma.mdx
 +++ a/content/guides/ecosystem/prisma.mdx
 @@ -1,7 +1,6 @@
@@ -3730,7 +3663,7 @@ index e0fffed5..e5911907 100644
  ---
  
  <Callout type="info">
-@@ -149,8 +148,7 @@ mode: center
+@@ -146,8 +145,7 @@ mode: center
  
      	```bash title="terminal"
      	$ bun run index.ts
@@ -3741,7 +3674,7 @@ index e0fffed5..e5911907 100644
      	There are 1 users in the database.
      	```
 diff --git b/content/guides/ecosystem/qwik.mdx a/content/guides/ecosystem/qwik.mdx
-index 99b002b6..ea9e377e 100644
+index eed902aa..99daab7e 100644
 --- b/content/guides/ecosystem/qwik.mdx
 +++ a/content/guides/ecosystem/qwik.mdx
 @@ -79,7 +79,6 @@ $ bun create qwik
@@ -3753,10 +3686,10 @@ index 99b002b6..ea9e377e 100644
  
  ---
 diff --git b/content/guides/ecosystem/remix.mdx a/content/guides/ecosystem/remix.mdx
-index 9b24bdc5..fb3d3f2c 100644
+index e6e36c19..ac275d5c 100644
 --- b/content/guides/ecosystem/remix.mdx
 +++ a/content/guides/ecosystem/remix.mdx
-@@ -69,19 +69,17 @@ To build and start your app, run `bun run build`
+@@ -69,19 +69,17 @@ To build your app, run `bun run build`.
  
  ```sh title="terminal"
  $ bun run build
@@ -3769,7 +3702,7 @@ index 9b24bdc5..fb3d3f2c 100644
 +  info  built (158ms)
  ```
  
- Then `bun run start` from the project root.
+ Then start the app from the project root.
  
  ```sh title="terminal"
  $ bun start
@@ -3782,7 +3715,7 @@ index 9b24bdc5..fb3d3f2c 100644
  
  ---
 diff --git b/content/guides/ecosystem/solidstart.mdx a/content/guides/ecosystem/solidstart.mdx
-index f2230557..23a151dc 100644
+index 9365d618..7def5980 100644
 --- b/content/guides/ecosystem/solidstart.mdx
 +++ a/content/guides/ecosystem/solidstart.mdx
 @@ -42,8 +42,7 @@ Then run the development server with `bun dev`.
@@ -3796,10 +3729,10 @@ index f2230557..23a151dc 100644
  vinxi starting dev server
  
 diff --git b/content/guides/ecosystem/tanstack-start.mdx a/content/guides/ecosystem/tanstack-start.mdx
-index 9ffdada8..38c4bbd5 100644
+index 34cedc6a..8cb70acf 100644
 --- b/content/guides/ecosystem/tanstack-start.mdx
 +++ a/content/guides/ecosystem/tanstack-start.mdx
-@@ -66,7 +66,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -64,7 +64,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
  
          ```sh title="terminal"
          $ bun add nitro
@@ -3808,7 +3741,7 @@ index 9ffdada8..38c4bbd5 100644
  
        </Step>
        <Step title={<span>Update your <code>vite.config.ts</code> file</span>}>
-@@ -85,7 +85,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -83,7 +83,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
          });
  
          export default config;
@@ -3817,7 +3750,7 @@ index 9ffdada8..38c4bbd5 100644
  
          <Callout type="info">
            The `bun` preset is optional, but it configures the build output specifically for Bun's runtime.
-@@ -106,7 +106,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -104,7 +104,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
                "start": "bun run .output/server/index.mjs" // [!code ++]
              }
            }
@@ -3826,7 +3759,7 @@ index 9ffdada8..38c4bbd5 100644
  
          <Callout type="info">
            You do **not** need the custom `start` script when deploying to Vercel.
-@@ -139,7 +139,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -137,7 +137,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
                }),
              ],
            });
@@ -3835,7 +3768,7 @@ index 9ffdada8..38c4bbd5 100644
          </Callout>
        </Step>
      </Steps>
-@@ -713,7 +713,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -711,7 +711,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
            log.error(`Failed to start server: ${String(error)}`)
            process.exit(1)
          })
@@ -3844,7 +3777,7 @@ index 9ffdada8..38c4bbd5 100644
  
        </Step>
        <Step>
-@@ -728,7 +728,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -726,7 +726,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
              "start": "bun run server.ts" // [!code ++]
            }
          }
@@ -3853,16 +3786,16 @@ index 9ffdada8..38c4bbd5 100644
  
        </Step>
        <Step>
-@@ -739,7 +739,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -737,7 +737,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
          ```sh title="terminal"
          $ bun run build
          $ bun run start
 -   ```
 +        ```
  
-         The server will start on port 3000 by default (configurable via `PORT` environment variable).
+         The server listens on port 3000 by default; set the `PORT` environment variable to change it.
  
-@@ -749,32 +749,13 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -747,32 +747,13 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
    </Tab>
  </Tabs>
  
@@ -3897,7 +3830,7 @@ index 9ffdada8..38c4bbd5 100644
    <Card
      title="Todo App with Tanstack + Bun"
      img="/images/templates/bun-tanstack-todo.png"
-@@ -802,7 +783,7 @@ To host your TanStack Start app, you can use [Nitro](https://nitro.build/) or a
+@@ -800,7 +781,7 @@ To host your TanStack Start app in production, use [Nitro](https://nitro.build/)
    >
      The basic TanStack starter using the Bun runtime and Bun's file APIs.
    </Card>
@@ -3907,10 +3840,10 @@ index 9ffdada8..38c4bbd5 100644
  ---
  
 diff --git b/content/guides/ecosystem/upstash.mdx a/content/guides/ecosystem/upstash.mdx
-index 3532a260..28cc6a07 100644
+index 2a91a200..f2bf0309 100644
 --- b/content/guides/ecosystem/upstash.mdx
 +++ a/content/guides/ecosystem/upstash.mdx
-@@ -84,8 +84,7 @@ mode: center
+@@ -82,8 +82,7 @@ mode: center
      	// Get the updated value
      	counter = await redis.get("counter");
      	console.log(counter);
@@ -3919,9 +3852,9 @@ index 3532a260..28cc6a07 100644
 +    	// => 1
      	```
  
-     	The Redis client automatically handles connections in the background. No need to manually connect or disconnect for basic operations.
+     	The Redis client handles connections automatically. You don't need to connect or disconnect manually for basic operations.
 diff --git b/content/guides/index.mdx a/content/guides/index.mdx
-index 107c894c..07a4fff2 100644
+index 47bcee7c..74cecad8 100644
 --- b/content/guides/index.mdx
 +++ a/content/guides/index.mdx
 @@ -5,6 +5,112 @@ contextual: false
@@ -4040,7 +3973,7 @@ index 107c894c..07a4fff2 100644
 +
 +<GuidesCategory category="websocket" />
 diff --git b/content/guides/install/from-npm-install-to-bun-install.mdx a/content/guides/install/from-npm-install-to-bun-install.mdx
-index 5fd41dd1..372dc4de 100644
+index f40c269d..77fa200d 100644
 --- b/content/guides/install/from-npm-install-to-bun-install.mdx
 +++ a/content/guides/install/from-npm-install-to-bun-install.mdx
 @@ -48,7 +48,8 @@ $ bun my-script
@@ -4053,7 +3986,7 @@ index 5fd41dd1..372dc4de 100644
  $ bun run my-executable
  
  # Run a JavaScript/TypeScript file:
-@@ -150,7 +151,6 @@ To list installed packages, you can use `bun pm ls`. This will list all the pack
+@@ -150,7 +151,6 @@ $ bun outdated
  ```sh title="terminal"
  # List top-level installed packages:
  $ bun pm ls
@@ -4069,7 +4002,7 @@ index 5fd41dd1..372dc4de 100644
  my-pkg node_modules
  ├── @alloc/quick-lru@5.2.0
  ├── @isaacs/cliui@8.0.2
-@@ -183,7 +182,6 @@ To create a package tarball, you can use `bun pm pack`. This will create a tarba
+@@ -183,7 +182,6 @@ my-pkg node_modules
  ```sh title="terminal"
  # Create a tarball
  $ bun pm pack
@@ -4077,7 +4010,7 @@ index 5fd41dd1..372dc4de 100644
  Total files: 46
  Shasum: 2ee19b6f0c6b001358449ca0eadead703f326216
  Integrity: sha512-ZV0lzWTEkGAMz[...]Gl4f8lA9sl97g==
-@@ -218,5 +216,5 @@ You can install packages globally using `bun i -g <package>`. This will install
+@@ -218,5 +216,5 @@ Install packages globally with `bun i -g <package>`. By default, they go into a
  $ bun i -g eslint
  
  # Run a globally-installed package without the `bun run` prefix
@@ -4085,7 +4018,7 @@ index 5fd41dd1..372dc4de 100644
 +$ eslint --init
  ```
 diff --git b/content/guides/install/registry-scope.mdx a/content/guides/install/registry-scope.mdx
-index 88ddcc0b..9a204350 100644
+index 2bfbb67d..9527f1f0 100644
 --- b/content/guides/install/registry-scope.mdx
 +++ a/content/guides/install/registry-scope.mdx
 @@ -23,7 +23,6 @@ To configure a registry for a particular npm scope:
@@ -4097,7 +4030,7 @@ index 88ddcc0b..9a204350 100644
  
  ---
 diff --git b/content/guides/runtime/build-time-constants.mdx a/content/guides/runtime/build-time-constants.mdx
-index 29e47553..0a63d325 100644
+index 6553b911..d3b8b513 100644
 --- b/content/guides/runtime/build-time-constants.mdx
 +++ a/content/guides/runtime/build-time-constants.mdx
 @@ -63,33 +63,28 @@ await Bun.build({
@@ -4172,7 +4105,7 @@ index 29e47553..0a63d325 100644
  
  ### Build automation script
 diff --git b/content/guides/runtime/cicd.mdx a/content/guides/runtime/cicd.mdx
-index bf22f065..e9de250b 100644
+index 8e373cde..0b4e002a 100644
 --- b/content/guides/runtime/cicd.mdx
 +++ a/content/guides/runtime/cicd.mdx
 @@ -37,7 +37,7 @@ jobs:
@@ -4185,24 +4118,23 @@ index bf22f065..e9de250b 100644
  
  ---
 diff --git b/content/guides/runtime/codesign-macos-executable.mdx a/content/guides/runtime/codesign-macos-executable.mdx
-index cbe257d5..58a41b64 100644
+index 7893c622..abc837a4 100644
 --- b/content/guides/runtime/codesign-macos-executable.mdx
 +++ a/content/guides/runtime/codesign-macos-executable.mdx
-@@ -16,8 +16,7 @@ $ bun build --compile ./path/to/entry.ts --outfile myapp
- List your available signing identities. One of these will be your signing identity that you pass to the `codesign` command. This command requires macOS.
+@@ -16,7 +16,7 @@ $ bun build --compile ./path/to/entry.ts --outfile myapp
+ List your available signing identities. You'll pass one of these to `codesign` in a later step. This command requires macOS.
  
  ```sh title="terminal"
 -security find-identity -v -p codesigning
--
 +$ security find-identity -v -p codesigning
+ 
  1. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "Developer ID Application: Your Name (ZZZZZZZZZZ)"
     1 valid identities found
- ```
 diff --git b/content/guides/runtime/define-constant.mdx a/content/guides/runtime/define-constant.mdx
-index 25a2d582..b7acf7b3 100644
+index 8f2f4eb9..7c373303 100644
 --- b/content/guides/runtime/define-constant.mdx
 +++ a/content/guides/runtime/define-constant.mdx
-@@ -57,7 +57,7 @@ To also collapse the surrounding `if` scaffolding and produce the minimal output
+@@ -57,7 +57,7 @@ To also collapse the surrounding `if` scaffolding down to the following output,
  $ bun build --define process.env.NODE_ENV="'production'" --minify-syntax src/index.ts
  ```
  
@@ -4212,7 +4144,7 @@ index 25a2d582..b7acf7b3 100644
  ```
  
 diff --git b/content/guides/runtime/set-env.mdx a/content/guides/runtime/set-env.mdx
-index 18c12c64..fade4263 100644
+index ccd5b892..8305a3d0 100644
 --- b/content/guides/runtime/set-env.mdx
 +++ a/content/guides/runtime/set-env.mdx
 @@ -39,7 +39,7 @@ $ FOO=helloworld bun run dev
@@ -4225,10 +4157,10 @@ index 18c12c64..fade4263 100644
  
  ---
 diff --git b/content/guides/test/coverage-threshold.mdx a/content/guides/test/coverage-threshold.mdx
-index 802d7559..22747491 100644
+index 63926330..b54a9c17 100644
 --- b/content/guides/test/coverage-threshold.mdx
 +++ a/content/guides/test/coverage-threshold.mdx
-@@ -9,8 +9,6 @@ Bun's test runner supports built-in code coverage reporting via the `--coverage`
+@@ -9,8 +9,6 @@ Bun's test runner has built-in code coverage reporting. Enable it with the `--co
  ```sh title="terminal"
  $ bun test --coverage
  
@@ -4237,7 +4169,7 @@ index 802d7559..22747491 100644
  test.test.ts:
  ✓ math > add [0.71ms]
  ✓ math > multiply [0.03ms]
-@@ -45,8 +43,6 @@ If your test suite does not meet this threshold, `bun test` will exit with a non
+@@ -45,8 +43,6 @@ If your test suite does not meet this threshold, `bun test` exits with a non-zer
  ```sh title="terminal"
  $ bun test --coverage
  
@@ -4247,10 +4179,10 @@ index 802d7559..22747491 100644
  $ echo $?
  1 # this is the exit code of the previous command
 diff --git b/content/guides/test/run-tests.mdx a/content/guides/test/run-tests.mdx
-index 5c1cd476..37b289d1 100644
+index d95ff3dc..e19f3811 100644
 --- b/content/guides/test/run-tests.mdx
 +++ a/content/guides/test/run-tests.mdx
-@@ -23,7 +23,6 @@ Here's what the output of a typical test run looks like. In this case, there are
+@@ -23,7 +23,6 @@ Here's the output of a typical run: three test files (`test.test.js`, `test2.tes
  
  ```sh title="terminal"
  $ bun test
@@ -4266,7 +4198,7 @@ index 5c1cd476..37b289d1 100644
  bun test v$BUN_LATEST_VERSION (9c68abdb)
  
  test3.test.js:
-@@ -89,7 +87,6 @@ Adding `-t add` will only run tests with "add" in the name. This works with test
+@@ -89,7 +87,6 @@ To filter tests by name, use the `-t`/`--test-name-pattern` flag.
  
  ```sh title="terminal"
  $ bun test -t add
@@ -4275,10 +4207,10 @@ index 5c1cd476..37b289d1 100644
  
  test.test.js:
 diff --git b/content/guides/test/skip-tests.mdx a/content/guides/test/skip-tests.mdx
-index c311c57c..4aebd9b1 100644
+index fe1a13c4..7f35c5c1 100644
 --- b/content/guides/test/skip-tests.mdx
 +++ a/content/guides/test/skip-tests.mdx
-@@ -20,7 +20,6 @@ Running `bun test` will not execute this test. It will be marked as skipped in t
+@@ -20,7 +20,6 @@ Running `bun test` doesn't execute this test. The terminal output marks it as sk
  
  ```sh title="terminal"
  $ bun test
@@ -4287,10 +4219,10 @@ index c311c57c..4aebd9b1 100644
  
  test.test.ts:
 diff --git b/content/guides/test/snapshot.mdx a/content/guides/test/snapshot.mdx
-index 023597a7..a3e3e649 100644
+index 7a3c18fa..2b5356ee 100644
 --- b/content/guides/test/snapshot.mdx
 +++ a/content/guides/test/snapshot.mdx
-@@ -20,7 +20,6 @@ The first time this test is executed, Bun will evaluate the value passed into `e
+@@ -20,7 +20,6 @@ The first time this test runs, Bun evaluates the value passed into `expect()` an
  
  ```sh title="terminal"
  $ bun test test/snap
@@ -4298,7 +4230,7 @@ index 023597a7..a3e3e649 100644
  bun test v$BUN_LATEST_VERSION (9c68abdb)
  
  test/snap.test.ts:
-@@ -64,8 +63,8 @@ Later, when this test file is executed again, Bun will read the snapshot file an
+@@ -64,8 +63,8 @@ On later runs, Bun reads the snapshot file and compares it to the value passed i
  
  ```sh title="terminal"
  $ bun test
@@ -4319,10 +4251,10 @@ index 023597a7..a3e3e649 100644
  ✓ snapshot [0.86ms]
  
 diff --git b/content/guides/test/todo-tests.mdx a/content/guides/test/todo-tests.mdx
-index 810760b7..d9c25efd 100644
+index 45875d6c..a5cce931 100644
 --- b/content/guides/test/todo-tests.mdx
 +++ a/content/guides/test/todo-tests.mdx
-@@ -19,7 +19,6 @@ The output of `bun test` indicates how many `todo` tests were encountered.
+@@ -19,7 +19,6 @@ The `bun test` output reports the number of `todo` tests.
  
  ```sh title="terminal"
  $ bun test
@@ -4330,7 +4262,7 @@ index 810760b7..d9c25efd 100644
  bun test v$BUN_LATEST_VERSION (9c68abdb)
  
  test.test.ts:
-@@ -52,7 +51,6 @@ If an implementation is provided, it will not be run unless the `--todo` flag is
+@@ -52,7 +51,6 @@ Bun doesn't run the implementation unless you pass the `--todo` flag. With `--to
  
  ```sh title="terminal"
  $ bun test --todo
@@ -4339,7 +4271,7 @@ index 810760b7..d9c25efd 100644
  
  my.test.ts:
 diff --git b/content/guides/test/update-snapshots.mdx a/content/guides/test/update-snapshots.mdx
-index eb97b5c6..0f15a187 100644
+index 10ab405f..f186499b 100644
 --- b/content/guides/test/update-snapshots.mdx
 +++ a/content/guides/test/update-snapshots.mdx
 @@ -31,7 +31,6 @@ To regenerate snapshots, use the `--update-snapshots` flag.
@@ -4351,20 +4283,17 @@ index eb97b5c6..0f15a187 100644
  
  test/snap.test.ts:
 diff --git b/content/guides/util/main.mdx a/content/guides/util/main.mdx
-index c6c10519..59bf3896 100644
+index 431935f9..db27e876 100644
 --- b/content/guides/util/main.mdx
 +++ a/content/guides/util/main.mdx
-@@ -18,15 +18,10 @@ import "./foo.ts";
+@@ -20,13 +20,9 @@ The printed path is the file executed with `bun run`.
  
- The printed path corresponds to the file that is executed with `bun run`.
- 
--```sh title="terminal"
-+```sh
+ ```sh title="terminal"
  $ bun run index.ts
 -
  /path/to/index.ts
 -```
--
+ 
 -```sh title="terminal"
  $ bun run foo.ts
 -
@@ -4372,11 +4301,11 @@ index c6c10519..59bf3896 100644
  ```
  
 diff --git b/content/guides/util/version.mdx a/content/guides/util/version.mdx
-index 4da39ce4..365df233 100644
+index 727858b1..24df5939 100644
 --- b/content/guides/util/version.mdx
 +++ a/content/guides/util/version.mdx
 @@ -7,7 +7,7 @@ mode: center
- Get the current version of Bun in a semver format.
+ `Bun.version` contains the current version of Bun in semver format.
  
  ```ts title="index.ts"
 -Bun.version; // => "1.3.3"

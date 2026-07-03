@@ -4,9 +4,9 @@ fullTitle: Run a Shell Command
 mode: center
 ---
 
-Bun Shell is a cross-platform bash-like shell built in to Bun.
+Bun Shell is a cross-platform bash-like shell built into Bun.
 
-It runs shell commands in JavaScript and TypeScript. To get started, import the `$` function from the `bun` package and use it to run shell commands.
+It runs shell commands from JavaScript and TypeScript. To get started, import the `$` function from the `bun` package.
 
 ```ts title="foo.ts"
 import { $ } from "bun";
@@ -39,4 +39,4 @@ for await (const line of $`ls -l`.lines()) {
 
 ---
 
-See [Docs > API > Shell](/docs/runtime/shell) for complete documentation.
+See [Bun Shell](/docs/runtime/shell).

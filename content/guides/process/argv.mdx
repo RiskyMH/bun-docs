@@ -22,9 +22,7 @@ $ bun run cli.ts --flag1 --flag2 value
 
 ---
 
-To parse `argv` into a more useful format, `util.parseArgs` would be helpful.
-
-Example:
+To parse `argv` into a more useful format, use `util.parseArgs`.
 
 ```ts title="cli.ts"
 import { parseArgs } from "util";
@@ -49,7 +47,7 @@ console.log(positionals);
 
 ---
 
-then it outputs
+Running `cli.ts` with the same arguments prints the parsed values.
 
 ```sh title="terminal"
 $ bun run cli.ts --flag1 --flag2 value

@@ -4,7 +4,7 @@ fullTitle: Use Gel with Bun
 mode: center
 ---
 
-Gel (formerly EdgeDB) is a graph-relational database powered by Postgres under the hood. It provides a declarative schema language, migrations system, and object-oriented query language, in addition to supporting raw SQL queries. It solves the object-relational mapping problem at the database layer, eliminating the need for an ORM library in your application code.
+Gel (formerly EdgeDB) is a graph-relational database built on Postgres. It provides a declarative schema language, migrations system, and object-oriented query language, and also supports raw SQL queries. It solves object-relational mapping at the database layer, so your application code doesn't need an ORM library.
 
 ---
 
@@ -34,7 +34,7 @@ $ bun init -y
 
 ---
 
-We'll use the Gel CLI to initialize a Gel instance for our project. This creates a `gel.toml` file in our project root.
+Initialize a Gel instance for the project with the Gel CLI. The `gel project init` command creates a `gel.toml` file in the project root.
 
 ```sh title="terminal"
 $ gel project init
@@ -65,7 +65,7 @@ To connect to my_gel_app, run `gel`
 
 ---
 
-To see if the database is running, let's open a REPL and run a query.
+To check that the database is running, open a REPL and run a query.
 
 ```sh title="terminal"
 $ gel
@@ -83,7 +83,7 @@ gel> \quit
 
 ---
 
-With the project initialized, we can define a schema. The `gel project init` command already created a `dbschema/default.esdl` file to contain our schema.
+Next, define a schema. The `gel project init` command already created a `dbschema/default.esdl` file to hold it.
 
 ```txt title="File Tree"
 dbschema
@@ -122,7 +122,7 @@ Applied m1uwekrn4ni4qs7ul7hfar4xemm5kkxlpswolcoyqj3xdhweomwjrq (00001.edgeql)
 
 ---
 
-With our schema applied, let's execute some queries using Gel's JavaScript client library. We'll install the client library and Gel's codegen CLI, and create a `seed.ts`.file.
+With the schema applied, query the database with Gel's JavaScript client library. Install the client library and Gel's codegen CLI, then create a `seed.ts` file.
 
 ```sh title="terminal"
 $ bun add gel
@@ -134,7 +134,7 @@ $ touch seed.ts
 
 Paste the following code into `seed.ts`.
 
-The client auto-connects to the database. We insert a couple movies using the `.execute()` method. We will use EdgeQL's `for` expression to turn this bulk insert into a single optimized query.
+The client auto-connects to the database. The script inserts a few movies with the `.execute()` method, using EdgeQL's `for` expression to turn the bulk insert into a single query.
 
 ```ts title="seed.ts"
 import { createClient } from "gel";
@@ -175,7 +175,7 @@ Seeding complete.
 
 ---
 
-Gel implements a number of code generation tools for TypeScript. To query our newly seeded database in a typesafe way, we'll use `@gel/generate` to code-generate the EdgeQL query builder.
+Gel implements several code generation tools for TypeScript. To write typesafe queries against the seeded database, generate the EdgeQL query builder with `@gel/generate`.
 
 ```sh title="terminal"
 $ bunx @gel/generate edgeql-js
@@ -199,7 +199,7 @@ the query builder directory? The following line will be added:
 
 ---
 
-In `index.ts`, we can import the generated query builder from `./dbschema/edgeql-js` and write a select query.
+In `index.ts`, import the generated query builder from `./dbschema/edgeql-js` and write a select query.
 
 ```ts title="index.ts"
 import { createClient } from "gel";
@@ -220,7 +220,7 @@ results; // { title: string, releaseYear: number | null }[]
 
 ---
 
-Running the file with Bun, we can see the list of movies we inserted.
+Run the file with Bun to see the movies you inserted.
 
 ```sh title="terminal"
 $ bun run index.ts
@@ -241,4 +241,4 @@ $ bun run index.ts
 
 ---
 
-For complete documentation, refer to the [Gel docs](https://docs.geldata.com/).
+See the [Gel docs](https://docs.geldata.com/).

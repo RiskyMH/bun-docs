@@ -4,7 +4,7 @@ fullTitle: Read environment variables
 mode: center
 ---
 
-The current environment variables can be accessed via `process.env`.
+Access the current environment variables with `process.env`.
 
 ```ts title="index.ts"
 process.env.API_TOKEN; // => "secret"
@@ -12,7 +12,7 @@ process.env.API_TOKEN; // => "secret"
 
 ---
 
-Bun also exposes these variables via `Bun.env`, which is an alias of `process.env`.
+Bun also exposes these variables as `Bun.env`, an alias of `process.env`.
 
 ```ts title="index.ts"
 Bun.env.API_TOKEN; // => "secret"
@@ -20,7 +20,7 @@ Bun.env.API_TOKEN; // => "secret"
 
 ---
 
-To print all currently-set environment variables to the command line, run `bun --print process.env`. This is useful for debugging.
+To print all currently-set environment variables, run `bun --print process.env`.
 
 ```sh title="terminal"
 $ bun --print process.env
@@ -32,4 +32,4 @@ FOOBAR=aaaaaa
 
 ---
 
-See [Docs > Runtime > Environment variables](/docs/runtime/environment-variables) for more information on using environment variables with Bun.
+See [Environment variables](/docs/runtime/environment-variables).
