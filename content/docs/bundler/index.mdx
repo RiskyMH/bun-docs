@@ -1459,7 +1459,7 @@ interface BuildOutput {
 }
 
 interface BuildArtifact extends Blob {
-  kind: "entry-point" | "chunk" | "asset" | "sourcemap";
+  kind: "entry-point" | "chunk" | "asset" | "sourcemap" | "bytecode";
   path: string;
   loader: Loader;
   hash: string | null;
@@ -1694,7 +1694,7 @@ interface BuildConfig {
         asset?: string;
       };
   root?: string; // project root
-  splitting?: boolean; // default true, enable code splitting
+  splitting?: boolean; // default false, enable code splitting
   plugins?: BunPlugin[];
   external?: string[];
   packages?: "bundle" | "external";

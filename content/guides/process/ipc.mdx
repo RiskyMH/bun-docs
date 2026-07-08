@@ -7,8 +7,8 @@ mode: center
 Use [`Bun.spawn()`](/docs/runtime/child-process) to spawn a child process. When spawning a second `bun` process, you can open a direct inter-process communication (IPC) channel between the two processes.
 
 <Callout type="info">
-  This API is only compatible with other `bun` processes. Use `process.execPath` to get a path to the currently running
-  `bun` executable.
+  To communicate with a Node.js process, set `serialization: "json"` in `Bun.spawn`. Use `process.execPath` to get a
+  path to the currently running `bun` executable.
 </Callout>
 
 ```ts title="parent.ts"
@@ -54,7 +54,7 @@ process.on("message", message => {
 
 ---
 
-All messages are serialized with the JSC `serialize` API, which supports the same set of [transferrable types](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects) as `postMessage` and `structuredClone`, including strings, typed arrays, streams, and objects.
+By default, messages are serialized with the JSC `serialize` API, which supports everything [`structuredClone` supports](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), including strings, typed arrays, and objects. This does not support transferring ownership of objects.
 
 ```ts title="child.ts"
 // send a string

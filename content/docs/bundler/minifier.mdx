@@ -526,16 +526,16 @@ Simplifies unary operations.
 +123
 +"123"
 -(-x)
-~(~x)
-!(!x)
+~~x
+!!x
 ```
 
 ```js title="Output"
 123
 123
-x
-x
-x
+- -x
+~~x
+!!x
 ```
 
 ### Double negation removal
@@ -814,13 +814,13 @@ Removes whitespace in function declarations.
 
 ```ts title="Input"
 function myFunction(param1, param2) {
-  return param1 + param2;
+    return param1 + param2;
 }
 const arrow = (a, b) => a + b;
 ```
 
 ```js title="Output"
-function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
+function myFunction(param1,param2){return param1+param2}const arrow=(a,b)=>a+b;
 ```
 
 ### Parentheses minimization
@@ -839,20 +839,6 @@ a + (b * c)
 (a+b)*c
 a+b*c
 x
-```
-
-### Property mangling
-
-**Mode:** `--minify-identifiers` (with configuration)
-
-Renames object properties to shorter names when configured.
-
-```ts title="Input"
-obj.longPropertyName
-```
-
-```js title="Output (with property mangling enabled)"
-obj.a
 ```
 
 ### Template literal value folding
@@ -922,11 +908,11 @@ new Array(x, y)
 Inlines property access for objects with a single property.
 
 ```ts title="Input"
-({fn: () => console.log('hi')}).fn()
+({fn: () => console.log('hi')}).fn
 ```
 
 ```js title="Output"
-(() => console.log('hi'))()
+() => console.log('hi')
 ```
 
 ### String charCodeAt constant folding
@@ -1094,25 +1080,9 @@ const obj = { [Keys.FOO]: value }
 const obj={foo:value}
 ```
 
-### String number to numeric index
-
-**Mode:** `--minify-syntax`
-
-Converts string numeric property access to numeric index.
-
-```ts title="Input"
-obj["0"]
-arr["5"]
-```
-
-```js title="Output"
-obj[0]
-arr[5]
-```
-
 ### Arrow function body shortening
 
-**Mode:** Always active
+**Mode:** `--minify-syntax`
 
 Uses expression body syntax when an arrow function only returns a value.
 
@@ -1140,26 +1110,6 @@ Uses shorthand syntax when property name and value identifier match.
 ```js title="Output"
 { x, y }
 { name, age }
-```
-
-### Method shorthand
-
-**Mode:** Always active
-
-Uses method shorthand syntax in object literals.
-
-```ts title="Input"
-{
-  foo: function() {},
-  bar: async function() {}
-}
-```
-
-```js title="Output"
-{
-  foo() {},
-  async bar() {}
-}
 ```
 
 ### Drop debugger statements
@@ -1201,11 +1151,11 @@ x=void 0;
 
 **Mode:** `--drop=<name>`
 
-Removes calls to specified global functions or methods.
+Removes calls to specified global functions and their methods.
 
 ```ts title="Input"
 assert(condition);
-obj.assert(test);
+assert.equal(a, b);
 ```
 
 ```js title="Output with --drop=assert"

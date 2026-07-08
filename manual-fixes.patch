@@ -1,5 +1,5 @@
 diff --git b/content/docs/bundler/esbuild.mdx a/content/docs/bundler/esbuild.mdx
-index 72cdb8af..8beddd48 100644
+index 4e74b9ff..6107f2f7 100644
 --- b/content/docs/bundler/esbuild.mdx
 +++ a/content/docs/bundler/esbuild.mdx
 @@ -27,7 +27,7 @@ Bun's bundler is 1.75x faster than esbuild on esbuild's three.js benchmark.
@@ -12,7 +12,7 @@ index 72cdb8af..8beddd48 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index a02e056f..0c8e0e4b 100644
+index c47cb92c..13407064 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -495,7 +495,7 @@ However, with the `BUN_BE_BUN=1` environment variable, it acts like the `bun` bi
@@ -25,7 +25,7 @@ index a02e056f..0c8e0e4b 100644
  ```
  
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index aa4dc45a..6973ca76 100644
+index ef29f7f4..4f5bbf20 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
 @@ -121,7 +121,7 @@ Becomes something like this:
@@ -64,7 +64,7 @@ index aa4dc45a..6973ca76 100644
  import { useState } from "react";
  
  export default function App() {
-@@ -514,7 +514,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
+@@ -513,7 +513,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
  <Steps>
  <Step>
  
@@ -73,7 +73,7 @@ index aa4dc45a..6973ca76 100644
  - Transpiles TypeScript, JSX, and TSX in `<script>` tags
  - Bundles imported dependencies
  - Generates sourcemaps for debugging
-@@ -778,7 +778,7 @@ export function App() {
+@@ -777,7 +777,7 @@ export function App() {
  }
  ```
  
@@ -238,7 +238,7 @@ index d00ed01f..28cbd163 100644
  <Callout type="warning">
    Plugins are only supported through `Bun.build`'s API or through `bunfig.toml` with the frontend dev server, not
 diff --git b/content/docs/bundler/index.mdx a/content/docs/bundler/index.mdx
-index da811ead..f840f1bc 100644
+index 0528808e..0e53e587 100644
 --- b/content/docs/bundler/index.mdx
 +++ a/content/docs/bundler/index.mdx
 @@ -75,8 +75,8 @@ To create the bundle:
@@ -346,8 +346,8 @@ index da811ead..f840f1bc 100644
 +  </Card>
  
 -<Card title="node" icon="node">
--  For bundles that run in Node.js. Prioritizes the `"node"` export condition when resolving imports, and outputs `.mjs`.
--  Bun does not polyfill the `Bun` global or the built-in `bun:*` modules.
+-  For bundles that run in Node.js. Prioritizes the `"node"` export condition when resolving imports. Bun does not
+-  polyfill the `Bun` global or the built-in `bun:*` modules.
 -</Card>
 +  <Card title="Node">
 +    For bundles that run in Node.js. Prioritizes the `"node"` export condition when resolving imports, and outputs `.mjs`.
@@ -451,7 +451,16 @@ index da811ead..f840f1bc 100644
  ```
  
  And source code:
-@@ -936,9 +970,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
+@@ -682,6 +716,8 @@ The associated `*.js.map` sourcemap is a JSON file containing an equivalent `deb
+ 
+ Whether to enable minification. Default `false`.
+ 
++<Callout type="info">When targeting `bun`, identifiers are minified by default.</Callout>
++
+ To enable all minification options:
+ 
+ <Tabs items={['JavaScript', 'CLI']} groupId="js/cli">
+@@ -934,9 +970,9 @@ When a string is provided for the `naming` field, it is used only for bundles th
    <Tab value="CLI">
      ```bash title="terminal"
      $ bun build ./index.tsx --outdir ./out \
@@ -464,7 +473,7 @@ index da811ead..f840f1bc 100644
     ```
    </Tab>
  </Tabs>
-@@ -1472,44 +1506,39 @@ return new Response(artifact);
+@@ -1470,44 +1506,39 @@ return new Response(artifact);
  
  The Bun runtime pretty-prints `BuildArtifact` objects to make debugging easier.
  
@@ -542,7 +551,7 @@ index da811ead..f840f1bc 100644
  ## Bytecode
  
 diff --git b/content/docs/bundler/minifier.mdx a/content/docs/bundler/minifier.mdx
-index c82a23f6..98230e7a 100644
+index 10a1a6c9..fc10b0a6 100644
 --- b/content/docs/bundler/minifier.mdx
 +++ a/content/docs/bundler/minifier.mdx
 @@ -102,12 +102,12 @@ Renames local variables and function names to shorter identifiers using frequenc
@@ -913,7 +922,7 @@ index c82a23f6..98230e7a 100644
  ```
  
  ### Unary expression folding
-@@ -523,22 +522,19 @@ x ? !1 : !0
+@@ -523,7 +522,7 @@ x ? !1 : !0
  
  Simplifies unary operations.
  
@@ -922,26 +931,16 @@ index c82a23f6..98230e7a 100644
  +123
  +"123"
  -(-x)
--~~x
--!!x
-+~(~x)
-+!(!x)
+@@ -531,7 +530,7 @@ Simplifies unary operations.
+ !!x
  ```
  
 -```js Output
--123
--123
 +```js title="Output"
  123
  123
- x
--~~x
--!!x
-+x
- x
- ```
- 
-@@ -548,12 +544,12 @@ x
+ - -x
+@@ -545,12 +544,12 @@ Simplifies unary operations.
  
  Removes unnecessary double negations.
  
@@ -956,7 +955,7 @@ index c82a23f6..98230e7a 100644
  x
  !x
  ```
-@@ -564,14 +560,14 @@ x
+@@ -561,14 +560,14 @@ x
  
  Optimizes if statements with constant conditions.
  
@@ -973,7 +972,7 @@ index c82a23f6..98230e7a 100644
  x;
  // removed
  if(x)a;
-@@ -584,7 +580,7 @@ if(!x)y;
+@@ -581,7 +580,7 @@ if(!x)y;
  
  Removes unreachable code and code without side effects.
  
@@ -982,7 +981,7 @@ index c82a23f6..98230e7a 100644
  if (false) {
    unreachable();
  }
-@@ -594,7 +590,7 @@ function foo() {
+@@ -591,7 +590,7 @@ function foo() {
  }
  ```
  
@@ -991,7 +990,7 @@ index c82a23f6..98230e7a 100644
  function foo(){return x}
  ```
  
-@@ -604,13 +600,13 @@ function foo(){return x}
+@@ -601,13 +600,13 @@ function foo(){return x}
  
  Removes branches that can never execute.
  
@@ -1007,7 +1006,7 @@ index c82a23f6..98230e7a 100644
  // removed entirely
  ```
  
-@@ -620,13 +616,12 @@ while (false) {
+@@ -617,13 +616,12 @@ while (false) {
  
  Removes empty blocks and unnecessary braces.
  
@@ -1023,7 +1022,7 @@ index c82a23f6..98230e7a 100644
  // removed
  ```
  
-@@ -636,28 +631,27 @@ if (x) { }
+@@ -633,28 +631,27 @@ if (x) { }
  
  Removes unnecessary braces around single statements.
  
@@ -1056,7 +1055,7 @@ index c82a23f6..98230e7a 100644
  const x=0;
  ```
  
-@@ -667,12 +661,12 @@ const x=0;
+@@ -664,12 +661,12 @@ const x=0;
  
  Respects `/*@__PURE__*/` annotations for tree shaking (removing unused code).
  
@@ -1071,7 +1070,7 @@ index c82a23f6..98230e7a 100644
  // removed entirely
  ```
  
-@@ -682,14 +676,14 @@ const x = /*@__PURE__*/ expensive();
+@@ -679,14 +676,14 @@ const x = /*@__PURE__*/ expensive();
  
  Renames local variables to shorter names based on usage frequency.
  
@@ -1088,7 +1087,7 @@ index c82a23f6..98230e7a 100644
  function a(b,c){const d=b+c;return d}
  ```
  
-@@ -713,14 +707,14 @@ function a(b,c){const d=b+c;return d}
+@@ -710,14 +707,14 @@ function a(b,c){const d=b+c;return d}
  
  Removes all unnecessary whitespace.
  
@@ -1106,7 +1105,7 @@ index c82a23f6..98230e7a 100644
  function add(a,b){return a+b;}let x=10;
  ```
  
-@@ -730,13 +724,13 @@ function add(a,b){return a+b;}let x=10;
+@@ -727,13 +724,13 @@ function add(a,b){return a+b;}let x=10;
  
  Inserts semicolons only when necessary.
  
@@ -1122,7 +1121,7 @@ index c82a23f6..98230e7a 100644
  let a=1;let b=2;return a+b
  ```
  
-@@ -746,13 +740,13 @@ let a=1;let b=2;return a+b
+@@ -743,13 +740,13 @@ let a=1;let b=2;return a+b
  
  Removes spaces around operators.
  
@@ -1141,7 +1140,7 @@ index c82a23f6..98230e7a 100644
  a+b
  x=y*z
  foo&&bar||baz
-@@ -764,33 +758,32 @@ foo&&bar||baz
+@@ -761,33 +758,32 @@ foo&&bar||baz
  
  Removes comments except important license comments.
  
@@ -1181,7 +1180,7 @@ index c82a23f6..98230e7a 100644
  const obj={name:"John",age:30};const arr=[1,2,3];
  ```
  
-@@ -800,16 +793,16 @@ const obj={name:"John",age:30};const arr=[1,2,3];
+@@ -797,16 +793,16 @@ const obj={name:"John",age:30};const arr=[1,2,3];
  
  Removes whitespace in control structures.
  
@@ -1202,25 +1201,24 @@ index c82a23f6..98230e7a 100644
  if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
  ```
  
-@@ -819,14 +812,14 @@ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
+@@ -816,14 +812,14 @@ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
  
  Removes whitespace in function declarations.
  
 -```ts Input
 +```ts title="Input"
  function myFunction(param1, param2) {
--    return param1 + param2;
-+  return param1 + param2;
+     return param1 + param2;
  }
  const arrow = (a, b) => a + b;
  ```
  
 -```js Output
 +```js title="Output"
- function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
+ function myFunction(param1,param2){return param1+param2}const arrow=(a,b)=>a+b;
  ```
  
-@@ -836,13 +829,13 @@ function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
+@@ -833,13 +829,13 @@ function myFunction(param1,param2){return param1+param2}const arrow=(a,b)=>a+b;
  
  Only adds parentheses when necessary for operator precedence.
  
@@ -1236,21 +1234,7 @@ index c82a23f6..98230e7a 100644
  (a+b)*c
  a+b*c
  x
-@@ -854,11 +847,11 @@ x
- 
- Renames object properties to shorter names when configured.
- 
--```ts Input
-+```ts title="Input"
- obj.longPropertyName
- ```
- 
--```js Output (with property mangling enabled)
-+```js title="Output (with property mangling enabled)"
- obj.a
- ```
- 
-@@ -868,7 +861,7 @@ obj.a
+@@ -851,7 +847,7 @@ x
  
  Converts non-string interpolated values to strings and folds them into the template.
  
@@ -1259,7 +1243,7 @@ index c82a23f6..98230e7a 100644
  `hello ${123}`
  `value: ${true}`
  `result: ${null}`
-@@ -876,7 +869,7 @@ Converts non-string interpolated values to strings and folds them into the templ
+@@ -859,7 +855,7 @@ Converts non-string interpolated values to strings and folds them into the templ
  `big: ${10n}`
  ```
  
@@ -1268,7 +1252,7 @@ index c82a23f6..98230e7a 100644
  "hello 123"
  "value: true"
  "result: null"
-@@ -890,12 +883,12 @@ Converts non-string interpolated values to strings and folds them into the templ
+@@ -873,12 +869,12 @@ Converts non-string interpolated values to strings and folds them into the templ
  
  Evaluates `.length` property on string literals at compile time.
  
@@ -1283,7 +1267,7 @@ index c82a23f6..98230e7a 100644
  11
  4
  ```
-@@ -906,7 +899,7 @@ Evaluates `.length` property on string literals at compile time.
+@@ -889,7 +885,7 @@ Evaluates `.length` property on string literals at compile time.
  
  Simplifies constructor calls for built-in types.
  
@@ -1292,7 +1276,7 @@ index c82a23f6..98230e7a 100644
  new Object()
  new Object(null)
  new Object({a: 1})
-@@ -914,7 +907,7 @@ new Array()
+@@ -897,7 +893,7 @@ new Array()
  new Array(x, y)
  ```
  
@@ -1301,21 +1285,21 @@ index c82a23f6..98230e7a 100644
  {}
  {}
  {a:1}
-@@ -928,11 +921,11 @@ new Array(x, y)
+@@ -911,11 +907,11 @@ new Array(x, y)
  
  Inlines property access for objects with a single property.
  
 -```ts Input
 +```ts title="Input"
- ({fn: () => console.log('hi')}).fn()
+ ({fn: () => console.log('hi')}).fn
  ```
  
 -```js Output
 +```js title="Output"
- (() => console.log('hi'))()
+ () => console.log('hi')
  ```
  
-@@ -942,12 +935,12 @@ Inlines property access for objects with a single property.
+@@ -925,12 +921,12 @@ Inlines property access for objects with a single property.
  
  Evaluates `charCodeAt()` on string literals for ASCII characters.
  
@@ -1330,7 +1314,7 @@ index c82a23f6..98230e7a 100644
  101
  65
  ```
-@@ -958,12 +951,12 @@ Evaluates `charCodeAt()` on string literals for ASCII characters.
+@@ -941,12 +937,12 @@ Evaluates `charCodeAt()` on string literals for ASCII characters.
  
  Converts loose equality checks with `void 0` to `null` since they're equivalent.
  
@@ -1345,7 +1329,7 @@ index c82a23f6..98230e7a 100644
  x == null
  x != null
  ```
-@@ -974,12 +967,12 @@ x != null
+@@ -957,12 +953,12 @@ x != null
  
  Moves negation operator through comma expressions.
  
@@ -1360,7 +1344,7 @@ index c82a23f6..98230e7a 100644
  a,-b
  x,y,-z
  ```
-@@ -990,18 +983,18 @@ x,y,-z
+@@ -973,18 +969,18 @@ x,y,-z
  
  Inlines `import.meta` properties at build time when values are known.
  
@@ -1389,7 +1373,7 @@ index c82a23f6..98230e7a 100644
  ```
  
  ### Variable declaration merging
-@@ -1010,14 +1003,14 @@ import.meta.url
+@@ -993,14 +989,14 @@ import.meta.url
  
  Merges adjacent variable declarations of the same type.
  
@@ -1406,7 +1390,7 @@ index c82a23f6..98230e7a 100644
  let a=1,b=2;
  const c=3,d=4;
  ```
-@@ -1028,13 +1021,13 @@ const c=3,d=4;
+@@ -1011,13 +1007,13 @@ const c=3,d=4;
  
  Merges adjacent expression statements using comma operator.
  
@@ -1422,7 +1406,7 @@ index c82a23f6..98230e7a 100644
  console.log(1),console.log(2),console.log(3);
  ```
  
-@@ -1044,12 +1037,12 @@ console.log(1),console.log(2),console.log(3);
+@@ -1027,12 +1023,12 @@ console.log(1),console.log(2),console.log(3);
  
  Merges expressions before return with comma operator.
  
@@ -1437,7 +1421,7 @@ index c82a23f6..98230e7a 100644
  return console.log(x),y;
  ```
  
-@@ -1059,12 +1052,12 @@ return console.log(x),y;
+@@ -1042,12 +1038,12 @@ return console.log(x),y;
  
  Merges expressions before throw with comma operator.
  
@@ -1452,7 +1436,7 @@ index c82a23f6..98230e7a 100644
  throw(console.log(x),new Error());
  ```
  
-@@ -1074,7 +1067,7 @@ throw(console.log(x),new Error());
+@@ -1057,7 +1053,7 @@ throw(console.log(x),new Error());
  
  Inlines enum values across module boundaries.
  
@@ -1461,7 +1445,7 @@ index c82a23f6..98230e7a 100644
  // lib.ts
  export enum Color { Red, Green, Blue }
  
-@@ -1083,22 +1076,21 @@ import { Color } from './lib';
+@@ -1066,22 +1062,21 @@ import { Color } from './lib';
  const x = Color.Red;
  ```
  
@@ -1487,22 +1471,7 @@ index c82a23f6..98230e7a 100644
  const obj={foo:value}
  ```
  
-@@ -1108,12 +1100,12 @@ const obj={foo:value}
- 
- Converts string numeric property access to numeric index.
- 
--```ts Input
-+```ts title="Input"
- obj["0"]
- arr["5"]
- ```
- 
--```js Output
-+```js title="Output"
- obj[0]
- arr[5]
- ```
-@@ -1124,12 +1116,12 @@ arr[5]
+@@ -1091,12 +1086,12 @@ const obj={foo:value}
  
  Uses expression body syntax when an arrow function only returns a value.
  
@@ -1517,7 +1486,7 @@ index c82a23f6..98230e7a 100644
  () => x
  a => a + 1
  ```
-@@ -1140,12 +1132,12 @@ a => a + 1
+@@ -1107,12 +1102,12 @@ a => a + 1
  
  Uses shorthand syntax when property name and value identifier match.
  
@@ -1532,24 +1501,7 @@ index c82a23f6..98230e7a 100644
  { x, y }
  { name, age }
  ```
-@@ -1156,14 +1148,14 @@ Uses shorthand syntax when property name and value identifier match.
- 
- Uses method shorthand syntax in object literals.
- 
--```ts Input
-+```ts title="Input"
- {
-   foo: function() {},
-   bar: async function() {}
- }
- ```
- 
--```js Output
-+```js title="Output"
- {
-   foo() {},
-   async bar() {}
-@@ -1176,14 +1168,14 @@ Uses method shorthand syntax in object literals.
+@@ -1123,14 +1118,14 @@ Uses shorthand syntax when property name and value identifier match.
  
  Removes `debugger` statements from code.
  
@@ -1566,7 +1518,7 @@ index c82a23f6..98230e7a 100644
  function test(){return x}
  ```
  
-@@ -1193,13 +1185,13 @@ function test(){return x}
+@@ -1140,13 +1135,13 @@ function test(){return x}
  
  Removes all `console.*` method calls from code.
  
@@ -1582,14 +1534,14 @@ index c82a23f6..98230e7a 100644
  void 0;
  void 0;
  x=void 0;
-@@ -1211,12 +1203,12 @@ x=void 0;
+@@ -1158,12 +1153,12 @@ x=void 0;
  
- Removes calls to specified global functions or methods.
+ Removes calls to specified global functions and their methods.
  
 -```ts Input
 +```ts title="Input"
  assert(condition);
- obj.assert(test);
+ assert.equal(a, b);
  ```
  
 -```js Output with --drop=assert
@@ -1597,7 +1549,7 @@ index c82a23f6..98230e7a 100644
  void 0;
  void 0;
  ```
-@@ -1248,7 +1240,7 @@ await Bun.build({
+@@ -1195,7 +1190,7 @@ await Bun.build({
  
  Using all three minification modes together:
  
@@ -1607,10 +1559,10 @@ index c82a23f6..98230e7a 100644
  
  const myFunction = () => {
 diff --git b/content/docs/bundler/plugins.mdx a/content/docs/bundler/plugins.mdx
-index 509b85f2..26ee80cc 100644
+index 84bf50bb..ef30f7d1 100644
 --- b/content/docs/bundler/plugins.mdx
 +++ a/content/docs/bundler/plugins.mdx
-@@ -325,7 +325,7 @@ To create a native plugin, export a C ABI function that matches the signature of
+@@ -323,7 +323,7 @@ To create a native plugin, export a C ABI function that matches the signature of
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -2220,7 +2172,7 @@ index 71a690e1..62722724 100644
 -<Bunx />
 +<include>../../_snippets/cli/bunx.mdx</include>
 diff --git b/content/docs/pm/cli/link.mdx a/content/docs/pm/cli/link.mdx
-index 981eac72..56fa1bf6 100644
+index c9436fdf..763308d4 100644
 --- b/content/docs/pm/cli/link.mdx
 +++ a/content/docs/pm/cli/link.mdx
 @@ -7,7 +7,7 @@ Use `bun link` in a local directory to register the current package as a "linkab
@@ -2233,7 +2185,7 @@ index 981eac72..56fa1bf6 100644
  
  bun link v$BUN_LATEST_VERSION (7416672e)
 diff --git b/content/docs/pm/cli/outdated.mdx a/content/docs/pm/cli/outdated.mdx
-index b1d60778..9b2485fd 100644
+index 90d343b6..55a7fe8d 100644
 --- b/content/docs/pm/cli/outdated.mdx
 +++ a/content/docs/pm/cli/outdated.mdx
 @@ -19,7 +19,6 @@ $ bun outdated
@@ -2244,15 +2196,7 @@ index b1d60778..9b2485fd 100644
  ```
  
  ## Version Information
-@@ -41,7 +40,6 @@ $ bun outdated eslint-plugin-security eslint-plugin-sonarjs
- | ------------------------------ | ------- | ------ | --------- |
- | eslint-plugin-security (dev)   | 2.1.1   | 2.1.1  | 3.0.1     |
- | eslint-plugin-sonarjs (dev)    | 0.23.0  | 0.23.0 | 3.0.1     |
--
- ```
- 
- Glob patterns work too:
-@@ -63,7 +61,7 @@ $ bun outdated '@types/*'
+@@ -62,7 +61,7 @@ $ bun outdated '@types/*'
  
  | Package            | Current | Update | Latest |
  | ------------------ | ------- | ------ | ------ |
@@ -2262,7 +2206,7 @@ index b1d60778..9b2485fd 100644
  
  Or to exclude all `@types/*` packages:
 diff --git b/content/docs/pm/cli/pm.mdx a/content/docs/pm/cli/pm.mdx
-index 3c5f8ec9..337de2e7 100644
+index d9e05296..48f79dd7 100644
 --- b/content/docs/pm/cli/pm.mdx
 +++ a/content/docs/pm/cli/pm.mdx
 @@ -85,7 +85,6 @@ To print the path to the `bin` directory for the local project:
@@ -2294,7 +2238,7 @@ index ddf3c652..ec1c920c 100644
  
  packed 203B package.json
 diff --git b/content/docs/pm/cli/update.mdx a/content/docs/pm/cli/update.mdx
-index b33d7993..1a6cb74e 100644
+index e4a0602f..2b5b348c 100644
 --- b/content/docs/pm/cli/update.mdx
 +++ a/content/docs/pm/cli/update.mdx
 @@ -32,7 +32,9 @@ The flag opens a terminal interface that lists every outdated package with its c
@@ -2321,7 +2265,7 @@ index 90441055..cd95b7c9 100644
  
  Bun loads configuration options from [`.npmrc`](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc) files, so you can reuse your existing registry and scope configuration.
 diff --git b/content/docs/pm/security-scanner-api.mdx a/content/docs/pm/security-scanner-api.mdx
-index 7c51a30c..86a2e09a 100644
+index 78910c5f..734918e2 100644
 --- b/content/docs/pm/security-scanner-api.mdx
 +++ a/content/docs/pm/security-scanner-api.mdx
 @@ -1,6 +1,5 @@
@@ -2331,8 +2275,21 @@ index 7c51a30c..86a2e09a 100644
  ---
  
  Bun's package manager can scan packages before installing them, to catch supply chain attacks and known vulnerabilities.
+diff --git b/content/docs/project/benchmarking.mdx a/content/docs/project/benchmarking.mdx
+index 06aac7b1..560b6501 100644
+--- b/content/docs/project/benchmarking.mdx
++++ a/content/docs/project/benchmarking.mdx
+@@ -195,7 +195,7 @@ Bun uses mimalloc for the other heap. To print a summary of non-JavaScript memor
+ Bun.unsafe.mimallocDump();
+ ```
+ 
+-```txt
++```txt title="terminal"
+ heap stats:    peak      total      freed    current       unit      count
+   reserved:   64.0 MiB   64.0 MiB      0       64.0 MiB                        not all freed!
+  committed:   64.0 MiB   64.0 MiB      0       64.0 MiB                        not all freed!
 diff --git b/content/docs/project/building-windows.mdx a/content/docs/project/building-windows.mdx
-index 1b2e243a..0bed3e3c 100644
+index c4242ff2..a4e61eca 100644
 --- b/content/docs/project/building-windows.mdx
 +++ a/content/docs/project/building-windows.mdx
 @@ -12,7 +12,7 @@ Use [PowerShell 7 (`pwsh.exe`)](https://learn.microsoft.com/en-us/powershell/scr
@@ -2425,13 +2382,8 @@ index 1b2e243a..0bed3e3c 100644
  ```
  
  Add this folder to `$Env:PATH`: open the Start menu, type "Path", and use the environment variables menu to add `C:\.....\bun\build\debug` to the user environment variable `PATH`. Then restart your editor (if it still does not pick up the change, log out and log back in).
-@@ -117,15 +117,15 @@ Run the test suite with `bun test <path>` or with the wrapper script `bun node:t
- 
+@@ -118,11 +118,11 @@ Run the test suite with `bun test <path>` or with the wrapper script `bun node:t
  ```ps1
- # Setup
--bun i --cwd packages\bun-internal-test
-+> bun i --cwd packages\bun-internal-test
- 
  # Run the entire test suite with reporter
  # the package.json script "test" uses "build/debug/bun-debug.exe" by default
 -bun run test
@@ -2445,7 +2397,7 @@ index 1b2e243a..0bed3e3c 100644
  ```
  
  ## Troubleshooting
-@@ -151,14 +151,14 @@ You can also build Windows binaries (both x64 and arm64) on a Linux host. The bu
+@@ -148,14 +148,14 @@ You can also build Windows binaries (both x64 and arm64) on a Linux host. The bu
  
  ```bash
  $ cargo install xwin # or download a release binary
@@ -2464,7 +2416,7 @@ index 1b2e243a..0bed3e3c 100644
  
  The build looks for the sysroot at `/opt/winsysroot` (or `/opt/xwin`) automatically; elsewhere, set `WINDOWS_SYSROOT=<path>` or pass `--winsysroot=<path>` (a user-writable path also lets configure manage the aliases for you). Configure validates the splat at the start of every cross build. CI agents bake the same splat into their images (`.buildkite/Dockerfile`, `scripts/bootstrap.sh`); when an agent doesn't have one, the build fetches it into its cache dir at configure time.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index 5c551e89..c05a28be 100644
+index 2f7473b2..fa9fc475 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
 @@ -12,7 +12,7 @@ If you are using Windows, see [Building Windows](/docs/project/building-windows)
@@ -2473,10 +2425,10 @@ index 5c551e89..c05a28be 100644
  ```bash
 -nix develop
 +$ nix develop
- # or explicitly use the pure shell
- # nix develop .#pure
- $ export CMAKE_SYSTEM_PROCESSOR=$(uname -m)
-@@ -119,7 +119,7 @@ If none of these work, install it [manually](https://github.com/llvm/llvm-projec
+ $ bun bd
+ ```
+ 
+@@ -116,7 +116,7 @@ If none of these work, install it [manually](https://github.com/llvm/llvm-projec
  Make sure Clang/LLVM 21 is in your path:
  
  ```bash
@@ -2485,7 +2437,7 @@ index 5c551e89..c05a28be 100644
  ```
  
  If not, add it manually:
-@@ -150,7 +150,7 @@ $ bun run build
+@@ -147,7 +147,7 @@ $ bun run build
  The binary is at `./build/debug/bun-debug`. It is recommended to add this to your `$PATH`. To verify the build worked, print its version:
  
  ```bash
@@ -2494,7 +2446,7 @@ index 5c551e89..c05a28be 100644
  x.y.z_debug
  ```
  
-@@ -345,7 +345,7 @@ $ brew install pkg-config
+@@ -342,7 +342,7 @@ $ brew install pkg-config
  If you see this error when compiling, run:
  
  ```bash
@@ -2504,7 +2456,7 @@ index 5c551e89..c05a28be 100644
  
  ### Cannot find `libatomic.a`
 diff --git b/content/docs/quickstart.mdx a/content/docs/quickstart.mdx
-index 3deee3b9..cbc36656 100644
+index 6863d451..a4b1a49b 100644
 --- b/content/docs/quickstart.mdx
 +++ a/content/docs/quickstart.mdx
 @@ -26,7 +26,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
@@ -2514,7 +2466,7 @@ index 3deee3b9..cbc36656 100644
 -    
      ✓ Select a project template: Blank
  
-     - .gitignore
+     + .gitignore
 @@ -49,7 +48,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
      ```bash title="terminal"
      $ cd my-app
@@ -2528,7 +2480,7 @@ index 3deee3b9..cbc36656 100644
      ```bash title="terminal"
      $ bun run index.ts
 -    
-     Listening on http://localhost:3000
+     Listening on http://localhost:3000/
      ```
  
 @@ -110,7 +107,7 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
@@ -2545,7 +2497,7 @@ index 3deee3b9..cbc36656 100644
      ```bash title="terminal"
      $ bun run index.ts
 -    
-     Listening on http://localhost:3000
+     Listening on http://localhost:3000/
      ```
  
 @@ -206,7 +202,6 @@ Build a minimal HTTP server with `Bun.serve`, run it locally, then evolve it by
@@ -2553,7 +2505,7 @@ index 3deee3b9..cbc36656 100644
      ```bash title="terminal"
      $ bun run index.ts
 -    
-     Listening on http://localhost:3000
+     Listening on http://localhost:3000/
      ```
  
 @@ -247,7 +242,6 @@ Then run it with `bun run start`.
@@ -2561,11 +2513,11 @@ index 3deee3b9..cbc36656 100644
  ```bash title="terminal"
  $ bun run start
 -
- Listening on http://localhost:3000
+ Listening on http://localhost:3000/
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 4af28d25..274326bc 100644
+index 1cb10ada..2502c16f 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ The coverage threshold. By default, no threshold is set. If your test suite does
@@ -2604,7 +2556,7 @@ index 4af28d25..274326bc 100644
  ```
  
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 53226156..5666cd1f 100644
+index 3635ed4e..18be7d29 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
 @@ -100,7 +100,7 @@ Read the subprocess's output from the `stdout` and `stderr` properties. By defau
@@ -2617,7 +2569,7 @@ index 53226156..5666cd1f 100644
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
 diff --git b/content/docs/runtime/cron.mdx a/content/docs/runtime/cron.mdx
-index cc91cd82..25fe4cd7 100644
+index ce3cf38b..eea1e7a1 100644
 --- b/content/docs/runtime/cron.mdx
 +++ a/content/docs/runtime/cron.mdx
 @@ -266,18 +266,18 @@ When the cron daemon fires the job, Bun imports your module and calls the `sched
@@ -2694,28 +2646,28 @@ index cc91cd82..25fe4cd7 100644
  
  ### Windows
 diff --git b/content/docs/runtime/debugger.mdx a/content/docs/runtime/debugger.mdx
-index 95d84b48..d664c439 100644
+index 3dd0cb60..d337593a 100644
 --- b/content/docs/runtime/debugger.mdx
 +++ a/content/docs/runtime/debugger.mdx
-@@ -22,9 +22,7 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This s
+@@ -22,9 +22,6 @@ To enable debugging when running code with Bun, use the `--inspect` flag. This s
  
  ```sh title="terminal"
  $ bun --inspect server.ts
 -```
- 
+-
 -```txt id="terminal"
- ------------------ Bun Inspector ------------------
- Listening at:
+ --------------------- Bun Inspector ---------------------
+ Listening:
    ws://localhost:6499/0tqxs9exrgrm
-@@ -143,12 +141,16 @@ await fetch("https://example.com", {
+@@ -142,12 +139,16 @@ await fetch("https://example.com", {
    },
    body: JSON.stringify({ foo: "bar" }),
  });
 +```
++
++This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
  
 -[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/1.3.3" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
-+This prints the `fetch` request as a single-line `curl` command to let you copy-paste into your terminal to replicate the request.
-+
 +```sh
 +[fetch] $ curl --http1.1 "https://example.com/" -X POST -H "content-type: application/json" -H "Connection: keep-alive" -H "User-Agent: Bun/$BUN_LATEST_VERSION" -H "Accept: */*" -H "Host: example.com" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Content-Length: 13" --data-raw "{\"foo\":\"bar\"}"
  [fetch] > HTTP/1.1 POST https://example.com/
@@ -2726,7 +2678,7 @@ index 95d84b48..d664c439 100644
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br
-@@ -182,11 +184,13 @@ await fetch("https://example.com", {
+@@ -181,11 +182,13 @@ await fetch("https://example.com", {
  });
  ```
  
@@ -2742,7 +2694,7 @@ index 95d84b48..d664c439 100644
  [fetch] > Accept: */*
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br
-@@ -310,7 +314,9 @@ const fn = () => {
+@@ -309,7 +312,9 @@ const fn = () => {
  fn();
  ```
  
@@ -2754,7 +2706,7 @@ index 95d84b48..d664c439 100644
      at myInner (file.js:4:15)
      at fn (file.js:8:5)
 diff --git b/content/docs/runtime/environment-variables.mdx a/content/docs/runtime/environment-variables.mdx
-index 4434c604..a7deb893 100644
+index afd3f9fb..7e8cd6b7 100644
 --- b/content/docs/runtime/environment-variables.mdx
 +++ a/content/docs/runtime/environment-variables.mdx
 @@ -29,7 +29,7 @@ $ FOO=helloworld bun run dev
@@ -2767,7 +2719,7 @@ index 4434c604..a7deb893 100644
  
  <Accordions type="single">
 diff --git b/content/docs/runtime/ffi.mdx a/content/docs/runtime/ffi.mdx
-index abf8996b..b5445797 100644
+index 9c56877c..b7b5bebe 100644
 --- b/content/docs/runtime/ffi.mdx
 +++ a/content/docs/runtime/ffi.mdx
 @@ -66,7 +66,7 @@ pub export fn add(a: i32, b: i32) i32 {
@@ -2802,7 +2754,7 @@ index abf8996b..b5445797 100644
  
  ---
 diff --git b/content/docs/runtime/file-types.mdx a/content/docs/runtime/file-types.mdx
-index 61808e83..fc098988 100644
+index 35028123..457a5b83 100644
 --- b/content/docs/runtime/file-types.mdx
 +++ a/content/docs/runtime/file-types.mdx
 @@ -309,7 +309,7 @@ The `html` loader processes HTML files and bundles any referenced assets. It:
@@ -2815,7 +2767,7 @@ index 61808e83..fc098988 100644
  <html>
    <body>
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 220c5e92..c9b425b1 100644
+index 9a9e116f..3cfd56f3 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
 @@ -545,7 +545,7 @@ export interface Post {
@@ -2854,7 +2806,7 @@ index ebeb7f92..1d868815 100644
  });
  ```
 diff --git b/content/docs/runtime/index.mdx a/content/docs/runtime/index.mdx
-index ee910864..1c8e28e0 100644
+index 090580b1..9a12f496 100644
 --- b/content/docs/runtime/index.mdx
 +++ a/content/docs/runtime/index.mdx
 @@ -64,7 +64,7 @@ Flags at the end of the command are ignored by `bun` and passed through to the `
@@ -2867,7 +2819,7 @@ index ee910864..1c8e28e0 100644
  ```
  
 diff --git b/content/docs/runtime/markdown.mdx a/content/docs/runtime/markdown.mdx
-index 73fc0a1d..bbe52f44 100644
+index 84506170..723f75b1 100644
 --- b/content/docs/runtime/markdown.mdx
 +++ a/content/docs/runtime/markdown.mdx
 @@ -3,7 +3,7 @@ title: Markdown
@@ -2880,7 +2832,7 @@ index 73fc0a1d..bbe52f44 100644
  </Callout>
  
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
-index 3cf1626e..818fedbf 100644
+index 9060434b..2ff44cf3 100644
 --- b/content/docs/runtime/networking/fetch.mdx
 +++ a/content/docs/runtime/networking/fetch.mdx
 @@ -358,7 +358,7 @@ This prints the request and response headers to your terminal:
@@ -2893,10 +2845,10 @@ index 3cf1626e..818fedbf 100644
  [fetch] > Host: example.com
  [fetch] > Accept-Encoding: gzip, deflate, br, zstd
 diff --git b/content/docs/runtime/plugins.mdx a/content/docs/runtime/plugins.mdx
-index 30ae8c76..dbfeae28 100644
+index 83866a95..119f84fe 100644
 --- b/content/docs/runtime/plugins.mdx
 +++ a/content/docs/runtime/plugins.mdx
-@@ -314,7 +314,7 @@ Native plugins are NAPI modules which expose lifecycle hooks as C ABI functions.
+@@ -312,7 +312,7 @@ Native plugins are NAPI modules which expose lifecycle hooks as C ABI functions.
  
  ```bash title="terminal"
  $ bun add -g @napi-rs/cli
@@ -2906,7 +2858,7 @@ index 30ae8c76..dbfeae28 100644
  
  Then install this crate:
 diff --git b/content/docs/runtime/sql.mdx a/content/docs/runtime/sql.mdx
-index 0900bfb3..4af1114e 100644
+index 332e6b4b..7ca57b1e 100644
 --- b/content/docs/runtime/sql.mdx
 +++ a/content/docs/runtime/sql.mdx
 @@ -524,11 +524,11 @@ MySQL connections can be configured with environment variables:
@@ -2938,7 +2890,7 @@ index 0900bfb3..4af1114e 100644
  
  **Note:** PostgreSQL-specific environment variables such as `POSTGRES_URL` and `PGHOST` are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index 9b4b71f5..2ba1478f 100644
+index 4ecb9268..77a22aed 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -2977,8 +2929,8 @@ index 9b4b71f5..2ba1478f 100644
 -```
 -
 -```txt
--[{ message: "Hello world" }]
-+// => [{ message: "Hello world" }]
+-[{ $message: "Hello world" }]
++// => [{ $message: "Hello world" }]
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
@@ -2993,7 +2945,7 @@ index 9b4b71f5..2ba1478f 100644
 +// => { $message: "Hello world" }
  ```
  
- Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `undefined` is returned.
+ Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `null` is returned.
 @@ -335,13 +321,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
  ```ts title="db.ts"
  const query = db.query(`create table foo;`);
@@ -3117,7 +3069,7 @@ index 9b4b71f5..2ba1478f 100644
  
  To point `bun:sqlite` to the new build, call `Database.setCustomSQLite(path)` before creating any `Database` instances. (On other operating systems, this is a no-op.) Pass a path to the SQLite `.dylib` file, _not_ the executable. With recent versions of Homebrew this is something like `/opt/homebrew/Cellar/sqlite/<version>/libsqlite3.dylib`.
 diff --git b/content/docs/runtime/streams.mdx a/content/docs/runtime/streams.mdx
-index 5845f0b8..9b51d644 100644
+index 6357dc81..88ee8c17 100644
 --- b/content/docs/runtime/streams.mdx
 +++ a/content/docs/runtime/streams.mdx
 @@ -219,7 +219,7 @@ sink.start({
@@ -3130,10 +3082,10 @@ index 5845f0b8..9b51d644 100644
   * Fast incremental writer that becomes an `ArrayBuffer` on end().
   */
 diff --git b/content/docs/runtime/templating/create.mdx a/content/docs/runtime/templating/create.mdx
-index 57e0c6e5..df9d69af 100644
+index 821f0e49..219dccea 100644
 --- b/content/docs/runtime/templating/create.mdx
 +++ a/content/docs/runtime/templating/create.mdx
-@@ -230,7 +230,7 @@ After cloning a template, `bun create` removes the `"bun-create"` section from `
+@@ -229,7 +229,7 @@ After cloning a template, `bun create` removes the `"bun-create"` section from `
  | `GITHUB_TOKEN` (or `GITHUB_ACCESS_TOKEN`) | Lets `bun create` access private repositories and avoid rate limits. `GITHUB_TOKEN` is chosen over `GITHUB_ACCESS_TOKEN` if both exist. |
  
  <Accordions type="single">
@@ -3143,7 +3095,7 @@ index 57e0c6e5..df9d69af 100644
  When you run `bun create ${template} ${destination}`, here’s what happens:
  
 diff --git b/content/docs/runtime/transpiler.mdx a/content/docs/runtime/transpiler.mdx
-index efe5d86d..33e72fbd 100644
+index 2754d3fe..786ba307 100644
 --- b/content/docs/runtime/transpiler.mdx
 +++ a/content/docs/runtime/transpiler.mdx
 @@ -17,7 +17,7 @@ const transpiler = new Bun.Transpiler({
@@ -3155,7 +3107,7 @@ index efe5d86d..33e72fbd 100644
  const transpiler = new Bun.Transpiler({
    loader: 'tsx',
  });
-@@ -186,7 +186,7 @@ const result = transpiler.scanImports(code);
+@@ -174,7 +174,7 @@ const result = transpiler.scanImports(code);
  
  ## Reference
  
@@ -3165,7 +3117,7 @@ index efe5d86d..33e72fbd 100644
  
  interface TranspilerOptions {
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 0c7a26a4..cb6c9cd8 100644
+index 5ab52e86..9b54c796 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
@@ -3252,7 +3204,7 @@ index cb942f50..44ddd1b2 100644
  When using `backend: "chrome"`, you can drop down to raw [CDP](https://chromedevtools.github.io/devtools-protocol/) commands for anything the high-level API doesn't cover.
  
 diff --git b/content/docs/test/dom.mdx a/content/docs/test/dom.mdx
-index 6e6961e5..631dc09a 100644
+index 778b6230..62351e9b 100644
 --- b/content/docs/test/dom.mdx
 +++ a/content/docs/test/dom.mdx
 @@ -62,9 +62,6 @@ Run the test with `bun test`:
@@ -3266,7 +3218,7 @@ index 6e6961e5..631dc09a 100644
  
  dom.test.ts:
 diff --git b/content/docs/test/index.mdx a/content/docs/test/index.mdx
-index b1609fc1..b334b280 100644
+index 2d88042f..1cb2bd1b 100644
 --- b/content/docs/test/index.mdx
 +++ a/content/docs/test/index.mdx
 @@ -246,8 +246,6 @@ With `--randomize`, the seed used for randomization is displayed in the test sum
@@ -3292,7 +3244,7 @@ index 035665c8..2d2917ec 100644
  // File beforeAll
  // Outer beforeAll
 diff --git b/content/docs/test/reporters.mdx a/content/docs/test/reporters.mdx
-index fcf0be2c..57db1171 100644
+index e19d0d22..07b9e562 100644
 --- b/content/docs/test/reporters.mdx
 +++ a/content/docs/test/reporters.mdx
 @@ -1,6 +1,5 @@
@@ -3312,10 +3264,10 @@ index fcf0be2c..57db1171 100644
  ---
  
 diff --git b/content/docs/test/runtime-behavior.mdx a/content/docs/test/runtime-behavior.mdx
-index 493db0a7..2c4462b2 100644
+index e77f7d0b..40c0f2ba 100644
 --- b/content/docs/test/runtime-behavior.mdx
 +++ a/content/docs/test/runtime-behavior.mdx
-@@ -275,10 +275,10 @@ The test runner handles common signals:
+@@ -261,10 +261,10 @@ The test runner handles common signals:
  
  ```bash title="terminal"
  # Gracefully stops test execution
@@ -4030,7 +3982,7 @@ index 2bfbb67d..9527f1f0 100644
  
  ---
 diff --git b/content/guides/runtime/build-time-constants.mdx a/content/guides/runtime/build-time-constants.mdx
-index 6553b911..d3b8b513 100644
+index 6745f81d..b2cbc06c 100644
 --- b/content/guides/runtime/build-time-constants.mdx
 +++ a/content/guides/runtime/build-time-constants.mdx
 @@ -63,33 +63,28 @@ await Bun.build({
@@ -4131,7 +4083,7 @@ index 7893c622..abc837a4 100644
  1. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "Developer ID Application: Your Name (ZZZZZZZZZZ)"
     1 valid identities found
 diff --git b/content/guides/runtime/define-constant.mdx a/content/guides/runtime/define-constant.mdx
-index 8f2f4eb9..7c373303 100644
+index 7911b25b..f5930f65 100644
 --- b/content/guides/runtime/define-constant.mdx
 +++ a/content/guides/runtime/define-constant.mdx
 @@ -57,7 +57,7 @@ To also collapse the surrounding `if` scaffolding down to the following output,
@@ -4179,7 +4131,7 @@ index 63926330..b54a9c17 100644
  $ echo $?
  1 # this is the exit code of the previous command
 diff --git b/content/guides/test/run-tests.mdx a/content/guides/test/run-tests.mdx
-index d95ff3dc..e19f3811 100644
+index 9a5e7ddc..d519d836 100644
 --- b/content/guides/test/run-tests.mdx
 +++ a/content/guides/test/run-tests.mdx
 @@ -23,7 +23,6 @@ Here's the output of a typical run: three test files (`test.test.js`, `test2.tes
@@ -4207,7 +4159,7 @@ index d95ff3dc..e19f3811 100644
  
  test.test.js:
 diff --git b/content/guides/test/skip-tests.mdx a/content/guides/test/skip-tests.mdx
-index fe1a13c4..7f35c5c1 100644
+index 6a46628c..9f73ccc3 100644
 --- b/content/guides/test/skip-tests.mdx
 +++ a/content/guides/test/skip-tests.mdx
 @@ -20,7 +20,6 @@ Running `bun test` doesn't execute this test. The terminal output marks it as sk
@@ -4219,7 +4171,7 @@ index fe1a13c4..7f35c5c1 100644
  
  test.test.ts:
 diff --git b/content/guides/test/snapshot.mdx a/content/guides/test/snapshot.mdx
-index 7a3c18fa..2b5356ee 100644
+index ebfd04c1..e5cd22e8 100644
 --- b/content/guides/test/snapshot.mdx
 +++ a/content/guides/test/snapshot.mdx
 @@ -20,7 +20,6 @@ The first time this test runs, Bun evaluates the value passed into `expect()` an
@@ -4251,7 +4203,7 @@ index 7a3c18fa..2b5356ee 100644
  ✓ snapshot [0.86ms]
  
 diff --git b/content/guides/test/todo-tests.mdx a/content/guides/test/todo-tests.mdx
-index 45875d6c..a5cce931 100644
+index 9e3f43dd..9d07c046 100644
 --- b/content/guides/test/todo-tests.mdx
 +++ a/content/guides/test/todo-tests.mdx
 @@ -19,7 +19,6 @@ The `bun test` output reports the number of `todo` tests.
