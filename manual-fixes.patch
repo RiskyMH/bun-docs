@@ -2416,7 +2416,7 @@ index c4242ff2..a4e61eca 100644
  
  The build looks for the sysroot at `/opt/winsysroot` (or `/opt/xwin`) automatically; elsewhere, set `WINDOWS_SYSROOT=<path>` or pass `--winsysroot=<path>` (a user-writable path also lets configure manage the aliases for you). Configure validates the splat at the start of every cross build. CI agents bake the same splat into their images (`.buildkite/Dockerfile`, `scripts/bootstrap.sh`); when an agent doesn't have one, the build fetches it into its cache dir at configure time.
 diff --git b/content/docs/project/contributing.mdx a/content/docs/project/contributing.mdx
-index 2f7473b2..fa9fc475 100644
+index dd8ce5ca..f5a9057b 100644
 --- b/content/docs/project/contributing.mdx
 +++ a/content/docs/project/contributing.mdx
 @@ -12,7 +12,7 @@ If you are using Windows, see [Building Windows](/docs/project/building-windows)
@@ -2446,7 +2446,7 @@ index 2f7473b2..fa9fc475 100644
  x.y.z_debug
  ```
  
-@@ -342,7 +342,7 @@ $ brew install pkg-config
+@@ -343,7 +343,7 @@ $ brew install pkg-config
  If you see this error when compiling, run:
  
  ```bash
@@ -2517,7 +2517,7 @@ index 6863d451..a4b1a49b 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index 1cb10ada..2502c16f 100644
+index de334246..76d19ada 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ The coverage threshold. By default, no threshold is set. If your test suite does
@@ -2569,10 +2569,10 @@ index 3635ed4e..18be7d29 100644
  
  Configure the output stream by passing one of the following values to `stdout/stderr`:
 diff --git b/content/docs/runtime/cron.mdx a/content/docs/runtime/cron.mdx
-index ce3cf38b..eea1e7a1 100644
+index 444dfc9a..c174d2c2 100644
 --- b/content/docs/runtime/cron.mdx
 +++ a/content/docs/runtime/cron.mdx
-@@ -266,18 +266,18 @@ When the cron daemon fires the job, Bun imports your module and calls the `sched
+@@ -281,18 +281,18 @@ When the cron daemon fires the job, Bun imports your module and calls the `sched
  **Viewing registered jobs:**
  
  ```sh
@@ -2595,7 +2595,7 @@ index ce3cf38b..eea1e7a1 100644
  ```
  
  To capture stdout/stderr to a file, redirect output in the crontab entry directly, or add logging inside your `scheduled()` handler.
-@@ -287,10 +287,10 @@ To capture stdout/stderr to a file, redirect output in the crontab entry directl
+@@ -302,10 +302,10 @@ To capture stdout/stderr to a file, redirect output in the crontab entry directl
  ```sh
  # Edit your crontab and remove the "# bun-cron: <title>" comment
  # and the command line below it
@@ -2608,7 +2608,7 @@ index ce3cf38b..eea1e7a1 100644
  ```
  
  ### macOS
-@@ -306,7 +306,7 @@ The plist uses `StartCalendarInterval` to define the schedule. Complex patterns
+@@ -321,7 +321,7 @@ The plist uses `StartCalendarInterval` to define the schedule. Complex patterns
  **Viewing registered jobs:**
  
  ```sh
@@ -2617,7 +2617,7 @@ index ce3cf38b..eea1e7a1 100644
  ```
  
  **Logs:** stdout and stderr are written to:
-@@ -319,22 +319,22 @@ launchctl list | grep bun.cron
+@@ -334,22 +334,22 @@ launchctl list | grep bun.cron
  For example, a job titled `weekly-report`:
  
  ```sh
@@ -2832,7 +2832,7 @@ index 84506170..723f75b1 100644
  </Callout>
  
 diff --git b/content/docs/runtime/networking/fetch.mdx a/content/docs/runtime/networking/fetch.mdx
-index 9060434b..2ff44cf3 100644
+index 124d1bd1..068a7f90 100644
 --- b/content/docs/runtime/networking/fetch.mdx
 +++ a/content/docs/runtime/networking/fetch.mdx
 @@ -358,7 +358,7 @@ This prints the request and response headers to your terminal:
@@ -3117,7 +3117,7 @@ index 2754d3fe..786ba307 100644
  
  interface TranspilerOptions {
 diff --git b/content/docs/runtime/utils.mdx a/content/docs/runtime/utils.mdx
-index 5ab52e86..9b54c796 100644
+index 652cb8b1..f3ee2087 100644
 --- b/content/docs/runtime/utils.mdx
 +++ a/content/docs/runtime/utils.mdx
 @@ -9,7 +9,7 @@ A `string` containing the version of the `bun` CLI that is currently running.
@@ -3129,7 +3129,7 @@ index 5ab52e86..9b54c796 100644
  ```
  
  ## `Bun.revision`
-@@ -328,8 +328,8 @@ The API matches the "string-width" npm package, so existing code can be ported t
+@@ -330,8 +330,8 @@ The API matches the "string-width" npm package, so existing code can be ported t
  
  [In this benchmark](https://github.com/oven-sh/bun/blob/5147c0ba7379d85d4d1ed0714b84d6544af917eb/bench/snippets/string-width.mjs#L13), `Bun.stringWidth` is ~6,756x faster than the `string-width` npm package for input larger than about 500 characters. Big thanks to [sindresorhus](https://github.com/sindresorhus) for their work on `string-width`.
  
@@ -3140,7 +3140,7 @@ index 5ab52e86..9b54c796 100644
  cpu: 13th Gen Intel(R) Core(TM) i9-13900
  runtime: bun 1.0.29 (x64-linux)
  
-@@ -337,8 +337,7 @@ benchmark                                          time (avg)             (min 
+@@ -339,8 +339,7 @@ benchmark                                          time (avg)             (min 
  ------------------------------------------------------------------------------------- -----------------------------
  Bun.stringWidth     500 chars ascii              37.09 ns/iter   (36.77 ns … 41.11 ns)  37.07 ns  38.84 ns  38.99 ns
  
@@ -3150,7 +3150,7 @@ index 5ab52e86..9b54c796 100644
  benchmark                                          time (avg)             (min … max)       p75       p99      p995
  ------------------------------------------------------------------------------------- -----------------------------
  npm/string-width    500 chars ascii             249,710 ns/iter (239,970 ns … 293,180 ns) 250,930 ns  276,700 ns 281,450 ns
-@@ -358,7 +357,7 @@ npm/string-width    500 chars ascii             249,710 ns/iter (239,970 ns …
+@@ -360,7 +359,7 @@ npm/string-width    500 chars ascii             249,710 ns/iter (239,970 ns …
  | ms   | 1             |
  
  ```bash title="terminal"
@@ -3159,7 +3159,7 @@ index 5ab52e86..9b54c796 100644
  cpu: 13th Gen Intel(R) Core(TM) i9-13900
  runtime: bun 1.0.29 (x64-linux)
  
-@@ -387,7 +386,7 @@ Bun.stringWidth 95,000 chars ansi+emoji+ascii  572.69 µs/iter (565.52 µs … 6
+@@ -389,7 +388,7 @@ Bun.stringWidth 95,000 chars ansi+emoji+ascii  572.69 µs/iter (565.52 µs … 6
  ```
  
  ```bash title="terminal"
