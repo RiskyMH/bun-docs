@@ -12,7 +12,7 @@ index 4e74b9ff..6107f2f7 100644
  # bun
  $ bun build <entrypoint> --outdir=out
 diff --git b/content/docs/bundler/executables.mdx a/content/docs/bundler/executables.mdx
-index c47cb92c..13407064 100644
+index e33604dc..de0450b7 100644
 --- b/content/docs/bundler/executables.mdx
 +++ a/content/docs/bundler/executables.mdx
 @@ -495,7 +495,7 @@ However, with the `BUN_BE_BUN=1` environment variable, it acts like the `bun` bi
@@ -2719,7 +2719,7 @@ index afd3f9fb..7e8cd6b7 100644
  
  <Accordions type="single">
 diff --git b/content/docs/runtime/ffi.mdx a/content/docs/runtime/ffi.mdx
-index 9c56877c..b7b5bebe 100644
+index e279e173..cef6a864 100644
 --- b/content/docs/runtime/ffi.mdx
 +++ a/content/docs/runtime/ffi.mdx
 @@ -66,7 +66,7 @@ pub export fn add(a: i32, b: i32) i32 {
@@ -2766,6 +2766,22 @@ index 35028123..457a5b83 100644
  <!DOCTYPE html>
  <html>
    <body>
+diff --git b/content/docs/runtime/http/routing.mdx a/content/docs/runtime/http/routing.mdx
+index bbadea42..3c746050 100644
+--- b/content/docs/runtime/http/routing.mdx
++++ a/content/docs/runtime/http/routing.mdx
+@@ -208,9 +208,9 @@ Bun.serve({
+ 
+ The part of the request URL after the prefix is percent-decoded once and opened relative to `dir`. Non-canonical paths (those containing `.`, `..`, empty segments, `%2F`, or a `%XX` sequence encoding a character that may appear literally in a path segment) are rejected with `404`, so the served path is always the path the router matched. On Linux the open uses `openat2(RESOLVE_IN_ROOT)`, so symlinks that would escape `dir` are clamped by the kernel.
+ 
+-{% callout %}
++<Callout type="info">
+ Routing is case-sensitive but filesystems on macOS and Windows are case-insensitive by default, so a case-varied URL (`/static/Admin/secret.txt`) will route to the directory wildcard rather than a sibling `/static/admin/*` handler and still open `admin/secret.txt`. As with nginx, Caddy, and other static file servers, do not place access-controlled content inside `dir` and rely on an overlapping route to gate it.
+-{% /callout %}
++</Callout>
+ 
+ Directory routes share the response path with file routes:
+ 
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
 index 9a9e116f..3cfd56f3 100644
 --- b/content/docs/runtime/http/server.mdx
@@ -2780,10 +2796,10 @@ index 9a9e116f..3cfd56f3 100644
    /**
     * Stop the server from accepting new connections.
 diff --git b/content/docs/runtime/http/websockets.mdx a/content/docs/runtime/http/websockets.mdx
-index ebeb7f92..1d868815 100644
+index a815e795..60dd136e 100644
 --- b/content/docs/runtime/http/websockets.mdx
 +++ a/content/docs/runtime/http/websockets.mdx
-@@ -90,15 +90,15 @@ Bun.serve({
+@@ -90,16 +90,16 @@ Bun.serve({
  
  Each `ServerWebSocket` instance has a `.send()` method for sending messages to the client. It supports a range of input types.
  
@@ -2796,11 +2812,13 @@ index ebeb7f92..1d868815 100644
 -      ws.send("Hello world"); // string
 -      ws.send(response.arrayBuffer()); // ArrayBuffer
 -      ws.send(new Uint8Array([1, 2, 3])); // TypedArray | DataView
+-      ws.send(new Blob(["binary"])); // Blob
 -    },
 +    message(ws, message) { // [!code highlight]
 +      ws.send("Hello world"); // string // [!code highlight]
 +      ws.send(response.arrayBuffer()); // ArrayBuffer // [!code highlight]
 +      ws.send(new Uint8Array([1, 2, 3])); // TypedArray | DataView // [!code highlight]
++      ws.send(new Blob(["binary"])); // Blob // [!code highlight]
 +    }, // [!code highlight]
    },
  });
@@ -3069,10 +3087,10 @@ index 4ecb9268..77a22aed 100644
  
  To point `bun:sqlite` to the new build, call `Database.setCustomSQLite(path)` before creating any `Database` instances. (On other operating systems, this is a no-op.) Pass a path to the SQLite `.dylib` file, _not_ the executable. With recent versions of Homebrew this is something like `/opt/homebrew/Cellar/sqlite/<version>/libsqlite3.dylib`.
 diff --git b/content/docs/runtime/streams.mdx a/content/docs/runtime/streams.mdx
-index 6357dc81..88ee8c17 100644
+index d13f5c96..964902d1 100644
 --- b/content/docs/runtime/streams.mdx
 +++ a/content/docs/runtime/streams.mdx
-@@ -219,7 +219,7 @@ sink.start({
+@@ -215,7 +215,7 @@ sink.start({
  
  ## Reference
  
