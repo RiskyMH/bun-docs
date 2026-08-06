@@ -11,6 +11,7 @@
     "---[Zap] Test Execution---",
     "runtime-behavior",
     "discovery",
+    "parallel",
     "---[Sparkles] Test Features---",
     "lifecycle",
     "mocks",
