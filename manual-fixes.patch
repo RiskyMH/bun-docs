@@ -1727,7 +1727,7 @@ index 85601e51..5de20dbd 100644
  ## What's Inside
  
 diff --git b/content/docs/installation.mdx a/content/docs/installation.mdx
-index e90a89e1..d24e92ae 100644
+index 889cb83a..b395d684 100644
 --- b/content/docs/installation.mdx
 +++ a/content/docs/installation.mdx
 @@ -13,13 +13,9 @@ Bun ships as a single, dependency-free executable. Install it with the install s
@@ -1745,7 +1745,7 @@ index e90a89e1..d24e92ae 100644
 +      $ curl -fsSL https://bun.com/install | bash
 +      ```
      <Callout type="info">
-       **Linux users**  The `unzip` package is required to install Bun (`sudo apt install unzip`). Kernel version 5.6 or higher is recommended; Bun runs on kernels as old as 3.10 (RHEL 7) with graceful degradation of newer syscalls. Use `uname -r` to check your kernel version.
+       **Linux users:** The `unzip` package is required to install Bun (`sudo apt install unzip`). Kernel version 5.6 or higher is recommended; Bun runs on kernels as old as 3.10 (RHEL 7) with graceful degradation of newer syscalls. Use `uname -r` to check your kernel version.
        </Callout>
 @@ -27,12 +23,9 @@ $ curl -fsSL https://bun.com/install | bash
    </Tab>
@@ -2253,7 +2253,7 @@ index e4a0602f..2b5b348c 100644
  
    dependencies                Current  Target   Latest
 diff --git b/content/docs/pm/npmrc.mdx a/content/docs/pm/npmrc.mdx
-index 90441055..cd95b7c9 100644
+index de6bc3e3..1bcd1449 100644
 --- b/content/docs/pm/npmrc.mdx
 +++ a/content/docs/pm/npmrc.mdx
 @@ -1,6 +1,6 @@
@@ -2276,7 +2276,7 @@ index 78910c5f..734918e2 100644
  
  Bun's package manager can scan packages before installing them, to catch supply chain attacks and known vulnerabilities.
 diff --git b/content/docs/project/benchmarking.mdx a/content/docs/project/benchmarking.mdx
-index 06aac7b1..560b6501 100644
+index 1633c584..c34d79de 100644
 --- b/content/docs/project/benchmarking.mdx
 +++ a/content/docs/project/benchmarking.mdx
 @@ -195,7 +195,7 @@ Bun uses mimalloc for the other heap. To print a summary of non-JavaScript memor
@@ -2517,7 +2517,7 @@ index 6863d451..a4b1a49b 100644
  ```
  
 diff --git b/content/docs/runtime/bunfig.mdx a/content/docs/runtime/bunfig.mdx
-index de334246..76d19ada 100644
+index 40b9e734..6818d89d 100644
 --- b/content/docs/runtime/bunfig.mdx
 +++ a/content/docs/runtime/bunfig.mdx
 @@ -225,7 +225,6 @@ The coverage threshold. By default, no threshold is set. If your test suite does
@@ -2545,7 +2545,7 @@ index de334246..76d19ada 100644
  # the directory to use for the cache
  dir = "~/.bun/install/cache"
  
-@@ -833,9 +831,7 @@ With this option, the command being run is not printed:
+@@ -844,9 +842,7 @@ With this option, the command being run is not printed:
  
  ```sh
  $ bun run dev
@@ -2706,7 +2706,7 @@ index 3dd0cb60..d337593a 100644
      at myInner (file.js:4:15)
      at fn (file.js:8:5)
 diff --git b/content/docs/runtime/environment-variables.mdx a/content/docs/runtime/environment-variables.mdx
-index afd3f9fb..7e8cd6b7 100644
+index d933e783..265e3aa9 100644
 --- b/content/docs/runtime/environment-variables.mdx
 +++ a/content/docs/runtime/environment-variables.mdx
 @@ -29,7 +29,7 @@ $ FOO=helloworld bun run dev
@@ -2754,10 +2754,10 @@ index e279e173..cef6a864 100644
  
  ---
 diff --git b/content/docs/runtime/file-types.mdx a/content/docs/runtime/file-types.mdx
-index 35028123..457a5b83 100644
+index dbbcfa32..efae66c3 100644
 --- b/content/docs/runtime/file-types.mdx
 +++ a/content/docs/runtime/file-types.mdx
-@@ -309,7 +309,7 @@ The `html` loader processes HTML files and bundles any referenced assets. It:
+@@ -356,7 +356,7 @@ The `html` loader processes HTML files and bundles any referenced assets. It:
  
  For example, given this HTML file:
  
@@ -2783,10 +2783,10 @@ index bbadea42..3c746050 100644
  Directory routes share the response path with file routes:
  
 diff --git b/content/docs/runtime/http/server.mdx a/content/docs/runtime/http/server.mdx
-index 9a9e116f..3cfd56f3 100644
+index b572d63b..f2dbcc30 100644
 --- b/content/docs/runtime/http/server.mdx
 +++ a/content/docs/runtime/http/server.mdx
-@@ -545,7 +545,7 @@ export interface Post {
+@@ -556,7 +556,7 @@ export interface Post {
  
  ## Reference
  
@@ -2876,7 +2876,7 @@ index 83866a95..119f84fe 100644
  
  Then install this crate:
 diff --git b/content/docs/runtime/sql.mdx a/content/docs/runtime/sql.mdx
-index 332e6b4b..7ca57b1e 100644
+index 1d9f621f..51d476ad 100644
 --- b/content/docs/runtime/sql.mdx
 +++ a/content/docs/runtime/sql.mdx
 @@ -524,11 +524,11 @@ MySQL connections can be configured with environment variables:
@@ -2894,7 +2894,7 @@ index 332e6b4b..7ca57b1e 100644
  ```
  
  If no connection URL is provided, Bun checks these individual parameters:
-@@ -572,9 +572,9 @@ SQLite connections can be configured with `DATABASE_URL` when it contains a SQLi
+@@ -573,9 +573,9 @@ SQLite connections can be configured with `DATABASE_URL` when it contains a SQLi
  
  ```bash
  # These are all recognized as SQLite
@@ -2908,7 +2908,7 @@ index 332e6b4b..7ca57b1e 100644
  
  **Note:** PostgreSQL-specific environment variables such as `POSTGRES_URL` and `PGHOST` are ignored when using SQLite.
 diff --git b/content/docs/runtime/sqlite.mdx a/content/docs/runtime/sqlite.mdx
-index 4ecb9268..77a22aed 100644
+index 6dbf10d5..51036fc1 100644
 --- b/content/docs/runtime/sqlite.mdx
 +++ a/content/docs/runtime/sqlite.mdx
 @@ -10,11 +10,7 @@ import { Database } from "bun:sqlite";
@@ -2924,7 +2924,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  The API is synchronous and fast. Credit to [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3) and its contributors for inspiring the API of `bun:sqlite`.
-@@ -143,14 +139,10 @@ import { Database } from "bun:sqlite";
+@@ -149,14 +145,10 @@ import { Database } from "bun:sqlite";
  {
    using db = new Database("mydb.sqlite"); // [!code highlight]
    using query = db.query("select 'Hello world' as message;"); // [!code highlight]
@@ -2940,7 +2940,7 @@ index 4ecb9268..77a22aed 100644
  ### `.serialize()`
  
  `bun:sqlite` supports SQLite's built-in mechanism for [serializing](https://www.sqlite.org/c3ref/serialize.html) and [deserializing](https://www.sqlite.org/c3ref/deserialize.html) databases to and from memory.
-@@ -305,10 +297,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
+@@ -311,10 +303,7 @@ Use `.all()` to run a query and get back the results as an array of objects.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.all({ $message: "Hello world" }); // [!code highlight]
@@ -2952,7 +2952,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -320,10 +309,7 @@ Use `.get()` to run a query and get back the first result as an object.
+@@ -326,10 +315,7 @@ Use `.get()` to run a query and get back the first result as an object.
  ```ts title="db.ts"
  const query = db.query(`select $message;`);
  query.get({ $message: "Hello world" }); // [!code highlight]
@@ -2964,7 +2964,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) followed by [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it no longer returns `SQLITE_ROW`. If the query returns no rows, `null` is returned.
-@@ -335,13 +321,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
+@@ -341,13 +327,10 @@ Use `.run()` to run a query and get back an object with execution metadata. This
  ```ts title="db.ts"
  const query = db.query(`create table foo;`);
  query.run(); // [!code highlight]
@@ -2982,7 +2982,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) once. Stepping through all the rows is not necessary when you don't care about the results.
-@@ -366,13 +349,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
+@@ -372,13 +355,8 @@ const query = db.query("SELECT title, year FROM movies").as(Movie); // [!code hi
  const movies = query.all();
  const first = query.get();
  
@@ -2998,7 +2998,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  As a performance optimization, the class constructor is not called, default initializers are not run, and private fields are not accessible. This is more like `Object.create` than `new`: the class's prototype is assigned to the object, so its methods, getters, and setters work.
-@@ -408,14 +386,11 @@ const query = db.query(`select $message;`);
+@@ -414,14 +392,11 @@ const query = db.query(`select $message;`);
  
  query.values({ $message: "Hello world" }); // [!code highlight]
  query.values(2); // [!code highlight]
@@ -3018,7 +3018,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  Internally, this calls [`sqlite3_reset`](https://www.sqlite.org/capi3ref.html#sqlite3_reset) and repeatedly calls [`sqlite3_step`](https://www.sqlite.org/capi3ref.html#sqlite3_step) until it returns `SQLITE_DONE`.
-@@ -473,13 +448,8 @@ const query = db.query("SELECT ?1, ?2");
+@@ -479,13 +454,8 @@ const query = db.query("SELECT ?1, ?2");
  const results = query.all("hello", "goodbye");
  ```
  
@@ -3034,7 +3034,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  ---
-@@ -500,12 +470,7 @@ import { Database } from "bun:sqlite";
+@@ -506,12 +476,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: true }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3048,7 +3048,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  When `safeIntegers` is `true`, `bun:sqlite` throws an error if a `bigint` value in a bound parameter exceeds 64 bits:
-@@ -521,14 +486,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
+@@ -527,14 +492,10 @@ const query = db.query("INSERT INTO test (value) VALUES ($value)");
  try {
    query.run({ $value: BigInt(Number.MAX_SAFE_INTEGER) ** 2n });
  } catch (e) {
@@ -3064,7 +3064,7 @@ index 4ecb9268..77a22aed 100644
  ### `safeIntegers: false` (default)
  
  When `safeIntegers` is `false`, `bun:sqlite` returns integers as `number` types and truncates any bits beyond 53:
-@@ -539,11 +500,7 @@ import { Database } from "bun:sqlite";
+@@ -545,11 +506,7 @@ import { Database } from "bun:sqlite";
  const db = new Database(":memory:", { safeIntegers: false }); // [!code highlight]
  const query = db.query(`SELECT ${BigInt(Number.MAX_SAFE_INTEGER) + 102n} as max_int`);
  const result = query.get();
@@ -3077,7 +3077,7 @@ index 4ecb9268..77a22aed 100644
  ```
  
  ---
-@@ -636,7 +593,7 @@ db.loadExtension("myext"); // [!code highlight]
+@@ -642,7 +599,7 @@ db.loadExtension("myext"); // [!code highlight]
  
  ```bash title="terminal"
  $ brew install sqlite
@@ -3187,10 +3187,10 @@ index 652cb8b1..f3ee2087 100644
  runtime: node v21.4.0 (x64-linux)
  
 diff --git b/content/docs/runtime/watch-mode.mdx a/content/docs/runtime/watch-mode.mdx
-index 6eca6ebc..95de9ec7 100644
+index d2f90fe0..22707b20 100644
 --- b/content/docs/runtime/watch-mode.mdx
 +++ a/content/docs/runtime/watch-mode.mdx
-@@ -114,8 +114,6 @@ If you run this file with `bun --hot server.ts`, you'll see the reload count inc
+@@ -120,8 +120,6 @@ If you run this file with `bun --hot server.ts`, you'll see the reload count inc
  ```bash title="terminal"
  $ bun --hot index.ts
  
@@ -3236,10 +3236,10 @@ index 778b6230..62351e9b 100644
  
  dom.test.ts:
 diff --git b/content/docs/test/index.mdx a/content/docs/test/index.mdx
-index 2d88042f..1cb2bd1b 100644
+index 0ddc73a5..f6c73de2 100644
 --- b/content/docs/test/index.mdx
 +++ a/content/docs/test/index.mdx
-@@ -246,8 +246,6 @@ With `--randomize`, the seed used for randomization is displayed in the test sum
+@@ -248,8 +248,6 @@ With `--randomize`, the seed used for randomization is displayed in the test sum
  ```sh title="terminal"
  $ bun test --randomize
  
@@ -3261,6 +3261,19 @@ index 035665c8..2d2917ec 100644
  // Output order:
  // File beforeAll
  // Outer beforeAll
+diff --git b/content/docs/test/parallel.mdx a/content/docs/test/parallel.mdx
+index 41fe4c6c..b8b70c69 100644
+--- b/content/docs/test/parallel.mdx
++++ a/content/docs/test/parallel.mdx
+@@ -23,7 +23,7 @@ $ bun test --parallel=4      # exactly 4 workers
+ The main `bun test` process becomes a coordinator. It discovers test files as usual, then starts worker processes and hands each one file at a time. Results stream back as each test finishes, so the output looks the same as a serial run — each file's results are printed together under its filename, and `console.log` output from a test is never interleaved with another file's.
+ 
+ ```txt
+-bun test v1.4.0 8x PARALLEL
++bun test v$BUN_LATEST_VERSION 8x PARALLEL
+ 
+ src/router.test.ts:
+ ✓ matches static routes [0.31ms]
 diff --git b/content/docs/test/reporters.mdx a/content/docs/test/reporters.mdx
 index e19d0d22..07b9e562 100644
 --- b/content/docs/test/reporters.mdx

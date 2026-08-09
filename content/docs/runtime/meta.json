@@ -70,6 +70,7 @@
     "yaml",
     "json5",
     "jsonl",
+    "xml",
     "html-rewriter",
     "image",
     "hashing",
