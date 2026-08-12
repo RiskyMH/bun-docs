@@ -25,7 +25,7 @@ index e33604dc..de0450b7 100644
  ```
  
 diff --git b/content/docs/bundler/fullstack.mdx a/content/docs/bundler/fullstack.mdx
-index ef29f7f4..4f5bbf20 100644
+index e35d83ae..ef70f230 100644
 --- b/content/docs/bundler/fullstack.mdx
 +++ a/content/docs/bundler/fullstack.mdx
 @@ -121,7 +121,7 @@ Becomes something like this:
@@ -64,7 +64,16 @@ index ef29f7f4..4f5bbf20 100644
  import { useState } from "react";
  
  export default function App() {
-@@ -513,7 +513,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
+@@ -512,7 +512,7 @@ To override the default, set the `sourcemap` option in your `bunfig.toml`:
+ 
+ ```toml title="bunfig.toml"
+ [serve.static]
+-sourcemap = "linked" # serve sourcemaps in production too
++sourcemap = "linked"     # serve sourcemaps in production too
+ # sourcemap = "inline"   # embed sourcemaps in the chunks
+ # sourcemap = "external" # emit .map files without a sourceMappingURL comment
+ # sourcemap = false      # never generate sourcemaps
+@@ -527,7 +527,7 @@ Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files,
  <Steps>
  <Step>
  
@@ -72,8 +81,8 @@ index ef29f7f4..4f5bbf20 100644
 +  ### 1. `<script>` Processing
  - Transpiles TypeScript, JSX, and TSX in `<script>` tags
  - Bundles imported dependencies
- - Generates sourcemaps for debugging
-@@ -777,7 +777,7 @@ export function App() {
+ - Generates sourcemaps for debugging in development
+@@ -791,7 +791,7 @@ export function App() {
  }
  ```
  
@@ -2556,7 +2565,7 @@ index 40b9e734..6818d89d 100644
  ```
  
 diff --git b/content/docs/runtime/child-process.mdx a/content/docs/runtime/child-process.mdx
-index 3635ed4e..18be7d29 100644
+index e6ccbeca..c1bb6c64 100644
 --- b/content/docs/runtime/child-process.mdx
 +++ a/content/docs/runtime/child-process.mdx
 @@ -100,7 +100,7 @@ Read the subprocess's output from the `stdout` and `stderr` properties. By defau
