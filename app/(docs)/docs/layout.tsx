@@ -47,6 +47,7 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
         },
       ]}
       sidebar={{
+        prefetch: false,
         tabs: [
           {
             title: 'Runtime',

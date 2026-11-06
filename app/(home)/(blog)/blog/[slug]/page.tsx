@@ -49,7 +49,7 @@ export default async function Page(props: PageProps<'/blog/[slug]'>) {
 
             if ('github' in authorData || 'twitter' in authorData) {
               return <a
-                href={'twitter' in authorData ? `https://x.com/${authorData.twitter}`: `https://github.com/${authorData.github}` }
+                href={'twitter' in authorData ? `https://x.com/${authorData.twitter}` : `https://github.com/${authorData.github}`}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='hover:underline transition-all duration-100 text-fd-foreground'
