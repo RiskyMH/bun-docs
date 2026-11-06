@@ -11,6 +11,8 @@ Official is https://bun.com/docs (mintlify)
 
 This is https://bun-docs.vercel.app/docs (fumadocs)
 
+> NOTE: Bun has since migrated to a custom docs site again, so this fork is no longer actively maintained.
+
 ## Development
 
 ```sh
